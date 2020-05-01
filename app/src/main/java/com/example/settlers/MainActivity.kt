@@ -27,13 +27,110 @@ class MainActivity : AppCompatActivity() {
         setContentView(scrollingLayout)
     }
 }
-
+enum class GroundType { Grass, Desert }
 class Polygon(val a: Pair<Float, Float>, val b: Pair<Float, Float>, val c: Pair<Float, Float>)
+class Element(val x: Int, val y: Int, val typeTop: GroundType, val typeBottom: GroundType )
 
 class GameWorld(context: Context) : View(context) {
 
+    val map = listOf(
+        Element(x = 1, y = 1, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
+        Element(x = 2, y = 1, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
+        Element(x = 3, y = 1, typeTop = GroundType.Grass, typeBottom = GroundType.Desert),
+        Element(x = 4, y = 1, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
+        Element(x = 5, y = 1, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
+        Element(x = 1, y = 2, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
+        Element(x = 2, y = 2, typeTop = GroundType.Desert, typeBottom = GroundType.Desert),
+        Element(x = 3, y = 2, typeTop = GroundType.Grass, typeBottom = GroundType.Desert),
+        Element(x = 4, y = 2, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
+        Element(x = 5, y = 2, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
+        Element(x = 1, y = 3, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
+        Element(x = 2, y = 3, typeTop = GroundType.Desert, typeBottom = GroundType.Grass),
+        Element(x = 3, y = 3, typeTop = GroundType.Desert, typeBottom = GroundType.Desert),
+        Element(x = 4, y = 3, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
+        Element(x = 5, y = 3, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
+        Element(x = 1, y = 4, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
+        Element(x = 2, y = 4, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
+        Element(x = 3, y = 4, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
+        Element(x = 4, y = 4, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
+        Element(x = 5, y = 4, typeTop = GroundType.Grass, typeBottom = GroundType.Grass)
+    )
+
     companion object {
-        fun drawPolygon(p: Polygon, canvas: Canvas, path: Path, paint: Paint) {
+
+        val flagPaint = Paint().apply {
+            this.color = Color.LTGRAY
+            this.style = Paint.Style.FILL
+            this.textSize = 100.0f
+        }
+        val grassPaint = Paint().apply {
+            this.color = Color.GREEN
+            this.style = Paint.Style.FILL
+        }
+        val desertPaint = Paint().apply {
+            this.color = Color.YELLOW
+            this.style = Paint.Style.FILL
+        }
+
+        val distance = 100.0f
+
+        fun drawGround(item: Element, canvas: Canvas, path: Path) {
+            //even rows need distance/" offset
+
+            val top = calcTop(item)
+            val bottom = calcBottom(item)
+
+            val colorTop = when(item.typeTop) {
+                GroundType.Grass -> grassPaint
+                GroundType.Desert -> desertPaint
+            }
+            drawPolygon(p = top, canvas = canvas, path = path, paint = colorTop)
+            val colorBottom = when(item.typeBottom) {
+                GroundType.Grass -> grassPaint
+                GroundType.Desert -> desertPaint
+            }
+            drawPolygon(p = bottom, canvas = canvas, path = path, paint = colorBottom)
+        }
+
+        fun drawFlag(item: Element, canvas: Canvas) {
+            val top = calcTop(item)
+            drawFlag(top, canvas = canvas, paint = flagPaint)
+        }
+
+
+        private fun calcTop(item: Element): Polygon {
+            if (item.y.rem(2) == 0) {
+                return Polygon(
+                    Pair(item.x * distance + 0.5f * distance, item.y * distance),
+                    Pair(item.x * distance + 1.5f * distance, item.y * distance),
+                    Pair(item.x * distance + 1.0f * distance, item.y * distance - distance)
+                )
+            } else {
+                return Polygon(
+                    Pair(item.x * distance, item.y * distance),
+                    Pair(item.x * distance + distance, item.y * distance),
+                    Pair(item.x * distance + distance * 0.5f, item.y * distance - distance)
+                )
+            }
+        }
+
+        private fun calcBottom(item: Element): Polygon {
+            if (item.y.rem(2) == 0) {
+                return Polygon(
+                    Pair(item.x * distance + 0.5f * distance, item.y * distance),
+                    Pair(item.x * distance + 1.5f * distance, item.y * distance),
+                    Pair(item.x * distance + 1.0f * distance, item.y * distance + distance)
+                )
+            } else {
+                return Polygon(
+                    Pair(item.x * distance, item.y * distance),
+                    Pair(item.x * distance + distance, item.y * distance),
+                    Pair(item.x * distance + distance * 0.5f, item.y * distance + distance)
+                )
+            }
+        }
+
+        private fun drawPolygon(p: Polygon, canvas: Canvas, path: Path, paint: Paint) {
             path.reset()
             path.moveTo(p.a.first, p.a.second)
             path.lineTo(p.b.first, p.b.second)
@@ -41,27 +138,31 @@ class GameWorld(context: Context) : View(context) {
             canvas.drawPath(path, paint)
         }
 
-        fun drawFlag(p: Pair<Float, Float>, canvas: Canvas, paint: Paint) {
+        private fun drawFlag(p: Pair<Float, Float>, canvas: Canvas, paint: Paint) {
             canvas.drawCircle(p.first, p.second, 15.0f, paint)
+        }
+
+        private fun drawFlag(p: Polygon, canvas: Canvas, paint: Paint) {
+            canvas.drawCircle(p.a.first, p.b.second, 15.0f, paint)
         }
     }
 
-    val topleft = Pair(100.0f, 0.0f)
-    val topRight = Pair(300.0f, 0.0f)
-    val middleLeft = Pair(0.0f, 100.0f)
-    val middle = Pair(200.0f, 100.0f)
-    val middleRifght = Pair(400.0f, 100.0f)
-    val bottomLeft = Pair(100.0f, 200.0f)
-    val bottomRight = Pair(300.0f, 200.0f)
-    val flags = listOf(topleft, topRight, middleLeft, middle, middleRifght, bottomLeft, bottomRight)
-    val polygons = listOf(
-        Polygon(topleft,middle,middleLeft),
-        Polygon(topleft,topRight,middle),
-        Polygon(middle,middleRifght,topRight),
-        Polygon(middle,middleRifght,bottomRight),
-        Polygon(middle,bottomRight,bottomLeft),
-        Polygon(middle,bottomLeft,middleLeft)
-    )
+//    val topleft = Pair(100.0f, 0.0f)
+//    val topRight = Pair(300.0f, 0.0f)
+//    val middleLeft = Pair(0.0f, 100.0f)
+//    val middle = Pair(200.0f, 100.0f)
+//    val middleRifght = Pair(400.0f, 100.0f)
+//    val bottomLeft = Pair(100.0f, 200.0f)
+//    val bottomRight = Pair(300.0f, 200.0f)
+//    val flags = listOf(topleft, topRight, middleLeft, middle, middleRifght, bottomLeft, bottomRight)
+//    val polygons = listOf(
+//        Polygon(topleft,middle,middleLeft),
+//        Polygon(topleft,topRight,middle),
+//        Polygon(middle,middleRifght,topRight),
+//        Polygon(middle,middleRifght,bottomRight),
+//        Polygon(middle,bottomRight,bottomLeft),
+//        Polygon(middle,bottomLeft,middleLeft)
+//    )
 
     private val textPaint = Paint(ANTI_ALIAS_FLAG).apply {
         textSize = 60.0f
@@ -70,21 +171,22 @@ class GameWorld(context: Context) : View(context) {
         this.color = Color.GRAY
         this.style = Paint.Style.FILL
     }
-    val flagPaint = Paint().apply {
-        this.color = Color.YELLOW
-        this.style = Paint.Style.FILL
-        this.textSize = 100.0f
-    }
 
     val path = Path()
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        polygons.forEach {
-            drawPolygon(it, canvas!!, path, polygonPaint)
+//        polygons.forEach {
+//            drawPolygon(it, canvas!!, path, polygonPaint)
+//        }
+//        flags.map {
+//            drawFlag(it, canvas!!, flagPaint)
+//        }
+        map.forEach {
+            drawGround(it, canvas!!, path)
         }
-        flags.map {
-            drawFlag(it, canvas!!, flagPaint)
+        map.forEach {
+            drawFlag(it, canvas!!)
         }
 
     }
