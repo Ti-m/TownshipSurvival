@@ -13,6 +13,18 @@ open class TerrainInterpolator {
 
         doSquare(0, 0, size)
         doDiamond(0,0, size)
+        if (size == 5) {
+            val s2 = ceil(size.toDouble()/2).toInt()
+            val s2h = ceil(s2.toDouble()/2).toInt()
+            doSquare(0, 0, s2)
+            doSquare(0, s2h, s2)
+            doSquare(s2h, 0, s2)
+            doSquare(s2h, s2h, s2)
+            doDiamond(0,0, s2)
+            doDiamond(0,s2h, s2)
+            doDiamond(s2h,0, s2)
+            doDiamond(s2h,s2h, s2)
+        }
     }
 
     fun isPowerOfTwo(n: Int): Boolean {

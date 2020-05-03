@@ -102,31 +102,36 @@ class TerrainInterpolatorTest {
                 )
             )
         }
+    }
+
+    inner class SquareDiamondRepetition {
+
+        @Before
+        fun setUp() {
+            actions = ""
+            dummy = Array(5) {
+                Array(5) {
+                    0.0
+                }
+            }
+            interpolator = TerrainInterpolatorDiamondSquareSpy()
         }
-//    inner class SquareDiamondRepetition {
-//
-//        @Before
-//        fun setUp() {
-//            actions = ""
-//            dummy = arrayOf(arrayOf())
-//            interpolator = TerrainInterpolatorDiamondSquareSpy()
-//        }
-//
-//
-//        @Test
-//        @Throws(Exception::class)
-//        fun FiveByFive() {
-//            interpolator.interpolate(dummy, 5)
-//            assertThat(
-//                actions, `is`(
-//                    "" +
-//                            "Square(0,0,5) Diamond(0,0,5) " +
-//                            "Square(0,0,3) Square(0,2,3) Square(2,0,3) Square(2,2,3) " +
-//                            "Diamond(0,0,3) Diamond(0,2,3) Diamond(2,0,3) Diamond(2,2,3) "
-//                )
-//            )
-//        }
-//    }
+
+
+        @Test
+        @Throws(Exception::class)
+        fun FiveByFive() {
+            interpolator.interpolate(dummy, 5)
+            assertThat(
+                actions, `is`(
+                    "" +
+                            "Square(0,0,5) Diamond(0,0,5) " +
+                            "Square(0,0,3) Square(0,2,3) Square(2,0,3) Square(2,2,3) " +
+                            "Diamond(0,0,3) Diamond(0,2,3) Diamond(2,0,3) Diamond(2,2,3) "
+                )
+            )
+        }
+    }
 
 
     //class TerrainInterpolatorSpy : TerrainInterpolator()  {
