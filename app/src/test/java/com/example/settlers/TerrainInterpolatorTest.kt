@@ -119,7 +119,6 @@ class TerrainInterpolatorTest {
 
 
         @Test
-        @Throws(Exception::class)
         fun FiveByFive() {
             interpolator.interpolate(dummy, 5)
             assertThat(
@@ -133,10 +132,53 @@ class TerrainInterpolatorTest {
         }
     }
 
+    inner class Averages {
+        @Before
+        fun setup() {
+            dummy = Array(3) {
+                Array(3) {
+                    0.0
+                }
+            }
+            interpolator = TerrainInterpolator();
+        }
 
-    //class TerrainInterpolatorSpy : TerrainInterpolator()  {
-//
-//}
+        @Test
+        fun zero() {
+            interpolator.interpolate(dummy, 3)
+            assertThat(
+                dummy,
+                `is`(
+                    arrayOf(
+                        arrayOf(0.0, 0.0, 0.0),
+                        arrayOf(0.0, 0.0, 0.0),
+                        arrayOf(0.0, 0.0, 0.0)
+                    )
+                )
+            )
+        }
+
+        @Test
+        fun allOnes() {
+            dummy[2][2] = 1.0
+            dummy[0][2] = dummy[2][2]
+            dummy[2][0] = dummy[0][2]
+            dummy[0][0] = dummy[2][0]
+            interpolator.interpolate(dummy, 3)
+            assertThat(
+                dummy,
+                `is`(
+                    arrayOf(
+                        arrayOf(1.0, 1.0, 1.0),
+                        arrayOf(1.0, 1.0, 1.0),
+                        arrayOf(1.0, 1.0, 1.0)
+                    )
+                )
+            )
+        }
+
+    }
+
     private inner class TerrainInterpolatorSpy : TerrainInterpolator() {
         override fun doSquare(x: Int, y: Int, size: Int) {
             actions += String.format("Square(%d,%d,%d): ", x, y, size)
@@ -168,10 +210,9 @@ class TerrainInterpolatorTest {
                 i += 2
             }
             actions = actions.substring(0, actions.length - 1) + ")"
-            return 0.0
+            return super.average(*points)
         }
     }
-
 
     private inner class TerrainInterpolatorDiamondSquareSpy : TerrainInterpolator() {
         override fun doSquare(x: Int, y: Int, size: Int) {
