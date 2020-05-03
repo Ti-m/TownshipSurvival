@@ -12,14 +12,22 @@ import org.junit.runner.RunWith
 class TerrainInterpolatorTest {
 
     private lateinit var actions: String
-    private lateinit var dummy: Array<Array<Double>>
+    private lateinit var dummy: Array<Array<Double?>>
     private lateinit var interpolator: TerrainInterpolator
 
     inner class SimpleValidations {
         @Before
         fun setUp() {
             actions = ""
-            dummy = arrayOf(arrayOf())
+            dummy =  Array(3) {
+                Array<Double?>(3) {
+                    null
+                }
+            }
+            dummy[2][2] = 0.0
+            dummy[0][2] = dummy[2][2]
+            dummy[2][0] = dummy[0][2]
+            dummy[0][0] = dummy[2][0]
             interpolator = TerrainInterpolatorSpy()
         }
 
@@ -52,10 +60,14 @@ class TerrainInterpolatorTest {
         fun setUp() {
             actions = ""
             dummy = Array(3) {
-                Array(3) {
-                    0.0
+                Array<Double?>(3) {
+                    null
                 }
             }
+            dummy[2][2] = 0.0
+            dummy[0][2] = dummy[2][2]
+            dummy[2][0] = dummy[0][2]
+            dummy[0][0] = dummy[2][0]
             interpolator = TerrainInterpolatorSpy()
         }
 
@@ -86,10 +98,14 @@ class TerrainInterpolatorTest {
         @Test
         fun DiamondSquare_FirstPass() {
             dummy = Array(5) {
-                Array(5) {
-                    0.0
+                Array<Double?>(5) {
+                    null
                 }
             }
+            dummy[4][4] = 0.0
+            dummy[0][4] = dummy[4][4]
+            dummy[4][0] = dummy[0][4]
+            dummy[0][0] = dummy[4][0]
             interpolator.interpolate(dummy, 5)
             assertThat(
                 actions, startsWith(
@@ -110,10 +126,14 @@ class TerrainInterpolatorTest {
         fun setUp() {
             actions = ""
             dummy = Array(5) {
-                Array(5) {
-                    0.0
+                Array<Double?>(5) {
+                    null
                 }
             }
+            dummy[4][4] = 0.0
+            dummy[0][4] = dummy[4][4]
+            dummy[4][0] = dummy[0][4]
+            dummy[0][0] = dummy[4][0]
             interpolator = TerrainInterpolatorDiamondSquareSpy()
         }
 
@@ -136,10 +156,14 @@ class TerrainInterpolatorTest {
         @Before
         fun setup() {
             dummy = Array(3) {
-                Array(3) {
-                    0.0
+                Array<Double?>(3) {
+                    null
                 }
             }
+            dummy[2][2] = 0.0
+            dummy[0][2] = dummy[2][2]
+            dummy[2][0] = dummy[0][2]
+            dummy[0][0] = dummy[2][0]
             interpolator = TerrainInterpolator();
         }
 
@@ -150,9 +174,9 @@ class TerrainInterpolatorTest {
                 dummy,
                 `is`(
                     arrayOf(
-                        arrayOf(0.0, 0.0, 0.0),
-                        arrayOf(0.0, 0.0, 0.0),
-                        arrayOf(0.0, 0.0, 0.0)
+                        arrayOf<Double?>(0.0, 0.0, 0.0),
+                        arrayOf<Double?>(0.0, 0.0, 0.0),
+                        arrayOf<Double?>(0.0, 0.0, 0.0)
                     )
                 )
             )
@@ -169,14 +193,66 @@ class TerrainInterpolatorTest {
                 dummy,
                 `is`(
                     arrayOf(
-                        arrayOf(1.0, 1.0, 1.0),
-                        arrayOf(1.0, 1.0, 1.0),
-                        arrayOf(1.0, 1.0, 1.0)
+                        arrayOf<Double?>(1.0, 1.0, 1.0),
+                        arrayOf<Double?>(1.0, 1.0, 1.0),
+                        arrayOf<Double?>(1.0, 1.0, 1.0)
                     )
                 )
             )
         }
 
+        @Test
+        fun ramp() {
+            dummy[0][0] = 0.0
+            dummy[2][0] = 12.0
+            dummy[0][2] = 12.0
+            dummy[2][2] = 24.0
+            interpolator.interpolate(dummy, 3)
+            assertThat(
+                dummy,
+                `is`(
+                    arrayOf(
+                        arrayOf<Double?>(0.0, 8.0, 12.0),
+                        arrayOf<Double?>(8.0, 12.0, 16.0),
+                        arrayOf<Double?>(12.0, 16.0, 24.0)
+                    )
+                )
+            )
+        }
+    }
+
+    inner class RandomsAndOffsets {
+
+        @Before
+        fun setup() {
+            dummy = Array(5) {
+                Array<Double?>(5) {
+                    null
+                }
+            }
+            dummy[4][4] = 0.0
+            dummy[0][4] = dummy[4][4]
+            dummy[4][0] = dummy[0][4]
+            dummy[0][0] = dummy[4][0]
+            interpolator = TerrainInterpolatorWithFixedRandom()
+        }
+
+        @Test
+        fun volcano() {
+            interpolator.interpolate(dummy, 5, 2.0, 4.0)
+            assertThat(
+                dummy,
+                `is`(
+                    arrayOf(
+                        arrayOf<Double?>(0.0, 8.5, 8.0, 8.5, 0.0),
+                        arrayOf<Double?>(8.5, 8.5, 10.75, 8.5, 8.5),
+                        arrayOf<Double?>(8.0, 10.75, 6.0, 10.75, 8.0),
+                        arrayOf<Double?>(8.5, 8.5, 10.75, 8.5, 8.5),
+                        arrayOf<Double?>(0.0, 8.5, 8.0, 8.5, 0.0)
+                    )
+                )
+            )
+        }
     }
 
     private inner class TerrainInterpolatorSpy : TerrainInterpolator() {
@@ -194,10 +270,7 @@ class TerrainInterpolatorTest {
 
         override fun set(x: Int, y: Int, value: Double) {
             actions += String.format("->[%d,%d]. ", x, y)
-        }
-
-        override fun get(x: Int, y: Int): Double {
-            return -1.0
+            super.set(x, y, value)
         }
 
         override fun average(vararg points: Int): Double {
@@ -226,8 +299,8 @@ class TerrainInterpolatorTest {
     }
 
     private inner class TerrainInterpolatorWithFixedRandom : TerrainInterpolator() {
-        fun random(): Double {
-            return randomAmplitude;
+        override fun random(): Double {
+            return randomAmplitude
         }
     }
 }

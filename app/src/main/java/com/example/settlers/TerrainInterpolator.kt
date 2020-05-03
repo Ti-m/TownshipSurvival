@@ -5,13 +5,16 @@ import kotlin.math.floor
 import kotlin.math.log2
 
 open class TerrainInterpolator {
-    protected var randomAmplitude: Double = 0.0
-    protected lateinit var terrain: Array<Array<Double>>
+    protected var randomAmplitude: Double = 1.0
+    protected var offset: Double = 0.0
+    protected lateinit var terrain: Array<Array<Double?>>
 
-    fun interpolate(terrain: Array<Array<Double>>, size: Int) {
+    fun interpolate(terrain: Array<Array<Double?>>, size: Int, randomAmplitude: Double = 1.0, offset: Double = 0.0) {
         if (isPowerOfTwo(size)) return
         if (size == 0 || size == 1) return
         this.terrain = terrain
+        this.randomAmplitude = randomAmplitude
+        this.offset = offset
 
         doSquare(0, 0, size)
         doDiamond(0,0, size)
@@ -49,21 +52,25 @@ open class TerrainInterpolator {
     }
 
     open fun set(x: Int, y: Int, value: Double) {
-        terrain[x][y] = value
+        terrain[x][y] = value * random() + offset
     }
 
     open fun get(x: Int, y: Int): Double {
-        return  terrain[x][y]
+        return  terrain[x][y]!!
     }
 
     open fun average(vararg points: Int): Double {
         var i = 0
         var result = 0.0
         while (i < points.size) {
-                result += (terrain[points[i]][points[i + 1]])
+                result += (terrain[points[i]][points[i + 1]]!!)
 
             i += 2
         }
         return result / (points.size / 2)
+    }
+
+    open fun random(): Double {
+        return randomAmplitude
     }
 }
