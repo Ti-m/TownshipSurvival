@@ -82,21 +82,26 @@ class TerrainInterpolatorTest {
                 )
             )
         }
-//
-//        @Test
-//        fun DiamondSquare_FirstPass() {
-//            interpolator.interpolate(dummy, 5)
-//            assertThat(
-//                actions, startsWith(
-//                    "Square(0,0,5): A([0,0],[4,0],[0,4],[4,4])->[2,2]. " +
-//                            "Diamond(0,0,5): " +
-//                            "A([0,0],[4,0],[2,2])->[2,0]. " +
-//                            "A([2,2],[0,0],[0,4])->[0,2]. " +
-//                            "A([0,4],[4,4],[2,2])->[2,4]. " +
-//                            "A([2,2],[4,0],[4,4])->[4,2]. "
-//                )
-//            )
-//        }
+
+        @Test
+        fun DiamondSquare_FirstPass() {
+            dummy = Array(5) {
+                Array(5) {
+                    0.0
+                }
+            }
+            interpolator.interpolate(dummy, 5)
+            assertThat(
+                actions, startsWith(
+                    "Square(0,0,5): A([0,0],[4,0],[0,4],[4,4])->[2,2]. " +
+                            "Diamond(0,0,5): " +
+                            "A([0,0],[4,0],[2,2])->[2,0]. " +
+                            "A([2,2],[0,0],[0,4])->[0,2]. " +
+                            "A([0,4],[4,4],[2,2])->[2,4]. " +
+                            "A([2,2],[4,0],[4,4])->[4,2]. "
+                )
+            )
+        }
         }
 //    inner class SquareDiamondRepetition {
 //
