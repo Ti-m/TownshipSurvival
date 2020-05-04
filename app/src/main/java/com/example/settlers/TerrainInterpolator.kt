@@ -1,9 +1,7 @@
 package com.example.settlers
 
-import kotlin.math.ceil
-import kotlin.math.floor
-import kotlin.math.log2
-import kotlin.math.round
+import kotlin.math.*
+import kotlin.random.Random
 
 open class TerrainInterpolator {
     protected var randomAmplitude: Double = 1.0
@@ -77,6 +75,7 @@ open class TerrainInterpolator {
     }
 
     open fun random(): Double {
-        return randomAmplitude
+        val rnd = sin(Random.nextDouble(6.28))//TODO set seed?
+        return randomAmplitude * rnd
     }
 }
