@@ -3,6 +3,7 @@ package com.example.settlers
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.log2
+import kotlin.math.round
 
 open class TerrainInterpolator {
     protected var randomAmplitude: Double = 1.0
@@ -39,17 +40,17 @@ open class TerrainInterpolator {
 
     open fun doSquare(x: Int, y: Int, size: Int) {
         val u = size-1
-        this.set(x = x + u/2, y = y + u/2, value = this.average(0, 0, u, 0, 0, u, u, u))
+        this.set(x = x + u/2, y = y + u/2, value = this.average(x + 0, y + 0, x + u, y + 0, x + 0, y + u, x + u, y + u))
     }
 
     open fun doDiamond(x: Int, y: Int, size: Int) {
         val u = size-1
 
-        //this.set(x = x+u/2, y = y+0,   value = this.average(0,0,u/2,-u/2,u,0,u/2,u/2))
-        this.set(x = x+u/2, y = y+0,   value = this.average(0,0,u,0,u/2,u/2))
-        this.set(x = x+0,   y = y+u/2, value = this.average(u/2,u/2,0,0,0,u))
-        this.set(x = x+u/2, y = y+u,   value = this.average(0,u,u,u,u/2,u/2))
-        this.set(x = x+u,   y = y+u/2, value = this.average(u/2,u/2,u,0,u,u))
+        //this.set(x = x+u/2, y = y+0,   value = this.average(x + 0  , y + 0  , x + u/2, y - u/2, x + u  , y + 0  , x + u/2 , y + u/2))
+        this.set(x = x+u/2, y = y+0,   value = this.average(x + 0  , y + 0  , x + u, y + 0, x + u/2, y + u/2))
+        this.set(x = x+0,   y = y+u/2, value = this.average(x + u/2, y + u/2, x + 0  , y + 0  , x + 0  , y + u))
+        this.set(x = x+u/2, y = y+u,   value = this.average(x + 0  , y + u  , x + u  , y + u  , x + u/2, y + u/2))
+        this.set(x = x+u,   y = y+u/2, value = this.average(x + u/2, y + u/2, x + u  , y + 0  , x + u  , y + u))
     }
 
     open fun set(x: Int, y: Int, value: Double) {
@@ -71,7 +72,7 @@ open class TerrainInterpolator {
             //}
             i += 2
         }
-        return result / (points.size / 2)
+        return round((result / (points.size / 2)) * 100) / 100
         //return result / divider
     }
 

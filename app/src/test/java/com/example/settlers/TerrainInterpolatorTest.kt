@@ -308,16 +308,16 @@ class TerrainInterpolatorTest {
 
         @Test
         fun volcano() {
-            interpolator.interpolate(dummy, 5, 2.0, 4.0)
+            interpolator.interpolate(dummy, 5, 2.0, 6.0)
             assertThat(
                 dummy,
                 `is`(
                     arrayOf(
-                        arrayOf<Double?>(0.0, 8.5, 8.0, 8.5, 0.0),
-                        arrayOf<Double?>(8.5, 8.5, 10.75, 8.5, 8.5),
-                        arrayOf<Double?>(8.0, 10.75, 6.0, 10.75, 8.0),
-                        arrayOf<Double?>(8.5, 8.5, 10.75, 8.5, 8.5),
-                        arrayOf<Double?>(0.0, 8.5, 8.0, 8.5, 0.0)
+                        arrayOf<Double?>(0.0  , 25.33 , 10.0 , 25.33 , 0.0),
+                        arrayOf<Double?>(25.33, 19.0  , 33.0 , 19.0  , 25.33),
+                        arrayOf<Double?>(10.0 , 33.0  , 6.0  , 33.0  , 10.0),
+                        arrayOf<Double?>(25.33, 19.0  , 33.0 , 19.0  , 25.33),
+                        arrayOf<Double?>(0.0  , 25.33 , 10.0 , 25.33 , 0.0)
                     )
                 )
             )
