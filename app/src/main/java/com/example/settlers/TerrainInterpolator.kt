@@ -64,16 +64,16 @@ open class TerrainInterpolator {
     open fun average(vararg points: Int): Double {
         var i = 0
         var result = 0.0
-        //var divider = 0
+       // var divider = 0
         while (i < points.size) {
-            //if (points[i] > 0 && points[i+1] > 0 && points[i] < terrain.count() && points[i+1] < terrain[0].count()) {
+       //     if (points[i] > 0 && points[i+1] > 0 && points[i] < terrain.count() && points[i+1] < terrain[0].count()) {
                 result += (terrain[points[i]][points[i + 1]]!!)
-            //    divider += 1
-            //}
+        //        divider += 1
+       //     }
             i += 2
         }
         return round((result / (points.size / 2)) * 100) / 100
-        //return result / divider
+        //return round((result / divider) * 100) / 100
     }
 
     open fun random(): Double {
