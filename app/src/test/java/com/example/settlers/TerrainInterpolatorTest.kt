@@ -219,6 +219,33 @@ class TerrainInterpolatorTest {
                 )
             )
         }
+
+
+        @Test
+        fun all_ones_big() {
+            dummy = Array(5) {
+                Array<Double?>(5) {
+                    null
+                }
+            }
+            dummy[4][4] = 1.0
+            dummy[0][4] = 1.0
+            dummy[4][0] = 1.0
+            dummy[0][0] = 1.0
+            interpolator.interpolate(dummy, 5)
+            assertThat(
+                dummy,
+                `is`(
+                    arrayOf(
+                        arrayOf<Double?>(1.0, 1.0, 1.0, 1.0, 1.0),
+                        arrayOf<Double?>(1.0, 1.0, 1.0, 1.0, 1.0),
+                        arrayOf<Double?>(1.0, 1.0, 1.0, 1.0, 1.0),
+                        arrayOf<Double?>(1.0, 1.0, 1.0, 1.0, 1.0),
+                        arrayOf<Double?>(1.0, 1.0, 1.0, 1.0, 1.0)
+                    )
+                )
+            )
+        }
     }
 
     inner class RandomsAndOffsets {
@@ -238,6 +265,48 @@ class TerrainInterpolatorTest {
         }
 
         @Test
+        fun volcanoSmall() {
+            dummy = Array(3) {
+                Array<Double?>(3) {
+                    null
+                }
+            }
+            dummy[2][2] = 0.0
+            dummy[0][2] = dummy[2][2]
+            dummy[2][0] = dummy[0][2]
+            dummy[0][0] = dummy[2][0]
+            interpolator.interpolate(dummy, 3, 2.0, 6.0)
+            assertThat(
+                dummy,
+                `is`(
+                    arrayOf(
+                        arrayOf<Double?>(0.0, 10.0, 0.0),
+                        arrayOf<Double?>(10.0, 6.0, 10.0),
+                        arrayOf<Double?>(0.0, 10.0, 0.0)
+                    )
+                )
+            )
+        }
+
+
+//        @Test
+//        fun volcano() {
+//            interpolator.interpolate(dummy, 5, 1.0, 6.0)
+//            assertThat(
+//                dummy,
+//                `is`(
+//                    arrayOf(
+//                        arrayOf<Double?>(0.0 , 12.5 , 8.0  , 12.5 , 0.0),
+//                        arrayOf<Double?>(12.5, 11.5 , 15.25, 11.5 , 12.5),
+//                        arrayOf<Double?>(8.0 , 15.25, 6.0  , 15.25, 8.0),
+//                        arrayOf<Double?>(12.5, 11.5 , 15.25, 11.5 , 12.5),
+//                        arrayOf<Double?>(0.0 , 12.5 , 8.0  , 12.5 , 0.0)
+//                    )
+//                )
+//            )
+//        }
+
+        @Test
         fun volcano() {
             interpolator.interpolate(dummy, 5, 2.0, 4.0)
             assertThat(
@@ -253,6 +322,8 @@ class TerrainInterpolatorTest {
                 )
             )
         }
+
+
     }
 
     private inner class TerrainInterpolatorSpy : TerrainInterpolator() {
@@ -290,10 +361,12 @@ class TerrainInterpolatorTest {
     private inner class TerrainInterpolatorDiamondSquareSpy : TerrainInterpolator() {
         override fun doSquare(x: Int, y: Int, size: Int) {
             actions += String.format("Square(%d,%d,%d) ", x, y, size)
+            super.doSquare(x, y, size)
         }
 
         override fun doDiamond(x: Int, y: Int, size: Int) {
             actions += String.format("Diamond(%d,%d,%d) ", x, y, size)
+            super.doDiamond(x, y, size)
         }
 
     }

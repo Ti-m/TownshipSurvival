@@ -39,16 +39,17 @@ open class TerrainInterpolator {
 
     open fun doSquare(x: Int, y: Int, size: Int) {
         val u = size-1
-        this.set(u/2, u/2, this.average(0, 0, u, 0, 0, u, u, u))
+        this.set(x = x + u/2, y = y + u/2, value = this.average(0, 0, u, 0, 0, u, u, u))
     }
 
     open fun doDiamond(x: Int, y: Int, size: Int) {
         val u = size-1
 
-        this.set(u/2,0,this.average(0,0,u,0,u/2,u/2))
-        this.set(0,u/2,this.average(u/2,u/2,0,0,0,u))
-        this.set(u/2,u, this.average(0,u,u,u,u/2,u/2))
-        this.set(u,u/2, this.average(u/2,u/2,u,0,u,u))
+        //this.set(x = x+u/2, y = y+0,   value = this.average(0,0,u/2,-u/2,u,0,u/2,u/2))
+        this.set(x = x+u/2, y = y+0,   value = this.average(0,0,u,0,u/2,u/2))
+        this.set(x = x+0,   y = y+u/2, value = this.average(u/2,u/2,0,0,0,u))
+        this.set(x = x+u/2, y = y+u,   value = this.average(0,u,u,u,u/2,u/2))
+        this.set(x = x+u,   y = y+u/2, value = this.average(u/2,u/2,u,0,u,u))
     }
 
     open fun set(x: Int, y: Int, value: Double) {
@@ -62,12 +63,16 @@ open class TerrainInterpolator {
     open fun average(vararg points: Int): Double {
         var i = 0
         var result = 0.0
+        //var divider = 0
         while (i < points.size) {
+            //if (points[i] > 0 && points[i+1] > 0 && points[i] < terrain.count() && points[i+1] < terrain[0].count()) {
                 result += (terrain[points[i]][points[i + 1]]!!)
-
+            //    divider += 1
+            //}
             i += 2
         }
         return result / (points.size / 2)
+        //return result / divider
     }
 
     open fun random(): Double {
