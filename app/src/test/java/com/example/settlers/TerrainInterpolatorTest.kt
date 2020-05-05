@@ -164,7 +164,7 @@ class TerrainInterpolatorTest {
             dummy[0][2] = dummy[2][2]
             dummy[2][0] = dummy[0][2]
             dummy[0][0] = dummy[2][0]
-            interpolator = TerrainInterpolator();
+            interpolator = TerrainInterpolatorWithFixedRandom();
         }
 
         @Test
@@ -356,6 +356,10 @@ class TerrainInterpolatorTest {
             actions = actions.substring(0, actions.length - 1) + ")"
             return super.average(*points)
         }
+
+        override fun random(): Double {
+            return randomAmplitude
+        }
     }
 
     private inner class TerrainInterpolatorDiamondSquareSpy : TerrainInterpolator() {
@@ -369,6 +373,9 @@ class TerrainInterpolatorTest {
             super.doDiamond(x, y, size)
         }
 
+        override fun random(): Double {
+            return randomAmplitude
+        }
     }
 
     private inner class TerrainInterpolatorWithFixedRandom : TerrainInterpolator() {
