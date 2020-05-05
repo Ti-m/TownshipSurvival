@@ -9,7 +9,7 @@ open class TerrainInterpolator {
     protected lateinit var terrain: Array<Array<Double?>>
 
     fun interpolate(terrain: Array<Array<Double?>>, size: Int, randomAmplitude: Double = 1.0, offset: Double = 0.0) {
-        if (isPowerOfTwo(size)) return
+        if (!isPowerOfTwo(size-1)) return
         if (size == 0 || size == 1) return
         this.terrain = terrain
         this.randomAmplitude = randomAmplitude
@@ -18,6 +18,7 @@ open class TerrainInterpolator {
         doSquare(0, 0, size)
         doDiamond(0,0, size)
         if (size > 3) {
+            //unfinished here
             val s2 = ceil(size.toDouble() / 2).toInt()
             val s2h = ceil(s2.toDouble() / 2).toInt()
             doSquare(0, 0, s2)

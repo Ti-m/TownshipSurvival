@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import kotlin.math.ceil
 
 
 class MainActivity : AppCompatActivity() {
@@ -33,7 +34,7 @@ class Element(val x: Int, val y: Int, var typeTop: GroundType, var typeBottom: G
 
 class GameWorld(context: Context) : View(context) {
 
-    val map = createMap(5)
+    val map = createMap(9)
 
     companion object {
 
@@ -49,43 +50,15 @@ class GameWorld(context: Context) : View(context) {
             map[size-1][size-1] = 0.0
             val interpolator = TerrainInterpolator()
             interpolator.interpolate(map, size, 1.0, 1.0)
-            return listOf(
-                Element(x = 1, y = 1, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
-                Element(x = 2, y = 1, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
-                Element(x = 3, y = 1, typeTop = GroundType.Grass, typeBottom = GroundType.Desert),
-                Element(x = 4, y = 1, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
-                Element(x = 5, y = 1, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
-                Element(x = 1, y = 2, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
-                Element(x = 2, y = 2, typeTop = GroundType.Desert, typeBottom = GroundType.Desert),
-                Element(x = 3, y = 2, typeTop = GroundType.Grass, typeBottom = GroundType.Desert),
-                Element(x = 4, y = 2, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
-                Element(x = 5, y = 2, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
-                Element(x = 1, y = 3, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
-                Element(x = 2, y = 3, typeTop = GroundType.Desert, typeBottom = GroundType.Grass),
-                Element(x = 3, y = 3, typeTop = GroundType.Desert, typeBottom = GroundType.Desert),
-                Element(x = 4, y = 3, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
-                Element(x = 5, y = 3, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
-                Element(x = 1, y = 4, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
-                Element(x = 2, y = 4, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
-                Element(x = 3, y = 4, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
-                Element(x = 4, y = 4, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
-                Element(x = 5, y = 4, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
-                Element(x = 1, y = 5, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
-                Element(x = 2, y = 5, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
-                Element(x = 3, y = 5, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
-                Element(x = 4, y = 5, typeTop = GroundType.Grass, typeBottom = GroundType.Grass),
-                Element(x = 5, y = 5, typeTop = GroundType.Grass, typeBottom = GroundType.Grass)
-            ).map {
-                it.apply {
-                    if (map[this.x-1][this.y-1]!! < 1.0) {
-                        this.typeTop = GroundType.Grass
-                        this.typeBottom = GroundType.Grass
-                    } else {
-                        this.typeTop = GroundType.Desert
-                        this.typeBottom = GroundType.Desert
-                    }
+            if (map[(size/2-1)][size/2-1] == null) return listOf()
+            val result = mutableListOf<Element>()
+            map.forEachIndexed { indexX, array ->
+                array.forEachIndexed { indexY, item ->
+                    val type = if (item!! < 1.0) GroundType.Grass else GroundType.Desert
+                    result.add(Element(x= indexX + 1, y = indexY + 1, typeBottom = type, typeTop = type))
                 }
             }
+            return result
         }
 
         val flagPaint = Paint().apply {
