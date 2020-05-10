@@ -7,6 +7,7 @@ open class TerrainInterpolator {
     protected var randomAmplitude: Double = 1.0
     protected var offset: Double = 0.0
     protected lateinit var terrain: Array<Array<Double?>>
+    private var iteration: Int = 1
 
     fun interpolate(terrain: Array<Array<Double?>>, size: Int, randomAmplitude: Double = 1.0, offset: Double = 0.0) {
         if (!isPowerOfTwo(size-1)) return
@@ -20,6 +21,7 @@ open class TerrainInterpolator {
     }
 
     private fun diamondPass(x: Int, y: Int, size: Int) {
+        iteration*=2
         if (size >= 3) {
             doSquare(x, y, size)
             doDiamond(x, y, size)
@@ -91,6 +93,6 @@ open class TerrainInterpolator {
 
     open fun random(): Double {
         val rnd = sin(Random.nextDouble(6.28))//TODO set seed?
-        return randomAmplitude * rnd
+        return randomAmplitude * rnd / iteration
     }
 }

@@ -1,6 +1,7 @@
 package com.example.settlers
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.widget.RelativeLayout
 import androidx.core.view.MotionEventCompat
@@ -8,6 +9,10 @@ import androidx.core.view.MotionEventCompat
 class ScrollingLayout : RelativeLayout {
     private var mPosX = 0f
     private var mPosY = 0f
+
+    companion object {
+        private val TAG = "ScrollingLayout"
+    }
 
     constructor(context: Context?) : super(context) {}
     constructor(
@@ -23,6 +28,7 @@ class ScrollingLayout : RelativeLayout {
     )
 
     override fun onTouchEvent(ev: MotionEvent): Boolean {
+        Log.i(TAG, "onTouchEvent $ev")
         val action = MotionEventCompat.getActionMasked(ev)
         when (action) {
             MotionEvent.ACTION_DOWN -> {
