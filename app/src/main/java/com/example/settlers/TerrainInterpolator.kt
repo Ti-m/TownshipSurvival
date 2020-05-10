@@ -15,20 +15,34 @@ open class TerrainInterpolator {
         this.randomAmplitude = randomAmplitude
         this.offset = offset
 
-        doSquare(0, 0, size)
-        doDiamond(0,0, size)
-        if (size > 3) {
-            //unfinished here
-            val s2 = ceil(size.toDouble() / 2).toInt()
-            val s2h = ceil(s2.toDouble() / 2).toInt()
-            doSquare(0, 0, s2)
-            doSquare(0, s2h, s2)
-            doSquare(s2h, 0, s2)
-            doSquare(s2h, s2h, s2)
-            doDiamond(0, 0, s2)
-            doDiamond(0, s2h, s2)
-            doDiamond(s2h, 0, s2)
-            doDiamond(s2h, s2h, s2)
+        diamondPass(0, 0, size)
+
+    }
+
+    private fun diamondPass(x: Int, y: Int, size: Int) {
+        if (size >= 3) {
+            doSquare(x, y, size)
+            doDiamond(x, y, size)
+            if (size >= 5) {
+                //unfinished here
+                val s2 = ceil(size.toDouble() / 2).toInt()
+                val s2h = ceil(s2.toDouble() / 2).toInt()
+                doSquare(x = x, y = y, size = s2)
+                doSquare(x = x, y = y + s2 - 1, size = s2)
+                doSquare(x = x + s2 - 1, y = y, size = s2)
+                doSquare(x = x + s2 - 1, y = y + s2 - 1, size = s2)
+                doDiamond(x = x, y = y, size = s2)
+                doDiamond(x = x, y = y + s2 - 1, size = s2)
+                doDiamond(x = x + s2 -1, y = y, size = s2)
+                doDiamond(x = x + s2 - 1, y = y + s2 - 1, size = s2)
+
+                if (size >= 9) {
+                    diamondPass(x = x, y = y, size = s2)
+                    diamondPass(x = x, y = y + s2 - 1, size = s2)
+                    diamondPass(x = x + s2 - 1, y = y, size = s2)
+                    diamondPass(x = x + s2 - 1, y = y + s2 - 1, size = s2)
+                }
+            }
         }
     }
 
