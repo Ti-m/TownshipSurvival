@@ -65,11 +65,11 @@ class ZoomingLayout : RelativeLayout, ScaleGestureDetector.OnScaleGestureListene
             when (motionEvent.action and MotionEvent.ACTION_MASK) {
                 MotionEvent.ACTION_DOWN -> {
                     Log.i(TAG, "DOWN")
-                    if (scale > MIN_ZOOM) {
+//                    if (scale > MIN_ZOOM) {
                         mode = Mode.DRAG
                         startX = motionEvent.x - prevDx
                         startY = motionEvent.y - prevDy
-                    }
+//                    }
                 }
                 MotionEvent.ACTION_MOVE -> if (mode == Mode.DRAG) {
                     dx = motionEvent.x - startX
@@ -91,8 +91,8 @@ class ZoomingLayout : RelativeLayout, ScaleGestureDetector.OnScaleGestureListene
                     (child()!!.getWidth() - child()!!.getWidth() / scale) / 2 * scale
                 val maxDy: Float =
                     (child()!!.getHeight() - child()!!.getHeight() / scale) / 2 * scale
-                dx = Math.min(Math.max(dx, -maxDx), maxDx)
-                dy = Math.min(Math.max(dy, -maxDy), maxDy)
+//                dx = Math.min(Math.max(dx, -maxDx), maxDx)
+//                dy = Math.min(Math.max(dy, -maxDy), maxDy)
                 Log.i(
                     TAG,
                     "Width: " + child()!!.getWidth()
