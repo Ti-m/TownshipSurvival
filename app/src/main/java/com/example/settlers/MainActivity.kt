@@ -10,10 +10,18 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import com.example.settlers.MainActivity.Companion.flagDistance
 import kotlin.math.ceil
 
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+
+        val flagDistance = 100.0f
+        val tileGridSize = 33
+        val gameBoardBorder = 200
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,20 +29,22 @@ class MainActivity : AppCompatActivity() {
         val scrollingLayout = ScrollingLayout(this)
 
         scrollingLayout.setBackgroundColor(Color.parseColor("#333333"))
-        scrollingLayout.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
-        val gw = GameWorld(this)
+        //scrollingLayout.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
+        scrollingLayout.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
+        val gw = GameWorld(context = this, tileGridSize = tileGridSize)
         gw.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         scrollingLayout.addView(gw)
         setContentView(scrollingLayout)
+
     }
 }
 enum class GroundType { Grass, Desert }
 class Polygon(val a: Pair<Float, Float>, val b: Pair<Float, Float>, val c: Pair<Float, Float>)
 class Element(val x: Int, val y: Int, var typeTop: GroundType, var typeBottom: GroundType )
 
-class GameWorld(context: Context) : View(context) {
+class GameWorld(context: Context, tileGridSize: Int) : View(context) {
 
-    val map = createMap(9)
+    val map = createMap(tileGridSize)
 
     companion object {
 
@@ -75,7 +85,6 @@ class GameWorld(context: Context) : View(context) {
             this.style = Paint.Style.FILL
         }
 
-        val distance = 100.0f
 
         fun drawGround(item: Element, canvas: Canvas, path: Path) {
             //even rows need distance/" offset
@@ -104,15 +113,15 @@ class GameWorld(context: Context) : View(context) {
         private fun calcTop(item: Element): Polygon {
             if (item.y.rem(2) == 0) {
                 return Polygon(
-                    Pair(item.x * distance + 0.5f * distance, item.y * distance),
-                    Pair(item.x * distance + 1.5f * distance, item.y * distance),
-                    Pair(item.x * distance + 1.0f * distance, item.y * distance - distance)
+                    Pair(item.x * flagDistance + 0.5f * flagDistance, item.y * flagDistance),
+                    Pair(item.x * flagDistance + 1.5f * flagDistance, item.y * flagDistance),
+                    Pair(item.x * flagDistance + 1.0f * flagDistance, item.y * flagDistance - flagDistance)
                 )
             } else {
                 return Polygon(
-                    Pair(item.x * distance, item.y * distance),
-                    Pair(item.x * distance + distance, item.y * distance),
-                    Pair(item.x * distance + distance * 0.5f, item.y * distance - distance)
+                    Pair(item.x * flagDistance, item.y * flagDistance),
+                    Pair(item.x * flagDistance + flagDistance, item.y * flagDistance),
+                    Pair(item.x * flagDistance + flagDistance * 0.5f, item.y * flagDistance - flagDistance)
                 )
             }
         }
@@ -120,15 +129,15 @@ class GameWorld(context: Context) : View(context) {
         private fun calcBottom(item: Element): Polygon {
             if (item.y.rem(2) == 0) {
                 return Polygon(
-                    Pair(item.x * distance + 0.5f * distance, item.y * distance),
-                    Pair(item.x * distance + 1.5f * distance, item.y * distance),
-                    Pair(item.x * distance + 1.0f * distance, item.y * distance + distance)
+                    Pair(item.x * flagDistance + 0.5f * flagDistance, item.y * flagDistance),
+                    Pair(item.x * flagDistance + 1.5f * flagDistance, item.y * flagDistance),
+                    Pair(item.x * flagDistance + 1.0f * flagDistance, item.y * flagDistance + flagDistance)
                 )
             } else {
                 return Polygon(
-                    Pair(item.x * distance, item.y * distance),
-                    Pair(item.x * distance + distance, item.y * distance),
-                    Pair(item.x * distance + distance * 0.5f, item.y * distance + distance)
+                    Pair(item.x * flagDistance, item.y * flagDistance),
+                    Pair(item.x * flagDistance + flagDistance, item.y * flagDistance),
+                    Pair(item.x * flagDistance + flagDistance * 0.5f, item.y * flagDistance + flagDistance)
                 )
             }
         }
@@ -193,6 +202,4 @@ class GameWorld(context: Context) : View(context) {
         }
 
     }
-
-
 }
