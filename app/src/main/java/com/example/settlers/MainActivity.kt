@@ -20,10 +20,10 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
 
-        val flagDistance = 33.0f
+        val flagDistance = 15.0f //33.0f
         val flagDiameter = flagDistance / 7
-        val tileGridSize = 33
-        val gameBoardBorder = 400
+        val tileGridSize = 65
+        val gameBoardBorder = 200
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 }
-enum class GroundType { Grass, Desert }
+enum class GroundType { Water, Grass, Desert, Mountain }
 class Polygon(val a: Pair<Float, Float>, val b: Pair<Float, Float>, val c: Pair<Float, Float>)
 class Element(val x: Int, val y: Int, var typeTop: GroundType, var typeBottom: GroundType )
 
@@ -66,17 +66,24 @@ class GameWorld(context: Context, tileGridSize: Int) : View(context) {
                     null
                 }
             }
-            map[0][0] = 0.0
-            map[0][size-1] = 0.0
-            map[size-1][0] = 0.0
-            map[size-1][size-1] = 0.0
+            map[0][0] = 1.0
+            map[0][size-1] = 1.0
+            map[size-1][0] = 1.0
+            map[size-1][size-1] = 1.0
             val interpolator = TerrainInterpolator()
-            interpolator.interpolate(map, size, 1.0, 1.0)
+            interpolator.interpolate(map, size, 0.5, 0.0)
             if (map[(size/2-1)][size/2-1] == null) return listOf()
             val result = mutableListOf<Element>()
             map.forEachIndexed { indexX, array ->
                 array.forEachIndexed { indexY, item ->
-                    val type = if (item!! < 1.0) GroundType.Grass else GroundType.Desert
+                    val type = when  { //if (item!! < 1.0) GroundType.Grass else GroundType.Desert
+                        item!! < -0.5 -> GroundType.Water
+                        item < 0.0 -> GroundType.Desert
+                        item < 0.5 -> GroundType.Grass
+                        item < 2.0 -> GroundType.Mountain
+                        else -> GroundType.Water
+                    }
+
                     result.add(Element(x= indexX + 1, y = indexY + 1, typeBottom = type, typeTop = type))
                 }
             }
@@ -88,12 +95,20 @@ class GameWorld(context: Context, tileGridSize: Int) : View(context) {
             this.style = Paint.Style.FILL
             this.textSize = 100.0f
         }
+        val waterPaint = Paint().apply {
+            this.color = Color.BLUE
+            this.style = Paint.Style.FILL
+        }
         val grassPaint = Paint().apply {
             this.color = Color.GREEN
             this.style = Paint.Style.FILL
         }
         val desertPaint = Paint().apply {
             this.color = Color.YELLOW
+            this.style = Paint.Style.FILL
+        }
+        val mountainPaint = Paint().apply {
+            this.color = Color.GRAY
             this.style = Paint.Style.FILL
         }
 
@@ -107,11 +122,15 @@ class GameWorld(context: Context, tileGridSize: Int) : View(context) {
             val colorTop = when(item.typeTop) {
                 GroundType.Grass -> grassPaint
                 GroundType.Desert -> desertPaint
+                GroundType.Water -> waterPaint
+                GroundType.Mountain -> mountainPaint
             }
             drawPolygon(p = top, canvas = canvas, path = path, paint = colorTop)
             val colorBottom = when(item.typeBottom) {
                 GroundType.Grass -> grassPaint
                 GroundType.Desert -> desertPaint
+                GroundType.Water -> waterPaint
+                GroundType.Mountain -> mountainPaint
             }
             drawPolygon(p = bottom, canvas = canvas, path = path, paint = colorBottom)
         }

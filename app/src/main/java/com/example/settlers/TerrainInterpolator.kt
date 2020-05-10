@@ -5,9 +5,10 @@ import kotlin.random.Random
 
 open class TerrainInterpolator {
     protected var randomAmplitude: Double = 1.0
+    protected var randomAmplitudeDecrease: Double = 0.0
+    protected var totalNumber = 0
     protected var offset: Double = 0.0
     protected lateinit var terrain: Array<Array<Double?>>
-    private var iteration: Int = 1
 
     fun interpolate(terrain: Array<Array<Double?>>, size: Int, randomAmplitude: Double = 1.0, offset: Double = 0.0) {
         if (!isPowerOfTwo(size-1)) return
@@ -15,13 +16,13 @@ open class TerrainInterpolator {
         this.terrain = terrain
         this.randomAmplitude = randomAmplitude
         this.offset = offset
+        this.totalNumber = size * size
 
         diamondPass(0, 0, size)
 
     }
 
     private fun diamondPass(x: Int, y: Int, size: Int) {
-        iteration*=2
         if (size >= 3) {
             doSquare(x, y, size)
             doDiamond(x, y, size)
@@ -69,7 +70,8 @@ open class TerrainInterpolator {
     }
 
     open fun set(x: Int, y: Int, value: Double) {
-        terrain[x][y] = value * random() + offset
+        val result =  value * random() + offset
+        terrain[x][y] = result
     }
 
     open fun get(x: Int, y: Int): Double {
@@ -79,20 +81,24 @@ open class TerrainInterpolator {
     open fun average(vararg points: Int): Double {
         var i = 0
         var result = 0.0
-       // var divider = 0
+        var divider = 0
         while (i < points.size) {
-       //     if (points[i] > 0 && points[i+1] > 0 && points[i] < terrain.count() && points[i+1] < terrain[0].count()) {
+            if (points[i] < terrain.count() && points[i+1] < terrain[0].count()) {
                 result += (terrain[points[i]][points[i + 1]]!!)
-        //        divider += 1
-       //     }
+                divider += 1
+            }
             i += 2
         }
-        return round((result / (points.size / 2)) * 100) / 100
+        //return round((result / (points.size / 2)) * 100) / 100
         //return round((result / divider) * 100) / 100
+        return result / divider
     }
 
     open fun random(): Double {
         val rnd = sin(Random.nextDouble(6.28))//TODO set seed?
-        return randomAmplitude * rnd / iteration
+        randomAmplitudeDecrease-= 1/totalNumber
+        return 1.0 + (randomAmplitude - randomAmplitudeDecrease) * rnd
+        //val value = randomAmplitude * rnd
+        //return value
     }
 }
