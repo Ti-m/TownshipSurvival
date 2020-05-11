@@ -50,16 +50,6 @@ class GameWorld(context: Context, tileGridSize: Int) : View(context) {
 
         val TAG = "GameWorld"
 
-        fun getIntFromColor(red: Int, green: Int, blue: Int): Int {
-            var red = red
-            var green = green
-            var blue = blue
-            red = red shl 16 and 0x00FF0000 //Shift red 16-bits and mask out other stuff
-            green = green shl 8 and 0x0000FF00 //Shift Green 8-bits and mask out other stuff
-            blue = blue and 0x000000FF //Mask out anything not blue.
-            return -0x1000000 or red or green or blue //0xFF000000 for 100% Alpha. Bitwise OR everything together.
-        }
-
         fun createMap(size: Int): List<Element> {
             val map = Array(size) {
                 Array<Double?>(size) {
@@ -134,7 +124,7 @@ class GameWorld(context: Context, tileGridSize: Int) : View(context) {
             }
 
 //            val paint = Paint().apply {
-//                this.color = getIntFromColor((item.value * 255).toInt(),(item.value * 255).toInt(),0)
+//                this.color = ColorTools.getIntFromColor((item.value * 255).toInt(),(item.value * 255).toInt(),0)
 //                this.style = Paint.Style.FILL
 //            }
 //            drawPolygon(p = top, canvas = canvas, path = path, paint = paint)
@@ -195,38 +185,9 @@ class GameWorld(context: Context, tileGridSize: Int) : View(context) {
             canvas.drawPath(path, paint)
         }
 
-//        private fun drawFlag(p: Pair<Float, Float>, canvas: Canvas, paint: Paint) {
-//            canvas.drawCircle(p.first, p.second, 15.0f, paint)
-//        }
-
         private fun drawFlag(p: Polygon, canvas: Canvas, paint: Paint) {
             canvas.drawCircle(p.a.first, p.b.second, flagDiameter, paint)
         }
-    }
-
-//    val topleft = Pair(100.0f, 0.0f)
-//    val topRight = Pair(300.0f, 0.0f)
-//    val middleLeft = Pair(0.0f, 100.0f)
-//    val middle = Pair(200.0f, 100.0f)
-//    val middleRifght = Pair(400.0f, 100.0f)
-//    val bottomLeft = Pair(100.0f, 200.0f)
-//    val bottomRight = Pair(300.0f, 200.0f)
-//    val flags = listOf(topleft, topRight, middleLeft, middle, middleRifght, bottomLeft, bottomRight)
-//    val polygons = listOf(
-//        Polygon(topleft,middle,middleLeft),
-//        Polygon(topleft,topRight,middle),
-//        Polygon(middle,middleRifght,topRight),
-//        Polygon(middle,middleRifght,bottomRight),
-//        Polygon(middle,bottomRight,bottomLeft),
-//        Polygon(middle,bottomLeft,middleLeft)
-//    )
-
-    private val textPaint = Paint(ANTI_ALIAS_FLAG).apply {
-        textSize = 60.0f
-    }
-    val polygonPaint = Paint().apply {
-        this.color = Color.GRAY
-        this.style = Paint.Style.FILL
     }
 
     val path = Path()
@@ -240,6 +201,20 @@ class GameWorld(context: Context, tileGridSize: Int) : View(context) {
         }
         map.forEach {
             drawFlag(it, canvas!!)
+        }
+    }
+}
+
+class ColorTools {
+    companion object {
+        fun getIntFromColor(red: Int, green: Int, blue: Int): Int {
+            var red = red
+            var green = green
+            var blue = blue
+            red = red shl 16 and 0x00FF0000 //Shift red 16-bits and mask out other stuff
+            green = green shl 8 and 0x0000FF00 //Shift Green 8-bits and mask out other stuff
+            blue = blue and 0x000000FF //Mask out anything not blue.
+            return -0x1000000 or red or green or blue //0xFF000000 for 100% Alpha. Bitwise OR everything together.
         }
     }
 }
