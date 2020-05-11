@@ -13,30 +13,20 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.example.settlers.MainActivity.Companion.flagDiameter
 import com.example.settlers.MainActivity.Companion.flagDistance
-import kotlin.math.ceil
 
 
 class MainActivity : AppCompatActivity() {
 
     companion object {
 
-        val flagDistance = 15.0f //33.0f
+        val flagDistance = 33.0f //33.0f
         val flagDiameter = flagDistance / 7
-        val tileGridSize = 65
+        val tileGridSize = 33
         val gameBoardBorder = 200
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_main)
-
-//        val scrollingLayout = ScrollingLayout(this)
-//        scrollingLayout.setBackgroundColor(Color.parseColor("#333333"))
-//        scrollingLayout.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
-//        val gw = GameWorld(context = this, tileGridSize = tileGridSize)
-//        gw.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-//        scrollingLayout.addView(gw)
-//        setContentView(scrollingLayout)
 
         val zoomingLayout = ZoomingLayout(this)
         zoomingLayout.setBackgroundColor(Color.parseColor("#333333"))
@@ -45,12 +35,12 @@ class MainActivity : AppCompatActivity() {
         gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         zoomingLayout.addView(gw2)
         setContentView(zoomingLayout)
-
     }
 }
+
 enum class GroundType { Water, Grass, Desert, Mountain }
 class Polygon(val a: Pair<Float, Float>, val b: Pair<Float, Float>, val c: Pair<Float, Float>)
-class Element(val x: Int, val y: Int, var typeTop: GroundType, var typeBottom: GroundType )
+class Element(val x: Int, val y: Int, var typeTop: GroundType, var typeBottom: GroundType, val value: Double )
 
 class GameWorld(context: Context, tileGridSize: Int) : View(context) {
 
@@ -60,6 +50,16 @@ class GameWorld(context: Context, tileGridSize: Int) : View(context) {
 
         val TAG = "GameWorld"
 
+        fun getIntFromColor(red: Int, green: Int, blue: Int): Int {
+            var red = red
+            var green = green
+            var blue = blue
+            red = red shl 16 and 0x00FF0000 //Shift red 16-bits and mask out other stuff
+            green = green shl 8 and 0x0000FF00 //Shift Green 8-bits and mask out other stuff
+            blue = blue and 0x000000FF //Mask out anything not blue.
+            return -0x1000000 or red or green or blue //0xFF000000 for 100% Alpha. Bitwise OR everything together.
+        }
+
         fun createMap(size: Int): List<Element> {
             val map = Array(size) {
                 Array<Double?>(size) {
@@ -67,26 +67,33 @@ class GameWorld(context: Context, tileGridSize: Int) : View(context) {
                 }
             }
             map[0][0] = 1.0
-            map[0][size-1] = 1.0
-            map[size-1][0] = 1.0
-            map[size-1][size-1] = 1.0
+            map[0][size-1] = 11.0
+            map[size-1][0] = 21.0
+            map[size-1][size-1] = 31.0
             val interpolator = TerrainInterpolator()
-            interpolator.interpolate(map, size, 0.5, 0.0)
+            interpolator.interpolate(map, size, 0.03, 0.0)
             if (map[(size/2-1)][size/2-1] == null) return listOf()
-            val result = mutableListOf<Element>()
+            var result = mutableListOf<Element>()
             map.forEachIndexed { indexX, array ->
                 array.forEachIndexed { indexY, item ->
-                    val type = when  { //if (item!! < 1.0) GroundType.Grass else GroundType.Desert
-                        item!! < -0.5 -> GroundType.Water
-                        item < 0.0 -> GroundType.Desert
-                        item < 0.5 -> GroundType.Grass
-                        item < 2.0 -> GroundType.Mountain
-                        else -> GroundType.Water
-                    }
 
-                    result.add(Element(x= indexX + 1, y = indexY + 1, typeBottom = type, typeTop = type))
+                    result.add(Element(x= indexX + 1, y = indexY + 1, typeBottom =  GroundType.Water, typeTop =  GroundType.Water, value = item!!))
                 }
             }
+            val max = result.maxBy { it.value }
+            val min = result.minBy { it.value }
+            result = result.map {
+                val tmp = it.value / max!!.value
+                val type = when  { //if (item!! < 1.0) GroundType.Grass else GroundType.Desert
+                    tmp < 0.25 -> GroundType.Water
+                    tmp < 0.5 -> GroundType.Desert
+                    tmp < 0.75 -> GroundType.Grass
+                    tmp < 1.0 -> GroundType.Mountain
+                    else -> GroundType.Water
+                }
+
+                Element(x = it.x, y = it.y, typeTop = type, typeBottom = type, value = tmp)
+            }.toMutableList()
             return result
         }
 
@@ -125,6 +132,12 @@ class GameWorld(context: Context, tileGridSize: Int) : View(context) {
                 GroundType.Water -> waterPaint
                 GroundType.Mountain -> mountainPaint
             }
+
+//            val paint = Paint().apply {
+//                this.color = getIntFromColor((item.value * 255).toInt(),(item.value * 255).toInt(),0)
+//                this.style = Paint.Style.FILL
+//            }
+//            drawPolygon(p = top, canvas = canvas, path = path, paint = paint)
             drawPolygon(p = top, canvas = canvas, path = path, paint = colorTop)
             val colorBottom = when(item.typeBottom) {
                 GroundType.Grass -> grassPaint
@@ -132,6 +145,7 @@ class GameWorld(context: Context, tileGridSize: Int) : View(context) {
                 GroundType.Water -> waterPaint
                 GroundType.Mountain -> mountainPaint
             }
+//            drawPolygon(p = bottom, canvas = canvas, path = path, paint = paint)
             drawPolygon(p = bottom, canvas = canvas, path = path, paint = colorBottom)
         }
 
@@ -220,12 +234,7 @@ class GameWorld(context: Context, tileGridSize: Int) : View(context) {
     override fun onDraw(canvas: Canvas?) {
         Log.i(TAG, "onDraw")
         super.onDraw(canvas)
-//        polygons.forEach {
-//            drawPolygon(it, canvas!!, path, polygonPaint)
-//        }
-//        flags.map {
-//            drawFlag(it, canvas!!, flagPaint)
-//        }
+
         map.forEach {
             drawGround(it, canvas!!, path)
         }
