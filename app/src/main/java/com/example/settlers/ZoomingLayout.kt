@@ -21,24 +21,10 @@ class ZoomingLayout : RelativeLayout, ScaleGestureDetector.OnScaleGestureListene
         private val MAX_ZOOM = 4.0f
     }
 
-    constructor(context: Context?) : super(context) {
-        init(context)
-    }
+    constructor(context: Context?) : super(context)
+    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
 
-    constructor(
-        context: Context?,
-        attrs: AttributeSet?,
-        defStyle: Int
-    ) : super(context, attrs, defStyle) {
-        init(context)
-    }
-
-    constructor(context: Context?, attrs: AttributeSet?) : super(
-        context,
-        attrs
-    ) {
-        init(context)
-    }
 
     // Where the finger first  touches the screen
     private var startX = 0f
@@ -58,51 +44,66 @@ class ZoomingLayout : RelativeLayout, ScaleGestureDetector.OnScaleGestureListene
     private var scale = 1.0f
     private var lastScaleFactor = 0f
 
+    private var scaleDetector = ScaleGestureDetector(context, this)
 
-    fun init(context: Context?) {
-        val scaleDetector = ScaleGestureDetector(context, this)
-        setOnTouchListener { view, motionEvent ->
-            when (motionEvent.action and MotionEvent.ACTION_MASK) {
-                MotionEvent.ACTION_DOWN -> {
-                    Log.i(TAG, "DOWN")
+    private val childTouchListeners = mutableMapOf<String, (motionEvent: MotionEvent?) -> Boolean>()
+
+    override fun onTouchEvent(motionEvent: MotionEvent?): Boolean {
+        super.onTouchEvent(motionEvent)
+        Log.d("foo-zooming", motionEvent!!.action.toString())
+        when (motionEvent.action and MotionEvent.ACTION_MASK) {
+            MotionEvent.ACTION_DOWN -> {
+                Log.i(TAG, "DOWN")
 //                    if (scale > MIN_ZOOM) {
-                        mode = Mode.DRAG
-                        startX = motionEvent.x - prevDx
-                        startY = motionEvent.y - prevDy
+                mode = Mode.DRAG
+                startX = motionEvent.x - prevDx
+                startY = motionEvent.y - prevDy
 //                    }
-                }
-                MotionEvent.ACTION_MOVE -> if (mode == Mode.DRAG) {
-                    dx = motionEvent.x - startX
-                    dy = motionEvent.y - startY
-                }
-                MotionEvent.ACTION_POINTER_DOWN -> mode = Mode.ZOOM
-                MotionEvent.ACTION_POINTER_UP -> mode = Mode.DRAG
-                MotionEvent.ACTION_UP -> {
-                    Log.i(TAG, "UP")
-                    mode = Mode.NONE
-                    prevDx = dx
-                    prevDy = dy
-                }
             }
-            scaleDetector.onTouchEvent(motionEvent)
-            if (mode == Mode.DRAG && scale >= MIN_ZOOM || mode == Mode.ZOOM) {
-                parent.requestDisallowInterceptTouchEvent(true)
-                val maxDx: Float =
-                    (child()!!.getWidth() - child()!!.getWidth() / scale) / 2 * scale
-                val maxDy: Float =
-                    (child()!!.getHeight() - child()!!.getHeight() / scale) / 2 * scale
+            MotionEvent.ACTION_MOVE -> if (mode == Mode.DRAG) {
+                dx = motionEvent.x - startX
+                dy = motionEvent.y - startY
+            }
+            MotionEvent.ACTION_POINTER_DOWN -> mode = Mode.ZOOM
+            MotionEvent.ACTION_POINTER_UP -> mode = Mode.DRAG
+            MotionEvent.ACTION_UP -> {
+                Log.i(TAG, "UP")
+                mode = Mode.NONE
+                prevDx = dx
+                prevDy = dy
+            }
+        }
+        scaleDetector.onTouchEvent(motionEvent)
+        if (mode == Mode.DRAG && scale >= MIN_ZOOM || mode == Mode.ZOOM) {
+            parent.requestDisallowInterceptTouchEvent(true)
+            val maxDx: Float =
+                (child()!!.getWidth() - child()!!.getWidth() / scale) / 2 * scale
+            val maxDy: Float =
+                (child()!!.getHeight() - child()!!.getHeight() / scale) / 2 * scale
 //                dx = Math.min(Math.max(dx, -maxDx), maxDx)
 //                dy = Math.min(Math.max(dy, -maxDy), maxDy)
-                Log.i(
-                    TAG,
-                    "Width: " + child()!!.getWidth()
-                        .toString() + ", scale " + scale.toString() + ", dx " + dx
-                        .toString() + ", max " + maxDx
-                )
-                applyScaleAndTranslation()
-            }
-            true
+            Log.i(
+                TAG,
+                "Width: " + child()!!.getWidth()
+                    .toString() + ", scale " + scale.toString() + ", dx " + dx
+                    .toString() + ", max " + maxDx
+            )
+            applyScaleAndTranslation()
         }
+
+        childTouchListeners.forEach {
+            it.value.invoke(motionEvent)
+        }
+
+        return true
+    }
+
+    fun addTouchListener(identifier: String, func: (motionEvent: MotionEvent?) -> Boolean) {
+        childTouchListeners[identifier] = func
+    }
+
+    fun removeTouchListener(identifier: String) {
+        childTouchListeners.remove(identifier)
     }
 
     override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {

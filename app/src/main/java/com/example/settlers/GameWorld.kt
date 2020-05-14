@@ -8,15 +8,20 @@ import android.graphics.Path
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import com.example.settlers.MainActivity.Companion.flagDistance
 
 enum class GroundType { Water, Grass, Desert, Mountain }
 class Polygon(val a: Pair<Float, Float>, val b: Pair<Float, Float>, val c: Pair<Float, Float>)
 class Element(val x: Int, val y: Int, var typeTop: GroundType, var typeBottom: GroundType, val value: Double )
 
-class GameWorld(context: Context,private val tileGridSize: Int) : View(context) {
+class GameWorld(context: Context, private val parent: ZoomingLayout, private val tileGridSize: Int) : View(context) {
     companion object {
         val TAG = "GameWorld"
+    }
+
+    init {
+        parent.addTouchListener(TAG, ::onTouchEvent)
     }
 
     val map = createMap(tileGridSize)
@@ -179,18 +184,23 @@ class GameWorld(context: Context,private val tileGridSize: Int) : View(context) 
     private var selectedElement: Element? = null
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
+        Log.d("foo-gameworld", event!!.action.toString())
         super.onTouchEvent(event)
         when (event!!.action) {
-            MotionEvent.ACTION_DOWN -> selectedElement = null
+            MotionEvent.ACTION_DOWN -> {
+                selectedElement = null
+                return false
+            }
             MotionEvent.ACTION_UP -> {
                 selectedElement = getSelectedElement(event.x, event.y)
                 performClick()
+                return false
             }
         }
-        Log.e("onTouchEvent", "fired ${event.action} ${selectedElement?.x} ${selectedElement?.y}")
+        parent
+        //Log.e("onTouchEvent", "fired ${event.action} ${selectedElement?.x} ${selectedElement?.y}")
         //return super.onTouchEvent(event)
-        return true
-
+        return false
     }
 
     override fun performClick(): Boolean {

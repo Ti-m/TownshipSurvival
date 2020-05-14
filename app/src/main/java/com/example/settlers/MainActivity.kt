@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         val zoomingLayout = ZoomingLayout(this)
         zoomingLayout.setBackgroundColor(Color.parseColor("#333333"))
         zoomingLayout.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
-        val gw2 = GameWorld(context = this, tileGridSize = tileGridSize)
+        val gw2 = GameWorld(context = this, parent = zoomingLayout, tileGridSize = tileGridSize)
         gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         zoomingLayout.addView(gw2)
         setContentView(zoomingLayout)
