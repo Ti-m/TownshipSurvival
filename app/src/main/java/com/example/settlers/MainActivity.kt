@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         val flagDistance = 33.0f //33.0f
         val flagDiameter = flagDistance / 7
         val tileGridSize = 33
-        val gameBoardBorder = 200
+        val gameBoardBorder = 0
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

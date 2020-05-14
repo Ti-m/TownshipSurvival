@@ -50,8 +50,7 @@ class ZoomingLayout : RelativeLayout, ScaleGestureDetector.OnScaleGestureListene
 
     override fun onTouchEvent(motionEvent: MotionEvent?): Boolean {
         super.onTouchEvent(motionEvent)
-        Log.d("foo-zooming", motionEvent!!.action.toString())
-        when (motionEvent.action and MotionEvent.ACTION_MASK) {
+        when (motionEvent!!.action and MotionEvent.ACTION_MASK) {
             MotionEvent.ACTION_DOWN -> {
                 Log.i(TAG, "DOWN")
 //                    if (scale > MIN_ZOOM) {

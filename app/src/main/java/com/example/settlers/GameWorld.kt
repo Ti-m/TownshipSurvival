@@ -184,23 +184,25 @@ class GameWorld(context: Context, private val parent: ZoomingLayout, private val
     private var selectedElement: Element? = null
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        Log.d("foo-gameworld", event!!.action.toString())
         super.onTouchEvent(event)
         when (event!!.action) {
             MotionEvent.ACTION_DOWN -> {
                 selectedElement = null
-                return false
             }
             MotionEvent.ACTION_UP -> {
-                selectedElement = getSelectedElement(event.x, event.y)
+                Log.d("foo-gameworld", "x is $x")
+                Log.d("foo-gameworld", "translationX is $translationX")
+                Log.d("foo-gameworld", "left is $left")
+                Log.d("foo-gameworld", "event.x is ${event.x}")
+                Log.d("foo-gameworld", "scaleX is $scaleX")
+                selectedElement = getSelectedElement( event.x - translationX, event.y - translationY)
                 performClick()
-                return false
+
             }
         }
-        parent
         //Log.e("onTouchEvent", "fired ${event.action} ${selectedElement?.x} ${selectedElement?.y}")
         //return super.onTouchEvent(event)
-        return false
+        return false // return true in parentview
     }
 
     override fun performClick(): Boolean {
