@@ -10,6 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.example.settlers.MainActivity.Companion.flagDistance
+import kotlin.math.round
 
 enum class GroundType { Water, Grass, Desert, Mountain }
 class Polygon(val a: Pair<Float, Float>, val b: Pair<Float, Float>, val c: Pair<Float, Float>)
@@ -195,6 +196,7 @@ class GameWorld(context: Context, private val parent: ZoomingLayout, private val
                 Log.d("foo-gameworld", "left is $left")
                 Log.d("foo-gameworld", "event.x is ${event.x}")
                 Log.d("foo-gameworld", "scaleX is $scaleX")
+                //selectedElement = getSelectedElement( event.x / scaleX - translationX / scaleX, event.y / scaleY - translationY / scaleY) //scalex benutzen um beim zoom die richtig position zu ermitteln?
                 selectedElement = getSelectedElement( event.x - translationX, event.y - translationY)
                 performClick()
 
@@ -222,16 +224,28 @@ class GameWorld(context: Context, private val parent: ZoomingLayout, private val
     }
 
     private fun getSelectedElement(x: Float, y: Float) : Element?  {
-        val row = (y / flagDistance)
+        //val row = (y - 0.5 * flagDistance) / flagDistance
+        val row = round(y / flagDistance).toInt()
+        //var column = round(x / flagDistance).toInt()
+        val column = if (row.rem(2).toInt() == 0) {
+            round((x  - flagDistance / 2) / flagDistance).toInt()
+        } else {
+            round(x / flagDistance).toInt()
+        }
         //val column = (x / textSize) - 1
-        val column = (x / flagDistance)
+       // var column = round(x / flagDistance).toInt()
+//        if (column.rem(2).toInt() == 0) {
+//            column = round((x  - flagDistance / 2) / flagDistance).toInt()
+//        }
+
+        //val column = (x - 0.5 * flagDistance) / flagDistance
         Log.e("getSelected", "$row $column")
-        try {
-            return map.first {
-                it.y == column.toInt() && it.x == row.toInt()
+        return try {
+            map.first {
+                it.y == column && it.x == row
             }
         } catch (e: NoSuchElementException) {
-            return null
+            null
         }
     }
 
