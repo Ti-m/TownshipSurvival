@@ -196,8 +196,8 @@ class GameWorld(context: Context, private val parent: ZoomingLayout, private val
                 Log.d("foo-gameworld", "left is $left")
                 Log.d("foo-gameworld", "event.x is ${event.x}")
                 Log.d("foo-gameworld", "scaleX is $scaleX")
-                //selectedElement = getSelectedElement( event.x / scaleX - translationX / scaleX, event.y / scaleY - translationY / scaleY) //scalex benutzen um beim zoom die richtig position zu ermitteln?
-                selectedElement = getSelectedElement( event.x - translationX, event.y - translationY)
+                selectedElement = getSelectedElement( event.x / scaleX - translationX / scaleX, event.y / scaleY - translationY / scaleY) //scalex benutzen um beim zoom die richtig position zu ermitteln?
+                //selectedElement = getSelectedElement( event.x - translationX, event.y - translationY)
                 performClick()
 
             }

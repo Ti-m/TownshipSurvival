@@ -50,7 +50,8 @@ class ZoomingLayout : RelativeLayout, ScaleGestureDetector.OnScaleGestureListene
 
     override fun onTouchEvent(motionEvent: MotionEvent?): Boolean {
         super.onTouchEvent(motionEvent)
-        when (motionEvent!!.action and MotionEvent.ACTION_MASK) {
+        Log.i("width event is", motionEvent!!.action.toString())
+        when (motionEvent!!.action) {
             MotionEvent.ACTION_DOWN -> {
                 Log.i(TAG, "DOWN")
 //                    if (scale > MIN_ZOOM) {
@@ -75,17 +76,24 @@ class ZoomingLayout : RelativeLayout, ScaleGestureDetector.OnScaleGestureListene
         scaleDetector.onTouchEvent(motionEvent)
         if (mode == Mode.DRAG && scale >= MIN_ZOOM || mode == Mode.ZOOM) {
             parent.requestDisallowInterceptTouchEvent(true)
-            val maxDx: Float =
-                (child()!!.getWidth() - child()!!.getWidth() / scale) / 2 * scale
-            val maxDy: Float =
-                (child()!!.getHeight() - child()!!.getHeight() / scale) / 2 * scale
+
+            //Muss ich hier was machen?  wenn ich zoome wird dx und dy nicht richtig berechnet. Die werte bleiben so, als würde ich nicht zoomen..
+//            if (scale > MIN_ZOOM) {
+//
+//                dx = (child()!!.getWidth() - child()!!.getWidth() / scale) / 2 * scale
+//                dy = (child()!!.getHeight() - child()!!.getHeight() / scale) / 2 * scale
+//            }
+//            val maxDx: Float =
+//                (child()!!.getWidth() - child()!!.getWidth() / scale) / 2 * scale
+//            val maxDy: Float =
+//                (child()!!.getHeight() - child()!!.getHeight() / scale) / 2 * scale
 //                dx = Math.min(Math.max(dx, -maxDx), maxDx)
 //                dy = Math.min(Math.max(dy, -maxDy), maxDy)
             Log.i(
                 TAG,
                 "Width: " + child()!!.getWidth()
                     .toString() + ", scale " + scale.toString() + ", dx " + dx
-                    .toString() + ", max " + maxDx
+                    .toString() + ", startX " + startX + ", motionEvenet x " + motionEvent.x + ", mode " + mode
             )
             applyScaleAndTranslation()
         }
@@ -112,15 +120,17 @@ class ZoomingLayout : RelativeLayout, ScaleGestureDetector.OnScaleGestureListene
 
     override fun onScaleEnd(detector: ScaleGestureDetector?) {
         Log.i(TAG, "onScaleEnd")
+//        prevDy = 0.0f
+//        prevDx = 0.0f
+//        dx = -startX
+//        dy = -startY
+//        applyScaleAndTranslation()
     }
 
     override fun onScale(detector: ScaleGestureDetector?): Boolean {
         val scaleFactor: Float = detector!!.scaleFactor
         Log.i(TAG, "onScale$scaleFactor")
-        if (lastScaleFactor == 0.0f || sign(scaleFactor) == sign(
-                lastScaleFactor
-            )
-        ) {
+        if (lastScaleFactor == 0.0f || sign(scaleFactor) == sign(lastScaleFactor)) {
             scale *= scaleFactor
             scale = max(MIN_ZOOM, min(scale, MAX_ZOOM))
             lastScaleFactor = scaleFactor
