@@ -16,7 +16,7 @@ import kotlin.math.round
 
 enum class GroundType { Water, Grass, Desert, Mountain }
 class Polygon(val a: Pair<Float, Float>, val b: Pair<Float, Float>, val c: Pair<Float, Float>)
-class Element(val x: Int, val y: Int, var typeTop: GroundType, var typeBottom: GroundType, val value: Double )
+class Element(val x: Int, val y: Int, var type: GroundType, val value: Double )
 
 class GameWorld : View {
     companion object {
@@ -39,6 +39,13 @@ private val tileGridSize: Int = 33
     }
 
     val map = createMap(tileGridSize)
+    val tiles = createTiles(map)
+
+//    init {
+//        tiles.forEach {
+//            this.addView(it)
+//        }
+//    }
 
     private fun createMap(size: Int): List<Element> {
         val map = Array(size) {
@@ -57,7 +64,7 @@ private val tileGridSize: Int = 33
         map.forEachIndexed { indexX, array ->
             array.forEachIndexed { indexY, item ->
 
-                result.add(Element(x= indexX + 1, y = indexY + 1, typeBottom =  GroundType.Water, typeTop =  GroundType.Water, value = item!!))
+                result.add(Element(x= indexX + 1, y = indexY + 1, type = GroundType.Water, value = item!!))
             }
         }
         val max = result.maxBy { it.value }
@@ -72,131 +79,72 @@ private val tileGridSize: Int = 33
                 else -> GroundType.Water
             }
 
-            Element(x = it.x, y = it.y, typeTop = type, typeBottom = type, value = tmp)
+            Element(x = it.x, y = it.y, type = type, value = tmp)
         }.toMutableList()
         return result
     }
 
-    private val flagPaint = Paint().apply {
-        this.color = Color.LTGRAY
-        this.style = Paint.Style.FILL
-        this.textSize = 100.0f
-    }
-    private val waterPaint = Paint().apply {
-        this.color = Color.BLUE
-        this.style = Paint.Style.FILL
-    }
-    private val grassPaint = Paint().apply {
-        this.color = Color.GREEN
-        this.style = Paint.Style.FILL
-    }
-    private val desertPaint = Paint().apply {
-        this.color = Color.YELLOW
-        this.style = Paint.Style.FILL
-    }
-    private val mountainPaint = Paint().apply {
-        this.color = Color.GRAY
-        this.style = Paint.Style.FILL
+    private fun createTiles(input: List<Element>): List<FlagTile> {
+        return input.map { FlagTile(it, context) }
     }
 
-    private fun drawGround(item: Element, canvas: Canvas, path: Path) {
-        //even rows need distance/" offset
 
-        val top = calcTop(item)
-        val bottom = calcBottom(item)
-
-        val colorTop = when(item.typeTop) {
-            GroundType.Grass -> grassPaint
-            GroundType.Desert -> desertPaint
-            GroundType.Water -> waterPaint
-            GroundType.Mountain -> mountainPaint
-        }
-
-//            val paint = Paint().apply {
-//                this.color = ColorTools.getIntFromColor((item.value * 255).toInt(),(item.value * 255).toInt(),0)
-//                this.style = Paint.Style.FILL
-//            }
-//            drawPolygon(p = top, canvas = canvas, path = path, paint = paint)
-        drawPolygon(p = top, canvas = canvas, path = path, paint = colorTop)
-        val colorBottom = when(item.typeBottom) {
-            GroundType.Grass -> grassPaint
-            GroundType.Desert -> desertPaint
-            GroundType.Water -> waterPaint
-            GroundType.Mountain -> mountainPaint
-        }
-//            drawPolygon(p = bottom, canvas = canvas, path = path, paint = paint)
-        drawPolygon(p = bottom, canvas = canvas, path = path, paint = colorBottom)
-    }
-
-    private fun drawFlag(item: Element, canvas: Canvas) {
-        val top = calcTop(item)
-        drawFlag(top, canvas = canvas, paint = flagPaint)
-    }
-
-    private fun calcTop(item: Element): Polygon {
-        if (item.y.rem(2) == 0) {
-            return Polygon(
-                Pair(item.x * MainActivity.flagDistance + 0.5f * MainActivity.flagDistance, item.y * MainActivity.flagDistance),
-                Pair(item.x * MainActivity.flagDistance + 1.5f * MainActivity.flagDistance, item.y * MainActivity.flagDistance),
-                Pair(item.x * MainActivity.flagDistance + 1.0f * MainActivity.flagDistance, item.y * MainActivity.flagDistance - MainActivity.flagDistance)
-            )
-        } else {
-            return Polygon(
-                Pair(item.x * MainActivity.flagDistance, item.y * MainActivity.flagDistance),
-                Pair(item.x * MainActivity.flagDistance + MainActivity.flagDistance, item.y * MainActivity.flagDistance),
-                Pair(item.x * MainActivity.flagDistance + MainActivity.flagDistance * 0.5f, item.y * MainActivity.flagDistance - MainActivity.flagDistance)
-            )
-        }
-    }
-
-    private fun calcBottom(item: Element): Polygon {
-        if (item.y.rem(2) == 0) {
-            return Polygon(
-                Pair(item.x * MainActivity.flagDistance + 0.5f * MainActivity.flagDistance, item.y * MainActivity.flagDistance),
-                Pair(item.x * MainActivity.flagDistance + 1.5f * MainActivity.flagDistance, item.y * MainActivity.flagDistance),
-                Pair(item.x * MainActivity.flagDistance + 1.0f * MainActivity.flagDistance, item.y * MainActivity.flagDistance + MainActivity.flagDistance)
-            )
-        } else {
-            return Polygon(
-                Pair(item.x * MainActivity.flagDistance, item.y * MainActivity.flagDistance),
-                Pair(item.x * MainActivity.flagDistance + MainActivity.flagDistance, item.y * MainActivity.flagDistance),
-                Pair(item.x * MainActivity.flagDistance + MainActivity.flagDistance * 0.5f, item.y * MainActivity.flagDistance + MainActivity.flagDistance)
-            )
-        }
-    }
-
-    private fun drawPolygon(p: Polygon, canvas: Canvas, path: Path, paint: Paint) {
-        path.reset()
-        path.moveTo(p.a.first, p.a.second)
-        path.lineTo(p.b.first, p.b.second)
-        path.lineTo(p.c.first, p.c.second)
-        canvas.drawPath(path, paint)
-    }
-
-    private fun drawFlag(p: Polygon, canvas: Canvas, paint: Paint) {
-        canvas.drawCircle(p.a.first, p.b.second, MainActivity.flagDiameter, paint)
-    }
-
-    private val path = Path()
-
+//    private fun calcTop(item: Element): Polygon {
+//        if (item.y.rem(2) == 0) {
+//            return Polygon(
+//                Pair(item.x * MainActivity.flagDistance + 0.5f * MainActivity.flagDistance, item.y * MainActivity.flagDistance),
+//                Pair(item.x * MainActivity.flagDistance + 1.5f * MainActivity.flagDistance, item.y * MainActivity.flagDistance),
+//                Pair(item.x * MainActivity.flagDistance + 1.0f * MainActivity.flagDistance, item.y * MainActivity.flagDistance - MainActivity.flagDistance)
+//            )
+//        } else {
+//            return Polygon(
+//                Pair(item.x * MainActivity.flagDistance, item.y * MainActivity.flagDistance),
+//                Pair(item.x * MainActivity.flagDistance + MainActivity.flagDistance, item.y * MainActivity.flagDistance),
+//                Pair(item.x * MainActivity.flagDistance + MainActivity.flagDistance * 0.5f, item.y * MainActivity.flagDistance - MainActivity.flagDistance)
+//            )
+//        }
+//    }
+//
+//    private fun calcBottom(item: Element): Polygon {
+//        if (item.y.rem(2) == 0) {
+//            return Polygon(
+//                Pair(item.x * MainActivity.flagDistance + 0.5f * MainActivity.flagDistance, item.y * MainActivity.flagDistance),
+//                Pair(item.x * MainActivity.flagDistance + 1.5f * MainActivity.flagDistance, item.y * MainActivity.flagDistance),
+//                Pair(item.x * MainActivity.flagDistance + 1.0f * MainActivity.flagDistance, item.y * MainActivity.flagDistance + MainActivity.flagDistance)
+//            )
+//        } else {
+//            return Polygon(
+//                Pair(item.x * MainActivity.flagDistance, item.y * MainActivity.flagDistance),
+//                Pair(item.x * MainActivity.flagDistance + MainActivity.flagDistance, item.y * MainActivity.flagDistance),
+//                Pair(item.x * MainActivity.flagDistance + MainActivity.flagDistance * 0.5f, item.y * MainActivity.flagDistance + MainActivity.flagDistance)
+//            )
+//        }
+//    }
 
 
     override fun onDraw(canvas: Canvas?) {
-        Log.e("mywidth", "width: ${width.toString()} height ${height} ")
-        Log.i(TAG, "onDraw")
         super.onDraw(canvas)
-
-        map.forEach {
-            drawGround(it, canvas!!, path)
-        }
-        map.forEach {
-            drawFlag(it, canvas!!)
-        }
-
-        if (selectedElement != null) {
-            drawSelectedBox(canvas)
+        tiles.forEach {
+            it.draw(canvas)
         }
     }
+
+//    override fun onDraw(canvas: Canvas?) {
+//        Log.e("mywidth", "width: ${width.toString()} height ${height} ")
+//        Log.i(TAG, "onDraw")
+//        super.onDraw(canvas)
+//
+//        map.forEach {
+//            drawGround(it, canvas!!, path)
+//        }
+//        map.forEach {
+//            drawFlag(it, canvas!!)
+//        }
+//
+//        if (selectedElement != null) {
+//            drawSelectedBox(canvas)
+//        }
+//    }
 
     private var selectedElement: Element? = null
 
@@ -227,6 +175,7 @@ private val tileGridSize: Int = 33
         this.invalidate()
         return super.performClick()
     }
+
 
     private val framePaint = Paint().apply {
         this.color = Color.RED
