@@ -13,6 +13,9 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.example.settlers.MainActivity.Companion.flagDiameter
 import com.example.settlers.MainActivity.Companion.flagDistance
+import com.otaliastudios.zoom.ZoomApi.Companion.MAX_ZOOM_DEFAULT_TYPE
+import com.otaliastudios.zoom.ZoomApi.Companion.MIN_ZOOM_DEFAULT_TYPE
+import com.otaliastudios.zoom.ZoomLayout
 
 
 class MainActivity : AppCompatActivity() {
@@ -26,13 +29,29 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val zoomingLayout = ZoomingLayout(this)
+//        setContentView(R.layout.activity_main)
+        val zoomingLayout = ZoomLayout( context = this)
         zoomingLayout.setBackgroundColor(Color.parseColor("#333333"))
-        zoomingLayout.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
-        val gw2 = GameWorld(context = this, parent = zoomingLayout, tileGridSize = tileGridSize)
-        gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        //zoomingLayout.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
+        zoomingLayout.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        zoomingLayout.isHorizontalScrollBarEnabled = true
+        zoomingLayout.isVerticalScrollBarEnabled = true
+        zoomingLayout.setMinZoom(1.0f, MIN_ZOOM_DEFAULT_TYPE)
+        zoomingLayout.setMaxZoom(4.0f, MAX_ZOOM_DEFAULT_TYPE)
+//Das zoomen geht ejtz aber die scale informationg elangt nicht in den subview...
+//        workaround doer doch lieber wieder das eigene. Prinzipiell ist das zoom verhalten mit dem zoomlayout schon schöner...
+        val gw2 = GameWorld(context = this)
+        //gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        gw2.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
         zoomingLayout.addView(gw2)
         setContentView(zoomingLayout)
+
+//        val zoomingLayout = ZoomingLayout(this)
+//        zoomingLayout.setBackgroundColor(Color.parseColor("#333333"))
+//        zoomingLayout.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
+//        val gw2 = GameWorld(context = this, parent = zoomingLayout, tileGridSize = tileGridSize)
+//        gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+//        zoomingLayout.addView(gw2)
+//        setContentView(zoomingLayout)
     }
 }

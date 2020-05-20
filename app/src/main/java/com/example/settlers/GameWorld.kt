@@ -5,24 +5,37 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
+import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.example.settlers.MainActivity.Companion.flagDistance
+import com.otaliastudios.zoom.ZoomLayout
 import kotlin.math.round
 
 enum class GroundType { Water, Grass, Desert, Mountain }
 class Polygon(val a: Pair<Float, Float>, val b: Pair<Float, Float>, val c: Pair<Float, Float>)
 class Element(val x: Int, val y: Int, var typeTop: GroundType, var typeBottom: GroundType, val value: Double )
 
-class GameWorld(context: Context, private val parent: ZoomingLayout, private val tileGridSize: Int) : View(context) {
+class GameWorld : View {
     companion object {
         val TAG = "GameWorld"
     }
-
+    constructor(context: Context?) : super(context)
+    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+//    init {
+//        parent.addTouchListener(TAG, ::onTouchEvent)
+//    }
+private val tileGridSize: Int = 33
     init {
-        parent.addTouchListener(TAG, ::onTouchEvent)
+//        val a = layoutParams
+//        a.height = (tileGridSize * flagDistance).toInt()
+//        a.width = (tileGridSize * flagDistance).toInt()
+//        layoutParams = a
+//        layoutParams.height = (tileGridSize * flagDistance).toInt()
+//        layoutParams.width = (tileGridSize * flagDistance).toInt()
     }
 
     val map = createMap(tileGridSize)
@@ -166,7 +179,10 @@ class GameWorld(context: Context, private val parent: ZoomingLayout, private val
 
     private val path = Path()
 
+
+
     override fun onDraw(canvas: Canvas?) {
+        Log.e("mywidth", "width: ${width.toString()} height ${height} ")
         Log.i(TAG, "onDraw")
         super.onDraw(canvas)
 
@@ -204,7 +220,7 @@ class GameWorld(context: Context, private val parent: ZoomingLayout, private val
         }
         //Log.e("onTouchEvent", "fired ${event.action} ${selectedElement?.x} ${selectedElement?.y}")
         //return super.onTouchEvent(event)
-        return false // return true in parentview
+        return true // return true in parentview
     }
 
     override fun performClick(): Boolean {
