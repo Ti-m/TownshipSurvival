@@ -13,7 +13,7 @@ import kotlin.math.sqrt
 
 class FlagTile(val element: Element, context: Context?) : View(context) {
 
-    private val coords: Hexagon = Hexagon(center = Pair(element.x * flagDistance, element.y* flagDistance), distance = flagDistance / 2)
+    private val coords: Hexagon = Hexagon(a = flagDistance / 2)
     private val flagPaint = ColorHelper.getFlagPaint()
     private val selectedPaint = ColorHelper.getSelectedPaint()
     private val groundPaint = ColorHelper.getGroundPaint(element.type)
@@ -107,7 +107,9 @@ class FlagTile(val element: Element, context: Context?) : View(context) {
     }
 }
 
-class Hexagon(val center: Pair<Float, Float>, private val distance: Float) {
+class Hexagon(private val a: Float) {
+
+    //a is the outer radius
 
     /*
     * ....p1..p2...
@@ -123,16 +125,20 @@ class Hexagon(val center: Pair<Float, Float>, private val distance: Float) {
     val p6: Pair<Float, Float>
 
     companion object {
-        val sqrt3 = sqrt(3.0f)
+        private val sqrt3 = sqrt(3.0f)
     }
+    val r = sqrt3 * a / 2
 
     init {
-        p3 = Pair(distance - distance, distance )
-        p4 = Pair(distance + distance, distance  )
-        p1 = Pair(distance - distance / 2, distance - sqrt3 * distance / 2 )
-        p2 = Pair(distance + distance / 2, distance - sqrt3 * distance / 2 )
-        p5 = Pair(distance - distance / 2, distance  + sqrt3 * distance / 2 )
-        p6 = Pair(distance + distance / 2, distance  + sqrt3 * distance / 2 )
+
+        val center = Pair(a,r)
+        //calculated from center which is 0,0
+        p3 = Pair(center.first - a  , center.second)
+        p4 = Pair(center.first + a  , center.second)
+        p1 = Pair(center.first - a/2, center.second - r)
+        p2 = Pair(center.first + a/2, center.second - r)
+        p5 = Pair(center.first - a/2, center.second + r)
+        p6 = Pair(center.first + a/2, center.second + r)
     }
 }
 

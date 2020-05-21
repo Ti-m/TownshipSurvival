@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         zoomingLayout.isHorizontalScrollBarEnabled = true
         zoomingLayout.isVerticalScrollBarEnabled = true
         zoomingLayout.setMinZoom(1.0f, MIN_ZOOM_DEFAULT_TYPE)
-        zoomingLayout.setMaxZoom(4.0f, MAX_ZOOM_DEFAULT_TYPE)
+        zoomingLayout.setMaxZoom(8.0f, MAX_ZOOM_DEFAULT_TYPE)
         zoomingLayout.setHasClickableChildren(true)
 //Das zoomen geht ejtz aber die scale informationg elangt nicht in den subview...
 //        workaround doer doch lieber wieder das eigene. Prinzipiell ist das zoom verhalten mit dem zoomlayout schon schöner...

@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import com.example.settlers.MainActivity.Companion.flagDistance
 import com.otaliastudios.zoom.ZoomLayout
 import kotlin.math.round
+import kotlin.math.sqrt
 
 enum class GroundType { Water, Grass, Desert, Mountain }
 class Polygon(val a: Pair<Float, Float>, val b: Pair<Float, Float>, val c: Pair<Float, Float>)
@@ -181,13 +182,24 @@ private val tileGridSize: Int = 33
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        val a = flagDistance / 2
+        val r = sqrt(3.0f) / 2 * a
         tiles.forEach {
-            it.layout(
-                (it.element.x * flagDistance).toInt() + (flagDistance / 2).toInt(),
-                (it.element.y * flagDistance).toInt() + (flagDistance / 2).toInt(),
-                (it.element.x * flagDistance).toInt() + flagDistance.toInt() + (flagDistance / 2).toInt(),
-                (it.element.y * flagDistance).toInt() + flagDistance.toInt() + (flagDistance / 2).toInt()
-            )
+            if (it.element.x.rem(2) == 0) {
+                it.layout(
+                    (it.element.x * 1.5 * a).toInt(),
+                    (it.element.y * 2 * r).toInt(),
+                    (it.element.x * 1.5 * a + 2 * a).toInt(),
+                    (it.element.y * 2 * r + 2 * r).toInt()
+                )
+            } else {
+                it.layout(
+                    (it.element.x * 1.5 * a).toInt(),
+                    (it.element.y * 2 * r + r).toInt(),
+                    (it.element.x * 1.5 * a + 2 * a).toInt(),
+                    (it.element.y * 2 * r + 3 * r).toInt()
+                )
+            }
         }
     }
 
