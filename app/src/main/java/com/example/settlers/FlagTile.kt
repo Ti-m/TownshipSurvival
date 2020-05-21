@@ -8,22 +8,34 @@ import android.graphics.Path
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import androidx.fragment.app.FragmentManager
 import com.example.settlers.MainActivity.Companion.flagDistance
 import kotlin.math.sqrt
 
-class FlagTile(val element: Element, context: Context?) : View(context) {
+class FlagTile(
+    val element: Element,
+    private val fragmentManager: FragmentManager,
+    context: Context?
+) : View(context) {
+
+    companion object {
+        private val TAG = "FlagTile"
+    }
 
     val coords: Hexagon = Hexagon(a = flagDistance / 2)
     private val flagPaint = ColorHelper.getFlagPaint()
     private val selectedPaint = ColorHelper.getSelectedPaint()
     private val groundPaint = ColorHelper.getGroundPaint(element.type)
+    private val textPaint = ColorHelper.getTextPaint()
+    private val buildingPaint = ColorHelper.getBuildingPaint()
     private val path = Path()
 
     override fun onDraw(canvas: Canvas?) {
-        Log.i("FlagTile", "onDraw")
+        Log.i(TAG, "onDraw")
         super.onDraw(canvas!!)
         drawGround(canvas)
         drawFlag(canvas)
+        drawBuilding(canvas)
     }
 
     private fun drawGround(canvas: Canvas) {
@@ -36,23 +48,36 @@ class FlagTile(val element: Element, context: Context?) : View(context) {
         path.lineTo(coords.p3.first, coords.p3.second)
         path.lineTo(coords.p1.first, coords.p1.second)
 
-        if (isSelectedTile) {
-            canvas.drawPath(path, selectedPaint)
-        } else {
+//        if (isSelectedTile) {
+//            canvas.drawPath(path, selectedPaint)
+//        } else {
+//            canvas.drawPath(path, groundPaint)
+//        }
+         if (element.building != null) {
+             canvas.drawPath(path, buildingPaint)
+         } else {
             canvas.drawPath(path, groundPaint)
+        }
+
+
+    }
+
+    private fun drawBuilding(canvas: Canvas) {
+        element.building?.let {
+            canvas.drawText("L", coords.center.first, coords.center.second + coords.r/2, textPaint)
         }
     }
 
     private fun drawFlag(canvas: Canvas) {
         //val top = calcTop(item)
         //drawFlag(top, canvas = canvas, paint = flagPaint)
-        canvas.drawCircle(flagDistance / 2, flagDistance / 2, MainActivity.flagDiameter, flagPaint)
+        canvas.drawCircle(coords.center.first, coords.center.second, MainActivity.flagDiameter, flagPaint)
     }
 
     private var isSelectedTile = false
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        Log.i("FlagTile", "onTouchEvent")
+        Log.i(TAG, "onTouchEvent")
         super.onTouchEvent(event)
         when (event!!.action) {
             MotionEvent.ACTION_DOWN -> {
@@ -69,7 +94,9 @@ class FlagTile(val element: Element, context: Context?) : View(context) {
 
     override fun performClick(): Boolean {
         isSelectedTile = true
-        invalidate()
+        val dialog = BuildDialog(element, this)
+        dialog.show(fragmentManager, TAG)
+        //invalidate()
         return super.performClick()
     }
 }
@@ -83,30 +110,20 @@ class Hexagon(val a: Float) {
     * .p3...c...p4.
     * ....p5..p6..
     * */
-
-    val p1: Pair<Float, Float>
-    val p2: Pair<Float, Float>
-    val p3: Pair<Float, Float>
-    val p4: Pair<Float, Float>
-    val p5: Pair<Float, Float>
-    val p6: Pair<Float, Float>
-
     companion object {
         private val sqrt3 = sqrt(3.0f)
     }
     val r = sqrt3 * a / 2
+    val center = Pair(a,r)
 
-    init {
+    //calculated from center which is 0,0
+    val p3 = Pair(center.first - a  , center.second)
+    val p4 = Pair(center.first + a  , center.second)
+    val p1 = Pair(center.first - a/2, center.second - r)
+    val p2 = Pair(center.first + a/2, center.second - r)
+    val p5 = Pair(center.first - a/2, center.second + r)
+    val p6 = Pair(center.first + a/2, center.second + r)
 
-        val center = Pair(a,r)
-        //calculated from center which is 0,0
-        p3 = Pair(center.first - a  , center.second)
-        p4 = Pair(center.first + a  , center.second)
-        p1 = Pair(center.first - a/2, center.second - r)
-        p2 = Pair(center.first + a/2, center.second - r)
-        p5 = Pair(center.first - a/2, center.second + r)
-        p6 = Pair(center.first + a/2, center.second + r)
-    }
 }
 
 object ColorHelper {
@@ -146,6 +163,23 @@ object ColorHelper {
             this.style = Paint.Style.FILL_AND_STROKE
             this.strokeWidth = 1.0f
             //this.textAlign = Paint.Align.CENTER
+        }
+    }
+
+    fun getTextPaint() : Paint {
+        return Paint().apply {
+            this.color = Color.BLACK
+            this.textAlign = Paint.Align.CENTER
+            this.textSize =  24.0f
+            this.style = Paint.Style.FILL
+        }
+    }
+
+    fun getBuildingPaint() : Paint {
+        return Paint().apply {
+            this.color = Color.LTGRAY
+            this.style = Paint.Style.FILL_AND_STROKE
+            this.strokeWidth = 1.0f
         }
     }
 }

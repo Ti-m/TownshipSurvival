@@ -10,16 +10,24 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import com.example.settlers.MainActivity.Companion.flagDistance
 import com.otaliastudios.zoom.ZoomLayout
 import kotlin.math.round
 import kotlin.math.sqrt
 
 enum class GroundType { Water, Grass, Desert, Mountain }
+enum class BuildingType { Townhall, Lumberjack }
 
-class Element(val x: Int, val y: Int, var type: GroundType, val value: Double )
+class Element(
+    val x: Int,
+    val y: Int,
+    var type: GroundType,
+    var building: BuildingType? = null,
+    val value: Double//Used in map generation, remove?
+)
 
-class GameWorld(private val tileGridSize: Int, context: Context?) : ViewGroup(context) {
+class GameWorld(private val tileGridSize: Int, private val fragmentManager: FragmentManager, context: Context?) : ViewGroup(context) {
     companion object {
         val TAG = "GameWorld"
     }
@@ -71,7 +79,7 @@ class GameWorld(private val tileGridSize: Int, context: Context?) : ViewGroup(co
     }
 
     private fun createTiles(input: List<Element>): List<FlagTile> {
-        return input.map { FlagTile(it, context) }
+        return input.map { FlagTile(it, fragmentManager, context) }
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
