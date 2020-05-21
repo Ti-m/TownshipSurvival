@@ -16,27 +16,12 @@ import kotlin.math.round
 import kotlin.math.sqrt
 
 enum class GroundType { Water, Grass, Desert, Mountain }
-class Polygon(val a: Pair<Float, Float>, val b: Pair<Float, Float>, val c: Pair<Float, Float>)
+
 class Element(val x: Int, val y: Int, var type: GroundType, val value: Double )
 
-class GameWorld : ViewGroup {
+class GameWorld(private val tileGridSize: Int, context: Context?) : ViewGroup(context) {
     companion object {
         val TAG = "GameWorld"
-    }
-    constructor(context: Context?) : super(context)
-    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-//    init {
-//        parent.addTouchListener(TAG, ::onTouchEvent)
-//    }
-private val tileGridSize: Int = 33
-    init {
-//        val a = layoutParams
-//        a.height = (tileGridSize * flagDistance).toInt()
-//        a.width = (tileGridSize * flagDistance).toInt()
-//        layoutParams = a
-//        layoutParams.height = (tileGridSize * flagDistance).toInt()
-//        layoutParams.width = (tileGridSize * flagDistance).toInt()
     }
 
     val map = createMap(tileGridSize)
@@ -89,88 +74,6 @@ private val tileGridSize: Int = 33
         return input.map { FlagTile(it, context) }
     }
 
-
-//    private fun calcTop(item: Element): Polygon {
-//        if (item.y.rem(2) == 0) {
-//            return Polygon(
-//                Pair(item.x * MainActivity.flagDistance + 0.5f * MainActivity.flagDistance, item.y * MainActivity.flagDistance),
-//                Pair(item.x * MainActivity.flagDistance + 1.5f * MainActivity.flagDistance, item.y * MainActivity.flagDistance),
-//                Pair(item.x * MainActivity.flagDistance + 1.0f * MainActivity.flagDistance, item.y * MainActivity.flagDistance - MainActivity.flagDistance)
-//            )
-//        } else {
-//            return Polygon(
-//                Pair(item.x * MainActivity.flagDistance, item.y * MainActivity.flagDistance),
-//                Pair(item.x * MainActivity.flagDistance + MainActivity.flagDistance, item.y * MainActivity.flagDistance),
-//                Pair(item.x * MainActivity.flagDistance + MainActivity.flagDistance * 0.5f, item.y * MainActivity.flagDistance - MainActivity.flagDistance)
-//            )
-//        }
-//    }
-//
-//    private fun calcBottom(item: Element): Polygon {
-//        if (item.y.rem(2) == 0) {
-//            return Polygon(
-//                Pair(item.x * MainActivity.flagDistance + 0.5f * MainActivity.flagDistance, item.y * MainActivity.flagDistance),
-//                Pair(item.x * MainActivity.flagDistance + 1.5f * MainActivity.flagDistance, item.y * MainActivity.flagDistance),
-//                Pair(item.x * MainActivity.flagDistance + 1.0f * MainActivity.flagDistance, item.y * MainActivity.flagDistance + MainActivity.flagDistance)
-//            )
-//        } else {
-//            return Polygon(
-//                Pair(item.x * MainActivity.flagDistance, item.y * MainActivity.flagDistance),
-//                Pair(item.x * MainActivity.flagDistance + MainActivity.flagDistance, item.y * MainActivity.flagDistance),
-//                Pair(item.x * MainActivity.flagDistance + MainActivity.flagDistance * 0.5f, item.y * MainActivity.flagDistance + MainActivity.flagDistance)
-//            )
-//        }
-//    }
-
-
-
-//    override fun onDraw(canvas: Canvas?) {
-//        Log.e("mywidth", "width: ${width.toString()} height ${height} ")
-//        Log.i(TAG, "onDraw")
-//        super.onDraw(canvas)
-//
-//        map.forEach {
-//            drawGround(it, canvas!!, path)
-//        }
-//        map.forEach {
-//            drawFlag(it, canvas!!)
-//        }
-//
-//        if (selectedElement != null) {
-//            drawSelectedBox(canvas)
-//        }
-//    }
-
-//    private var selectedElement: Element? = null
-
-//    override fun onTouchEvent(event: MotionEvent?): Boolean {
-//        super.onTouchEvent(event)
-//        when (event!!.action) {
-//            MotionEvent.ACTION_DOWN -> {
-//                selectedElement = null
-//            }
-//            MotionEvent.ACTION_UP -> {
-//                Log.d("foo-gameworld", "x is $x")
-//                Log.d("foo-gameworld", "translationX is $translationX")
-//                Log.d("foo-gameworld", "left is $left")
-//                Log.d("foo-gameworld", "event.x is ${event.x}")
-//                Log.d("foo-gameworld", "scaleX is $scaleX")
-//                selectedElement = getSelectedElement( event.x / scaleX - translationX / scaleX, event.y / scaleY - translationY / scaleY) //scalex benutzen um beim zoom die richtig position zu ermitteln?
-//                //selectedElement = getSelectedElement( event.x - translationX, event.y - translationY)
-//                performClick()
-//
-//            }
-//        }
-//        //Log.e("onTouchEvent", "fired ${event.action} ${selectedElement?.x} ${selectedElement?.y}")
-//        //return super.onTouchEvent(event)
-//        return true // return true in parentview
-//    }
-//
-//    override fun performClick(): Boolean {
-//        this.invalidate()
-//        return super.performClick()
-//    }
-
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
         Log.i(TAG,"onInterceptTouchEvent")
         return false
@@ -182,9 +85,10 @@ private val tileGridSize: Int = 33
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        val a = flagDistance / 2
-        val r = sqrt(3.0f) / 2 * a
+
         tiles.forEach {
+            val a = it.coords.a
+            val r = it.coords.r
             if (it.element.x.rem(2) == 0) {
                 it.layout(
                     (it.element.x * 1.5 * a).toInt(),
@@ -202,12 +106,6 @@ private val tileGridSize: Int = 33
             }
         }
     }
-
-//    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-//        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-//        setMeasuredDimension(flagDistance.toInt()*100,flagDistance.toInt()*100)
-//    }
-
 
     private val overlayBackgroundPaint = Paint().apply {
         this.color = Color.WHITE
@@ -262,7 +160,6 @@ private val tileGridSize: Int = 33
 //        ////canvas!!.drawText(it.text.toString(),left + textSize * it.coords.y,top + textSize * it.coords.x, localPaint)
 //    }
 }
-class Coordinates(var x: Int, var y: Int)
 
 class ColorTools {
     companion object {

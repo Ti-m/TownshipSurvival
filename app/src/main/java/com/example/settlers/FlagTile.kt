@@ -13,7 +13,7 @@ import kotlin.math.sqrt
 
 class FlagTile(val element: Element, context: Context?) : View(context) {
 
-    private val coords: Hexagon = Hexagon(a = flagDistance / 2)
+    val coords: Hexagon = Hexagon(a = flagDistance / 2)
     private val flagPaint = ColorHelper.getFlagPaint()
     private val selectedPaint = ColorHelper.getSelectedPaint()
     private val groundPaint = ColorHelper.getGroundPaint(element.type)
@@ -27,32 +27,6 @@ class FlagTile(val element: Element, context: Context?) : View(context) {
     }
 
     private fun drawGround(canvas: Canvas) {
-        //even rows need distance/" offset
-
-//        val top = calcTop(item)
-//        val bottom = calcBottom(item)
-//
-//        val colorTop = when(item.typeTop) {
-//            GroundType.Grass -> grassPaint
-//            GroundType.Desert -> desertPaint
-//            GroundType.Water -> waterPaint
-//            GroundType.Mountain -> mountainPaint
-//        }
-
-//            val paint = Paint().apply {
-//                this.color = ColorTools.getIntFromColor((item.value * 255).toInt(),(item.value * 255).toInt(),0)
-//                this.style = Paint.Style.FILL
-//            }
-//            drawPolygon(p = top, canvas = canvas, path = path, paint = paint)
-//        drawPolygon(p = top, canvas = canvas, path = path, paint = colorTop)
-//        val colorBottom = when(item.typeBottom) {
-//            GroundType.Grass -> grassPaint
-//            GroundType.Desert -> desertPaint
-//            GroundType.Water -> waterPaint
-//            GroundType.Mountain -> mountainPaint
-//        }
-////            drawPolygon(p = bottom, canvas = canvas, path = path, paint = paint)
-//        drawPolygon(p = bottom, canvas = canvas, path = path, paint = colorBottom)
         path.reset()
         path.moveTo(coords.p1.first, coords.p1.second)
         path.lineTo(coords.p2.first, coords.p2.second)
@@ -85,19 +59,12 @@ class FlagTile(val element: Element, context: Context?) : View(context) {
                 isSelectedTile = false
             }
             MotionEvent.ACTION_UP -> {
-                Log.d("foo-gameworld", "x is $x")
-                Log.d("foo-gameworld", "translationX is $translationX")
-                Log.d("foo-gameworld", "left is $left")
-                Log.d("foo-gameworld", "event.x is ${event.x}")
-                Log.d("foo-gameworld", "scaleX is $scaleX")
                 //selectedElement = getSelectedElement( event.x - translationX, event.y - translationY)
                 performClick()
 
             }
         }
-        //Log.e("onTouchEvent", "fired ${event.action} ${selectedElement?.x} ${selectedElement?.y}")
-        //return super.onTouchEvent(event)
-        return true // return true in parentview
+        return true
     }
 
     override fun performClick(): Boolean {
@@ -107,7 +74,7 @@ class FlagTile(val element: Element, context: Context?) : View(context) {
     }
 }
 
-class Hexagon(private val a: Float) {
+class Hexagon(val a: Float) {
 
     //a is the outer radius
 
@@ -143,23 +110,24 @@ class Hexagon(private val a: Float) {
 }
 
 object ColorHelper {
+
     fun getGroundPaint(type: GroundType): Paint {
+        val base = Paint().apply {
+            this.style = Paint.Style.FILL_AND_STROKE
+            this.strokeWidth = 1.0f
+        }
         return when (type) {
-            GroundType.Water -> Paint().apply {
+            GroundType.Water -> base.apply {
                 this.color = Color.BLUE
-                this.style = Paint.Style.FILL
             }
-            GroundType.Grass -> Paint().apply {
+            GroundType.Grass -> base.apply {
                 this.color = Color.GREEN
-                this.style = Paint.Style.FILL
             }
-            GroundType.Desert -> Paint().apply {
+            GroundType.Desert -> base.apply {
                 this.color = Color.YELLOW
-                this.style = Paint.Style.FILL
             }
-            GroundType.Mountain -> Paint().apply {
+            GroundType.Mountain -> base.apply {
                 this.color = Color.GRAY
-                this.style = Paint.Style.FILL
             }
         }
     }
@@ -175,9 +143,9 @@ object ColorHelper {
     fun getSelectedPaint() : Paint {
         return Paint().apply {
             this.color = Color.RED
-            this.style = Paint.Style.STROKE
-            this.strokeWidth = 3.0f
-            this.textAlign = Paint.Align.CENTER
+            this.style = Paint.Style.FILL_AND_STROKE
+            this.strokeWidth = 1.0f
+            //this.textAlign = Paint.Align.CENTER
         }
     }
 }

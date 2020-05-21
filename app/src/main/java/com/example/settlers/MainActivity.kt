@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         val flagDistance = 33.0f //33.0f
         val flagDiameter = flagDistance / 7
-        val tileGridSize = 33
+        val tileGridSize = 65
         val gameBoardBorder = (4 * flagDistance).toInt()
     }
 
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         zoomingLayout.setHasClickableChildren(true)
 //Das zoomen geht ejtz aber die scale informationg elangt nicht in den subview...
 //        workaround doer doch lieber wieder das eigene. Prinzipiell ist das zoom verhalten mit dem zoomlayout schon schöner...
-        val gw2 = GameWorld(context = this)
+        val gw2 = GameWorld(tileGridSize = tileGridSize, context = this)
         //gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         gw2.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
 //        gw2.setBackgroundColor(Color.parseColor("#aaaaaa"))
