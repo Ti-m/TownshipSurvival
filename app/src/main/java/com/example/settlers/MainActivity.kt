@@ -38,13 +38,16 @@ class MainActivity : AppCompatActivity() {
         zoomingLayout.isVerticalScrollBarEnabled = true
         zoomingLayout.setMinZoom(1.0f, MIN_ZOOM_DEFAULT_TYPE)
         zoomingLayout.setMaxZoom(4.0f, MAX_ZOOM_DEFAULT_TYPE)
+        zoomingLayout.setHasClickableChildren(true)
 //Das zoomen geht ejtz aber die scale informationg elangt nicht in den subview...
 //        workaround doer doch lieber wieder das eigene. Prinzipiell ist das zoom verhalten mit dem zoomlayout schon schöner...
         val gw2 = GameWorld(context = this)
         //gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         gw2.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
+//        gw2.setBackgroundColor(Color.parseColor("#aaaaaa"))
         zoomingLayout.addView(gw2)
         setContentView(zoomingLayout)
+//        setContentView(gw2)
 
 //        val zoomingLayout = ZoomingLayout(this)
 //        zoomingLayout.setBackgroundColor(Color.parseColor("#333333"))

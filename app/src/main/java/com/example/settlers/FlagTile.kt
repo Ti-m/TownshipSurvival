@@ -5,18 +5,22 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
+import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import com.example.settlers.MainActivity.Companion.flagDistance
 import kotlin.math.sqrt
 
-class FlagTile(private val element: Element, context: Context?) : View(context) {
+class FlagTile(val element: Element, context: Context?) : View(context) {
 
     private val coords: Hexagon = Hexagon(center = Pair(element.x * flagDistance, element.y* flagDistance), distance = flagDistance / 2)
     private val flagPaint = ColorHelper.getFlagPaint()
+    private val selectedPaint = ColorHelper.getSelectedPaint()
     private val groundPaint = ColorHelper.getGroundPaint(element.type)
     private val path = Path()
 
     override fun onDraw(canvas: Canvas?) {
+        Log.i("FlagTile", "onDraw")
         super.onDraw(canvas!!)
         drawGround(canvas)
         drawFlag(canvas)
@@ -56,17 +60,50 @@ class FlagTile(private val element: Element, context: Context?) : View(context) 
         path.lineTo(coords.p6.first, coords.p6.second)
         path.lineTo(coords.p5.first, coords.p5.second)
         path.lineTo(coords.p3.first, coords.p3.second)
-        canvas.drawPath(path, groundPaint)
+        path.lineTo(coords.p1.first, coords.p1.second)
 
+        if (isSelectedTile) {
+            canvas.drawPath(path, selectedPaint)
+        } else {
+            canvas.drawPath(path, groundPaint)
+        }
     }
 
-    private fun drawPolygon(p: Polygon, canvas: Canvas, path: Path, paint: Paint) {
-
-    }
     private fun drawFlag(canvas: Canvas) {
         //val top = calcTop(item)
         //drawFlag(top, canvas = canvas, paint = flagPaint)
-        canvas.drawCircle(coords.center.first, coords.center.second, MainActivity.flagDiameter, flagPaint)
+        canvas.drawCircle(flagDistance / 2, flagDistance / 2, MainActivity.flagDiameter, flagPaint)
+    }
+
+    private var isSelectedTile = false
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        Log.i("FlagTile", "onTouchEvent")
+        super.onTouchEvent(event)
+        when (event!!.action) {
+            MotionEvent.ACTION_DOWN -> {
+                isSelectedTile = false
+            }
+            MotionEvent.ACTION_UP -> {
+                Log.d("foo-gameworld", "x is $x")
+                Log.d("foo-gameworld", "translationX is $translationX")
+                Log.d("foo-gameworld", "left is $left")
+                Log.d("foo-gameworld", "event.x is ${event.x}")
+                Log.d("foo-gameworld", "scaleX is $scaleX")
+                //selectedElement = getSelectedElement( event.x - translationX, event.y - translationY)
+                performClick()
+
+            }
+        }
+        //Log.e("onTouchEvent", "fired ${event.action} ${selectedElement?.x} ${selectedElement?.y}")
+        //return super.onTouchEvent(event)
+        return true // return true in parentview
+    }
+
+    override fun performClick(): Boolean {
+        isSelectedTile = true
+        invalidate()
+        return super.performClick()
     }
 }
 
@@ -90,12 +127,12 @@ class Hexagon(val center: Pair<Float, Float>, private val distance: Float) {
     }
 
     init {
-        p3 = Pair(center.first - distance, center.second)
-        p4 = Pair(center.first + distance, center.second)
-        p1 = Pair(center.first - distance / 2, center.second - sqrt3 * distance / 2 )
-        p2 = Pair(center.first + distance / 2, center.second - sqrt3 * distance / 2 )
-        p5 = Pair(center.first - distance / 2, center.second + sqrt3 * distance / 2 )
-        p6 = Pair(center.first + distance / 2, center.second + sqrt3 * distance / 2 )
+        p3 = Pair(distance - distance, distance )
+        p4 = Pair(distance + distance, distance  )
+        p1 = Pair(distance - distance / 2, distance - sqrt3 * distance / 2 )
+        p2 = Pair(distance + distance / 2, distance - sqrt3 * distance / 2 )
+        p5 = Pair(distance - distance / 2, distance  + sqrt3 * distance / 2 )
+        p6 = Pair(distance + distance / 2, distance  + sqrt3 * distance / 2 )
     }
 }
 
@@ -126,6 +163,15 @@ object ColorHelper {
             this.color = Color.LTGRAY
             this.style = Paint.Style.FILL
             this.textSize = 100.0f
+        }
+    }
+
+    fun getSelectedPaint() : Paint {
+        return Paint().apply {
+            this.color = Color.RED
+            this.style = Paint.Style.STROKE
+            this.strokeWidth = 3.0f
+            this.textAlign = Paint.Align.CENTER
         }
     }
 }

@@ -18,7 +18,7 @@ enum class GroundType { Water, Grass, Desert, Mountain }
 class Polygon(val a: Pair<Float, Float>, val b: Pair<Float, Float>, val c: Pair<Float, Float>)
 class Element(val x: Int, val y: Int, var type: GroundType, val value: Double )
 
-class GameWorld : View {
+class GameWorld : ViewGroup {
     companion object {
         val TAG = "GameWorld"
     }
@@ -41,11 +41,11 @@ private val tileGridSize: Int = 33
     val map = createMap(tileGridSize)
     val tiles = createTiles(map)
 
-//    init {
-//        tiles.forEach {
-//            this.addView(it)
-//        }
-//    }
+    init {
+        tiles.forEach {
+            this.addView(it)
+        }
+    }
 
     private fun createMap(size: Int): List<Element> {
         val map = Array(size) {
@@ -122,12 +122,6 @@ private val tileGridSize: Int = 33
 //    }
 
 
-    override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
-        tiles.forEach {
-            it.draw(canvas)
-        }
-    }
 
 //    override fun onDraw(canvas: Canvas?) {
 //        Log.e("mywidth", "width: ${width.toString()} height ${height} ")
@@ -146,95 +140,115 @@ private val tileGridSize: Int = 33
 //        }
 //    }
 
-    private var selectedElement: Element? = null
+//    private var selectedElement: Element? = null
+
+//    override fun onTouchEvent(event: MotionEvent?): Boolean {
+//        super.onTouchEvent(event)
+//        when (event!!.action) {
+//            MotionEvent.ACTION_DOWN -> {
+//                selectedElement = null
+//            }
+//            MotionEvent.ACTION_UP -> {
+//                Log.d("foo-gameworld", "x is $x")
+//                Log.d("foo-gameworld", "translationX is $translationX")
+//                Log.d("foo-gameworld", "left is $left")
+//                Log.d("foo-gameworld", "event.x is ${event.x}")
+//                Log.d("foo-gameworld", "scaleX is $scaleX")
+//                selectedElement = getSelectedElement( event.x / scaleX - translationX / scaleX, event.y / scaleY - translationY / scaleY) //scalex benutzen um beim zoom die richtig position zu ermitteln?
+//                //selectedElement = getSelectedElement( event.x - translationX, event.y - translationY)
+//                performClick()
+//
+//            }
+//        }
+//        //Log.e("onTouchEvent", "fired ${event.action} ${selectedElement?.x} ${selectedElement?.y}")
+//        //return super.onTouchEvent(event)
+//        return true // return true in parentview
+//    }
+//
+//    override fun performClick(): Boolean {
+//        this.invalidate()
+//        return super.performClick()
+//    }
+
+    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
+        Log.i(TAG,"onInterceptTouchEvent")
+        return false
+    }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        super.onTouchEvent(event)
-        when (event!!.action) {
-            MotionEvent.ACTION_DOWN -> {
-                selectedElement = null
-            }
-            MotionEvent.ACTION_UP -> {
-                Log.d("foo-gameworld", "x is $x")
-                Log.d("foo-gameworld", "translationX is $translationX")
-                Log.d("foo-gameworld", "left is $left")
-                Log.d("foo-gameworld", "event.x is ${event.x}")
-                Log.d("foo-gameworld", "scaleX is $scaleX")
-                selectedElement = getSelectedElement( event.x / scaleX - translationX / scaleX, event.y / scaleY - translationY / scaleY) //scalex benutzen um beim zoom die richtig position zu ermitteln?
-                //selectedElement = getSelectedElement( event.x - translationX, event.y - translationY)
-                performClick()
+        Log.i(TAG,"onTouchEvent")
+        return false
+    }
 
-            }
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        tiles.forEach {
+            it.layout(
+                (it.element.x * flagDistance).toInt() + (flagDistance / 2).toInt(),
+                (it.element.y * flagDistance).toInt() + (flagDistance / 2).toInt(),
+                (it.element.x * flagDistance).toInt() + flagDistance.toInt() + (flagDistance / 2).toInt(),
+                (it.element.y * flagDistance).toInt() + flagDistance.toInt() + (flagDistance / 2).toInt()
+            )
         }
-        //Log.e("onTouchEvent", "fired ${event.action} ${selectedElement?.x} ${selectedElement?.y}")
-        //return super.onTouchEvent(event)
-        return true // return true in parentview
     }
 
-    override fun performClick(): Boolean {
-        this.invalidate()
-        return super.performClick()
-    }
+//    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+//        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+//        setMeasuredDimension(flagDistance.toInt()*100,flagDistance.toInt()*100)
+//    }
 
 
-    private val framePaint = Paint().apply {
-        this.color = Color.RED
-        this.style = Paint.Style.STROKE
-        this.strokeWidth = 3.0f
-        this.textAlign = Paint.Align.CENTER
-    }
     private val overlayBackgroundPaint = Paint().apply {
         this.color = Color.WHITE
         this.style = Paint.Style.FILL_AND_STROKE
     }
 
-    private fun getSelectedElement(x: Float, y: Float) : Element?  {
-        //val row = (y - 0.5 * flagDistance) / flagDistance
-        val row = round(y / flagDistance).toInt()
-        //var column = round(x / flagDistance).toInt()
-        val column = if (row.rem(2).toInt() == 0) {
-            round((x  - flagDistance / 2) / flagDistance).toInt()
-        } else {
-            round(x / flagDistance).toInt()
-        }
-        //val column = (x / textSize) - 1
-       // var column = round(x / flagDistance).toInt()
-//        if (column.rem(2).toInt() == 0) {
-//            column = round((x  - flagDistance / 2) / flagDistance).toInt()
+//    private fun getSelectedElement(x: Float, y: Float) : Element?  {
+//        //val row = (y - 0.5 * flagDistance) / flagDistance
+//        val row = round(y / flagDistance).toInt()
+//        //var column = round(x / flagDistance).toInt()
+//        val column = if (row.rem(2).toInt() == 0) {
+//            round((x  - flagDistance / 2) / flagDistance).toInt()
+//        } else {
+//            round(x / flagDistance).toInt()
 //        }
+//        //val column = (x / textSize) - 1
+//       // var column = round(x / flagDistance).toInt()
+////        if (column.rem(2).toInt() == 0) {
+////            column = round((x  - flagDistance / 2) / flagDistance).toInt()
+////        }
+//
+//        //val column = (x - 0.5 * flagDistance) / flagDistance
+//        Log.e("getSelected", "$row $column")
+//        return try {
+//            map.first {
+//                it.y == column && it.x == row
+//            }
+//        } catch (e: NoSuchElementException) {
+//            null
+//        }
+//    }
 
-        //val column = (x - 0.5 * flagDistance) / flagDistance
-        Log.e("getSelected", "$row $column")
-        return try {
-            map.first {
-                it.y == column && it.x == row
-            }
-        } catch (e: NoSuchElementException) {
-            null
-        }
-    }
-
-    private fun drawSelectedBox(canvas: Canvas?) {
-        var add = 0.0f
-        if (selectedElement!!.x.rem(2).toInt() == 0) {
-            add = flagDistance/2
-        }
-        canvas!!.drawRect(
-            selectedElement!!.y * flagDistance + add,
-            selectedElement!!.x * flagDistance,
-            selectedElement!!.y * flagDistance + add + 100.0f,
-            selectedElement!!.x * flagDistance + 100.0f,
-            framePaint
-        )
-//        canvas.drawRect(
-//            selectedCoordinate!!.y * textSize + 2 * textSize + 10,
-//            selectedCoordinate!!.x * textSize + textSize + 10,
-//            selectedCoordinate!!.y * textSize  + 2 * textSize + 2 * textSize - 10,
-//            selectedCoordinate!!.x * textSize  + textSize + 2 * textSize - 10,
-//            overlayBackgroundPaint
+//    private fun drawSelectedBox(canvas: Canvas?) {
+//        var add = 0.0f
+//        if (selectedElement!!.x.rem(2).toInt() == 0) {
+//            add = flagDistance/2
+//        }
+//        canvas!!.drawRect(
+//            selectedElement!!.y * flagDistance + add,
+//            selectedElement!!.x * flagDistance,
+//            selectedElement!!.y * flagDistance + add + 100.0f,
+//            selectedElement!!.x * flagDistance + 100.0f,
+//            framePaint
 //        )
-        ////canvas!!.drawText(it.text.toString(),left + textSize * it.coords.y,top + textSize * it.coords.x, localPaint)
-    }
+////        canvas.drawRect(
+////            selectedCoordinate!!.y * textSize + 2 * textSize + 10,
+////            selectedCoordinate!!.x * textSize + textSize + 10,
+////            selectedCoordinate!!.y * textSize  + 2 * textSize + 2 * textSize - 10,
+////            selectedCoordinate!!.x * textSize  + textSize + 2 * textSize - 10,
+////            overlayBackgroundPaint
+////        )
+//        ////canvas!!.drawText(it.text.toString(),left + textSize * it.coords.y,top + textSize * it.coords.x, localPaint)
+//    }
 }
 class Coordinates(var x: Int, var y: Int)
 
