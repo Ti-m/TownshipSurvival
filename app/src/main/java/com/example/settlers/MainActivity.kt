@@ -21,6 +21,7 @@ import com.otaliastudios.zoom.ZoomLayout
 class MainActivity : AppCompatActivity() {
 
     companion object {
+        private val TAG = "MainActivity"
         val flagDistance = 33.0f //33.0f
         val flagDiameter = flagDistance / 10
         val tileGridSize = 33
@@ -57,5 +58,20 @@ class MainActivity : AppCompatActivity() {
 //        gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 //        zoomingLayout.addView(gw2)
 //        setContentView(zoomingLayout)
+        val gameRunLoop = GameRunLoop()
+        val delay = 1000L
+        RepeatHelper.repeatDelayed(delay) {
+            Log.i(TAG, "every second")
+            gameRunLoop.moveWorker()
+        }
+    }
+}
+
+class GameRunLoop {
+    companion object {
+        private val TAG = "GameRunLoop"
+    }
+    fun moveWorker() {
+        Log.i(TAG, "move Worker")
     }
 }

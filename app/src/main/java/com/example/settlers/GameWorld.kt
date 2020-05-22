@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
+import android.os.Handler
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
@@ -24,8 +25,17 @@ class Element(
     val y: Int,
     var type: GroundType,
     var building: BuildingType? = null,
+    var carrier: Boolean = false,
+    var worker: Worker? = null,
+    var ressource1: Ressource? = null,
+    var ressource2: Ressource? = null,
     val value: Double//Used in map generation, remove?
 )
+
+class Ressource
+class Worker
+
+
 
 class GameWorld(private val tileGridSize: Int, private val fragmentManager: FragmentManager, context: Context?) : ViewGroup(context) {
     companion object {
