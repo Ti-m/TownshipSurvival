@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 //        gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 //        zoomingLayout.addView(gw2)
 //        setContentView(zoomingLayout)
-        val gameRunLoop = GameRunLoop()
+        val gameRunLoop = GameRunLoop(cells = cells)
         val delay = 1000L
         RepeatHelper.repeatDelayed(delay) {
             Log.i(TAG, "every second")
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class GameRunLoop {
+class GameRunLoop(private val cells: List<Cell>) {
     companion object {
         private val TAG = "GameRunLoop"
     }

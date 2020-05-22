@@ -174,7 +174,7 @@ object ColorHelper {
         return Paint().apply {
             this.color = Color.BLACK
             this.textAlign = Paint.Align.CENTER
-            this.textSize =  24.0f
+            this.textSize =  10.0f
             this.style = Paint.Style.FILL
         }
     }
