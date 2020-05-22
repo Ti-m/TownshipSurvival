@@ -1,28 +1,18 @@
 package com.example.settlers
 
 import android.content.Context
-import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.Path
-import android.os.Handler
-import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
-import com.example.settlers.MainActivity.Companion.flagDistance
-import com.otaliastudios.zoom.ZoomLayout
-import kotlin.math.round
-import kotlin.math.sqrt
 
 enum class GroundType { Water, Grass, Desert, Mountain }
 enum class BuildingType { Townhall, Lumberjack, Road }
 
-class Element(
-    val x: Int,
-    val y: Int,
+class Cell(
+    var coordinates: Coordinates,
     var type: GroundType,
     var building: BuildingType? = null,
     var carrier: Boolean = false,
@@ -32,18 +22,17 @@ class Element(
     val value: Double//Used in map generation, remove?
 )
 
+class Coordinates(val x: Int, val y: Int)
+
 class Ressource
 class Worker
 
-
-
-class GameWorld(private val tileGridSize: Int, private val fragmentManager: FragmentManager, context: Context?) : ViewGroup(context) {
+class GameWorld(private val cells: List<Cell>, private val fragmentManager: FragmentManager, context: Context?) : ViewGroup(context) {
     companion object {
         val TAG = "GameWorld"
     }
 
-    val map = createMap(tileGridSize)
-    val tiles = createTiles(map)
+    val tiles = createTiles(cells)
 
     init {
         tiles.forEach {
@@ -51,44 +40,7 @@ class GameWorld(private val tileGridSize: Int, private val fragmentManager: Frag
         }
     }
 
-    private fun createMap(size: Int): List<Element> {
-        val map = Array(size) {
-            Array<Double?>(size) {
-                null
-            }
-        }
-        map[0][0] = 1.0
-        map[0][size-1] = 11.0
-        map[size-1][0] = 21.0
-        map[size-1][size-1] = 31.0
-        val interpolator = TerrainInterpolator()
-        interpolator.interpolate(map, size, 0.03, 0.0)
-        if (map[(size/2-1)][size/2-1] == null) return listOf()
-        var result = mutableListOf<Element>()
-        map.forEachIndexed { indexX, array ->
-            array.forEachIndexed { indexY, item ->
-
-                result.add(Element(x= indexX + 1, y = indexY + 1, type = GroundType.Water, value = item!!))
-            }
-        }
-        val max = result.maxBy { it.value }
-        val min = result.minBy { it.value }
-        result = result.map {
-            val tmp = it.value / max!!.value
-            val type = when  { //if (item!! < 1.0) GroundType.Grass else GroundType.Desert
-                tmp < 0.25 -> GroundType.Water
-                tmp < 0.5 -> GroundType.Desert
-                tmp < 0.75 -> GroundType.Grass
-                tmp < 1.0 -> GroundType.Mountain
-                else -> GroundType.Water
-            }
-
-            Element(x = it.x, y = it.y, type = type, value = tmp)
-        }.toMutableList()
-        return result
-    }
-
-    private fun createTiles(input: List<Element>): List<FlagTile> {
+    private fun createTiles(input: List<Cell>): List<FlagTile> {
         return input.map { FlagTile(it, fragmentManager, context) }
     }
 
@@ -107,19 +59,19 @@ class GameWorld(private val tileGridSize: Int, private val fragmentManager: Frag
         tiles.forEach {
             val a = it.coords.a
             val r = it.coords.r
-            if (it.element.x.rem(2) == 0) {
+            if (it.cell.coordinates.x.rem(2) == 0) {
                 it.layout(
-                    (it.element.x * 1.5 * a).toInt(),
-                    (it.element.y * 2 * r).toInt(),
-                    (it.element.x * 1.5 * a + 2 * a).toInt(),
-                    (it.element.y * 2 * r + 2 * r).toInt()
+                    (it.cell.coordinates.x * 1.5 * a).toInt(),
+                    (it.cell.coordinates.y * 2 * r).toInt(),
+                    (it.cell.coordinates.x * 1.5 * a + 2 * a).toInt(),
+                    (it.cell.coordinates.y * 2 * r + 2 * r).toInt()
                 )
             } else {
                 it.layout(
-                    (it.element.x * 1.5 * a).toInt(),
-                    (it.element.y * 2 * r + r).toInt(),
-                    (it.element.x * 1.5 * a + 2 * a).toInt(),
-                    (it.element.y * 2 * r + 3 * r).toInt()
+                    (it.cell.coordinates.x * 1.5 * a).toInt(),
+                    (it.cell.coordinates.y * 2 * r + r).toInt(),
+                    (it.cell.coordinates.x * 1.5 * a + 2 * a).toInt(),
+                    (it.cell.coordinates.y * 2 * r + 3 * r).toInt()
                 )
             }
         }

@@ -13,7 +13,7 @@ import com.example.settlers.MainActivity.Companion.flagDistance
 import kotlin.math.sqrt
 
 class FlagTile(
-    val element: Element,
+    val cell: Cell,
     private val fragmentManager: FragmentManager,
     context: Context?
 ) : View(context) {
@@ -25,7 +25,7 @@ class FlagTile(
     val coords: Hexagon = Hexagon(a = flagDistance / 2)
     private val flagPaint = ColorHelper.getFlagPaint()
     private val selectedPaint = ColorHelper.getSelectedPaint()
-    private val groundPaint = ColorHelper.getGroundPaint(element.type)
+    private val groundPaint = ColorHelper.getGroundPaint(cell.type)
     private val textPaint = ColorHelper.getTextPaint()
     private val buildingPaint = ColorHelper.getBuildingPaint()
     private val path = Path()
@@ -53,7 +53,7 @@ class FlagTile(
 //        } else {
 //            canvas.drawPath(path, groundPaint)
 //        }
-         if (element.building != null) {
+         if (cell.building != null) {
              canvas.drawPath(path, buildingPaint)
          } else {
             canvas.drawPath(path, groundPaint)
@@ -63,7 +63,7 @@ class FlagTile(
     }
 
     private fun drawBuilding(canvas: Canvas) {
-        element.building?.let {
+        cell.building?.let {
             when (it) {
                 BuildingType.Townhall -> canvas.drawText("T", coords.center.first, coords.center.second + coords.r/2, textPaint)
                 BuildingType.Lumberjack -> canvas.drawText("L", coords.center.first, coords.center.second + coords.r/2, textPaint)
@@ -98,7 +98,7 @@ class FlagTile(
 
     override fun performClick(): Boolean {
         isSelectedTile = true
-        val dialog = BuildDialog(element, this)
+        val dialog = BuildDialog(cell, this)
         dialog.show(fragmentManager, TAG)
         //invalidate()
         return super.performClick()

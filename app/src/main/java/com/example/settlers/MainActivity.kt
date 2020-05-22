@@ -43,7 +43,11 @@ class MainActivity : AppCompatActivity() {
 //Das zoomen geht ejtz aber die scale informationg elangt nicht in den subview...
 //        workaround doer doch lieber wieder das eigene. Prinzipiell ist das zoom verhalten mit dem zoomlayout schon schöner...
         val fragmentManager = supportFragmentManager
-        val gw2 = GameWorld(tileGridSize = tileGridSize, fragmentManager = fragmentManager, context = this)
+
+        val mapGen = MapGenerator(TerrainInterpolator())
+        val cells = mapGen.createMap(tileGridSize)
+
+        val gw2 = GameWorld(cells = cells, fragmentManager = fragmentManager, context = this)
         //gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         gw2.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
 //        gw2.setBackgroundColor(Color.parseColor("#aaaaaa"))
