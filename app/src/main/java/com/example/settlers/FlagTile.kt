@@ -35,7 +35,7 @@ class FlagTile(
         super.onDraw(canvas!!)
         drawGround(canvas)
         drawFlag(canvas)
-        drawBuilding(canvas)
+        drawText(canvas)
     }
 
     private fun drawGround(canvas: Canvas) {
@@ -62,13 +62,31 @@ class FlagTile(
 
     }
 
-    private fun drawBuilding(canvas: Canvas) {
-        cell.building?.let {
-            when (it) {
-                BuildingType.Townhall -> canvas.drawText("T", coords.center.first, coords.center.second + coords.r/2, textPaint)
-                BuildingType.Lumberjack -> canvas.drawText("L", coords.center.first, coords.center.second + coords.r/2, textPaint)
-                BuildingType.Road -> canvas.drawText("R", coords.center.first, coords.center.second + coords.r/2, textPaint)
+    private fun drawText(canvas: Canvas) {
+
+        cell.ressource1?.let {
+            val letter = when (it) {
+                Ressource.Wood -> "w"
+                Ressource.Stone -> "s"
             }
+            canvas.drawText(letter, coords.center.first - textPaint.textSize / 2, coords.center.second - textPaint.textSize * 0.75f, textPaint)
+        }
+
+        cell.ressource2?.let {
+            val letter = when (it) {
+                Ressource.Wood -> "w"
+                Ressource.Stone -> "s"
+            }
+            canvas.drawText(letter, coords.center.first + textPaint.textSize / 2, coords.center.second - textPaint.textSize * 0.75f, textPaint)
+        }
+
+        cell.building?.let {
+            val letter = when (it) {
+                BuildingType.Townhall ->"T"
+                BuildingType.Lumberjack -> "L"
+                BuildingType.Road -> "R"
+            }
+            canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize / 2, textPaint)
         }
     }
 

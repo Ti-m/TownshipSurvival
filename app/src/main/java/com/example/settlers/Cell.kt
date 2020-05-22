@@ -19,5 +19,5 @@ enum class BuildingType { Townhall, Lumberjack, Road }
 
 class Coordinates(val x: Int, val y: Int)
 
-class Ressource
+enum class Ressource {Wood, Stone}
 class Worker
