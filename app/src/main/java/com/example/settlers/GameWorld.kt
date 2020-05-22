@@ -17,7 +17,7 @@ import kotlin.math.round
 import kotlin.math.sqrt
 
 enum class GroundType { Water, Grass, Desert, Mountain }
-enum class BuildingType { Townhall, Lumberjack }
+enum class BuildingType { Townhall, Lumberjack, Road }
 
 class Element(
     val x: Int,

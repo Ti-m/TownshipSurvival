@@ -64,7 +64,11 @@ class FlagTile(
 
     private fun drawBuilding(canvas: Canvas) {
         element.building?.let {
-            canvas.drawText("L", coords.center.first, coords.center.second + coords.r/2, textPaint)
+            when (it) {
+                BuildingType.Townhall -> canvas.drawText("T", coords.center.first, coords.center.second + coords.r/2, textPaint)
+                BuildingType.Lumberjack -> canvas.drawText("L", coords.center.first, coords.center.second + coords.r/2, textPaint)
+                BuildingType.Road -> canvas.drawText("R", coords.center.first, coords.center.second + coords.r/2, textPaint)
+            }
         }
     }
 

@@ -11,8 +11,9 @@ class BuildDialog(private val element: Element, private val tile: FlagTile) : Di
         val dialog = AlertDialog.Builder(context)
         //dialog.setMessage("Pick something")
         dialog.setTitle("Pick a building")
-        dialog.setItems(arrayOf(BuildingType.Lumberjack.name), DialogInterface.OnClickListener { dialog, which ->
-            element.building = BuildingType.Lumberjack
+        val items = BuildingType.values().map { it.name }
+        dialog.setItems(items.toTypedArray(), DialogInterface.OnClickListener { dialog, which ->
+            element.building = BuildingType.values()[which]
             tile.invalidate()
         })
         //dialog.setButton(1,"OK mate", {dialog, which ->  })
