@@ -1,5 +1,8 @@
 package com.example.settlers
 
+import android.content.Context
+import androidx.fragment.app.FragmentManager
+
 class MapGenerator(private val interpolator: TerrainInterpolator) {
     fun createMap(size: Int): List<Cell> {
         val map = Array(size) {
@@ -39,5 +42,9 @@ class MapGenerator(private val interpolator: TerrainInterpolator) {
             Cell(coordinates = it.coordinates, type = type, value = tmp)
         }.toMutableList()
         return result
+    }
+
+    fun createTiles(input: List<Cell>, transport: MutableList<Transport>, fragmentManager: FragmentManager, context: Context): List<FlagTile> {
+        return input.map { FlagTile(it, input, transport, fragmentManager, context) }
     }
 }

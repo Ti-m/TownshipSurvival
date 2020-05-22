@@ -46,8 +46,10 @@ class MainActivity : AppCompatActivity() {
 
         val mapGen = MapGenerator(TerrainInterpolator())
         val cells = mapGen.createMap(tileGridSize)
+        val transports = mutableListOf<Transport>()
 
-        val gw2 = GameWorld(cells = cells, fragmentManager = fragmentManager, context = this)
+        val tiles = mapGen.createTiles(cells,transports,fragmentManager,this)
+        val gw2 = GameWorld(tiles = tiles, transport = transports, fragmentManager = fragmentManager, context = this)
         //gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         gw2.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
 //        gw2.setBackgroundColor(Color.parseColor("#aaaaaa"))
@@ -62,20 +64,14 @@ class MainActivity : AppCompatActivity() {
 //        gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 //        zoomingLayout.addView(gw2)
 //        setContentView(zoomingLayout)
-        val gameRunLoop = GameRunLoop(cells = cells)
+        val gameRunLoop = GameRunLoop(tiles = tiles, cells = cells, transports = transports)
         val delay = 1000L
         RepeatHelper.repeatDelayed(delay) {
             Log.i(TAG, "every second")
-            gameRunLoop.moveWorker()
+            gameRunLoop.moveRessources()
+
+            gameRunLoop.redraw()
         }
     }
 }
 
-class GameRunLoop(private val cells: List<Cell>) {
-    companion object {
-        private val TAG = "GameRunLoop"
-    }
-    fun moveWorker() {
-        Log.i(TAG, "move Worker")
-    }
-}

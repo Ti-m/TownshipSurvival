@@ -14,6 +14,8 @@ import kotlin.math.sqrt
 
 class FlagTile(
     val cell: Cell,
+    val cells: List<Cell>,
+    val transports: MutableList<Transport>,
     private val fragmentManager: FragmentManager,
     context: Context?
 ) : View(context) {
@@ -31,7 +33,7 @@ class FlagTile(
     private val path = Path()
 
     override fun onDraw(canvas: Canvas?) {
-        Log.i(TAG, "onDraw")
+        Log.i(TAG, "onDraw chords ${cell.coordinates} res1 ${cell.ressource1}")
         super.onDraw(canvas!!)
         drawGround(canvas)
         drawFlag(canvas)
@@ -80,13 +82,24 @@ class FlagTile(
             canvas.drawText(letter, coords.center.first + textPaint.textSize / 2, coords.center.second - textPaint.textSize * 0.75f, textPaint)
         }
 
-        cell.building?.let {
+        cell.building?.type?.let {
             val letter = when (it) {
                 BuildingType.Townhall ->"T"
                 BuildingType.Lumberjack -> "L"
                 BuildingType.Road -> "R"
             }
-            canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize / 2, textPaint)
+            canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
+        }
+
+//        if  (cell.carrier) {
+//            canvas.drawText("c", coords.center.first - textPaint.textSize / 2, coords.center.second + textPaint.textSize * 1.2f, textPaint)
+//        }
+
+        cell.worker?.let {
+            val letter = when (it) {
+                Worker.Construction -> "C"
+            }
+            canvas.drawText(letter, coords.center.first + textPaint.textSize / 2, coords.center.second + textPaint.textSize * 1.2f, textPaint)
         }
     }
 
@@ -116,7 +129,7 @@ class FlagTile(
 
     override fun performClick(): Boolean {
         isSelectedTile = true
-        val dialog = BuildDialog(cell, this)
+        val dialog = BuildDialog(cell = cell, cells = cells, transports = transports, tile = this)
         dialog.show(fragmentManager, TAG)
         //invalidate()
         return super.performClick()

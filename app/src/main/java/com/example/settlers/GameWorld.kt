@@ -8,12 +8,11 @@ import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 
-class GameWorld(private val cells: List<Cell>, private val fragmentManager: FragmentManager, context: Context?) : ViewGroup(context) {
+class GameWorld(private val tiles: List<FlagTile>, private val transport: MutableList<Transport>, private val fragmentManager: FragmentManager, context: Context?) : ViewGroup(context) {
     companion object {
         val TAG = "GameWorld"
     }
 
-    val tiles = createTiles(cells)
 
     init {
         tiles.forEach {
@@ -21,9 +20,7 @@ class GameWorld(private val cells: List<Cell>, private val fragmentManager: Frag
         }
     }
 
-    private fun createTiles(input: List<Cell>): List<FlagTile> {
-        return input.map { FlagTile(it, fragmentManager, context) }
-    }
+
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
         Log.i(TAG,"onInterceptTouchEvent")
