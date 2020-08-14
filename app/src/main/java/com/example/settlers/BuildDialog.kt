@@ -6,7 +6,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 
-class BuildDialog(private val cell: Cell, private val cells: List<Cell>, private val transports: MutableList<Transport>, private val tile: FlagTile) : DialogFragment() {
+class BuildDialog(private val cell: Cell, private val cells: List<Cell>, private val transportManager: TransportManager, private val tile: FlagTile) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = AlertDialog.Builder(context)
         //dialog.setMessage("Pick something")
@@ -20,9 +20,12 @@ class BuildDialog(private val cell: Cell, private val cells: List<Cell>, private
                 BuildingType.Road -> Road()
             }
             cell.building!!.requires.forEach { needed ->
+                //TODO crashes with NoSuchElementException, if no ressources available.
+                // Actually it should not be checked right here, instead the gameloop
+                // needs to calc these each tick.
                 val startCoordinates = cells.first { it.building?.offers?.contains(needed) ?: false}//TODO this is not the closests ...
                 startCoordinates.building!!.markRequested(needed)
-                transports.add(Transport(start = startCoordinates.coordinates, end = cell.coordinates, what = needed))
+                transportManager.requestTransport(start = startCoordinates.coordinates, end = cell.coordinates, what = needed)
             }
             cell.redraw = true
             //tile.invalidate()

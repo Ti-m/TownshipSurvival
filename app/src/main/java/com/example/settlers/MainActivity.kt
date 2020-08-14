@@ -48,7 +48,8 @@ class MainActivity : AppCompatActivity() {
         val cells = mapGen.createMap(tileGridSize)
         val transports = mutableListOf<Transport>()
 
-        val tiles = mapGen.createTiles(cells,transports,fragmentManager,this)
+        val transportManager = TransportManager(cells = cells)
+        val tiles = mapGen.createTiles(cells,transportManager,fragmentManager,this)
         val gw2 = GameWorld(tiles = tiles, transport = transports, fragmentManager = fragmentManager, context = this)
         //gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         gw2.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
@@ -64,13 +65,11 @@ class MainActivity : AppCompatActivity() {
 //        gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 //        zoomingLayout.addView(gw2)
 //        setContentView(zoomingLayout)
-        val gameRunLoop = GameRunLoop(tiles = tiles, cells = cells, transports = transports)
+        val gameRunLoop = GameRunLoop(tiles = tiles, cells = cells, transportManager = transportManager)
         val delay = 1000L
         RepeatHelper.repeatDelayed(delay) {
             Log.i(TAG, "every second")
-            gameRunLoop.moveRessources()
-
-            gameRunLoop.redraw()
+            gameRunLoop.tick()
         }
     }
 }

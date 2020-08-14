@@ -15,7 +15,7 @@ import kotlin.math.sqrt
 class FlagTile(
     val cell: Cell,
     val cells: List<Cell>,
-    val transports: MutableList<Transport>,
+    val transportManager: TransportManager,
     private val fragmentManager: FragmentManager,
     context: Context?
 ) : View(context) {
@@ -129,7 +129,7 @@ class FlagTile(
 
     override fun performClick(): Boolean {
         isSelectedTile = true
-        val dialog = BuildDialog(cell = cell, cells = cells, transports = transports, tile = this)
+        val dialog = BuildDialog(cell = cell, cells = cells, transportManager = transportManager, tile = this)
         dialog.show(fragmentManager, TAG)
         //invalidate()
         return super.performClick()

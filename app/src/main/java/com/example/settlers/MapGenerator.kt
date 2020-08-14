@@ -44,7 +44,7 @@ class MapGenerator(private val interpolator: TerrainInterpolator) {
         return result
     }
 
-    fun createTiles(input: List<Cell>, transport: MutableList<Transport>, fragmentManager: FragmentManager, context: Context): List<FlagTile> {
-        return input.map { FlagTile(it, input, transport, fragmentManager, context) }
+    fun createTiles(input: List<Cell>, transportManager: TransportManager, fragmentManager: FragmentManager, context: Context): List<FlagTile> {
+        return input.map { FlagTile(it, input, transportManager, fragmentManager, context) }
     }
 }
