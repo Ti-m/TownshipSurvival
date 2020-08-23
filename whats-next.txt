@@ -1,0 +1,56 @@
+Tasks - Open
+* Create a dependency diagramm out of the .jar with a tool
+* Transport system.
+** Make simple class structure without dependencies
+*** Should start by simple coordinate
+*** Create a transport class which accepts Start and destination
+** Write tests for Transport
+** Do I need neighbour pointers for my cells?
+** Investigate A* Algorithm
+* Plan enemy
+** Zombie? which moves from spawner to attack most valueable buildung
+* Defense tower
+** Add build defense tower for 5 Wood
+** Shoots projectiles at Zombies
+* Combat system
+** Buildings have lifepoints
+** If Zombies move onto them, they do 1 dmg per round
+** Buildings can request material, to be repaired
+
+* Monument
+** Add Build Pyramids for 100 Wood
+
+Tasks - Done
+** Scrollable map
+*** Run on small phones to see if the scrollable map works
+*** ALternative is some grid system, which expands to a single cell on a bigger grid
+**** Works ok on Pixel 5 with 5" screen
+* Understand how to apply Next Action Approach by watching the video
+** Figure out what is the next single step. Decide based on that step what is the next
+
+
+M1 MVP
+* Design MVP which is playable
+** Gameloop
+*** What are must have buildings
+**** (Townhall) Storage
+**** (Lumberjack) Material
+**** (Defensetower) Shoot zombies
+***
+** Goal
+*** Build Monument
+** Obstacles
+*** Enemy spawners
+**** Send waves
+** Pixelart Graphics
+** Scrollable map
+*** Run on small phones to see if the scrollable map works
+*** ALternative is some grid system, which expands to a single cell on a bigger grid
+
+M2 Playstore
+* Make App Icon
+* Write Description Text
+* Configure Setting
+* Launch
+
+M3 Add features

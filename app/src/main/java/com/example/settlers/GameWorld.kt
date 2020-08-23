@@ -8,6 +8,12 @@ import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 
+open class MapManager (private val cells: List<Cell>) {
+    fun getCellBy(coordinates: Coordinates): Cell {
+        return cells[0]
+    }
+}
+
 class GameWorld(private val tiles: List<FlagTile>, private val transport: MutableList<Transport>, private val fragmentManager: FragmentManager, context: Context?) : ViewGroup(context) {
     companion object {
         val TAG = "GameWorld"
