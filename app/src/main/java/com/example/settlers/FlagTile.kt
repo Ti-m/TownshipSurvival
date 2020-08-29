@@ -33,7 +33,7 @@ class FlagTile(
     private val path = Path()
 
     override fun onDraw(canvas: Canvas?) {
-        Log.i(TAG, "onDraw chords ${cell.coordinates} res1 ${cell.ressource1}")
+        Log.i(TAG, "onDraw chords ${cell.coordinates} res1 ${cell.resource1}")
         super.onDraw(canvas!!)
         drawGround(canvas)
         drawFlag(canvas)
@@ -66,18 +66,18 @@ class FlagTile(
 
     private fun drawText(canvas: Canvas) {
 
-        cell.ressource1?.let {
+        cell.resource1?.let {
             val letter = when (it) {
-                Ressource.Wood -> "w"
-                Ressource.Stone -> "s"
+                Resource.Wood -> "w"
+                Resource.Stone -> "s"
             }
             canvas.drawText(letter, coords.center.first - textPaint.textSize / 2, coords.center.second - textPaint.textSize * 0.75f, textPaint)
         }
 
-        cell.ressource2?.let {
+        cell.resource2?.let {
             val letter = when (it) {
-                Ressource.Wood -> "w"
-                Ressource.Stone -> "s"
+                Resource.Wood -> "w"
+                Resource.Stone -> "s"
             }
             canvas.drawText(letter, coords.center.first + textPaint.textSize / 2, coords.center.second - textPaint.textSize * 0.75f, textPaint)
         }

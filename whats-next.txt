@@ -1,6 +1,29 @@
 Tasks - Open
-* Create a dependency diagramm out of the .jar with a tool
 * Transport system.
+** DONE Refactor that the list operations are hidden by methods of a Manager class.
+*** DONE Implement ExampleUnitTest.request the unit test to drive the design
+**** DONE TransportManagerNew.createActiveTransports() needs to generate a route
+**** DONE The current Test is a little wide. Build tests for MapManager
+**** DONE Make the test work
+
+** Improve coordinate grid
+*** Implement get Neighbour Function
+
+*** Implement the Routing in TransportManager
+**** DONE Find pseudo code for A*, is optimized for arrays https://rosettacode.org/wiki/A*_search_algorithm#Java . Does not work nice with my Lists
+**** DONE Try A* with TestData
+**** DONE Find variant with hexagons. Find out if its a worth read to build own algorithm with hexagons- https://www.redblobgames.com/grids/hexagons/
+**** Double Coordinates Koordinatensystem benutzen
+**** A* Tutorial von ihm https://www.redblobgames.com/pathfinding/a-star/introduction.html -  Für den Anfang reicht https://www.redblobgames.com/pathfinding/a-star/introduction.html#breadth-first-search
+
+**** Improve CommandQuerySepartion at TransportManager
+**** Build specific tests for transportManager
+**** All interactions with cells should go through the GameState Objects
+**** Apply the new architecture of TransportManager to the project
+**** Apply the new architecture of MapManager to the project
+**** Create the routing algorithm
+
+
 ** Make simple class structure without dependencies
 *** Should start by simple coordinate
 *** Create a transport class which accepts Start and destination
@@ -21,6 +44,10 @@ Tasks - Open
 ** Add Build Pyramids for 100 Wood
 
 Tasks - Done
+* Create a dependency diagramm out of the .jar with a tool
+** Automatisch geht nur mit der Intellij Ultimate Edition
+** Alternative ist PlantUML, hier kann man das UML Diagram von Hand schreiben.
+** Allerdings gibts es einen Code Generator nur für Java
 ** Scrollable map
 *** Run on small phones to see if the scrollable map works
 *** ALternative is some grid system, which expands to a single cell on a bigger grid

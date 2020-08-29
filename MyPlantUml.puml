@@ -1,0 +1,33 @@
+@startuml
+
+interface Shape
+
+Shape  <|-- "circular shape" Circle
+Shape  <|-- Square :description here
+note on link: this is a note
+
+Shape  <|-- Rectangle
+
+class Circle {
+    - Double radius;
+    + Double area();
+}
+
+class Square {
+    ~ Double side;
+    Double area();
+}
+
+
+class Rectangle<Double> {
+    Double length;
+    Double width;
+    Double area();
+}
+
+interface Shape<T> {
+    + T area();
+}
+
+
+@enduml

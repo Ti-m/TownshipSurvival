@@ -2,6 +2,118 @@ package com.example.settlers
 
 import android.util.Log
 
+enum class Command { SetResource, RemoveResource, SetResourceOffered, RemoveResourceOffered }
+data class GameState(val coordinates: Coordinates, val command: Command, val what: Resource)
+
+class TransportManagerNew(private val mapManager: MapManager) {
+
+    //Requested resource is not available, therefore, the transport is pending
+    private val pendingTransports: MutableList<TransportRequestNew> = mutableListOf()
+    //Currently getting delivered
+    private val activeTransports: MutableList<TransportRoute> = mutableListOf()
+
+    fun request(request: TransportRequestNew) {
+        pendingTransports.add(request)
+    }
+
+    fun tick(): List<GameState> {
+        val states = mutableListOf<GameState>()
+        states.addAll(createActiveTransports())
+        states.addAll(moveActiveTransports())
+        return states
+    }
+
+    private fun moveActiveTransports(): List<GameState> {
+        val new = mutableListOf<GameState>()
+
+        activeTransports.forEach {
+            val step = it.route.removeAt(0)
+            new.add(
+                GameState(
+                    coordinates = step.start,
+                    command = Command.RemoveResource,
+                    what = it.what
+                )
+            )
+            new.add(
+                GameState(
+                    coordinates = step.end,
+                    command = Command.SetResource,
+                    what = it.what
+                )
+            )
+        }
+        deleteFinishedTransports()
+        return new
+    }
+
+    private fun deleteFinishedTransports() {
+        activeTransports.removeIf { it.route.isEmpty() }
+    }
+
+    private fun createActiveTransports(): List<GameState> {
+        val new = mutableListOf<GameState>()
+        val markForRemovel = mutableListOf<TransportRequestNew>() //Prevent ConcurrentModificationException if the item is removed in the foreach
+        pendingTransports.forEach {
+            val coordinates = mapManager.whereIsResourceOfferedAt(what = it.what)
+            if (coordinates != null) {
+                new.add(
+                    GameState(
+                        coordinates = coordinates,
+                        command = Command.RemoveResourceOffered,
+                        what = it.what
+                    )
+                )
+                new.add(
+                    GameState(
+                        coordinates = coordinates,
+                        command = Command.SetResource,
+                        what = it.what
+                    )
+                )
+                val route = calcRoute(from = coordinates, to = it.destination, what = it.what)
+                activeTransports.add(route)
+                //TODO at the route elements here to the Transport. Create TransportNew class?
+                markForRemovel.add(it)
+            }
+        }
+        pendingTransports.removeAll(markForRemovel)//Remove newly active transports
+        return new
+    }
+
+    private fun calcRoute(from: Coordinates, to: Coordinates, what: Resource) : TransportRoute {
+        val route = mutableListOf<RouteElement>()
+        //TODO THis moves a single tile to the right
+        route.add(RouteElement(from, Coordinates(from.x + 1, from.y)))
+        //and back
+        //route.add(RouteElement(Coordinates(from.x + 1, from.y), from))
+
+        //TODO This is tricky. Best would be something like a* algorithm is there something simpler?
+//        if (isAllowed(from.north)) {
+//
+//        } else if (isAllowed(from.northEast))
+//        if (from.y < to.y && isAllowed(Coordinates(start.x, start.y + 1), destination)) {//TODO Check for road
+//            val coords = Coordinates(start.x, start.y + 1)
+//            route.add(coords)
+//            calcRoute(coords, end, destination, route)
+//        } else if (start.y > end.y && isAllowed(Coordinates(start.x, start.y - 1), destination)) {
+//            val coords = Coordinates(start.x, start.y - 1)
+//            route.add(coords)
+//            calcRoute(coords, end, destination, route)
+//        } else if (start.x < end.x && isAllowed(Coordinates(start.x + 1, start.y), destination)) {
+//            val coords = Coordinates(start.x + 1, start.y)
+//            route.add(coords)
+//            calcRoute(coords, end, destination, route)
+//        } else if (start.x > end.x && isAllowed(Coordinates(start.x - 1, start.y), destination)) {
+//            val coords = Coordinates(start.x - 1, start.y)
+//            route.add(coords)
+//            calcRoute(coords, end, destination, route)
+//        }
+        return TransportRoute(destination = to, what = what, route = route)
+    }
+
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
 class TransportManager(private val cells: List<Cell>) { //TODO rely here on Cells is bad?
     //Currently getting delivered
     private val activeTransports: MutableList<Transport> = mutableListOf()
@@ -72,33 +184,33 @@ class TransportManager(private val cells: List<Cell>) { //TODO rely here on Cell
         val cellStart = cells.first { it.coordinates == start }
         val cellEnd = cells.first { it.coordinates == end }
 
-        if (cellStart.ressource1 == transport.what) {
-            if (cellEnd.ressource1 == null) {
-                cellEnd.ressource1 = transport.what
-                cellStart.ressource1 = null
+        if (cellStart.resource1 == transport.what) {
+            if (cellEnd.resource1 == null) {
+                cellEnd.resource1 = transport.what
+                cellStart.resource1 = null
                 transport.route.removeAt(0)
-            } else if (cellEnd.ressource2 == null) {
-                cellEnd.ressource2 = transport.what
-                cellStart.ressource1 = null
+            } else if (cellEnd.resource2 == null) {
+                cellEnd.resource2 = transport.what
+                cellStart.resource1 = null
                 transport.route.removeAt(0)
             }
-        } else if (cellStart.ressource2 == transport.what) {
-            if (cellEnd.ressource1 == null) {
-                cellEnd.ressource1 = transport.what
-                cellStart.ressource2 = null
+        } else if (cellStart.resource2 == transport.what) {
+            if (cellEnd.resource1 == null) {
+                cellEnd.resource1 = transport.what
+                cellStart.resource2 = null
                 transport.route.removeAt(0)
-            } else if (cellEnd.ressource2 == null) {
-                cellEnd.ressource2 = transport.what
-                cellStart.ressource1 = null
+            } else if (cellEnd.resource2 == null) {
+                cellEnd.resource2 = transport.what
+                cellStart.resource1 = null
                 transport.route.removeAt(0)
             }
         } else if (cellStart.building!!.requested.contains(transport.what)) {
-            if (cellStart.ressource1 == null) {
+            if (cellStart.resource1 == null) {
                 cellStart.building!!.requested.remove(transport.what)
-                cellStart.ressource1 = transport.what
-            } else if (cellEnd.ressource2 == null) {
+                cellStart.resource1 = transport.what
+            } else if (cellEnd.resource2 == null) {
                 cellStart.building!!.requested.remove(transport.what)
-                cellStart.ressource2 = transport.what
+                cellStart.resource2 = transport.what
             }
         }
 
@@ -110,8 +222,13 @@ class TransportManager(private val cells: List<Cell>) { //TODO rely here on Cell
     }
 }
 
-data class Transport(val destination: Coordinates, val what: Ressource) {
+data class Transport(val destination: Coordinates, val what: Resource) {
     val route: MutableList<Coordinates> = mutableListOf()
 }
 
-data class TransportRequest(val destination: Coordinates, val what: Ressource, var markForRemovel: Boolean = false)
+data class TransportRequest(val destination: Coordinates, val what: Resource, var markForRemovel: Boolean = false)
+data class TransportRequestNew(val destination: Coordinates, val what: Resource)
+
+data class TransportRequestInner(val destination: Coordinates, val what: Resource, var markForRemovel: Boolean = false)
+data class TransportRoute(val destination: Coordinates, val what: Resource, val route: MutableList<RouteElement> = mutableListOf())
+data class RouteElement(val start: Coordinates, val end: Coordinates)

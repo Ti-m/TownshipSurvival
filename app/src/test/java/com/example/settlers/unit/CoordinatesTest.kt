@@ -1,5 +1,6 @@
-package com.example.settlers
+package com.example.settlers.unit
 
+import com.example.settlers.Coordinates
 import org.junit.Assert
 import org.junit.Test
 
