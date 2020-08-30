@@ -1,6 +1,6 @@
 package com.example.settlers.unit
 
-import com.example.settlers.TerrainInterpolator
+import com.example.settlers.terrain.TerrainInterpolator
 import de.bechte.junit.runners.context.HierarchicalContextRunner
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat

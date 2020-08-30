@@ -38,7 +38,7 @@
 <!--        app:layout_constraintRight_toRightOf="parent"-->
 <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-    <com.example.settlers.GameWorld
+    <com.example.settlers.ui.GameWorld
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#aaffaa"

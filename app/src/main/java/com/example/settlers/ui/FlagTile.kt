@@ -1,4 +1,4 @@
-package com.example.settlers
+package com.example.settlers.ui
 
 import android.content.Context
 import android.graphics.Canvas
@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.fragment.app.FragmentManager
+import com.example.settlers.*
 import com.example.settlers.MainActivity.Companion.flagDistance
 import kotlin.math.sqrt
 
@@ -107,7 +108,8 @@ class FlagTile(
     private fun drawFlag(canvas: Canvas) {
         //val top = calcTop(item)
         //drawFlag(top, canvas = canvas, paint = flagPaint)
-        canvas.drawCircle(coords.center.first, coords.center.second, MainActivity.flagDiameter, flagPaint)
+        canvas.drawCircle(coords.center.first, coords.center.second,
+            MainActivity.flagDiameter, flagPaint)
     }
 
     private var isSelectedTile = false

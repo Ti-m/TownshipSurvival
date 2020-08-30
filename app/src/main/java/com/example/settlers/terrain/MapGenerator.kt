@@ -1,7 +1,9 @@
-package com.example.settlers
+package com.example.settlers.terrain
 
 import android.content.Context
 import androidx.fragment.app.FragmentManager
+import com.example.settlers.*
+import com.example.settlers.ui.FlagTile
 
 class MapGenerator(private val interpolator: TerrainInterpolator) {
     fun createMap(size: Int): List<Cell> {
@@ -20,11 +22,13 @@ class MapGenerator(private val interpolator: TerrainInterpolator) {
         map.forEachIndexed { indexX, array ->
             array.forEachIndexed { indexY, item ->
 
-                result.add(Cell(
+                result.add(
+                    Cell(
                     coordinates = Coordinates(x= indexX + 1, y = indexY + 1),
                     type = GroundType.Water,
                     value = item!!
-                ))
+                )
+                )
             }
         }
         val max = result.maxBy { it.value }

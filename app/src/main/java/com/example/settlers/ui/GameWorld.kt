@@ -1,4 +1,4 @@
-package com.example.settlers
+package com.example.settlers.ui
 
 import android.content.Context
 import android.graphics.Color
@@ -6,7 +6,6 @@ import android.graphics.Paint
 import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentManager
 
 class GameWorld(private val tiles: List<FlagTile>, context: Context?) : ViewGroup(context) {
     companion object {

@@ -1,4 +1,4 @@
-package com.example.settlers
+package com.example.settlers.terrain
 
 import kotlin.math.*
 import kotlin.random.Random

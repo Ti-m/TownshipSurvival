@@ -1,6 +1,7 @@
 package com.example.settlers
 
 import android.util.Log
+import com.example.settlers.ui.FlagTile
 
 class GameRunLoop(private val tiles: List<FlagTile>, private val mapManager: MapManager, private val transportManager: TransportManager) {
     companion object {

@@ -1,6 +1,5 @@
 package com.example.settlers
 
-import android.util.Log
 import com.example.settlers.util.Logger
 
 open class MapManager(
@@ -95,12 +94,4 @@ open class MapManager(
         val dir = evenq_directions[parity][direction]
         return Coordinates(coords.x + dir[0], coords.y + dir[1])
     }
-
-//    fun getCubeCoordsFromEvenQ(coords: Coordinates): CubeCoords {
-//        val x = coords.x
-//        val z = hex
-//        return CubeCoords(0,0,0)
-//    }
 }
-
-data class CubeCoords(val x: Int, val y: Int, val z: Int)

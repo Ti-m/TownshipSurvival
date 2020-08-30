@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import com.example.settlers.terrain.MapGenerator
+import com.example.settlers.terrain.TerrainInterpolator
+import com.example.settlers.ui.GameWorld
 import com.example.settlers.util.DefaultLogger
 import com.otaliastudios.zoom.ZoomApi.Companion.MAX_ZOOM_DEFAULT_TYPE
 import com.otaliastudios.zoom.ZoomApi.Companion.MIN_ZOOM_DEFAULT_TYPE
