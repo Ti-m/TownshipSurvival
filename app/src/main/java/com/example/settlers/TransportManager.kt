@@ -1,5 +1,7 @@
 package com.example.settlers
 
+import android.util.Log
+
 enum class Command { SetResource, RemoveResource, SetResourceOffered, RemoveResourceOffered }
 data class GameState(val coordinates: Coordinates, val command: Command, val what: Resource)
 
@@ -14,6 +16,7 @@ class TransportManagerNew(
     private val activeTransports: MutableList<TransportRoute> = mutableListOf()
 
     fun request(request: TransportRequestNew) {
+        Log.i("TransportManagerNew", "request $request")
         pendingTransports.add(request)
     }
 
@@ -28,6 +31,7 @@ class TransportManagerNew(
         val new = mutableListOf<GameState>()
 
         activeTransports.forEach {
+            Log.i("TransportManagerNew", "moveActiveTransports $it")
             val step = it.route.steps.removeAt(0)
             new.add(
                 GameState(
@@ -43,6 +47,7 @@ class TransportManagerNew(
                     what = it.what
                 )
             )
+            it.route.current = step
         }
         deleteFinishedTransports()
         return new
@@ -56,6 +61,7 @@ class TransportManagerNew(
         val new = mutableListOf<GameState>()
         val markForRemovel = mutableListOf<TransportRequestNew>() //Prevent ConcurrentModificationException if the item is removed in the foreach
         pendingTransports.forEach {
+            Log.i("TransportManagerNew", "createActiveTransports $it")
             val coordinates = mapManager.whereIsResourceOfferedAt(what = it.what)
             if (coordinates != null) {
                 new.add(

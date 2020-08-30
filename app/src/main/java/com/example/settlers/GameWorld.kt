@@ -8,7 +8,7 @@ import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 
-class GameWorld(private val tiles: List<FlagTile>, private val transport: MutableList<Transport>, private val fragmentManager: FragmentManager, context: Context?) : ViewGroup(context) {
+class GameWorld(private val tiles: List<FlagTile>, context: Context?) : ViewGroup(context) {
     companion object {
         val TAG = "GameWorld"
     }

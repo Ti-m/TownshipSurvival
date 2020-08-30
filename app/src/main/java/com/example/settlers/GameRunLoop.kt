@@ -2,7 +2,7 @@ package com.example.settlers
 
 import android.util.Log
 
-class GameRunLoop(private val tiles: List<FlagTile>, private val cells: List<Cell>, private val transportManager: TransportManager) {
+class GameRunLoop(private val tiles: List<FlagTile>, private val mapManager: MapManager, private val transportManager: TransportManagerNew) {
     companion object {
         private val TAG = "GameRunLoop"
     }
@@ -19,7 +19,8 @@ class GameRunLoop(private val tiles: List<FlagTile>, private val cells: List<Cel
 
     private fun moveRessources() {
         Log.i(TAG, "moveRessources")
-        transportManager.tick()
+        val states = transportManager.tick()
+        mapManager.applyStates(states)
     }
 
     private fun redraw() {

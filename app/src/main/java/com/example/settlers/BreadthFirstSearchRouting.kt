@@ -2,7 +2,7 @@ package com.example.settlers
 
 
 data class Route(
-    val current: Coordinates,//TDO this is really needed?
+    var current: Coordinates,//TDO this is really needed?
     val steps: MutableList<Coordinates>
 )
 

@@ -6,7 +6,13 @@ import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 
-class BuildDialog(private val cell: Cell, private val cells: List<Cell>, private val transportManager: TransportManager, private val tile: FlagTile) : DialogFragment() {
+class BuildDialog(
+    private val cell: Cell,
+    private val cells: List<Cell>,
+    private val transportManager: TransportManagerNew,
+    private val tile: FlagTile,
+    private val mapManager: MapManager
+) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = AlertDialog.Builder(context)
         //dialog.setMessage("Pick something")
@@ -19,8 +25,12 @@ class BuildDialog(private val cell: Cell, private val cells: List<Cell>, private
                 BuildingType.Lumberjack -> Lumberjack()
                 BuildingType.Road -> Road()
             }
-            cell.building!!.requires.forEach { needed ->
-                transportManager.requestTransport(request = TransportRequest(destination = cell.coordinates, what = needed))
+            cell.building!!.requires.forEach { needed -> //TODO Move this to MainActivity? Or some Handler class?
+                val transportRequest = TransportRequestNew(destination = cell.coordinates, what = Resource.Wood)
+                transportManager.request(transportRequest)
+            }
+            cell.building!!.offers.forEach { resource ->//TODO Move this to MainActivity? Or some Handler class?
+                mapManager.applyStates(listOf(GameState(cell.coordinates, Command.SetResourceOffered, resource)))
             }
             cell.redraw = true
             //tile.invalidate()

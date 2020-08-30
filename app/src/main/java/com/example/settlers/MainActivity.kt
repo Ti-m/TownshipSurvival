@@ -46,11 +46,13 @@ class MainActivity : AppCompatActivity() {
 
         val mapGen = MapGenerator(TerrainInterpolator())
         val cells = mapGen.createMap(tileGridSize)
-        val transports = mutableListOf<Transport>()
+        //val transports = mutableListOf<Transport>()
 
-        val transportManager = TransportManager(cells = cells)
-        val tiles = mapGen.createTiles(cells,transportManager,fragmentManager,this)
-        val gw2 = GameWorld(tiles = tiles, transport = transports, fragmentManager = fragmentManager, context = this)
+        //val transportManager = TransportManager(cells = cells)
+        val mapManager = MapManager(cells)
+        val transportManager = TransportManagerNew(mapManager, BreadthFirstSearchRouting(mapManager))
+        val tiles = mapGen.createTiles(cells,transportManager,fragmentManager,this, mapManager)
+        val gw2 = GameWorld(tiles = tiles, context = this)
         //gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         gw2.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
 //        gw2.setBackgroundColor(Color.parseColor("#aaaaaa"))
@@ -65,7 +67,7 @@ class MainActivity : AppCompatActivity() {
 //        gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 //        zoomingLayout.addView(gw2)
 //        setContentView(zoomingLayout)
-        val gameRunLoop = GameRunLoop(tiles = tiles, cells = cells, transportManager = transportManager)
+        val gameRunLoop = GameRunLoop(tiles = tiles, mapManager = mapManager, transportManager = transportManager)
         val delay = 1000L
         RepeatHelper.repeatDelayed(delay) {
             Log.i(TAG, "every second")

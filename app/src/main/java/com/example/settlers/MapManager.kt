@@ -1,9 +1,12 @@
 package com.example.settlers
 
+import android.util.Log
+
 open class MapManager (private val cells: List<Cell>) {
 
     fun applyStates(newStates: List<GameState>) {
         newStates.forEach { state ->
+            Log.i("MapManager", "apply State: $state")
             val selected = findSpecificCell(state.coordinates)
             when (state.command) {
                 Command.SetResource -> {
@@ -14,6 +17,7 @@ open class MapManager (private val cells: List<Cell>) {
                     } else {
                         throw IllegalStateException()
                     }
+                    selected.redraw = true
                 }
                 Command.RemoveResource -> {
                     if (selected.resource2 == state.what) {
@@ -23,6 +27,7 @@ open class MapManager (private val cells: List<Cell>) {
                     } else {
                         throw IllegalStateException()
                     }
+                    selected.redraw = true
                 }
                 Command.SetResourceOffered -> {
                     selected.offers.add(state.what)
