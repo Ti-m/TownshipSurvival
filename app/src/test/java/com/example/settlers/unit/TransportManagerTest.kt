@@ -2,18 +2,24 @@ package com.example.settlers.unit
 
 import com.example.settlers.*
 import com.example.settlers.testdoubles.MapManagerTestData
+import com.example.settlers.util.DisabledLogger
+import com.example.settlers.util.Logger
+import org.junit.Before
 import org.junit.Test
 
 class TransportManagerTest {
 
-    lateinit var sut: TransportManagerNew
+    lateinit var sut: TransportManager
+    lateinit var logger: Logger
 
-    @Test
+    @Before
     fun prepare() {
         val mapManager = MapManagerTestData()
-        sut = TransportManagerNew(mapManager, BreadthFirstSearchRouting(mapManager))
+        logger = DisabledLogger()
+        sut = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
     }
 
+    @Test
     fun request() {
         val coords: Coordinates = Coordinates(0,0)
         val transportRequestNew = TransportRequestNew(coords, Resource.Wood)

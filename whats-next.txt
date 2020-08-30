@@ -17,14 +17,14 @@ Tasks - Open
 **** DONE Create a skeleton for the routing algorithm
 **** DONE Implement get Neighbour Function
 **** DONE A* Tutorial von ihm https://www.redblobgames.com/pathfinding/a-star/introduction.html -  Für den Anfang reicht https://www.redblobgames.com/pathfinding/a-star/introduction.html#breadth-first-search
-**** Integration in TransportManager
+**** DONE Integration in TransportManager
 
-**** Improve CommandQuerySepartion at TransportManager
-**** Build specific tests for transportManager
+*** Improve CommandQuerySepartion at TransportManager
+**** DONE Build specific tests for transportManager
 **** All interactions with cells should go through the GameState Objects
-**** Apply the new architecture of TransportManager to the project
-**** Apply the new architecture of MapManager to the project
-**** Create the routing algorithm
+**** DONE Apply the new architecture of TransportManager to the project
+**** DONE Apply the new architecture of MapManager to the project
+**** DONE Create the routing algorithm
 
 
 ** Make simple class structure without dependencies

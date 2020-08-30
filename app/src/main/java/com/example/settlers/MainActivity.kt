@@ -1,18 +1,11 @@
 package com.example.settlers
 
-import android.content.Context
-import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Paint.ANTI_ALIAS_FLAG
-import android.graphics.Path
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import com.example.settlers.MainActivity.Companion.flagDiameter
-import com.example.settlers.MainActivity.Companion.flagDistance
+import com.example.settlers.util.DefaultLogger
 import com.otaliastudios.zoom.ZoomApi.Companion.MAX_ZOOM_DEFAULT_TYPE
 import com.otaliastudios.zoom.ZoomApi.Companion.MIN_ZOOM_DEFAULT_TYPE
 import com.otaliastudios.zoom.ZoomLayout
@@ -44,13 +37,15 @@ class MainActivity : AppCompatActivity() {
 //        workaround doer doch lieber wieder das eigene. Prinzipiell ist das zoom verhalten mit dem zoomlayout schon schöner...
         val fragmentManager = supportFragmentManager
 
+        val logger = DefaultLogger()
+
         val mapGen = MapGenerator(TerrainInterpolator())
         val cells = mapGen.createMap(tileGridSize)
         //val transports = mutableListOf<Transport>()
 
         //val transportManager = TransportManager(cells = cells)
-        val mapManager = MapManager(cells)
-        val transportManager = TransportManagerNew(mapManager, BreadthFirstSearchRouting(mapManager))
+        val mapManager = MapManager(cells, logger)
+        val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
         val tiles = mapGen.createTiles(cells,transportManager,fragmentManager,this, mapManager)
         val gw2 = GameWorld(tiles = tiles, context = this)
         //gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)

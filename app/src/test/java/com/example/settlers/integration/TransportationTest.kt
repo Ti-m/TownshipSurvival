@@ -2,11 +2,22 @@ package com.example.settlers.integration
 
 import com.example.settlers.*
 import com.example.settlers.testdoubles.MapManagerTestData
+import com.example.settlers.util.DisabledLogger
+import com.example.settlers.util.Logger
 import org.junit.Test
 
 import org.junit.Assert.*
+import org.junit.Before
 
 class TransportationTest {
+
+    lateinit var logger: Logger
+
+    @Before
+    fun setup() {
+        logger = DisabledLogger()
+    }
+
     @Test
     fun request() {
         //TODO this seems to be some higherlvl class, which handles the different managers. Like GameManager??
@@ -20,7 +31,7 @@ class TransportationTest {
         mapManager.applyStates(listOf(GameState(provider, Command.SetResourceOffered, Resource.Wood)))
         assertEquals(listOf(Resource.Wood), mapManager.queryResourcesOffered(at = provider))
 
-        val transportManager = TransportManagerNew(mapManager, BreadthFirstSearchRouting(mapManager))
+        val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
 
         transportManager.request(transportRequest)
         val newStates = transportManager.tick()

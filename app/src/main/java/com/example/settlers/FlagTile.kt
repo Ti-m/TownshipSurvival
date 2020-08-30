@@ -15,7 +15,7 @@ import kotlin.math.sqrt
 class FlagTile(
     val cell: Cell,
     val cells: List<Cell>,
-    private val transportManager: TransportManagerNew,
+    private val transportManager: TransportManager,
     private val mapManager: MapManager,
     private val fragmentManager: FragmentManager,
     context: Context?

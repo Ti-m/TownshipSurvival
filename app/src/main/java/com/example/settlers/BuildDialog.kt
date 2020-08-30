@@ -9,7 +9,7 @@ import androidx.fragment.app.DialogFragment
 class BuildDialog(
     private val cell: Cell,
     private val cells: List<Cell>,
-    private val transportManager: TransportManagerNew,
+    private val transportManager: TransportManager,
     private val tile: FlagTile,
     private val mapManager: MapManager
 ) : DialogFragment() {

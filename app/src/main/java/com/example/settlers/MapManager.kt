@@ -1,12 +1,16 @@
 package com.example.settlers
 
 import android.util.Log
+import com.example.settlers.util.Logger
 
-open class MapManager (private val cells: List<Cell>) {
+open class MapManager(
+    private val cells: List<Cell>,
+    private val log: Logger
+) {
 
     fun applyStates(newStates: List<GameState>) {
         newStates.forEach { state ->
-            Log.i("MapManager", "apply State: $state")
+            log.logi("MapManager", "apply State: $state")
             val selected = findSpecificCell(state.coordinates)
             when (state.command) {
                 Command.SetResource -> {
