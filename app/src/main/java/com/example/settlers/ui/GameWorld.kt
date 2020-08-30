@@ -36,9 +36,9 @@ class GameWorld(private val tiles: List<FlagTile>, context: Context?) : ViewGrou
             if (it.cell.coordinates.x.rem(2) == 0) {
                 it.layout(
                     (it.cell.coordinates.x * 1.5 * a).toInt(),
-                    (it.cell.coordinates.y * 2 * r).toInt(),
+                    (it.cell.coordinates.y * 2 * r + 2 * r).toInt(),
                     (it.cell.coordinates.x * 1.5 * a + 2 * a).toInt(),
-                    (it.cell.coordinates.y * 2 * r + 2 * r).toInt()
+                    (it.cell.coordinates.y * 2 * r + 2 * r + 2 * r).toInt()
                 )
             } else {
                 it.layout(
