@@ -61,4 +61,9 @@ open class MapManager (private val cells: List<Cell>) {
         //TODO this search is kind of brute force
         return cells.first { it.coordinates == coordinates }
     }
+
+    fun getNeighboursOfCell(coords: Coordinates): List<Coordinates> {
+        NotImplementedError()
+        return emptyList()
+    }
 }

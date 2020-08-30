@@ -13,6 +13,7 @@ Tasks - Open
 **** DONE Find pseudo code for A*, is optimized for arrays https://rosettacode.org/wiki/A*_search_algorithm#Java . Does not work nice with my Lists
 **** DONE Try A* with TestData
 **** DONE Find variant with hexagons. Find out if its a worth read to build own algorithm with hexagons- https://www.redblobgames.com/grids/hexagons/
+**** DONE Create a skeleton for the routing algorithm
 **** Double Coordinates Koordinatensystem benutzen
 **** A* Tutorial von ihm https://www.redblobgames.com/pathfinding/a-star/introduction.html -  Für den Anfang reicht https://www.redblobgames.com/pathfinding/a-star/introduction.html#breadth-first-search
 

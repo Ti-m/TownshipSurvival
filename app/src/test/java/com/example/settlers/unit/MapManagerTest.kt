@@ -71,6 +71,6 @@ class MapManagerTest {
     @Test
     fun getNeighbourOfCell() {
         //TODO DOes this fit into mapmanager?
-        //val neighbours: List<Coordinates> = sut.getNeighboursOfCell(coords)
+        val neighbours: List<Coordinates> = sut.getNeighboursOfCell(coords)
     }
 }
