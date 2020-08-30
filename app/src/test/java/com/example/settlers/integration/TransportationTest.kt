@@ -20,7 +20,7 @@ class TransportationTest {
         mapManager.applyStates(listOf(GameState(provider, Command.SetResourceOffered, Resource.Wood)))
         assertEquals(listOf(Resource.Wood), mapManager.queryResourcesOffered(at = provider))
 
-        val transportManager = TransportManagerNew(mapManager)
+        val transportManager = TransportManagerNew(mapManager, BreadthFirstSearchRouting(mapManager))
 
         transportManager.request(transportRequest)
         val newStates = transportManager.tick()

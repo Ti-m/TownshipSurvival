@@ -24,8 +24,8 @@ class BreadthFirstSearchRoutingTest {
 
         Assert.assertEquals(
             Route(
-                listOf(
-                    Coordinates(1,1),
+                current = Coordinates(1,1),
+                steps = mutableListOf(
                     Coordinates(1,2)
                 )
             ),
@@ -42,8 +42,8 @@ class BreadthFirstSearchRoutingTest {
 
         Assert.assertEquals(
             Route(
-                listOf(
-                    Coordinates(1,1),
+                current = Coordinates(1,1),
+                steps = mutableListOf(
                     Coordinates(2,1),
                     Coordinates(2,2)
                 )
@@ -61,8 +61,8 @@ class BreadthFirstSearchRoutingTest {
 
         Assert.assertEquals(
             Route(
-                listOf(
-                    Coordinates(0,0),
+                current = Coordinates(0,0),
+                steps = mutableListOf(
                     Coordinates(1,1),
                     Coordinates(2,1),
                     Coordinates(2,2)

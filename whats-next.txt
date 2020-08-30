@@ -1,5 +1,6 @@
 Tasks - Open
 * Transport system.
+** What happens if the route of an active transport is interrrupted
 ** DONE Refactor that the list operations are hidden by methods of a Manager class.
 *** DONE Implement ExampleUnitTest.request the unit test to drive the design
 **** DONE TransportManagerNew.createActiveTransports() needs to generate a route

@@ -1,9 +1,6 @@
 package com.example.settlers.unit
 
-import com.example.settlers.Coordinates
-import com.example.settlers.Resource
-import com.example.settlers.TransportManagerNew
-import com.example.settlers.TransportRequestNew
+import com.example.settlers.*
 import com.example.settlers.testdoubles.MapManagerTestData
 import org.junit.Test
 
@@ -13,7 +10,8 @@ class TransportManagerTest {
 
     @Test
     fun prepare() {
-        sut = TransportManagerNew(MapManagerTestData())
+        val mapManager = MapManagerTestData()
+        sut = TransportManagerNew(mapManager, BreadthFirstSearchRouting(mapManager))
     }
 
     fun request() {

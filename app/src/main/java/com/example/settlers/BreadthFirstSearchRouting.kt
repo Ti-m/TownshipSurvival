@@ -1,7 +1,10 @@
 package com.example.settlers
 
 
-data class Route(val listOf: List<Coordinates>)
+data class Route(
+    val current: Coordinates,//TDO this is really needed?
+    val steps: MutableList<Coordinates>
+)
 
 class BreadthFirstSearchRouting(private val mapManager: MapManager) {
 
@@ -30,6 +33,8 @@ class BreadthFirstSearchRouting(private val mapManager: MapManager) {
         }
         path.add(start)
 
-        return Route(path.reversed())
+        val list = path.reversed().toMutableList()
+        val first = list.removeFirst()
+        return Route(first, list)
     }
 }
