@@ -3,6 +3,7 @@ package com.example.settlers
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.example.settlers.terrain.MapGenerator
@@ -62,5 +63,9 @@ class MainActivity : AppCompatActivity() {
             gameRunLoop.tick()
         }
     }
-}
 
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        Log.i(TAG, "onTouchEvent")
+        return super.onTouchEvent(event)
+    }
+}

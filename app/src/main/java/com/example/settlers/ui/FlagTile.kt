@@ -112,15 +112,10 @@ class FlagTile(
             MainActivity.flagDiameter, flagPaint)
     }
 
-    private var isSelectedTile = false
-
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         Log.i(TAG, "onTouchEvent")
         super.onTouchEvent(event)
         when (event!!.action) {
-            MotionEvent.ACTION_DOWN -> {
-                isSelectedTile = false
-            }
             MotionEvent.ACTION_UP -> {
                 //selectedElement = getSelectedElement( event.x - translationX, event.y - translationY)
                 performClick()
@@ -131,93 +126,9 @@ class FlagTile(
     }
 
     override fun performClick(): Boolean {
-        isSelectedTile = true
         val dialog = BuildDialog(cell = cell, cells = cells, transportManager = transportManager, tile = this, mapManager = mapManager)
         dialog.show(fragmentManager, TAG)
         //invalidate()
         return super.performClick()
-    }
-}
-
-class Hexagon(val a: Float) {
-
-    //a is the outer radius
-
-    /*
-    * ....p1..p2...
-    * .p3...c...p4.
-    * ....p5..p6..
-    * */
-    companion object {
-        private val sqrt3 = sqrt(3.0f)
-    }
-    val r = sqrt3 * a / 2
-    val center = Pair(a,r)
-
-    //calculated from center which is 0,0
-    val p3 = Pair(center.first - a  , center.second)
-    val p4 = Pair(center.first + a  , center.second)
-    val p1 = Pair(center.first - a/2, center.second - r)
-    val p2 = Pair(center.first + a/2, center.second - r)
-    val p5 = Pair(center.first - a/2, center.second + r)
-    val p6 = Pair(center.first + a/2, center.second + r)
-
-}
-
-object ColorHelper {
-
-    fun getGroundPaint(type: GroundType): Paint {
-        val base = Paint().apply {
-            this.style = Paint.Style.FILL_AND_STROKE
-            this.strokeWidth = 1.0f
-        }
-        return when (type) {
-            GroundType.Water -> base.apply {
-                this.color = Color.BLUE
-            }
-            GroundType.Grass -> base.apply {
-                this.color = Color.GREEN
-            }
-            GroundType.Desert -> base.apply {
-                this.color = Color.YELLOW
-            }
-            GroundType.Mountain -> base.apply {
-                this.color = Color.GRAY
-            }
-        }
-    }
-
-    fun getFlagPaint(): Paint {
-        return Paint().apply {
-            this.color = Color.LTGRAY
-            this.style = Paint.Style.FILL
-            this.textSize = 100.0f
-        }
-    }
-
-    fun getSelectedPaint() : Paint {
-        return Paint().apply {
-            this.color = Color.RED
-            this.style = Paint.Style.FILL_AND_STROKE
-            this.strokeWidth = 1.0f
-            //this.textAlign = Paint.Align.CENTER
-        }
-    }
-
-    fun getTextPaint() : Paint {
-        return Paint().apply {
-            this.color = Color.BLACK
-            this.textAlign = Paint.Align.CENTER
-            this.textSize =  10.0f
-            this.style = Paint.Style.FILL
-        }
-    }
-
-    fun getBuildingPaint() : Paint {
-        return Paint().apply {
-            this.color = Color.LTGRAY
-            this.style = Paint.Style.FILL_AND_STROKE
-            this.strokeWidth = 1.0f
-        }
     }
 }
