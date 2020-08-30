@@ -10,8 +10,11 @@ class BreadthFirstSearchRouting(private val mapManager: MapManager) {
         val cameFrom = mutableMapOf<Coordinates, Coordinates>()
 
         while (!frontier.isEmpty()) {
-            val current = frontier.first()
-            mapManager.getNeighboursOfCell(current).forEach { next ->
+            val current = frontier.removeFirst()
+            if (current == destiantion) {
+                break
+            }
+            mapManager.getNeighboursOfCellEvenQ(current).forEach { next ->
                 if (!cameFrom.containsKey(next)) {
                     frontier.add(next)
                     cameFrom[next] = current

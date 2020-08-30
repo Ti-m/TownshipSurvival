@@ -7,15 +7,16 @@ Tasks - Open
 **** DONE Make the test work
 
 ** Improve coordinate grid
-*** Implement get Neighbour Function
+**** Double Coordinates Koordinatensystem benutzen
 
 *** Implement the Routing in TransportManager
 **** DONE Find pseudo code for A*, is optimized for arrays https://rosettacode.org/wiki/A*_search_algorithm#Java . Does not work nice with my Lists
 **** DONE Try A* with TestData
 **** DONE Find variant with hexagons. Find out if its a worth read to build own algorithm with hexagons- https://www.redblobgames.com/grids/hexagons/
 **** DONE Create a skeleton for the routing algorithm
-**** Double Coordinates Koordinatensystem benutzen
-**** A* Tutorial von ihm https://www.redblobgames.com/pathfinding/a-star/introduction.html -  Für den Anfang reicht https://www.redblobgames.com/pathfinding/a-star/introduction.html#breadth-first-search
+**** DONE Implement get Neighbour Function
+**** DONE A* Tutorial von ihm https://www.redblobgames.com/pathfinding/a-star/introduction.html -  Für den Anfang reicht https://www.redblobgames.com/pathfinding/a-star/introduction.html#breadth-first-search
+**** Integration in TransportManager
 
 **** Improve CommandQuerySepartion at TransportManager
 **** Build specific tests for transportManager
