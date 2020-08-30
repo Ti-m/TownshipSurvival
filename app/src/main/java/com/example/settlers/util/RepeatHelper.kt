@@ -1,4 +1,4 @@
-package com.example.settlers
+package com.example.settlers.util
 
 import android.os.Handler
 
