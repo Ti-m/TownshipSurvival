@@ -2,23 +2,16 @@ package com.example.settlers.ui
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.Path
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import androidx.fragment.app.FragmentManager
 import com.example.settlers.*
 import com.example.settlers.MainActivity.Companion.flagDistance
-import kotlin.math.sqrt
 
 class FlagTile(
     val cell: Cell,
-    val cells: List<Cell>,
-    private val transportManager: TransportManager,
-    private val mapManager: MapManager,
-    private val fragmentManager: FragmentManager,
+    private val handler: BuildDialogHandler,
     context: Context?
 ) : View(context) {
 
@@ -126,8 +119,15 @@ class FlagTile(
     }
 
     override fun performClick(): Boolean {
-        val dialog = BuildDialog(cell = cell, cells = cells, transportManager = transportManager, tile = this, mapManager = mapManager)
-        dialog.show(fragmentManager, TAG)
+
+        val dialog = BuildDialog(
+            items = BuildingType.values().map { it.name },
+            handler = { dialog, which ->
+                handler.cell = this.cell
+                handler.onClick(dialog, which)
+            }
+        )
+        dialog.show((context as MainActivity).supportFragmentManager, TAG)
         //invalidate()
         return super.performClick()
     }

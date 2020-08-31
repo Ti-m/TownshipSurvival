@@ -1,4 +1,9 @@
 Tasks - Open
+
+* Refactor BuilDialog
+** The fragmentManager should not be passed down
+** Pass the request for a Dialog down to MainActivity
+
 * Transport system.
 ** What happens if the route of an active transport is interrrupted
 ** DONE Refactor that the list operations are hidden by methods of a Manager class.

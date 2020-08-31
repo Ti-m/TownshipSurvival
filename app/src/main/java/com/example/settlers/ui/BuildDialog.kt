@@ -5,38 +5,16 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import com.example.settlers.*
 
 class BuildDialog(
-    private val cell: Cell,
-    private val cells: List<Cell>,
-    private val transportManager: TransportManager,
-    private val tile: FlagTile,
-    private val mapManager: MapManager
+    private val items: List<String>,
+    private val handler: DialogInterface.OnClickListener
 ) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = AlertDialog.Builder(context)
         //dialog.setMessage("Pick something")
         dialog.setTitle("Pick a building")
-        val items = BuildingType.values().map { it.name }
-        dialog.setItems(items.toTypedArray(), DialogInterface.OnClickListener { dialog, which ->
-            val type = BuildingType.values()[which]
-            cell.building = when (type) {
-                BuildingType.Townhall -> Townhall()
-                BuildingType.Lumberjack -> Lumberjack()
-                BuildingType.Road -> Road()
-            }
-            cell.building!!.requires.forEach { needed -> //TODO Move this to MainActivity? Or some Handler class?
-                val transportRequest = TransportRequestNew(destination = cell.coordinates, what = Resource.Wood)
-                transportManager.request(transportRequest)
-            }
-            cell.building!!.offers.forEach { resource ->//TODO Move this to MainActivity? Or some Handler class?
-                mapManager.applyStates(listOf(GameState(cell.coordinates, Command.SetResourceOffered, resource)))
-            }
-            cell.redraw = true
-            //tile.invalidate()
-        })
-        //dialog.setButton(1,"OK mate", {dialog, which ->  })
+        dialog.setItems(items.toTypedArray(), handler)
         return dialog.create()
     }
 }

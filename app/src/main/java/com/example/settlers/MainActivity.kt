@@ -1,13 +1,18 @@
 package com.example.settlers
 
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import com.example.settlers.terrain.MapGenerator
 import com.example.settlers.terrain.TerrainInterpolator
+import com.example.settlers.ui.FlagTile
 import com.example.settlers.ui.GameWorld
 import com.example.settlers.util.DefaultLogger
 import com.example.settlers.util.RepeatHelper
@@ -39,8 +44,6 @@ class MainActivity : AppCompatActivity() {
         zoomingLayout.setMaxZoom(8.0f, MAX_ZOOM_DEFAULT_TYPE)
         zoomingLayout.setHasClickableChildren(true)
 
-        val fragmentManager = supportFragmentManager
-
         val logger = DefaultLogger()
 
         val mapGen = MapGenerator(TerrainInterpolator())
@@ -48,7 +51,8 @@ class MainActivity : AppCompatActivity() {
 
         val mapManager = MapManager(cells, logger)
         val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
-        val tiles = mapGen.createTiles(cells,transportManager,fragmentManager,this, mapManager)
+        val buildDialogHandler = BuildDialogHandler(transportManager, mapManager)
+        val tiles = mapGen.createTiles(cells, buildDialogHandler, this)
         val gw2 = GameWorld(tiles = tiles, context = this)
         //gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         gw2.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
@@ -69,3 +73,4 @@ class MainActivity : AppCompatActivity() {
         return super.onTouchEvent(event)
     }
 }
+
