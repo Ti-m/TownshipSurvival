@@ -1,5 +1,11 @@
 package com.example.settlers
 
+/*
+A cell can offer resources, in case a transport is aborted
+A Building can offer resources (Like a warehouse)
+A cell can't request resources
+A building can request resources
+* */
 
 class Cell(
     var coordinates: Coordinates,
@@ -9,7 +15,7 @@ class Cell(
     var worker: Worker? = null,
     var resource1: Resource? = null,
     var resource2: Resource? = null,
-    var requires: List<Resource>? = null, //TODO require/ offer here or in the building?
+    //var requires: List<Resource>? = null, //TODO require/ offer here or in the building?
     var offers: MutableList<Resource> = mutableListOf(),
     var redraw: Boolean = false,
     val value: Double//Used in map generation, remove?
@@ -26,11 +32,6 @@ abstract class Building {
     abstract var requires: MutableList<Resource>
     abstract var offers: MutableList<Resource>
     abstract var requested: MutableList<Resource>
-
-    fun markRequested(item: Resource) {
-        offers.remove(item)
-        requested.add(item)
-    }
 }
 class Townhall : Building() {
     override val type: BuildingType = BuildingType.Townhall

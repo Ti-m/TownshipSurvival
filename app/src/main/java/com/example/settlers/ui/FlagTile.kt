@@ -123,8 +123,7 @@ class FlagTile(
         val dialog = BuildDialog(
             items = BuildingType.values().map { it.name },
             handler = { dialog, which ->
-                handler.cell = this.cell
-                handler.onClick(dialog, which)
+                handler.onClick(cell, which)
             }
         )
         dialog.show((context as MainActivity).supportFragmentManager, TAG)

@@ -1,8 +1,9 @@
 Tasks - Open
 
 * Refactor BuilDialog
-** The fragmentManager should not be passed down
-** Pass the request for a Dialog down to MainActivity
+** DONE The fragmentManager should not be passed down
+** DONE Handle the Request in independent class
+** DONE Add UnitTests. See BuildDialogHandlerTest
 
 * Transport system.
 ** What happens if the route of an active transport is interrrupted
@@ -15,7 +16,7 @@ Tasks - Open
 ** Improve coordinate grid
 **** Double Coordinates Koordinatensystem benutzen
 
-*** Implement the Routing in TransportManager
+*** DONE Implement the Routing in TransportManager
 **** DONE Find pseudo code for A*, is optimized for arrays https://rosettacode.org/wiki/A*_search_algorithm#Java . Does not work nice with my Lists
 **** DONE Try A* with TestData
 **** DONE Find variant with hexagons. Find out if its a worth read to build own algorithm with hexagons- https://www.redblobgames.com/grids/hexagons/
@@ -26,7 +27,7 @@ Tasks - Open
 
 *** Improve CommandQuerySepartion at TransportManager
 **** DONE Build specific tests for transportManager
-**** All interactions with cells should go through the GameState Objects
+**** DONE All interactions with cells should go through the GameState Objects
 **** DONE Apply the new architecture of TransportManager to the project
 **** DONE Apply the new architecture of MapManager to the project
 **** DONE Create the routing algorithm
