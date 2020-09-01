@@ -8,15 +8,15 @@ import com.example.settlers.util.DisabledLogger
 
 class MapManagerTestData(
     cells: List<Cell> = listOf(
-        Cell(coordinates = Coordinates(0,0),type = GroundType.Desert, value = 0.0),
-        Cell(coordinates = Coordinates(1,0),type = GroundType.Desert, value = 0.0),
-        Cell(coordinates = Coordinates(2,0),type = GroundType.Desert, value = 0.0),
-        Cell(coordinates = Coordinates(0,1),type = GroundType.Desert, value = 0.0),
-        Cell(coordinates = Coordinates(1,1),type = GroundType.Desert, value = 0.0),
-        Cell(coordinates = Coordinates(2,1),type = GroundType.Desert, value = 0.0),
-        Cell(coordinates = Coordinates(0,2),type = GroundType.Desert, value = 0.0),
-        Cell(coordinates = Coordinates(1,2),type = GroundType.Desert, value = 0.0),
-        Cell(coordinates = Coordinates(2,2),type = GroundType.Desert, value = 0.0)
+        Cell(coordinates = Coordinates(0,0),type = GroundType.Desert),
+        Cell(coordinates = Coordinates(1,0),type = GroundType.Desert),
+        Cell(coordinates = Coordinates(2,0),type = GroundType.Desert),
+        Cell(coordinates = Coordinates(0,1),type = GroundType.Desert),
+        Cell(coordinates = Coordinates(1,1),type = GroundType.Desert),
+        Cell(coordinates = Coordinates(2,1),type = GroundType.Desert),
+        Cell(coordinates = Coordinates(0,2),type = GroundType.Desert),
+        Cell(coordinates = Coordinates(1,2),type = GroundType.Desert),
+        Cell(coordinates = Coordinates(2,2),type = GroundType.Desert)
     ),
     log: DisabledLogger = DisabledLogger()
 ) : MapManager(cells, log)

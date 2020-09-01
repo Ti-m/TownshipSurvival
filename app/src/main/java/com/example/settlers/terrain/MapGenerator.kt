@@ -5,6 +5,12 @@ import androidx.fragment.app.FragmentManager
 import com.example.settlers.*
 import com.example.settlers.ui.FlagTile
 
+data class MapGeneratorCell(
+    var coordinates: Coordinates,
+    var type: GroundType,
+    val value: Double
+)
+
 class MapGenerator(private val interpolator: TerrainInterpolator) {
     fun createMap(size: Int): List<Cell> {
         val map = Array(size) {
@@ -18,12 +24,12 @@ class MapGenerator(private val interpolator: TerrainInterpolator) {
         map[size-1][size-1] = 31.0
         interpolator.interpolate(map, size, 0.03, 0.0)
         if (map[(size/2-1)][size/2-1] == null) return listOf()
-        var result = mutableListOf<Cell>()
+        var result = mutableListOf<MapGeneratorCell>()
         map.forEachIndexed { indexX, array ->
             array.forEachIndexed { indexY, item ->
 
                 result.add(
-                    Cell(
+                    MapGeneratorCell(
                     coordinates = Coordinates(x= indexX + 1, y = indexY + 1),
                     type = GroundType.Water,
                     value = item!!
@@ -31,9 +37,9 @@ class MapGenerator(private val interpolator: TerrainInterpolator) {
                 )
             }
         }
-        val max = result.maxBy { it.value }
+        val max = result.maxByOrNull { it.value }
         //val min = result.minBy { it.value }
-        result = result.map {
+        val cellresult = result.map {
             val tmp = it.value / max!!.value
             val type = when  { //if (item!! < 1.0) GroundType.Grass else GroundType.Desert
                 tmp < 0.25 -> GroundType.Water
@@ -43,9 +49,9 @@ class MapGenerator(private val interpolator: TerrainInterpolator) {
                 else -> GroundType.Water
             }
 
-            Cell(coordinates = it.coordinates, type = type, value = tmp)
-        }.toMutableList()
-        return result
+            Cell(coordinates = it.coordinates, type = type)
+        }
+        return cellresult.toMutableList()
     }
 
     fun createTiles(input: List<Cell>, buildDialogHandler: BuildDialogHandler, context: Context): List<FlagTile> {

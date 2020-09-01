@@ -1,36 +1,12 @@
 Tasks - Open
 
-* Refactor BuilDialog
-** DONE The fragmentManager should not be passed down
-** DONE Handle the Request in independent class
-** DONE Add UnitTests. See BuildDialogHandlerTest
-
-* Transport system.
-** What happens if the route of an active transport is interrrupted
-** DONE Refactor that the list operations are hidden by methods of a Manager class.
-*** DONE Implement ExampleUnitTest.request the unit test to drive the design
-**** DONE TransportManagerNew.createActiveTransports() needs to generate a route
-**** DONE The current Test is a little wide. Build tests for MapManager
-**** DONE Make the test work
-
 ** Improve coordinate grid
 **** Double Coordinates Koordinatensystem benutzen
 
-*** DONE Implement the Routing in TransportManager
-**** DONE Find pseudo code for A*, is optimized for arrays https://rosettacode.org/wiki/A*_search_algorithm#Java . Does not work nice with my Lists
-**** DONE Try A* with TestData
-**** DONE Find variant with hexagons. Find out if its a worth read to build own algorithm with hexagons- https://www.redblobgames.com/grids/hexagons/
-**** DONE Create a skeleton for the routing algorithm
-**** DONE Implement get Neighbour Function
-**** DONE A* Tutorial von ihm https://www.redblobgames.com/pathfinding/a-star/introduction.html -  Für den Anfang reicht https://www.redblobgames.com/pathfinding/a-star/introduction.html#breadth-first-search
-**** DONE Integration in TransportManager
+* Transport system.
+** What happens if the route of an active transport is interrrupted
+** A single cell shall transport only a single item each round
 
-*** Improve CommandQuerySepartion at TransportManager
-**** DONE Build specific tests for transportManager
-**** DONE All interactions with cells should go through the GameState Objects
-**** DONE Apply the new architecture of TransportManager to the project
-**** DONE Apply the new architecture of MapManager to the project
-**** DONE Create the routing algorithm
 
 
 ** Make simple class structure without dependencies
@@ -52,17 +28,6 @@ Tasks - Open
 * Monument
 ** Add Build Pyramids for 100 Wood
 
-Tasks - Done
-* Create a dependency diagramm out of the .jar with a tool
-** Automatisch geht nur mit der Intellij Ultimate Edition
-** Alternative ist PlantUML, hier kann man das UML Diagram von Hand schreiben.
-** Allerdings gibts es einen Code Generator nur für Java
-** Scrollable map
-*** Run on small phones to see if the scrollable map works
-*** ALternative is some grid system, which expands to a single cell on a bigger grid
-**** Works ok on Pixel 5 with 5" screen
-* Understand how to apply Next Action Approach by watching the video
-** Figure out what is the next single step. Decide based on that step what is the next
 
 
 M1 MVP

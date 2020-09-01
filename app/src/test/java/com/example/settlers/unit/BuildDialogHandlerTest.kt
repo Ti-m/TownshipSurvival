@@ -18,7 +18,7 @@ class BuildDialogHandlerTest {
 
     @Before
     fun prepare() {
-        cell = Cell(coordinates = Coordinates(0,0),type = GroundType.Desert, value = 0.0)
+        cell = Cell(coordinates = Coordinates(0,0),type = GroundType.Desert)
         mapManager = MapManagerTestData(
             listOf(//override defaults
                 cell

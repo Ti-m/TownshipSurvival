@@ -18,7 +18,7 @@ class Cell(
     //var requires: List<Resource>? = null, //TODO require/ offer here or in the building?
     var offers: MutableList<Resource> = mutableListOf(),
     var redraw: Boolean = false,
-    val value: Double//Used in map generation, remove?
+    //val value: Double//Used in map generation, remove?
 )
 
 data class Coordinates(val x: Int, val y: Int)
