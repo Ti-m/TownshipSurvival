@@ -10,7 +10,7 @@ open class TerrainInterpolator {
     protected var offset: Double = 0.0
     protected lateinit var terrain: Array<Array<Double?>>
 
-    fun interpolate(terrain: Array<Array<Double?>>, size: Int, randomAmplitude: Double = 1.0, offset: Double = 0.0) {
+    open fun interpolate(terrain: Array<Array<Double?>>, size: Int, randomAmplitude: Double = 1.0, offset: Double = 0.0) {
         if (!isPowerOfTwo(size-1)) return
         if (size == 0 || size == 1) return
         this.terrain = terrain

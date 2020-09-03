@@ -1,6 +1,5 @@
 package com.example.settlers
 
-import android.util.Log
 import com.example.settlers.util.Logger
 
 enum class Command { SetResource, RemoveResource, SetResourceOffered, RemoveResourceOffered }

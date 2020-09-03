@@ -31,21 +31,21 @@ class GameWorld(private val tiles: List<FlagTile>, context: Context?) : ViewGrou
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
 
         tiles.forEach {
-            val a = it.coords.a
-            val r = it.coords.r
-            if (it.cell.coordinates.x.rem(2) == 0) {
+            val w = it.coords.w
+            val h = it.coords.h
+            if (it.cell.coordinates.y.rem(2) == 0) {
                 it.layout(
-                    (it.cell.coordinates.x * 1.5 * a).toInt(),
-                    (it.cell.coordinates.y * 2 * r + 2 * r).toInt(),
-                    (it.cell.coordinates.x * 1.5 * a + 2 * a).toInt(),
-                    (it.cell.coordinates.y * 2 * r + 2 * r + 2 * r).toInt()
+                    (it.cell.coordinates.x * 1.5 * w).toInt(),
+                    (it.cell.coordinates.y * 2 * h + 2 * h).toInt(),
+                    (it.cell.coordinates.x * 1.5 * w + 2 * w).toInt(),
+                    (it.cell.coordinates.y * 2 * h + 2 * h + 2 * h).toInt()
                 )
             } else {
                 it.layout(
-                    (it.cell.coordinates.x * 1.5 * a).toInt(),
-                    (it.cell.coordinates.y * 2 * r + r).toInt(),
-                    (it.cell.coordinates.x * 1.5 * a + 2 * a).toInt(),
-                    (it.cell.coordinates.y * 2 * r + 3 * r).toInt()
+                    (it.cell.coordinates.x * 1.5 * w).toInt(),
+                    (it.cell.coordinates.y * 2 * h + h).toInt(),
+                    (it.cell.coordinates.x * 1.5 * w + 2 * w).toInt(),
+                    (it.cell.coordinates.y * 2 * h + 3 * h).toInt()
                 )
             }
         }

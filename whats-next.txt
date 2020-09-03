@@ -1,7 +1,11 @@
 Tasks - Open
 
-** Improve coordinate grid
-**** Double Coordinates Koordinatensystem benutzen
+* Improve coordinate grid
+** Das Zeichnen der Hexes fixen. Ist das GameWold?
+**Test für MapGenerator bauen - wie createMap sinnvoll aufsplitten. Ist MapGeneratorTest der richtige Weg?
+** Double Coordinates Koordinatensystem benutzen
+** Eine Hashmap anstelle von einer Liste benutzen? https://www.redblobgames.com/grids/hexagons/#map-storage
+
 
 * Transport system.
 ** What happens if the route of an active transport is interrrupted

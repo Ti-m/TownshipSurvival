@@ -2,6 +2,8 @@ package com.example.settlers.unit
 
 import com.example.settlers.*
 import com.example.settlers.testdoubles.MapManagerTestData
+import com.example.settlers.BreadthFirstSearchRouting
+import com.example.settlers.Route
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

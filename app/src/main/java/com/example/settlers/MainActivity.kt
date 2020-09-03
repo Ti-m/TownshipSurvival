@@ -1,18 +1,13 @@
 package com.example.settlers
 
-import android.app.AlertDialog
-import android.app.Dialog
-import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
 import com.example.settlers.terrain.MapGenerator
 import com.example.settlers.terrain.TerrainInterpolator
-import com.example.settlers.ui.FlagTile
 import com.example.settlers.ui.GameWorld
 import com.example.settlers.util.DefaultLogger
 import com.example.settlers.util.RepeatHelper

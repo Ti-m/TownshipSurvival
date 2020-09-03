@@ -7,7 +7,7 @@ A cell can't request resources
 A building can request resources
 * */
 
-class Cell(
+data class Cell(
     var coordinates: Coordinates,
     var type: GroundType,
     var building: Building? = null,
@@ -22,6 +22,7 @@ class Cell(
 )
 
 data class Coordinates(val x: Int, val y: Int)
+data class CubeCoordinates(val x: Int, val y: Int, val z: Int)
 enum class GroundType { Water, Grass, Desert, Mountain }
 enum class BuildingType { Townhall, Lumberjack, Road }
 enum class Resource { Wood, Stone }

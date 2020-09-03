@@ -19,7 +19,7 @@ class FlagTile(
         private val TAG = "FlagTile"
     }
 
-    val coords: Hexagon = Hexagon(a = flagDistance / 2)
+    val coords: Hexagon = Hexagon(w = flagDistance / 2)
     private val flagPaint = ColorHelper.getFlagPaint()
     private val selectedPaint = ColorHelper.getSelectedPaint()
     private val groundPaint = ColorHelper.getGroundPaint(cell.type)

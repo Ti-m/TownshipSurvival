@@ -2,6 +2,7 @@ package com.example.settlers.unit
 
 import com.example.settlers.*
 import com.example.settlers.testdoubles.MapManagerTestData
+import com.example.settlers.BreadthFirstSearchRouting
 import com.example.settlers.util.DisabledLogger
 import com.example.settlers.util.Logger
 import org.junit.Assert.assertEquals
@@ -32,9 +33,6 @@ class BuildDialogHandlerTest {
 
     @Test
     fun onClick_buildingType() {
-        //val coords: Coordinates = Coordinates(0,0)
-        //val transportRequestNew = TransportRequestNew(coords, Resource.Wood)
-
         sut.onClick(cell, 0)
         assertEquals(BuildingType.Townhall, cell.building!!.type)
         sut.onClick(cell, 1)

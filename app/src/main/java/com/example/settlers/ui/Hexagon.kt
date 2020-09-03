@@ -2,7 +2,7 @@ package com.example.settlers.ui
 
 import kotlin.math.sqrt
 
-class Hexagon(val a: Float) {
+class Hexagon(val w: Float) {
 
     //a is the outer radius
 
@@ -14,15 +14,15 @@ class Hexagon(val a: Float) {
     companion object {
         private val sqrt3 = sqrt(3.0f)
     }
-    val r = sqrt3 * a / 2
-    val center = Pair(a,r)
+    val h = sqrt3 * w / 2 //half height
+    val center = Pair(w,h) //half width
 
     //calculated from center which is 0,0
-    val p3 = Pair(center.first - a  , center.second)
-    val p4 = Pair(center.first + a  , center.second)
-    val p1 = Pair(center.first - a/2, center.second - r)
-    val p2 = Pair(center.first + a/2, center.second - r)
-    val p5 = Pair(center.first - a/2, center.second + r)
-    val p6 = Pair(center.first + a/2, center.second + r)
+    val p3 = Pair(center.first - w  , center.second)
+    val p4 = Pair(center.first + w  , center.second)
+    val p1 = Pair(center.first - w/2, center.second - h)
+    val p2 = Pair(center.first + w/2, center.second - h)
+    val p5 = Pair(center.first - w/2, center.second + h)
+    val p6 = Pair(center.first + w/2, center.second + h)
 
 }

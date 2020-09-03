@@ -1,9 +1,9 @@
 package com.example.settlers.terrain
 
 import android.content.Context
-import androidx.fragment.app.FragmentManager
 import com.example.settlers.*
 import com.example.settlers.ui.FlagTile
+import com.example.settlers.util.CoordinateTransformer
 
 data class MapGeneratorCell(
     var coordinates: Coordinates,
@@ -15,14 +15,16 @@ class MapGenerator(private val interpolator: TerrainInterpolator) {
     fun createMap(size: Int): List<Cell> {
         val map = Array(size) {
             Array<Double?>(size) {
-                null
+                0.0
             }
         }
         map[0][0] = 1.0
         map[0][size-1] = 11.0
         map[size-1][0] = 21.0
         map[size-1][size-1] = 31.0
+
         interpolator.interpolate(map, size, 0.03, 0.0)
+
         if (map[(size/2-1)][size/2-1] == null) return listOf()
         var result = mutableListOf<MapGeneratorCell>()
         map.forEachIndexed { indexX, array ->
@@ -30,10 +32,11 @@ class MapGenerator(private val interpolator: TerrainInterpolator) {
 
                 result.add(
                     MapGeneratorCell(
-                    coordinates = Coordinates(x= indexX + 1, y = indexY + 1),
+//                    coordinates = Coordinates(x= indexX + 1, y = indexY + 1),
+                    coordinates = CoordinateTransformer.offsetToDouble(Coordinates(x= indexX, y = indexY)),
                     type = GroundType.Water,
                     value = item!!
-                )
+                    )
                 )
             }
         }

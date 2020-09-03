@@ -1,4 +1,4 @@
-package com.example.settlers.unit
+package com.example.settlers.unit.terrain
 
 import com.example.settlers.terrain.TerrainInterpolator
 import de.bechte.junit.runners.context.HierarchicalContextRunner
