@@ -6,15 +6,16 @@ import android.graphics.Paint
 import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup
+import com.example.settlers.Coordinates
 
-class GameWorld(private val tiles: List<FlagTile>, context: Context?) : ViewGroup(context) {
+class GameWorld(private val tiles: Map<Coordinates, FlagTile>, context: Context?) : ViewGroup(context) {
     companion object {
         val TAG = "GameWorld"
     }
 
     init {
         tiles.forEach {
-            this.addView(it)
+            this.addView(it.value)
         }
     }
 
@@ -31,21 +32,21 @@ class GameWorld(private val tiles: List<FlagTile>, context: Context?) : ViewGrou
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
 
         tiles.forEach {
-            val w = it.coords.w
-            val h = it.coords.h
-            if (it.cell.coordinates.y.rem(2) == 0) {
-                it.layout(
-                    (it.cell.coordinates.y * 1.5 * w).toInt(),
-                    (it.cell.coordinates.x * h + 2 * h).toInt(),
-                    (it.cell.coordinates.y * 1.5 * w + 2 * w).toInt(),
-                    (it.cell.coordinates.x * h + 2 * h + 2 * h).toInt()
+            val w = it.value.coords.w
+            val h = it.value.coords.h
+            if (it.value.cell.coordinates.y.rem(2) == 0) {
+                it.value.layout(
+                    (it.value.cell.coordinates.y * 1.5 * w).toInt(),
+                    (it.value.cell.coordinates.x * h + 2 * h).toInt(),
+                    (it.value.cell.coordinates.y * 1.5 * w + 2 * w).toInt(),
+                    (it.value.cell.coordinates.x * h + 2 * h + 2 * h).toInt()
                 )
             } else {
-                it.layout(
-                    (it.cell.coordinates.y * 1.5 * w).toInt(),
-                    (it.cell.coordinates.x * h + 2 * h).toInt(),
-                    (it.cell.coordinates.y * 1.5 * w + 2 * w).toInt(),
-                    (it.cell.coordinates.x * h + 2 * 3 * h).toInt()
+                it.value.layout(
+                    (it.value.cell.coordinates.y * 1.5 * w).toInt(),
+                    (it.value.cell.coordinates.x * h + 2 * h).toInt(),
+                    (it.value.cell.coordinates.y * 1.5 * w + 2 * w).toInt(),
+                    (it.value.cell.coordinates.x * h + 2 * 3 * h).toInt()
                 )
             }
         }

@@ -21,8 +21,8 @@ class BuildDialogHandlerTest {
     fun prepare() {
         cell = Cell(coordinates = Coordinates(0,0),type = GroundType.Desert)
         mapManager = MapManagerTestData(
-            listOf(//override defaults
-                cell
+            mapOf(//override defaults
+                Pair(Coordinates(0,0), cell)
             )
         )
         logger = DisabledLogger()

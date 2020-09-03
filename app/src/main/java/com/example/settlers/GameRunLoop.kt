@@ -3,7 +3,7 @@ package com.example.settlers
 import android.util.Log
 import com.example.settlers.ui.FlagTile
 
-class GameRunLoop(private val tiles: List<FlagTile>, private val mapManager: MapManager, private val transportManager: TransportManager) {
+class GameRunLoop(private val tiles: Map<Coordinates, FlagTile>, private val mapManager: MapManager, private val transportManager: TransportManager) {
     companion object {
         private val TAG = "GameRunLoop"
     }
@@ -26,10 +26,10 @@ class GameRunLoop(private val tiles: List<FlagTile>, private val mapManager: Map
 
     private fun redraw() {
         tiles.forEach {
-            if (it.cell.redraw) {
+            if (it.value.cell.redraw) {
                 Log.i(TAG, "need to redraw")
-                it.invalidate()
-                it.cell.redraw = false
+                it.value.invalidate()
+                it.value.cell.redraw = false
             }
         }
     }

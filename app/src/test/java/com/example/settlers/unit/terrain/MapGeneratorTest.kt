@@ -34,11 +34,11 @@ class MapGeneratorTest {
     @Test
     fun createMap() {
         val map = sut.createMap(2)
-        assertEquals(listOf(
-            Cell(Coordinates(0,0), GroundType.Water),
-            Cell(Coordinates(1,1), GroundType.Desert),//TODO Why is here desert and not water?
-            Cell(Coordinates(2,0), GroundType.Grass),//TODO Why is here desert and not water?
-            Cell(Coordinates(3,1), GroundType.Water)
+        assertEquals(mapOf(
+            Pair(Coordinates(0,0), Cell(Coordinates(0,0), GroundType.Water)),
+            Pair(Coordinates(1,1), Cell(Coordinates(1,1), GroundType.Desert)),//TODO Why is here desert and not water?
+            Pair(Coordinates(2,0), Cell(Coordinates(2,0), GroundType.Grass)),//TODO Why is here desert and not water?
+            Pair(Coordinates(3,1), Cell(Coordinates(3,1), GroundType.Water))
         ),
             map
         )

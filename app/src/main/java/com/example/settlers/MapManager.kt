@@ -3,7 +3,7 @@ package com.example.settlers
 import com.example.settlers.util.Logger
 
 open class MapManager(
-    private val cells: List<Cell>,
+    private val cells: Map<Coordinates, Cell>,
     private val log: Logger
 ) {
 
@@ -57,7 +57,7 @@ open class MapManager(
     fun whereIsResourceOfferedAt(what: Resource): Coordinates? {
         //TODO this search is kind of brute force
         return try {
-            cells.first { it.offers.contains(what) }.coordinates
+            cells.entries.first { it.value.offers.contains(what) }.key
         } catch (e: NoSuchElementException) {
             null
         }
@@ -66,8 +66,7 @@ open class MapManager(
     private fun findSpecificCell(coordinates: Coordinates): Cell {
         //Should never throw a NoSuchElementException, because every selected cell needs to be
         // on the map
-        //TODO this search is kind of brute force
-        return cells.first { it.coordinates == coordinates }
+        return cells.getValue(coordinates)
     }
     fun getNeighboursOfCellEvenQ(coords: Coordinates): List<Coordinates> {
         return listOf(
