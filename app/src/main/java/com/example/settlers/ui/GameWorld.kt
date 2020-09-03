@@ -35,17 +35,17 @@ class GameWorld(private val tiles: List<FlagTile>, context: Context?) : ViewGrou
             val h = it.coords.h
             if (it.cell.coordinates.y.rem(2) == 0) {
                 it.layout(
-                    (it.cell.coordinates.x * 1.5 * w).toInt(),
-                    (it.cell.coordinates.y * 2 * h + 2 * h).toInt(),
-                    (it.cell.coordinates.x * 1.5 * w + 2 * w).toInt(),
-                    (it.cell.coordinates.y * 2 * h + 2 * h + 2 * h).toInt()
+                    (it.cell.coordinates.y * 1.5 * w).toInt(),
+                    (it.cell.coordinates.x * h + 2 * h).toInt(),
+                    (it.cell.coordinates.y * 1.5 * w + 2 * w).toInt(),
+                    (it.cell.coordinates.x * h + 2 * h + 2 * h).toInt()
                 )
             } else {
                 it.layout(
-                    (it.cell.coordinates.x * 1.5 * w).toInt(),
-                    (it.cell.coordinates.y * 2 * h + h).toInt(),
-                    (it.cell.coordinates.x * 1.5 * w + 2 * w).toInt(),
-                    (it.cell.coordinates.y * 2 * h + 3 * h).toInt()
+                    (it.cell.coordinates.y * 1.5 * w).toInt(),
+                    (it.cell.coordinates.x * h + 2 * h).toInt(),
+                    (it.cell.coordinates.y * 1.5 * w + 2 * w).toInt(),
+                    (it.cell.coordinates.x * h + 2 * 3 * h).toInt()
                 )
             }
         }
