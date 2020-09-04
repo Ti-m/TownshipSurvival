@@ -68,29 +68,25 @@ open class MapManager(
         // on the map
         return cells.getValue(coordinates)
     }
-    fun getNeighboursOfCellEvenQ(coords: Coordinates): List<Coordinates> {
+
+    fun getNeighboursOfCellDoubleCoords(coords: Coordinates): List<Coordinates> {
         return listOf(
-            getNeighboursOfCellEvenQ(coords,0),
-            getNeighboursOfCellEvenQ(coords,1),
-            getNeighboursOfCellEvenQ(coords,2),
-            getNeighboursOfCellEvenQ(coords,3),
-            getNeighboursOfCellEvenQ(coords,4),
-            getNeighboursOfCellEvenQ(coords,5)
+            getNeighboursOfCellDoubleCoords(coords,0),
+            getNeighboursOfCellDoubleCoords(coords,1),
+            getNeighboursOfCellDoubleCoords(coords,2),
+            getNeighboursOfCellDoubleCoords(coords,3),
+            getNeighboursOfCellDoubleCoords(coords,4),
+            getNeighboursOfCellDoubleCoords(coords,5)
         )
     }
-    fun getNeighboursOfCellEvenQ(coords: Coordinates, direction: Int): Coordinates {
-        val evenq_directions = arrayOf(
-            arrayOf(
-                arrayOf(+1, +1), arrayOf(+1,  0), arrayOf( 0, -1),
-                arrayOf(-1,  0), arrayOf(-1, +1), arrayOf( 0, +1)
-            ),
-            arrayOf(
-                arrayOf(+1,  0), arrayOf(+1, -1), arrayOf( 0, -1),
-                arrayOf(-1, -1), arrayOf(-1,  0), arrayOf( 0, +1)
-            )
+
+    fun getNeighboursOfCellDoubleCoords(coords: Coordinates, direction: Int): Coordinates {
+        val doubleHeightDirections = arrayOf(
+            arrayOf(+1, +1), arrayOf(-1, +1), arrayOf(-2, 0),
+            arrayOf(-1, -1), arrayOf(+1, -1), arrayOf(+2, 0)
         )
-        val parity = coords.x and 1
-        val dir = evenq_directions[parity][direction]
+
+        val dir = doubleHeightDirections[direction]
         return Coordinates(coords.x + dir[0], coords.y + dir[1])
     }
 }

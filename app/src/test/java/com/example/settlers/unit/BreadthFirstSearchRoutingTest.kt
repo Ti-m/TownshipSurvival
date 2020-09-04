@@ -20,7 +20,7 @@ class BreadthFirstSearchRoutingTest {
     @Test
     fun calcRoute() {
         val from = Coordinates(1,1)
-        val to = Coordinates(1,2)
+        val to = Coordinates(2,2)
 
         val route = sut.calcRoute(from, to)
 
@@ -28,7 +28,7 @@ class BreadthFirstSearchRoutingTest {
             Route(
                 current = Coordinates(1,1),
                 steps = mutableListOf(
-                    Coordinates(1,2)
+                    Coordinates(2,2)
                 )
             ),
             route
@@ -38,7 +38,7 @@ class BreadthFirstSearchRoutingTest {
     @Test
     fun calcRoute2() {
         val from = Coordinates(1,1)
-        val to = Coordinates(2,2)
+        val to = Coordinates(4,2)
 
         val route = sut.calcRoute(from, to)
 
@@ -46,8 +46,8 @@ class BreadthFirstSearchRoutingTest {
             Route(
                 current = Coordinates(1,1),
                 steps = mutableListOf(
-                    Coordinates(2,1),
-                    Coordinates(2,2)
+                    Coordinates(2,2),
+                    Coordinates(4,2)
                 )
             ),
             route
@@ -57,7 +57,7 @@ class BreadthFirstSearchRoutingTest {
     @Test
     fun calcRoute3() {
         val from = Coordinates(0,0)
-        val to = Coordinates(2,2)
+        val to = Coordinates(4,2)
 
         val route = sut.calcRoute(from, to)
 
@@ -66,8 +66,8 @@ class BreadthFirstSearchRoutingTest {
                 current = Coordinates(0,0),
                 steps = mutableListOf(
                     Coordinates(1,1),
-                    Coordinates(2,1),
-                    Coordinates(2,2)
+                    Coordinates(2,2),
+                    Coordinates(4,2)
                 )
             ),
             route

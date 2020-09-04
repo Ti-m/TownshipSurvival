@@ -17,7 +17,7 @@ class BreadthFirstSearchRouting(private val mapManager: MapManager) {
             if (current == destiantion) {
                 break
             }
-            mapManager.getNeighboursOfCellEvenQ(current).forEach { next ->
+            mapManager.getNeighboursOfCellDoubleCoords(current).forEach { next ->
                 if (!cameFrom.containsKey(next)) {
                     frontier.add(next)
                     cameFrom[next] = current

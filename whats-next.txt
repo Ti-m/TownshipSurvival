@@ -1,16 +1,11 @@
 Tasks - Open
 
-* Improve coordinate grid
-** DONE Das Zeichnen der Hexes fixen. Ist das GameWold?
-** DONE Test für MapGenerator bauen - wie createMap sinnvoll aufsplitten. Ist MapGeneratorTest der richtige Weg?
-** DONE Double Coordinates Koordinatensystem benutzen
-** DONE Eine Hashmap anstelle von einer Liste benutzen? https://www.redblobgames.com/grids/hexagons/#map-storage
-** Try to remove the coords from Cell/Flagtile
-** Beim Transport kommt: java.util.NoSuchElementException: Key Coordinates(x=12, y=7) is missing in the map.
+
 
 * Transport system.
-** What happens if the route of an active transport is interrrupted
 ** A single cell shall transport only a single item each round
+** It crashes, if the system trys to move over an occupied field
+** What happens if the route of an active transport is interrrupted
 
 
 

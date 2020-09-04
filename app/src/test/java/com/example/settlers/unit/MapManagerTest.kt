@@ -70,15 +70,15 @@ class MapManagerTest {
 
     @Test
     fun getNeighbourOfCell() {
-        val middle = Coordinates(1,1)
-        val neighbours: List<Coordinates> = sut.getNeighboursOfCellEvenQ(middle)
+        val middle = Coordinates(3,1)
+        val neighbours: List<Coordinates> = sut.getNeighboursOfCellDoubleCoords(middle)
         Assert.assertEquals(listOf(
-            Coordinates(2,1),
+            Coordinates(4,2),
+            Coordinates(2,2),
+            Coordinates(1,1),
             Coordinates(2,0),
-            Coordinates(1,0),
-            Coordinates(0,0),
-            Coordinates(0,1),
-            Coordinates(1,2)
+            Coordinates(4,0),
+            Coordinates(5,1)
         ), neighbours)
     }
 }
