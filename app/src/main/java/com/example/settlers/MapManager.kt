@@ -11,32 +11,44 @@ open class MapManager(
         newStates.forEach { state ->
             log.logi("MapManager", "apply State: $state")
             val selected = findSpecificCell(state.coordinates)
-            when (state.command) {
-                Command.SetResource -> {
-                    if (selected.resource1 == null) {
-                        selected.resource1 = state.what
-                    } else if (selected.resource2 == null) {
-                        selected.resource2 = state.what
-                    } else {
-                        throw IllegalStateException()
+            when (state.operator) {
+                Operator.Set -> {
+                    when (state.type) {
+                        Type.Resource -> {
+                            val res = state.data as Resource
+                            if (selected.resource1 == null) {
+                                selected.resource1 = res
+                            } else if (selected.resource2 == null) {
+                                selected.resource2 = res
+                            } else {
+                                throw IllegalStateException()
+                            }
+                            selected.redraw = true
+                        }
+                        Type.Offered -> {
+                            selected.offers.add(state.data as Resource)
+                        }
+                        Type.Building -> TODO()
                     }
-                    selected.redraw = true
                 }
-                Command.RemoveResource -> {
-                    if (selected.resource2 == state.what) {
-                        selected.resource2 = null
-                    } else if (selected.resource1 == state.what) {
-                        selected.resource1 = null
-                    } else {
-                        throw IllegalStateException()
+                Operator.Remove -> {
+                    when (state.type) {
+                        Type.Resource -> {
+                            val res = state.data as Resource
+                            if (selected.resource2 == res) {
+                                selected.resource2 = null
+                            } else if (selected.resource1 == res) {
+                                selected.resource1 = null
+                            } else {
+                                throw IllegalStateException()
+                            }
+                            selected.redraw = true
+                        }
+                        Type.Offered -> {
+                            selected.offers.remove(state.data as Resource)
+                        }
+                        Type.Building -> TODO()
                     }
-                    selected.redraw = true
-                }
-                Command.SetResourceOffered -> {
-                    selected.offers.add(state.what)
-                }
-                Command.RemoveResourceOffered -> {
-                    selected.offers.remove(state.what)
                 }
             }
         }

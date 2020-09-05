@@ -1,8 +1,6 @@
 package com.example.settlers.unit
 
 import com.example.settlers.Coordinates
-import com.example.settlers.CubeCoordinates
-import com.example.settlers.terrain.MapGeneratorCell
 import com.example.settlers.util.CoordinateTransformer
 import org.junit.Assert.assertEquals
 import org.junit.Test

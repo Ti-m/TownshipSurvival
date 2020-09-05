@@ -1,8 +1,6 @@
 package com.example.settlers.util
 
 import com.example.settlers.Coordinates
-import com.example.settlers.CubeCoordinates
-import com.example.settlers.terrain.MapGeneratorCell
 
 object CoordinateTransformer {
 

@@ -1,9 +1,6 @@
 package com.example.settlers.unit
 
-import com.example.settlers.Command
-import com.example.settlers.Coordinates
-import com.example.settlers.GameState
-import com.example.settlers.Resource
+import com.example.settlers.*
 import com.example.settlers.testdoubles.MapManagerTestData
 import org.junit.Assert
 import org.junit.Before
@@ -22,7 +19,7 @@ class MapManagerTest {
 
     @Test
     fun queryResourcesOffered() {
-        sut.applyStates(listOf(GameState(coords, Command.SetResourceOffered, Resource.Wood)))
+        sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Offered, Resource.Wood)))
         val result = sut.queryResourcesOffered(coords)
 
         Assert.assertEquals(listOf(Resource.Wood), result)
@@ -30,7 +27,7 @@ class MapManagerTest {
 
     @Test
     fun whereIsResourceOfferedAt() {
-        sut.applyStates(listOf(GameState(coords, Command.SetResourceOffered, Resource.Wood)))
+        sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Offered, Resource.Wood)))
         val result = sut.whereIsResourceOfferedAt(Resource.Wood)
 
         Assert.assertEquals(coords, result)
@@ -39,10 +36,10 @@ class MapManagerTest {
     @Test
     fun applyStates_SetRemoveResourceOffered() {
         //Set
-        sut.applyStates(listOf(GameState(coords, Command.SetResourceOffered, Resource.Wood)))
+        sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Offered, Resource.Wood)))
         Assert.assertEquals(listOf(Resource.Wood), sut.queryResourcesOffered(coords))
         //Remove
-        sut.applyStates(listOf(GameState(coords, Command.RemoveResourceOffered, Resource.Wood)))
+        sut.applyStates(listOf(GameState(coords, Operator.Remove, Type.Offered, Resource.Wood)))
         Assert.assertEquals(listOf<Resource>(), sut.queryResourcesOffered(coords))
     }
 
@@ -51,8 +48,8 @@ class MapManagerTest {
         //Set
         sut.applyStates(
             listOf(
-                GameState(coords, Command.SetResource, Resource.Wood),
-                GameState(coords, Command.SetResource, Resource.Wood)
+                GameState(coords, Operator.Set, Type.Resource, Resource.Wood),
+                GameState(coords, Operator.Set, Type.Resource, Resource.Wood)
             )
         )
         Assert.assertEquals(Resource.Wood, sut.queryResource1(coords))
@@ -60,8 +57,8 @@ class MapManagerTest {
         //Remove
         sut.applyStates(
             listOf(
-                GameState(coords, Command.RemoveResource, Resource.Wood),
-                GameState(coords, Command.RemoveResource, Resource.Wood)
+                GameState(coords, Operator.Remove, Type.Resource, Resource.Wood),
+                GameState(coords, Operator.Remove, Type.Resource, Resource.Wood)
             )
         )
         Assert.assertNull(sut.queryResource1(coords))
@@ -86,7 +83,7 @@ class MapManagerTest {
 //    fun getNeighbourOfCellWithObstacles() {
 //        val middle = Coordinates(3,1)
 //        val destiantion = Coordinates(4,2)
-//        sut.applyStates(GameState(destiantion, Command.SetBuildingRoad))
+//        sut.applyStates(listOf(GameState(destiantion, Command.SetBuildingRoad)))
 //        val neighbours: List<Coordinates> = sut.getNeighboursOfCellDoubleCoords(middle,false)
 //        Assert.assertEquals(listOf(
 //            Coordinates(4,2)

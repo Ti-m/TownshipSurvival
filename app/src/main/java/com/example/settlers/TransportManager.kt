@@ -2,9 +2,6 @@ package com.example.settlers
 
 import com.example.settlers.util.Logger
 
-enum class Command { SetResource, RemoveResource, SetResourceOffered, RemoveResourceOffered }
-data class GameState(val coordinates: Coordinates, val command: Command, val what: Resource)
-
 data class TransportRequestNew(val destination: Coordinates, val what: Resource)
 data class TransportRoute(val destination: Coordinates, val what: Resource, val route: Route)
 
@@ -37,20 +34,13 @@ class TransportManager(
         activeTransports.forEach {
             log.logi("TransportManagerNew", "moveActiveTransports $it")
             val step = it.route.steps.removeAt(0)
-            new.add(
-                GameState(
-                    coordinates = it.route.current,
-                    command = Command.RemoveResource,
-                    what = it.what
-                )
-            )
-            new.add(
-                GameState(
-                    coordinates = step,
-                    command = Command.SetResource,
-                    what = it.what
-                )
-            )
+            if (it.what == Resource.Wood) {
+                new.add(GameState(it.route.current, Operator.Remove, Type.Resource, Resource.Wood))
+                new.add(GameState(step, Operator.Set, Type.Resource, Resource.Wood))
+            } else if (it.what == Resource.Stone) {
+                new.add(GameState(it.route.current, Operator.Remove, Type.Resource, Resource.Stone))
+                new.add(GameState(step, Operator.Set, Type.Resource, Resource.Stone))
+            }
             it.route.current = step
         }
         deleteFinishedTransports()
@@ -64,28 +54,21 @@ class TransportManager(
     private fun createActiveTransports(): List<GameState> {
         val new = mutableListOf<GameState>()
         val markForRemovel = mutableListOf<TransportRequestNew>() //Prevent ConcurrentModificationException if the item is removed in the foreach
-        pendingTransports.forEach {
-            log.logi("TransportManagerNew", "createActiveTransports $it")
-            val coordinates = mapManager.whereIsResourceOfferedAt(what = it.what)
-            if (coordinates != null) {
-                new.add(
-                    GameState(
-                        coordinates = coordinates,
-                        command = Command.RemoveResourceOffered,
-                        what = it.what
-                    )
-                )
-                new.add(
-                    GameState(
-                        coordinates = coordinates,
-                        command = Command.SetResource,
-                        what = it.what
-                    )
-                )
-                val route = calcRoute(from = coordinates, to = it.destination, what = it.what)
+        pendingTransports.forEach { request ->
+            log.logi("TransportManagerNew", "createActiveTransports $request")
+            mapManager.whereIsResourceOfferedAt(what = request.what)?.let { coords ->
+                if (request.what == Resource.Wood) {
+                    new.add(GameState(coords, Operator.Remove, Type.Offered, Resource.Wood))
+                    new.add(GameState(coords, Operator.Set, Type.Resource, Resource.Wood))
+                } else  if (request.what == Resource.Stone) {
+                    new.add(GameState(coords, Operator.Remove, Type.Offered, Resource.Stone))
+                    new.add(GameState(coords, Operator.Set, Type.Resource, Resource.Stone))
+                }
+
+                val route = calcRoute(from = coords, to = request.destination, what = request.what)
                 activeTransports.add(route)
-                //TODO at the route elements here to the Transport. Create TransportNew class?
-                markForRemovel.add(it)
+
+                markForRemovel.add(request)
             }
         }
         pendingTransports.removeAll(markForRemovel)//Remove newly active transports

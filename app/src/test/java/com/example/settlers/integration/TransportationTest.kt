@@ -28,7 +28,7 @@ class TransportationTest {
         val transportRequest = TransportRequestNew(destination = destiantion, what = Resource.Wood)
         val mapManager = MapManagerTestData()
 
-        mapManager.applyStates(listOf(GameState(provider, Command.SetResourceOffered, Resource.Wood)))
+        mapManager.applyStates(listOf(GameState(provider, Operator.Set, Type.Offered, Resource.Wood)))
         assertEquals(listOf(Resource.Wood), mapManager.queryResourcesOffered(at = provider))
 
         val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
