@@ -63,25 +63,28 @@ class FlagTile(
 
         cell.resource1?.let {
             val letter = when (it) {
-                Resource.Wood -> "w"
-                Resource.Stone -> "s"
+                is Wood -> "w"
+                is Stone -> "s"
+                else -> throw NotImplementedError()
             }
             canvas.drawText(letter, coords.center.first - textPaint.textSize / 2, coords.center.second - textPaint.textSize * 0.75f, textPaint)
         }
 
         cell.resource2?.let {
             val letter = when (it) {
-                Resource.Wood -> "w"
-                Resource.Stone -> "s"
+                is Wood -> "w"
+                is Stone -> "s"
+                else -> throw NotImplementedError()
             }
             canvas.drawText(letter, coords.center.first + textPaint.textSize / 2, coords.center.second - textPaint.textSize * 0.75f, textPaint)
         }
 
-        cell.building?.type?.let {
+        cell.building?.let {
             val letter = when (it) {
-                BuildingType.Townhall ->"T"
-                BuildingType.Lumberjack -> "L"
-                BuildingType.Road -> "R"
+                is Townhall ->"T"
+                is Lumberjack -> "L"
+                is Road -> "R"
+                else -> throw NotImplementedError()
             }
             canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
         }
@@ -119,11 +122,11 @@ class FlagTile(
     }
 
     override fun performClick(): Boolean {
-
+        val buildings = arrayOf(Townhall(), Lumberjack(), Road())
         val dialog = BuildDialog(
-            items = BuildingType.values().map { it.name },
+            items = buildings.map { it.javaClass.canonicalName!! }.toTypedArray(),
             handler = { dialog, which ->
-                handler.onClick(cell, which)
+                handler.onClick(cell, buildings[which])
             }
         )
         dialog.show((context as MainActivity).supportFragmentManager, TAG)

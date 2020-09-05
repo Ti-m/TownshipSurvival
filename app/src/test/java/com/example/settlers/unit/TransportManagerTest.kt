@@ -23,7 +23,7 @@ class TransportManagerTest {
     @Test
     fun request() {
         val coords: Coordinates = Coordinates(0,0)
-        val transportRequestNew = TransportRequestNew(coords, Resource.Wood)
+        val transportRequestNew = TransportRequestNew(coords, Wood)
         sut.request(transportRequestNew)
     }
 }

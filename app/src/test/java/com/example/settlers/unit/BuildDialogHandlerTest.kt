@@ -6,6 +6,7 @@ import com.example.settlers.BreadthFirstSearchRouting
 import com.example.settlers.util.DisabledLogger
 import com.example.settlers.util.Logger
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -33,38 +34,38 @@ class BuildDialogHandlerTest {
 
     @Test
     fun onClick_buildingType() {
-        sut.onClick(cell, 0)
-        assertEquals(BuildingType.Townhall, cell.building!!.type)
-        sut.onClick(cell, 1)
-        assertEquals(BuildingType.Lumberjack, cell.building!!.type)
-        sut.onClick(cell, 2)
-        assertEquals(BuildingType.Road, cell.building!!.type)
+        sut.onClick(cell, Townhall())
+        assertTrue(cell.building is Townhall)
+        sut.onClick(cell, Lumberjack())
+        assertTrue(cell.building is Lumberjack)
+        sut.onClick(cell, Road())
+        assertTrue(cell.building is Road)
     }
 
     @Test
     fun onClick_requires() {
-        sut.onClick(cell, 0)//Townhall
+        sut.onClick(cell, Townhall())
         assertEquals(emptyList<Resource>(), cell.building!!.requires)
-        sut.onClick(cell, 1)//Lumberjack
-        assertEquals(listOf(Resource.Wood, Resource.Wood), cell.building!!.requires)
-        sut.onClick(cell, 2)//Road
+        sut.onClick(cell, Lumberjack())
+        assertEquals(listOf(Wood, Wood), cell.building!!.requires)
+        sut.onClick(cell, Road())
         assertEquals(emptyList<Resource>(), cell.building!!.requires)
     }
 
     @Test
     fun onClick_offers() {
-        sut.onClick(cell, 0)//Townhall
-        assertEquals(listOf(Resource.Wood, Resource.Wood, Resource.Wood, Resource.Stone, Resource.Stone, Resource.Stone), cell.building!!.offers)
-        sut.onClick(cell, 1)//Lumberjack
+        sut.onClick(cell, Townhall())
+        assertEquals(listOf(Wood, Wood, Wood, Stone, Stone, Stone), cell.building!!.offers)
+        sut.onClick(cell, Lumberjack())
         assertEquals(emptyList<Resource>(), cell.building!!.offers)
-        sut.onClick(cell, 2)//Road
+        sut.onClick(cell, Road())
         assertEquals(emptyList<Resource>(), cell.building!!.offers)
     }
 
     @Test
     fun onClick_redraw() {
         assertEquals(false, cell.redraw)
-        sut.onClick(cell, 0)//Townhall
+        sut.onClick(cell, Townhall())
         assertEquals(true, cell.redraw)
     }
 }

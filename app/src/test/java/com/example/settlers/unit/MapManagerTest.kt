@@ -19,16 +19,16 @@ class MapManagerTest {
 
     @Test
     fun queryResourcesOffered() {
-        sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Offered, Resource.Wood)))
+        sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Offered, Wood)))
         val result = sut.queryResourcesOffered(coords)
 
-        Assert.assertEquals(listOf(Resource.Wood), result)
+        Assert.assertEquals(listOf(Wood), result)
     }
 
     @Test
     fun whereIsResourceOfferedAt() {
-        sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Offered, Resource.Wood)))
-        val result = sut.whereIsResourceOfferedAt(Resource.Wood)
+        sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Offered, Wood)))
+        val result = sut.whereIsResourceOfferedAt(Wood)
 
         Assert.assertEquals(coords, result)
     }
@@ -36,10 +36,10 @@ class MapManagerTest {
     @Test
     fun applyStates_SetRemoveResourceOffered() {
         //Set
-        sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Offered, Resource.Wood)))
-        Assert.assertEquals(listOf(Resource.Wood), sut.queryResourcesOffered(coords))
+        sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Offered, Wood)))
+        Assert.assertEquals(listOf(Wood), sut.queryResourcesOffered(coords))
         //Remove
-        sut.applyStates(listOf(GameState(coords, Operator.Remove, Type.Offered, Resource.Wood)))
+        sut.applyStates(listOf(GameState(coords, Operator.Remove, Type.Offered, Wood)))
         Assert.assertEquals(listOf<Resource>(), sut.queryResourcesOffered(coords))
     }
 
@@ -48,17 +48,17 @@ class MapManagerTest {
         //Set
         sut.applyStates(
             listOf(
-                GameState(coords, Operator.Set, Type.Resource, Resource.Wood),
-                GameState(coords, Operator.Set, Type.Resource, Resource.Wood)
+                GameState(coords, Operator.Set, Type.Resource, Wood),
+                GameState(coords, Operator.Set, Type.Resource, Wood)
             )
         )
-        Assert.assertEquals(Resource.Wood, sut.queryResource1(coords))
-        Assert.assertEquals(Resource.Wood, sut.queryResource2(coords))
+        Assert.assertEquals(Wood, sut.queryResource1(coords))
+        Assert.assertEquals(Wood, sut.queryResource2(coords))
         //Remove
         sut.applyStates(
             listOf(
-                GameState(coords, Operator.Remove, Type.Resource, Resource.Wood),
-                GameState(coords, Operator.Remove, Type.Resource, Resource.Wood)
+                GameState(coords, Operator.Remove, Type.Resource, Wood),
+                GameState(coords, Operator.Remove, Type.Resource, Wood)
             )
         )
         Assert.assertNull(sut.queryResource1(coords))

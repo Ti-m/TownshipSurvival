@@ -66,8 +66,8 @@ open class MapManager(
         return findSpecificCell(at).resource2
     }
 
-    fun queryBuilding(at: Coordinates): BuildingType? {
-        return findSpecificCell(at).building?.type
+    fun queryBuilding(at: Coordinates): Building? {
+        return findSpecificCell(at).building
     }
 
     fun whereIsResourceOfferedAt(what: Resource): Coordinates? {

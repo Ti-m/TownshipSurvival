@@ -25,11 +25,11 @@ class TransportationTest {
 
         val provider = Coordinates(0,0)
         val destiantion = Coordinates(1,1)//This test only works for a single tile, because the it ticks only once
-        val transportRequest = TransportRequestNew(destination = destiantion, what = Resource.Wood)
+        val transportRequest = TransportRequestNew(destination = destiantion, what = Wood)
         val mapManager = MapManagerTestData()
 
-        mapManager.applyStates(listOf(GameState(provider, Operator.Set, Type.Offered, Resource.Wood)))
-        assertEquals(listOf(Resource.Wood), mapManager.queryResourcesOffered(at = provider))
+        mapManager.applyStates(listOf(GameState(provider, Operator.Set, Type.Offered, Wood)))
+        assertEquals(listOf(Wood), mapManager.queryResourcesOffered(at = provider))
 
         val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
 
@@ -37,7 +37,7 @@ class TransportationTest {
         val newStates = transportManager.tick()//It has to tick more then once, to do a transport more far
         mapManager.applyStates(newStates)
 
-        assertEquals(Resource.Wood, mapManager.queryResource1(at = destiantion))
+        assertEquals(Wood, mapManager.queryResource1(at = destiantion))
         assertEquals(emptyList<Resource>(), mapManager.queryResourcesOffered(at = provider))
     }
 }

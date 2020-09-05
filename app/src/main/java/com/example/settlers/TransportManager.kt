@@ -34,12 +34,12 @@ class TransportManager(
         activeTransports.forEach {
             log.logi("TransportManagerNew", "moveActiveTransports $it")
             val step = it.route.steps.removeAt(0)
-            if (it.what == Resource.Wood) {
-                new.add(GameState(it.route.current, Operator.Remove, Type.Resource, Resource.Wood))
-                new.add(GameState(step, Operator.Set, Type.Resource, Resource.Wood))
-            } else if (it.what == Resource.Stone) {
-                new.add(GameState(it.route.current, Operator.Remove, Type.Resource, Resource.Stone))
-                new.add(GameState(step, Operator.Set, Type.Resource, Resource.Stone))
+            if (it.what == Wood) {
+                new.add(GameState(it.route.current, Operator.Remove, Type.Resource, Wood))
+                new.add(GameState(step, Operator.Set, Type.Resource, Wood))
+            } else if (it.what == Stone) {
+                new.add(GameState(it.route.current, Operator.Remove, Type.Resource, Stone))
+                new.add(GameState(step, Operator.Set, Type.Resource, Stone))
             }
             it.route.current = step
         }
@@ -57,12 +57,12 @@ class TransportManager(
         pendingTransports.forEach { request ->
             log.logi("TransportManagerNew", "createActiveTransports $request")
             mapManager.whereIsResourceOfferedAt(what = request.what)?.let { coords ->
-                if (request.what == Resource.Wood) {
-                    new.add(GameState(coords, Operator.Remove, Type.Offered, Resource.Wood))
-                    new.add(GameState(coords, Operator.Set, Type.Resource, Resource.Wood))
-                } else  if (request.what == Resource.Stone) {
-                    new.add(GameState(coords, Operator.Remove, Type.Offered, Resource.Stone))
-                    new.add(GameState(coords, Operator.Set, Type.Resource, Resource.Stone))
+                if (request.what == Wood) {
+                    new.add(GameState(coords, Operator.Remove, Type.Offered, Wood))
+                    new.add(GameState(coords, Operator.Set, Type.Resource, Wood))
+                } else  if (request.what == Stone) {
+                    new.add(GameState(coords, Operator.Remove, Type.Offered, Stone))
+                    new.add(GameState(coords, Operator.Set, Type.Resource, Stone))
                 }
 
                 val route = calcRoute(from = coords, to = request.destination, what = request.what)

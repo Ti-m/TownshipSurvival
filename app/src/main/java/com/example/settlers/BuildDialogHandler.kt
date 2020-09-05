@@ -4,13 +4,8 @@ class BuildDialogHandler(
     private val transportManager: TransportManager,
     private val mapManager: MapManager
 ) {
-    fun onClick(cell: Cell, which: Int) {
-        val type = BuildingType.values()[which]
-        cell.building = when (type) {
-            BuildingType.Townhall -> Townhall()
-            BuildingType.Lumberjack -> Lumberjack()
-            BuildingType.Road -> Road()
-        }
+    fun onClick(cell: Cell, which: Building) {
+        cell.building = which
         cell.building!!.requires.forEach { needed ->
             val transportRequest = TransportRequestNew(destination = cell.coordinates, what = needed)
             transportManager.request(transportRequest)
