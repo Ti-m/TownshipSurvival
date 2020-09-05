@@ -54,6 +54,10 @@ open class MapManager(
         return findSpecificCell(at).resource2
     }
 
+    fun queryBuilding(at: Coordinates): BuildingType? {
+        return findSpecificCell(at).building?.type
+    }
+
     fun whereIsResourceOfferedAt(what: Resource): Coordinates? {
         //TODO this search is kind of brute force
         return try {
@@ -69,24 +73,31 @@ open class MapManager(
         return cells.getValue(coordinates)
     }
 
-    fun getNeighboursOfCellDoubleCoords(coords: Coordinates): List<Coordinates> {
+    fun getNeighboursOfCellDoubleCoords(coords: Coordinates, ignoreObstacles: Boolean = true): List<Coordinates> {
         return listOf(
-            getNeighboursOfCellDoubleCoords(coords,0),
-            getNeighboursOfCellDoubleCoords(coords,1),
-            getNeighboursOfCellDoubleCoords(coords,2),
-            getNeighboursOfCellDoubleCoords(coords,3),
-            getNeighboursOfCellDoubleCoords(coords,4),
-            getNeighboursOfCellDoubleCoords(coords,5)
-        )
+            getNeighboursOfCellDoubleCoords(coords,0, ignoreObstacles),
+            getNeighboursOfCellDoubleCoords(coords,1, ignoreObstacles),
+            getNeighboursOfCellDoubleCoords(coords,2, ignoreObstacles),
+            getNeighboursOfCellDoubleCoords(coords,3, ignoreObstacles),
+            getNeighboursOfCellDoubleCoords(coords,4, ignoreObstacles),
+            getNeighboursOfCellDoubleCoords(coords,5, ignoreObstacles)
+        ).filterNotNull()
     }
 
-    fun getNeighboursOfCellDoubleCoords(coords: Coordinates, direction: Int): Coordinates {
+    fun getNeighboursOfCellDoubleCoords(coords: Coordinates, direction: Int, ignoreObstacles: Boolean): Coordinates? {
         val doubleHeightDirections = arrayOf(
             arrayOf(+1, +1), arrayOf(-1, +1), arrayOf(-2, 0),
             arrayOf(-1, -1), arrayOf(+1, -1), arrayOf(+2, 0)
         )
 
         val dir = doubleHeightDirections[direction]
-        return Coordinates(coords.x + dir[0], coords.y + dir[1])
+        val neighbour = Coordinates(coords.x + dir[0], coords.y + dir[1])
+        if (ignoreObstacles) { return neighbour }
+//        if (queryBuilding(at = coords) != BuildingType.Road) { //Refactor to roads
+        if (queryBuilding(at = neighbour) == null) {
+            return null
+        } else {
+            return neighbour
+        }
     }
 }

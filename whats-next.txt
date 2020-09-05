@@ -3,8 +3,15 @@ Tasks - Open
 
 
 * Transport system.
+** DONETransport only on roads
+** DONE First allow any building, instead of only roads
+** Should buildings be set through the GameStateObjects too?
+** Only allow transports on roads
+** How handle buildings? They sould not behave as roads, only for start or destination
+*** Add obstacles to routing
 ** A single cell shall transport only a single item each round
-** It crashes, if the system trys to move over an occupied field
+*** The transport system ignores how many things are already on a field. So if lumberjack requests
+    3 items of wood it crashes
 ** What happens if the route of an active transport is interrrupted
 
 

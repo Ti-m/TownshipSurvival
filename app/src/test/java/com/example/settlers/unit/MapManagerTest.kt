@@ -71,7 +71,7 @@ class MapManagerTest {
     @Test
     fun getNeighbourOfCell() {
         val middle = Coordinates(3,1)
-        val neighbours: List<Coordinates> = sut.getNeighboursOfCellDoubleCoords(middle)
+        val neighbours: List<Coordinates> = sut.getNeighboursOfCellDoubleCoords(middle, true)
         Assert.assertEquals(listOf(
             Coordinates(4,2),
             Coordinates(2,2),
@@ -81,4 +81,15 @@ class MapManagerTest {
             Coordinates(5,1)
         ), neighbours)
     }
+
+//    @Test
+//    fun getNeighbourOfCellWithObstacles() {
+//        val middle = Coordinates(3,1)
+//        val destiantion = Coordinates(4,2)
+//        sut.applyStates(GameState(destiantion, Command.SetBuildingRoad))
+//        val neighbours: List<Coordinates> = sut.getNeighboursOfCellDoubleCoords(middle,false)
+//        Assert.assertEquals(listOf(
+//            Coordinates(4,2)
+//        ), neighbours)
+//    }
 }
