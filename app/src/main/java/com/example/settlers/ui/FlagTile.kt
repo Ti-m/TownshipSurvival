@@ -124,7 +124,7 @@ class FlagTile(
     override fun performClick(): Boolean {
         val buildings = arrayOf(Townhall(), Lumberjack(), Road())
         val dialog = BuildDialog(
-            items = buildings.map { it.javaClass.canonicalName!! }.toTypedArray(),
+            items = buildings.map { it.javaClass.simpleName }.toTypedArray(),//TODO Do something better here
             handler = { dialog, which ->
                 handler.onClick(cell, buildings[which])
             }

@@ -5,8 +5,10 @@ Tasks - Open
 * Transport system.
 ** DONETransport only on roads
 ** DONE First allow any building, instead of only roads
-** Generalize the Commands?
-** Should buildings be set through the GameStateObjects too?
+** DONE Generalize the Commands?
+** Refactor MapManager to delegate applyState
+*** How to fix the cyclic dependency?
+** BuildDialog: Set buildings through GameStateObjects
 ** Only allow transports on roads
 ** How handle buildings? They sould not behave as roads, only for start or destination
 *** Add obstacles to routing
