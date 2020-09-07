@@ -37,4 +37,9 @@ class BreadthFirstSearchRouting(private val mapManager: MapManager) {
         val first = list.removeFirst()
         return Route(first, list)
     }
+
+    fun calcRouteNextStep(start: Coordinates, destiantion: Coordinates): Coordinates {
+        //Return First Step. Drop all other steps
+       return calcRoute(start, destiantion).steps.first()
+    }
 }

@@ -12,67 +12,95 @@ class TransportManager(
 ) {
 
     //Requested resource is not available, therefore, the transport is pending
-    private val pendingTransports: MutableList<TransportRequestNew> = mutableListOf()
+   // private val pendingTransports: MutableList<TransportRequestNew> = mutableListOf()
     //Currently getting delivered
-    private val activeTransports: MutableList<TransportRoute> = mutableListOf()
+    //private val activeTransports: MutableList<TransportRoute> = mutableListOf()
 
-    fun request(request: TransportRequestNew) {
-        log.logi("TransportManagerNew", "request $request")
-        pendingTransports.add(request)
-    }
+//    fun request(request: TransportRequestNew) {
+//        log.logi("TransportManagerNew", "request $request")
+//        pendingTransports.add(request)
+//    }
 
     fun tick(): List<GameState> {
         val states = mutableListOf<GameState>()
-        states.addAll(createActiveTransports())
-        states.addAll(moveActiveTransports())
+        states.addAll(runProduction())
+        states.addAll(convertTransportToProduction())
+        states.addAll(convertTransportToStorage())
+        states.addAll(moveResources())
+        //states.addAll(matchDemand()) //TODO Implement matchDemand which cancels a requested good with a resource available in field
         return states
     }
 
-    private fun moveActiveTransports(): List<GameState> {
-        val new = mutableListOf<GameState>()
-
-        activeTransports.forEach {
-            log.logi("TransportManagerNew", "moveActiveTransports $it")
-            val step = it.route.steps.removeAt(0)
-            if (it.what == Wood) {
-                new.add(GameState(it.route.current, Operator.Remove, Type.Resource, Wood))
-                new.add(GameState(step, Operator.Set, Type.Resource, Wood))
-            } else if (it.what == Stone) {
-                new.add(GameState(it.route.current, Operator.Remove, Type.Resource, Stone))
-                new.add(GameState(step, Operator.Set, Type.Resource, Stone))
-            }
-            it.route.current = step
-        }
-        deleteFinishedTransports()
-        return new
+    private fun runProduction(): Collection<GameState> {
+        return emptyList()
     }
 
-    private fun deleteFinishedTransports() {
-        activeTransports.removeIf { it.route.steps.isEmpty() }
+    private fun convertTransportToProduction(): Collection<GameState> {
+        return emptyList()
     }
 
-    private fun createActiveTransports(): List<GameState> {
-        val new = mutableListOf<GameState>()
-        val markForRemovel = mutableListOf<TransportRequestNew>() //Prevent ConcurrentModificationException if the item is removed in the foreach
-        pendingTransports.forEach { request ->
-            log.logi("TransportManagerNew", "createActiveTransports $request")
-            mapManager.whereIsResourceOfferedAt(what = request.what)?.let { coords ->
-                if (request.what == Wood) {
-                    new.add(GameState(coords, Operator.Remove, Type.Offered, Wood))
-                    new.add(GameState(coords, Operator.Set, Type.Resource, Wood))
-                } else  if (request.what == Stone) {
-                    new.add(GameState(coords, Operator.Remove, Type.Offered, Stone))
-                    new.add(GameState(coords, Operator.Set, Type.Resource, Stone))
+    private fun convertTransportToStorage(): Collection<GameState> {
+        return emptyList()
+    }
+
+    private fun moveResources(): Collection<GameState> {
+        val requests: Collection<TransportRequestNew> = mapManager.getRequests()
+        val states: Collection<GameState> = handleRequests(requests)
+        return states
+    }
+
+    private fun handleRequests(requests: Collection<TransportRequestNew>): Collection<GameState> {
+        val states: MutableList<GameState> = mutableListOf()
+        requests.forEach { request ->
+            //TODO Refactor to closest
+//            val closest = mapManager.whereIsResourceOfferedAt(request)
+//            if (closest != null) {
+//                val to = calcRouteOneStep(
+//                    from = closest,
+//                    to = request.destination,
+//                    what = request.what
+//                ) //only next step
+//                states.add(GameState(closest, Operator.Remove, Type.Offered, request.what))
+//                states.add(GameState(to, Operator.Set, Type.Resource, request.what))//TODO The types diverge here. Do it better?
+//            } else {
+//                val closest2 = mapManager.whereIsResourceinTransportAt(request)
+//                if (closest2 != null) {
+//                    val to = calcRouteOneStep(
+//                        from = closest2,
+//                        to = request.destination,
+//                        what = request.what
+//                    ) //only next step
+//                    states.add(GameState(closest2, Operator.Remove, Type.Resource, request.what))
+//                    states.add(GameState(to, Operator.Set, Type.Resource, request.what))
+//                }
+//            }
+            val closest = mapManager.whereIsResourceinTransportAt(request)
+            if (closest != null) {
+                val to = calcRouteOneStep(
+                    from = closest,
+                    to = request.destination,
+                    what = request.what
+                ) //only next step
+                states.add(GameState(closest, Operator.Remove, Type.Resource, request.what))
+                states.add(GameState(to, Operator.Set, Type.Resource, request.what))//TODO The types diverge here. Do it better?
+            } else {
+                val closest2 = mapManager.whereIsResourceOfferedAt(request)
+                if (closest2 != null) {
+                    val to = calcRouteOneStep(
+                        from = closest2,
+                        to = request.destination,
+                        what = request.what
+                    ) //only next step
+                    states.add(GameState(closest2, Operator.Remove, Type.Offered, request.what))
+                    states.add(GameState(to, Operator.Set, Type.Resource, request.what))
                 }
-
-                val route = calcRoute(from = coords, to = request.destination, what = request.what)
-                activeTransports.add(route)
-
-                markForRemovel.add(request)
             }
         }
-        pendingTransports.removeAll(markForRemovel)//Remove newly active transports
-        return new
+        return states
+    }
+
+    private fun calcRouteOneStep(from: Coordinates, to: Coordinates, what: Resource): Coordinates {
+        return routing.calcRouteNextStep(from, to)
     }
 
     private fun calcRoute(from: Coordinates, to: Coordinates, what: Resource) : TransportRoute {

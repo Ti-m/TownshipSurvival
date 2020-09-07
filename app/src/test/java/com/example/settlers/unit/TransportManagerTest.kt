@@ -20,10 +20,14 @@ class TransportManagerTest {
         sut = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
     }
 
+//    @Test
+//    fun request() {
+//        val coords: Coordinates = Coordinates(0,0)
+//        val transportRequestNew = TransportRequestNew(coords, Wood)
+//        sut.request(transportRequestNew)
+//    }
+
     @Test
-    fun request() {
-        val coords: Coordinates = Coordinates(0,0)
-        val transportRequestNew = TransportRequestNew(coords, Wood)
-        sut.request(transportRequestNew)
+    fun tick() {
     }
 }

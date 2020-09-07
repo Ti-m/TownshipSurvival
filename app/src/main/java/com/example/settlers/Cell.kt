@@ -13,10 +13,14 @@ data class Cell(
     var building: Building? = null,
     //var carrier: Boolean = false,
     var worker: Worker? = null,
-    var resource1: Resource? = null,
-    var resource2: Resource? = null,
-    //var requires: List<Resource>? = null, //TODO require/ offer here or in the building?
-    var offers: MutableList<Resource> = mutableListOf(),
+    //Resources in transport. visible on the map
+    var transport: MutableList<Resource> = mutableListOf(),
+    //This resources are requested for transport
+    var requires: MutableList<Resource> = mutableListOf(),
+    //This resources are available for transport
+    var storage: MutableList<Resource> = mutableListOf(),
+    //This resources are NOT available for transport, but are used for a pending production
+    var production: MutableList<Resource> = mutableListOf(),
     var redraw: Boolean = false,
     //val value: Double//Used in map generation, remove?
 )

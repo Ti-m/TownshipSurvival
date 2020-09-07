@@ -3,7 +3,12 @@ package com.example.settlers
 import android.util.Log
 import com.example.settlers.ui.FlagTile
 
-class GameRunLoop(private val tiles: Map<Coordinates, FlagTile>, private val mapManager: MapManager, private val transportManager: TransportManager) {
+class GameRunLoop(
+    private val tiles: Map<Coordinates, FlagTile>,
+    private val mapManager: MapManager,
+    private val transportManager: TransportManager,
+    private val gameStateManager: GameStateManager
+) {
     companion object {
         private val TAG = "GameRunLoop"
     }
@@ -21,7 +26,7 @@ class GameRunLoop(private val tiles: Map<Coordinates, FlagTile>, private val map
     private fun moveRessources() {
         Log.i(TAG, "moveRessources")
         val states = transportManager.tick()
-        mapManager.applyStates(states)
+        gameStateManager.applyStates(states)
     }
 
     private fun redraw() {

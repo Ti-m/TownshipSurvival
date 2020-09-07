@@ -2,24 +2,29 @@ package com.example.settlers.unit
 
 import com.example.settlers.*
 import com.example.settlers.testdoubles.MapManagerTestData
+import com.example.settlers.util.DisabledLogger
+import com.example.settlers.util.Logger
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
 class MapManagerTest {
 
+    private val logger: Logger = DisabledLogger()
     private lateinit var sut: MapManagerTestData
+    private lateinit var gameStateManager: GameStateManager
     private lateinit var coords: Coordinates
 
     @Before
     fun prepare() {
         sut = MapManagerTestData()
+        gameStateManager = GameStateManager(sut, logger)
         coords = Coordinates(0,0)
     }
 
     @Test
     fun queryResourcesOffered() {
-        sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Offered, Wood)))
+        gameStateManager.applyStates(listOf(GameState(coords, Operator.Set, Type.Offered, Wood)))
         val result = sut.queryResourcesOffered(coords)
 
         assertEquals(listOf(Wood), result)
@@ -27,62 +32,11 @@ class MapManagerTest {
 
     @Test
     fun whereIsResourceOfferedAt() {
-        sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Offered, Wood)))
-        val result = sut.whereIsResourceOfferedAt(Wood)
+        gameStateManager.applyStates(listOf(GameState(coords, Operator.Set, Type.Offered, Wood)))
+        //The coordinates are irrelevant here
+        val result = sut.whereIsResourceOfferedAt(TransportRequestNew(Coordinates(0,0), Wood))
 
         assertEquals(coords, result)
-    }
-
-    @Test
-    fun applyStates_SetRemoveResourceOffered() {
-        //Set
-        sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Offered, Wood)))
-        assertEquals(listOf(Wood), sut.queryResourcesOffered(coords))
-        //Remove
-        sut.applyStates(listOf(GameState(coords, Operator.Remove, Type.Offered, Wood)))
-        assertEquals(listOf<Resource>(), sut.queryResourcesOffered(coords))
-    }
-
-    @Test
-    fun applyStates_SetRemoveResource() {
-        //Set
-        sut.applyStates(
-            listOf(
-                GameState(coords, Operator.Set, Type.Resource, Wood),
-                GameState(coords, Operator.Set, Type.Resource, Wood)
-            )
-        )
-        assertEquals(Wood, sut.queryResource1(coords))
-        assertEquals(Wood, sut.queryResource2(coords))
-        //Remove
-        sut.applyStates(
-            listOf(
-                GameState(coords, Operator.Remove, Type.Resource, Wood),
-                GameState(coords, Operator.Remove, Type.Resource, Wood)
-            )
-        )
-        assertNull(sut.queryResource1(coords))
-        assertNull(sut.queryResource2(coords))
-    }
-
-    @Test
-    fun applyStates_SetTownhall() {
-        sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Building, Townhall())))
-        assertTrue(sut.queryBuilding(coords) is Townhall)
-
-        assertEquals(listOf(Wood, Wood, Wood, Stone, Stone, Stone), sut.queryResourcesOffered(coords))
-    }
-
-    @Test
-    fun applyStates_SetLumberjack() {
-        sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Building, Lumberjack())))
-        assertTrue(sut.queryBuilding(coords) is Lumberjack)
-    }
-
-    @Test
-    fun applyStates_SetRoad() {
-        sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Building, Road())))
-        assertTrue(sut.queryBuilding(coords) is Road)
     }
 
     @Test

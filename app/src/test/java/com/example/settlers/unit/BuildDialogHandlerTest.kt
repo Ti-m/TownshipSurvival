@@ -12,9 +12,10 @@ import org.junit.Test
 
 class BuildDialogHandlerTest {
     lateinit var cell: Cell
-    lateinit var transportManager: TransportManager
+    //lateinit var transportManager: TransportManager
     lateinit var mapManager: MapManager
     lateinit var logger: Logger
+    private lateinit var gameStateManager: GameStateManager
 
     lateinit var sut: BuildDialogHandler
 
@@ -27,9 +28,9 @@ class BuildDialogHandlerTest {
             )
         )
         logger = DisabledLogger()
-        transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
-
-        sut = BuildDialogHandler(transportManager, mapManager)
+        //transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
+        gameStateManager = GameStateManager(mapManager, logger)
+        sut = BuildDialogHandler(gameStateManager)
     }
 
     @Test

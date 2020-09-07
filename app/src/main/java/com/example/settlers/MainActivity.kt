@@ -46,7 +46,8 @@ class MainActivity : AppCompatActivity() {
 
         val mapManager = MapManager(cells, logger)
         val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
-        val buildDialogHandler = BuildDialogHandler(transportManager, mapManager)
+        val gameStateManager = GameStateManager(mapManager, logger)
+        val buildDialogHandler = BuildDialogHandler(gameStateManager)
         val tiles = mapGen.createTiles(cells, buildDialogHandler, this)
         val gw2 = GameWorld(tiles = tiles, context = this)
         //gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -55,7 +56,12 @@ class MainActivity : AppCompatActivity() {
         zoomingLayout.addView(gw2)
         setContentView(zoomingLayout)
 
-        val gameRunLoop = GameRunLoop(tiles = tiles, mapManager = mapManager, transportManager = transportManager)
+        val gameRunLoop = GameRunLoop(
+            tiles = tiles,
+            mapManager = mapManager,
+            transportManager = transportManager,
+            gameStateManager = gameStateManager
+        )
         val delay = 1000L
         RepeatHelper.repeatDelayed(delay) {
             Log.i(TAG, "every second")

@@ -1,11 +1,26 @@
 Tasks - Open
 
+* Redo item storage spaces in buildings
+** DONE Add storage list
+** DONE Add requires list
+** DONE Add production list
+** DONE Add resource list
+** DONE How to handle the search for an item:
+*** DONE When it is searched for transport and storage, it has to be seperated between the GameState command to remove the object
 
+* Crash when a transport is finished
+
+* Refactor the CommandTypes/
 
 * Transport system.
 ** DONETransport only on roads
 ** DONE First allow any building, instead of only roads
 ** DONE Generalize the Commands?
+** MoveTransports
+*** DONE always recalc each route at the beginning of a tick?
+*** DONE This will bypass obstacles
+*** DONE This will remove the dependency loop ..
+*** DONE This needs to loop through all cells to find requests..
 ** Refactor MapManager to delegate applyState
 *** How to fix the cyclic dependency?
 ** BuildDialog: Set buildings through GameStateObjects
