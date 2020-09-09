@@ -4,7 +4,13 @@ package com.example.settlers
 data class GameState(val coordinates: Coordinates, val operator: Operator, val type: Type, val data: GameObject)
 
 enum class Operator { Set, Remove }
-enum class Type { Resource, Offered, Requires, Building }
+enum class Type {
+    Transport, // In transport
+    Storage, // available for transport
+    Required,
+    Production, // Not available for transport
+    Building
+}
 
 abstract class GameObject
 

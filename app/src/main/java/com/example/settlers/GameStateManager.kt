@@ -2,15 +2,20 @@ package com.example.settlers
 
 import com.example.settlers.util.Logger
 
-
 class GameStateManager(
-    //private val transportManager: TransportManager,
+    private val transportManager: TransportManager,
     private val mapManager: MapManager,
     private val log: Logger
 ) {
+    fun tick() {
+        applyStates(transportManager.runProduction())
+        applyStates(transportManager.convertStorageToProduction())
+        applyStates(transportManager.convertTransportToStorage())
+        applyStates(transportManager.moveResources())
+    }
 
     //TODO Add overload without List
-    fun applyStates(newStates: List<GameState>) {
+    fun applyStates(newStates: Collection<GameState>) {
         newStates.forEach { state ->
             applyState(state)
         }
@@ -22,7 +27,7 @@ class GameStateManager(
         when (state.operator) {
             Operator.Set -> {
                 when (state.type) {
-                    Type.Resource -> {
+                    Type.Transport -> {
                         val res = state.data as Resource
                         if (selected.transport.count() <= 2) {
                             selected.transport.add(res)
@@ -31,14 +36,14 @@ class GameStateManager(
                         }
                         selected.redraw = true
                     }
-                    Type.Offered -> {
+                    Type.Storage -> {
                         selected.storage.add(state.data as Resource)
                     }
                     Type.Building -> {
                         selected.building = state.data as Building
                         selected.redraw = true
                         selected.building!!.requires.forEach { needed ->
-                            applyState(GameState(selected.coordinates, Operator.Set, Type.Requires, needed))
+                            applyState(GameState(selected.coordinates, Operator.Set, Type.Required, needed))
 //                            val transportRequest = TransportRequestNew(
 //                                destination = selected.coordinates,
 //                                what = needed
@@ -46,28 +51,31 @@ class GameStateManager(
 //                            transportManager.request(transportRequest)
                         }
                         selected.building!!.offers.forEach { resource ->
-                            applyState(GameState(selected.coordinates, Operator.Set, Type.Offered, resource))
+                            applyState(GameState(selected.coordinates, Operator.Set, Type.Storage, resource))
                         }
                     }
-                    Type.Requires -> {
+                    Type.Required -> {
                         selected.requires.add(state.data as Resource)
+                    }
+                    Type.Production -> {
+                        selected.production.add(state.data as Resource)
                     }
                 }
             }
             Operator.Remove -> {
                 when (state.type) {
-                    Type.Resource -> {
+                    Type.Transport -> {
                         val res = state.data as Resource
                         if (!selected.transport.remove(res)) {
                             throw IllegalStateException()
                         }
                         selected.redraw = true
                     }
-                    Type.Offered -> {
+                    Type.Storage -> {
                         selected.storage.remove(state.data as Resource)
                     }
                     Type.Building -> TODO()
-                    Type.Requires -> TODO()
+                    Type.Required -> selected.requires.remove(state.data as Resource)
                 }
             }
         }

@@ -13,30 +13,69 @@ class MapManagerTest {
     private val logger: Logger = DisabledLogger()
     private lateinit var sut: MapManagerTestData
     private lateinit var gameStateManager: GameStateManager
+    private lateinit var transportManager: TransportManager
     private lateinit var coords: Coordinates
 
     @Before
     fun prepare() {
         sut = MapManagerTestData()
-        gameStateManager = GameStateManager(sut, logger)
+        transportManager = TransportManager(sut, BreadthFirstSearchRouting(sut), logger)
+        gameStateManager = GameStateManager(transportManager, sut, logger)
         coords = Coordinates(0,0)
     }
 
     @Test
     fun queryResourcesOffered() {
-        gameStateManager.applyStates(listOf(GameState(coords, Operator.Set, Type.Offered, Wood)))
-        val result = sut.queryResourcesOffered(coords)
+        gameStateManager.applyStates(listOf(GameState(coords, Operator.Set, Type.Storage, Wood)))
+        val result = sut.queryInStorage(coords)
 
         assertEquals(listOf(Wood), result)
     }
 
     @Test
     fun whereIsResourceOfferedAt() {
-        gameStateManager.applyStates(listOf(GameState(coords, Operator.Set, Type.Offered, Wood)))
+        gameStateManager.applyStates(listOf(GameState(coords, Operator.Set, Type.Storage, Wood)))
         //The coordinates are irrelevant here
         val result = sut.whereIsResourceOfferedAt(TransportRequestNew(Coordinates(0,0), Wood))
 
         assertEquals(coords, result)
+    }
+
+    @Test
+    fun matchTansportToStorage() {
+        gameStateManager.applyStates(
+            listOf(
+                GameState(coords, Operator.Set, Type.Required, Wood),
+                GameState(coords, Operator.Set, Type.Required, Wood),
+                GameState(coords, Operator.Set, Type.Transport, Wood),
+            )
+        )
+        //The specific coordinates are irrelevant here
+        val result = sut.matchTansportToStorage()
+
+        assertEquals(listOf(
+            GameState(coords, Operator.Set, Type.Storage, Wood),
+            GameState(coords, Operator.Remove, Type.Transport, Wood)
+        ), result)
+    }
+
+    @Test
+    fun getMatchedInStorage() {
+        gameStateManager.applyStates(
+            listOf(
+                GameState(coords, Operator.Set, Type.Required, Wood),
+                GameState(coords, Operator.Set, Type.Required, Wood),
+                GameState(coords, Operator.Set, Type.Storage, Wood),
+            )
+        )
+        //The specific coordinates are irrelevant here
+        val result = sut.matchStorageToProduction()
+
+        assertEquals(listOf(
+            GameState(coords, Operator.Set, Type.Production, Wood),
+            GameState(coords, Operator.Remove, Type.Storage, Wood),
+            GameState(coords, Operator.Remove, Type.Required, Wood),
+        ), result)
     }
 
     @Test

@@ -27,30 +27,40 @@ class TransportationTest {
         val destiantion = Coordinates(1,1)//This test only works for a single tile, because the it ticks only once
         //val transportRequest = TransportRequestNew(destination = destiantion, what = Wood)
         val mapManager = MapManagerTestData()
-        val gameStateManager = GameStateManager(mapManager, DisabledLogger())
-
-        gameStateManager.applyStates(listOf(
-            GameState(provider, Operator.Set, Type.Offered, Wood),
-            GameState(destiantion, Operator.Set, Type.Requires, Wood),
-        ))
-        assertEquals(listOf(Wood), mapManager.queryResourcesOffered(at = provider))
 
         val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
 
-        //transportManager.request(transportRequest)
-        val newStates = transportManager.tick()//It has to tick more then once, to do a transport more far
-        gameStateManager.applyStates(newStates)
+        val gameStateManager = GameStateManager(transportManager, mapManager, DisabledLogger())
 
-        assertEquals(listOf(Wood), mapManager.queryResources(at = destiantion))
-        assertEquals(emptyList<Resource>(), mapManager.queryResourcesOffered(at = provider))
+        gameStateManager.applyStates(listOf(
+            GameState(provider, Operator.Set, Type.Storage, Wood),
+            GameState(destiantion, Operator.Set, Type.Required, Wood),
+        ))
+        assertEquals(listOf(Wood), mapManager.queryInStorage(at = provider))
+        //transportManager.request(transportRequest)
+        //val newStates = transportManager.tick()//It has to tick more then once, to do a transport more far
+        gameStateManager.tick()
+        assertEquals(listOf(Wood), mapManager.queryInTransport(at = destiantion))
+        assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = provider))
+        assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = provider))
+
+        //TODO Another tick to convert. Do I really want to do this here? This test gets really messy. Block Cells?
+        //val newStates2 = transportManager.tick()
+        gameStateManager.tick()
+        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = provider))
+        assertEquals(listOf(Wood), mapManager.queryInStorage(at = destiantion))
+        assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = provider))
+
+        gameStateManager.tick()
+        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = provider))
+        assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = provider))
+        assertEquals(listOf(Wood), mapManager.queryInProduction(at = destiantion))
     }
 
     @Test
     fun completeTransport() {
 
         //Convert an item from the resource list to the storage list
-        //This makes the item unavailable for further transports
-        //Special case for warehouse. This building makes storage items available for transport
         //TODO convertResourceToStorage()
 
         //Convert an item from the storage list to the production list

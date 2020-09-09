@@ -11,13 +11,13 @@ import org.junit.Before
 import org.junit.Test
 
 class BuildDialogHandlerTest {
-    lateinit var cell: Cell
-    //lateinit var transportManager: TransportManager
-    lateinit var mapManager: MapManager
-    lateinit var logger: Logger
+    private lateinit var cell: Cell
+    private lateinit var transportManager: TransportManager
+    private lateinit var mapManager: MapManager
+    private lateinit var logger: Logger
     private lateinit var gameStateManager: GameStateManager
 
-    lateinit var sut: BuildDialogHandler
+    private lateinit var sut: BuildDialogHandler
 
     @Before
     fun prepare() {
@@ -28,8 +28,8 @@ class BuildDialogHandlerTest {
             )
         )
         logger = DisabledLogger()
-        //transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
-        gameStateManager = GameStateManager(mapManager, logger)
+        transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
+        gameStateManager = GameStateManager(transportManager, mapManager, logger)
         sut = BuildDialogHandler(gameStateManager)
     }
 

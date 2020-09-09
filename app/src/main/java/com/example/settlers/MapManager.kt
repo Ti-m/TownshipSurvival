@@ -6,12 +6,16 @@ open class MapManager(
     private val cells: Map<Coordinates, Cell>,
     private val log: Logger
 ) {
-    fun queryResourcesOffered(at: Coordinates): List<Resource> {
+    fun queryInStorage(at: Coordinates): List<Resource> {
         return findSpecificCell(at).storage
     }
 
-    fun queryResources(at: Coordinates): List<Resource> {
+    fun queryInTransport(at: Coordinates): List<Resource> {
         return findSpecificCell(at).transport
+    }
+
+    fun queryInProduction(at: Coordinates): List<Resource> {
+        return findSpecificCell(at).production
     }
 
     fun queryBuilding(at: Coordinates): Building? {
@@ -76,9 +80,48 @@ open class MapManager(
         val requests = mutableListOf<TransportRequestNew>()
         cells.forEach { cell ->
             cell.value.requires.forEach { item ->
-                requests.add(TransportRequestNew(cell.key, item))
+                //If the item is already in storage, it will be moved to production in next round
+                if (!cell.value.storage.contains(item)) {
+                    requests.add(TransportRequestNew(cell.key, item))
+                }
             }
         }
         return requests
+    }
+
+    //Figures out were a transportation is ready to move to storage
+    //This only does a single step each tick
+    //It looks better for animations and otherwise I need ti allocate a lot of memory to create
+    // copys of the requires and transport lists
+    fun matchTansportToStorage(): List<GameState> {
+        val matched = mutableListOf<GameState>()
+        cells.filterValues { it.requires.count() > 0 }.forEach { cell ->
+            cell.value.requires.forEach { required ->
+                if (cell.value.transport.contains(required)) {
+                    matched.add(GameState(cell.key, Operator.Set, Type.Storage, required))
+                    matched.add(GameState(cell.key, Operator.Remove, Type.Transport, required))
+                    //matched.add(GameState(cell.key, Operator.Remove, Type.Required, required))
+                    return matched //Only do a single loop
+                }
+            }
+        }
+        return matched
+    }
+
+    //Figures out were an item in storage is ready to move to production
+    //This only does a single step each tick
+    fun matchStorageToProduction(): List<GameState> {
+        val matched = mutableListOf<GameState>()
+        cells.filterValues { it.requires.count() > 0 }.forEach { cell ->
+            cell.value.requires.forEach { required ->
+                if (cell.value.storage.contains(required)) {
+                    matched.add(GameState(cell.key, Operator.Set, Type.Production, required))
+                    matched.add(GameState(cell.key, Operator.Remove, Type.Storage, required))
+                    matched.add(GameState(cell.key, Operator.Remove, Type.Required, required))
+                    return matched //Only do a single loop
+                }
+            }
+        }
+        return matched
     }
 }

@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 
         val mapManager = MapManager(cells, logger)
         val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
-        val gameStateManager = GameStateManager(mapManager, logger)
+        val gameStateManager = GameStateManager(transportManager, mapManager, logger)
         val buildDialogHandler = BuildDialogHandler(gameStateManager)
         val tiles = mapGen.createTiles(cells, buildDialogHandler, this)
         val gw2 = GameWorld(tiles = tiles, context = this)

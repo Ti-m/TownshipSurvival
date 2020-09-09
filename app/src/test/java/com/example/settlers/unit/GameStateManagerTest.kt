@@ -12,24 +12,26 @@ class GameStateManagerTest {
 
     private val logger: Logger = DisabledLogger()
     private lateinit var mapManager: MapManagerTestData
+    private lateinit var transportManager: TransportManager
     private lateinit var sut: GameStateManager
     private lateinit var coords: Coordinates
 
     @Before
     fun prepare() {
         mapManager = MapManagerTestData()
-        sut = GameStateManager(mapManager, logger)
+        transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
+        sut = GameStateManager(transportManager, mapManager, logger)
         coords = Coordinates(0,0)
     }
 
     @Test
     fun applyStates_SetRemoveResourceOffered() {
         //Set
-        sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Offered, Wood)))
-        Assert.assertEquals(listOf(Wood), mapManager.queryResourcesOffered(coords))
+        sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Storage, Wood)))
+        Assert.assertEquals(listOf(Wood), mapManager.queryInStorage(coords))
         //Remove
-        sut.applyStates(listOf(GameState(coords, Operator.Remove, Type.Offered, Wood)))
-        Assert.assertEquals(listOf<Resource>(), mapManager.queryResourcesOffered(coords))
+        sut.applyStates(listOf(GameState(coords, Operator.Remove, Type.Storage, Wood)))
+        Assert.assertEquals(listOf<Resource>(), mapManager.queryInStorage(coords))
     }
 
     @Test
@@ -37,19 +39,19 @@ class GameStateManagerTest {
         //Set
         sut.applyStates(
             listOf(
-                GameState(coords, Operator.Set, Type.Resource, Wood),
-                GameState(coords, Operator.Set, Type.Resource, Wood)
+                GameState(coords, Operator.Set, Type.Transport, Wood),
+                GameState(coords, Operator.Set, Type.Transport, Wood)
             )
         )
-        Assert.assertEquals(listOf(Wood, Wood), mapManager.queryResources(coords))
+        Assert.assertEquals(listOf(Wood, Wood), mapManager.queryInTransport(coords))
         //Remove
         sut.applyStates(
             listOf(
-                GameState(coords, Operator.Remove, Type.Resource, Wood),
-                GameState(coords, Operator.Remove, Type.Resource, Wood)
+                GameState(coords, Operator.Remove, Type.Transport, Wood),
+                GameState(coords, Operator.Remove, Type.Transport, Wood)
             )
         )
-        Assert.assertEquals(emptyList<Resource>(), mapManager.queryResources(coords))
+        Assert.assertEquals(emptyList<Resource>(), mapManager.queryInTransport(coords))
     }
 
     @Test
@@ -59,7 +61,7 @@ class GameStateManagerTest {
 
         Assert.assertEquals(
             listOf(Wood, Wood, Wood, Stone, Stone, Stone),
-            mapManager.queryResourcesOffered(coords)
+            mapManager.queryInStorage(coords)
         )
     }
 

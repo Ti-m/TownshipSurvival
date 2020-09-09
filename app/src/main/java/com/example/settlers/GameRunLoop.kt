@@ -25,8 +25,7 @@ class GameRunLoop(
 
     private fun moveRessources() {
         Log.i(TAG, "moveRessources")
-        val states = transportManager.tick()
-        gameStateManager.applyStates(states)
+        gameStateManager.tick()
     }
 
     private fun redraw() {
