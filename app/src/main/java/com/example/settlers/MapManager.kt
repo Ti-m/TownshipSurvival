@@ -6,20 +6,24 @@ open class MapManager(
     private val cells: Map<Coordinates, Cell>,
     private val log: Logger
 ) {
+    //This should be never called with coordinates outside of the map
     fun queryInStorage(at: Coordinates): List<Resource> {
-        return findSpecificCell(at).storage
+        return findSpecificCell(at)!!.storage
     }
 
+    //This should be never called with coordinates outside of the map
     fun queryInTransport(at: Coordinates): List<Resource> {
-        return findSpecificCell(at).transport
+        return findSpecificCell(at)!!.transport
     }
 
+    //This should be never called with coordinates outside of the map
     fun queryInProduction(at: Coordinates): List<Resource> {
-        return findSpecificCell(at).production
+        return findSpecificCell(at)!!.production
     }
 
     fun queryBuilding(at: Coordinates): Building? {
-        return findSpecificCell(at).building
+        //This is queried sometimes of the map, in case its calculating the neighbours of cells
+        return findSpecificCell(at)?.building
     }
 
     //TODO refactor to closest from destination. search in spirals
@@ -42,10 +46,12 @@ open class MapManager(
         }
     }
 
-    fun findSpecificCell(coordinates: Coordinates): Cell {
-        //Should never throw a NoSuchElementException, because every selected cell needs to be
-        // on the map
-        return cells.getValue(coordinates)
+    fun findSpecificCell(coordinates: Coordinates): Cell? {
+        try {
+            return cells.getValue(coordinates)
+        } catch (e: NoSuchElementException) {
+            return null
+        }
     }
 
     fun getNeighboursOfCellDoubleCoords(coords: Coordinates, ignoreObstacles: Boolean = true): List<Coordinates> {
@@ -68,11 +74,11 @@ open class MapManager(
         val dir = doubleHeightDirections[direction]
         val neighbour = Coordinates(coords.x + dir[0], coords.y + dir[1])
         if (ignoreObstacles) { return neighbour }
-//        if (queryBuilding(at = coords) != BuildingType.Road) { //Refactor to roads
-        if (queryBuilding(at = neighbour) == null) {
-            return null
-        } else {
+        //if (queryBuilding(at = coords) is Road) {
+        if (queryBuilding(at = coords) != null) { //Refactor to roads
             return neighbour
+        } else {
+            return null
         }
     }
 

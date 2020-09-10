@@ -33,15 +33,17 @@ class TransportationTest {
         val gameStateManager = GameStateManager(transportManager, mapManager, DisabledLogger())
 
         gameStateManager.applyStates(listOf(
-            GameState(provider, Operator.Set, Type.Storage, Wood),
-            GameState(destiantion, Operator.Set, Type.Required, Wood),
+            GameState(provider, Operator.Set, Type.Building, Townhall()),
+            GameState(destiantion, Operator.Set, Type.Building, Lumberjack()),
+//            GameState(provider, Operator.Set, Type.Storage, Wood),
+//            GameState(destiantion, Operator.Set, Type.Required, Wood),
         ))
-        assertEquals(listOf(Wood), mapManager.queryInStorage(at = provider))
+        assertEquals(listOf(Wood, Wood, Wood, Stone, Stone, Stone), mapManager.queryInStorage(at = provider))
         //transportManager.request(transportRequest)
         //val newStates = transportManager.tick()//It has to tick more then once, to do a transport more far
         gameStateManager.tick()
-        assertEquals(listOf(Wood), mapManager.queryInTransport(at = destiantion))
-        assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = provider))
+        assertEquals(listOf(Wood, Wood), mapManager.queryInTransport(at = destiantion))
+        assertEquals(listOf(Wood, Stone, Stone, Stone), mapManager.queryInStorage(at = provider))
         assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = provider))
 
         //TODO Another tick to convert. Do I really want to do this here? This test gets really messy. Block Cells?
@@ -53,7 +55,7 @@ class TransportationTest {
 
         gameStateManager.tick()
         assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = provider))
-        assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = provider))
+        assertEquals(listOf(Wood, Stone, Stone, Stone), mapManager.queryInStorage(at = provider))
         assertEquals(listOf(Wood), mapManager.queryInProduction(at = destiantion))
     }
 

@@ -1,16 +1,21 @@
 Tasks - Open
 
+
+** Only allow transports on roads
+*** calcRoute_RoadMissing
+*** Atm any type of building is allowed, refactor to only allow roads, but at any building at start or destiantion
+
 * Block cells which already applied submitted Gamestate objects for further changes. This helps in many cases
 ** Is this really possible? Works bad with the granular states. The Game States cannot be atomic then
 ** Better to run the transports not in a loop. apply each Transport before calculating the next
 ** BUt how to make sure, that a single item is not moved twice a round
+** Block the move ressources for a round? Add a blocked property?
 
 
 
-** Refactor MapManager to delegate applyState
-*** How to fix the cyclic dependency?
-** BuildDialog: Set buildings through GameStateObjects
-** Only allow transports on roads
+** DONE Refactor MapManager to delegate applyState
+*** DONE How to fix the cyclic dependency?
+** DONE BuildDialog: Set buildings through GameStateObjects
 ** How handle buildings? They sould not behave as roads, only for start or destination
 *** Add obstacles to routing
 ** A single cell shall transport only a single item each round

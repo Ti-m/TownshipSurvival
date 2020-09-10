@@ -23,7 +23,7 @@ class GameStateManager(
 
     fun applyState(state: GameState){
         log.logi("GameStateManager", "apply State: $state")
-        val selected = mapManager.findSpecificCell(state.coordinates)
+        val selected = mapManager.findSpecificCell(state.coordinates)!!
         when (state.operator) {
             Operator.Set -> {
                 when (state.type) {
