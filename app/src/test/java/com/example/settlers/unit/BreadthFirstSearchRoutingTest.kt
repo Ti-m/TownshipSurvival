@@ -116,4 +116,46 @@ class BreadthFirstSearchRoutingTest {
 
         assertNull(route)
     }
+
+    @Test
+    fun `Don't allow routes through buildings`() {
+        val from = Coordinates(1,1)
+        val to = Coordinates(4,2)
+        gameStateManager.applyStates(listOf(
+            GameState(from, Operator.Set, Type.Building, Townhall()),
+            GameState(Coordinates(2,2), Operator.Set, Type.Building, Lumberjack()),
+            GameState(to, Operator.Set, Type.Building, Lumberjack())
+        ))
+
+        val route = sut.calcRoute(from, to)
+
+        assertNull(route)
+    }
+
+    @Test
+    fun `Route arround buildings`() {
+        val from = Coordinates(0,0)
+        val to = Coordinates(2,2)
+        gameStateManager.applyStates(listOf(
+            GameState(from, Operator.Set, Type.Building, Townhall()),
+            GameState(Coordinates(1,1), Operator.Set, Type.Building, Lumberjack()),
+            GameState(Coordinates(2,0), Operator.Set, Type.Building, Road()),
+            GameState(Coordinates(3,1), Operator.Set, Type.Building, Road()),
+            GameState(to, Operator.Set, Type.Building, Lumberjack())
+        ))
+
+        val route = sut.calcRoute(from, to)
+
+        assertEquals(
+            Route(
+                current = Coordinates(0,0),
+                steps = mutableListOf(
+                    Coordinates(2,0),
+                    Coordinates(3,1),
+                    Coordinates(2,2)
+                )
+            ),
+            route
+        )
+    }
 }

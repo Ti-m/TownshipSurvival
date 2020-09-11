@@ -1,5 +1,8 @@
 Tasks - Done
 
+** DONE Only allow transports on roads
+*** DONE calcRoute_RoadMissing
+*** DONE Atm any type of building is allowed, refactor to only allow roads, but at any building at start or destiantion
 
 * DONE Refactor the CommandTypes/
 

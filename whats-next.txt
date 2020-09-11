@@ -1,10 +1,5 @@
 Tasks - Open
 
-
-** Only allow transports on roads
-*** calcRoute_RoadMissing
-*** Atm any type of building is allowed, refactor to only allow roads, but at any building at start or destiantion
-
 * Block cells which already applied submitted Gamestate objects for further changes. This helps in many cases
 ** Is this really possible? Works bad with the granular states. The Game States cannot be atomic then
 ** Better to run the transports not in a loop. apply each Transport before calculating the next

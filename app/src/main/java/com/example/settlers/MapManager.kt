@@ -26,6 +26,11 @@ open class MapManager(
         return findSpecificCell(at)?.building
     }
 
+    fun isRoad(at: Coordinates): Boolean {
+        //This is queried sometimes of the map, in case its calculating the neighbours of cells
+        return queryBuilding(at) is Road
+    }
+
     //TODO refactor to closest from destination. search in spirals
     fun whereIsResourceOfferedAt(request: TransportRequestNew): Coordinates? {
         //TODO this search is kind of brute force
@@ -54,18 +59,18 @@ open class MapManager(
         }
     }
 
-    fun getNeighboursOfCellDoubleCoords(coords: Coordinates, ignoreObstacles: Boolean = true): List<Coordinates> {
+    fun getNeighboursOfCellDoubleCoords(coords: Coordinates, destination: Coordinates, ignoreObstacles: Boolean = true): List<Coordinates> {
         return listOf(
-            getNeighboursOfCellDoubleCoords(coords,0, ignoreObstacles),
-            getNeighboursOfCellDoubleCoords(coords,1, ignoreObstacles),
-            getNeighboursOfCellDoubleCoords(coords,2, ignoreObstacles),
-            getNeighboursOfCellDoubleCoords(coords,3, ignoreObstacles),
-            getNeighboursOfCellDoubleCoords(coords,4, ignoreObstacles),
-            getNeighboursOfCellDoubleCoords(coords,5, ignoreObstacles)
+            getNeighboursOfCellDoubleCoords(coords, destination,0, ignoreObstacles),
+            getNeighboursOfCellDoubleCoords(coords, destination,1, ignoreObstacles),
+            getNeighboursOfCellDoubleCoords(coords, destination,2, ignoreObstacles),
+            getNeighboursOfCellDoubleCoords(coords, destination,3, ignoreObstacles),
+            getNeighboursOfCellDoubleCoords(coords, destination,4, ignoreObstacles),
+            getNeighboursOfCellDoubleCoords(coords, destination,5, ignoreObstacles)
         ).filterNotNull()
     }
 
-    fun getNeighboursOfCellDoubleCoords(coords: Coordinates, direction: Int, ignoreObstacles: Boolean): Coordinates? {
+    fun getNeighboursOfCellDoubleCoords(coords: Coordinates, destination: Coordinates, direction: Int, ignoreObstacles: Boolean): Coordinates? {
         val doubleHeightDirections = arrayOf(
             arrayOf(+1, +1), arrayOf(-1, +1), arrayOf(-2, 0),
             arrayOf(-1, -1), arrayOf(+1, -1), arrayOf(+2, 0)
@@ -73,9 +78,10 @@ open class MapManager(
 
         val dir = doubleHeightDirections[direction]
         val neighbour = Coordinates(coords.x + dir[0], coords.y + dir[1])
+        if (neighbour == destination) { return neighbour }
         if (ignoreObstacles) { return neighbour }
-        //if (queryBuilding(at = coords) is Road) {
-        if (queryBuilding(at = coords) != null) { //Refactor to roads
+        if (isRoad(neighbour)) {
+        //if (queryBuilding(at = coords) != null) { //Refactor to roads
             return neighbour
         } else {
             return null

@@ -81,7 +81,11 @@ class MapManagerTest {
     @Test
     fun getNeighbourOfCell() {
         val middle = Coordinates(3,1)
-        val neighbours: List<Coordinates> = sut.getNeighboursOfCellDoubleCoords(middle, true)
+        val neighbours: List<Coordinates> = sut.getNeighboursOfCellDoubleCoords(
+            middle,
+            Coordinates(9,9) /* This coordinate is randomly selected*/,
+            true
+        )
         assertEquals(listOf(
             Coordinates(4,2),
             Coordinates(2,2),
