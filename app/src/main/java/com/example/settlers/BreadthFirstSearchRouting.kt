@@ -8,7 +8,7 @@ data class Route(
 
 class BreadthFirstSearchRouting(private val mapManager: MapManager) {
 
-    fun calcRoute(start: Coordinates, destiantion: Coordinates): Route {
+    fun calcRoute(start: Coordinates, destiantion: Coordinates): Route? {
         val frontier = mutableListOf(start)
         val cameFrom = mutableMapOf<Coordinates, Coordinates>()
 
@@ -29,7 +29,13 @@ class BreadthFirstSearchRouting(private val mapManager: MapManager) {
         val path = mutableListOf<Coordinates>()
         while (current != start) {
             path.add(current)
-            current = cameFrom[current]!!
+
+            val tmp = cameFrom[current]
+            if (tmp == null) {
+                return null
+            } else {
+                current = tmp
+            }
         }
         path.add(start)
 
@@ -38,8 +44,8 @@ class BreadthFirstSearchRouting(private val mapManager: MapManager) {
         return Route(first, list)
     }
 
-    fun calcRouteNextStep(start: Coordinates, destiantion: Coordinates): Coordinates {
+    fun calcRouteNextStep(start: Coordinates, destiantion: Coordinates): Coordinates? {
         //Return First Step. Drop all other steps
-       return calcRoute(start, destiantion).steps.first()
+       return calcRoute(start, destiantion)?.steps?.first()
     }
 }

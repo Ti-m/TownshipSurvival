@@ -6,7 +6,7 @@ import com.example.settlers.BreadthFirstSearchRouting
 import com.example.settlers.Route
 import com.example.settlers.util.DisabledLogger
 import com.example.settlers.util.Logger
-import org.junit.Assert
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
@@ -38,7 +38,7 @@ class BreadthFirstSearchRoutingTest {
 
         val route = sut.calcRoute(from, to)
 
-        Assert.assertEquals(
+        assertEquals(
             Route(
                 current = Coordinates(1,1),
                 steps = mutableListOf(
@@ -61,7 +61,7 @@ class BreadthFirstSearchRoutingTest {
 
         val route = sut.calcRoute(from, to)
 
-        Assert.assertEquals(
+        assertEquals(
             Route(
                 current = Coordinates(1,1),
                 steps = mutableListOf(
@@ -87,7 +87,7 @@ class BreadthFirstSearchRoutingTest {
 
         val route = sut.calcRoute(from, to)
 
-        Assert.assertEquals(
+        assertEquals(
             Route(
                 current = Coordinates(0,0),
                 steps = mutableListOf(
@@ -114,16 +114,6 @@ class BreadthFirstSearchRoutingTest {
 
         val route = sut.calcRoute(from, to)
 
-        Assert.assertEquals(
-            Route(
-                current = Coordinates(0,0),
-                steps = mutableListOf(
-                    Coordinates(1,1),
-                    Coordinates(2,2),
-                    Coordinates(4,2)
-                )
-            ),
-            route
-        )
+        assertNull(route)
     }
 }

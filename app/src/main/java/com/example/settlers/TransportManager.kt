@@ -43,7 +43,8 @@ class TransportManager(
                     from = closest,
                     to = request.destination,
                     what = request.what
-                ) //only next step
+                )?: return@forEach
+
                 states.add(GameState(closest, Operator.Remove, Type.Transport, request.what))
                 states.add(GameState(to, Operator.Set, Type.Transport, request.what))
             } else {
@@ -53,7 +54,8 @@ class TransportManager(
                         from = closest2,
                         to = request.destination,
                         what = request.what
-                    ) //only next step
+                    )?: return@forEach
+
                     states.add(GameState(closest2, Operator.Remove, Type.Storage, request.what))
                     states.add(GameState(to, Operator.Set, Type.Transport, request.what))
                 }
@@ -62,13 +64,13 @@ class TransportManager(
         return states
     }
 
-    private fun calcRouteOneStep(from: Coordinates, to: Coordinates, what: Resource): Coordinates {
+    private fun calcRouteOneStep(from: Coordinates, to: Coordinates, what: Resource): Coordinates? {
         return routing.calcRouteNextStep(from, to)
     }
 
-    private fun calcRoute(from: Coordinates, to: Coordinates, what: Resource) : TransportRoute {
-        val route = routing.calcRoute(from, to)
-        return TransportRoute(destination = to, what = what, route = route)
-    }
+//    private fun calcRoute(from: Coordinates, to: Coordinates, what: Resource) : TransportRoute {
+//        val route = routing.calcRoute(from, to)
+//        return TransportRoute(destination = to, what = what, route = route)
+//    }
 
 }
