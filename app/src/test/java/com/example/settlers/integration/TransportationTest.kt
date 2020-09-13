@@ -55,7 +55,7 @@ class TransportationTest {
 
         gameStateManager.tick()
         assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = provider))
-        assertEquals(listOf(Wood, Wood, Stone, Stone, Stone), mapManager.queryInStorage(at = provider))
+        assertEquals(listOf(Wood, Stone, Stone, Stone), mapManager.queryInStorage(at = provider))
         assertEquals(listOf(Wood), mapManager.queryInProduction(at = destiantion))
     }
 

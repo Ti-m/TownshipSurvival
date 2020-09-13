@@ -1,5 +1,6 @@
 package com.example.settlers
 
+import com.example.settlers.MainActivity.Companion.tileGridSize
 import com.example.settlers.util.Logger
 
 open class MapManager(
@@ -31,24 +32,13 @@ open class MapManager(
         return queryBuilding(at) is Road
     }
 
-    //TODO refactor to closest from destination. search in spirals
-    fun whereIsResourceOfferedAt(request: TransportRequest): Coordinates? {
-        //TODO this search is kind of brute force
-        return try {
-            cells.entries.filterNot { it.value.touched }.first { it.value.storage.contains(request.what) }.key
-        } catch (e: NoSuchElementException) {
-            null
-        }
+    fun isBuilding(at: Coordinates): Boolean {
+        //This is queried sometimes of the map, in case its calculating the neighbours of cells
+        return queryBuilding(at) != null
     }
 
-    //TODO refactor to closest from destination. search in spirals
-    fun whereIsResourceinTransportAt(request: TransportRequest): Coordinates? {
-        //TODO this search is kind of brute force
-        return try {
-            cells.entries.filterNot { it.value.touched }.first { it.value.transport.contains(request.what) }.key
-        } catch (e: NoSuchElementException) {
-            null
-        }
+    fun isTouched(at: Coordinates): Boolean {
+        return findSpecificCell(at)!!.touched
     }
 
     fun findSpecificCell(coordinates: Coordinates): Cell? {
@@ -59,18 +49,20 @@ open class MapManager(
         }
     }
 
-    fun getNeighboursOfCellDoubleCoords(coords: Coordinates, destination: Coordinates, ignoreObstacles: Boolean = true): List<Coordinates> {
+    fun getNeighboursOfCellDoubleCoords(coords: Coordinates, destination: Coordinates, ignoreObstacles: Boolean = true, allowAnyBuilding: Boolean = false): List<Coordinates> {
         return listOf(
-            getNeighboursOfCellDoubleCoords(coords, destination,0, ignoreObstacles),
-            getNeighboursOfCellDoubleCoords(coords, destination,1, ignoreObstacles),
-            getNeighboursOfCellDoubleCoords(coords, destination,2, ignoreObstacles),
-            getNeighboursOfCellDoubleCoords(coords, destination,3, ignoreObstacles),
-            getNeighboursOfCellDoubleCoords(coords, destination,4, ignoreObstacles),
-            getNeighboursOfCellDoubleCoords(coords, destination,5, ignoreObstacles)
+            getNeighboursOfCellDoubleCoords(coords, destination,0, ignoreObstacles, allowAnyBuilding),
+            getNeighboursOfCellDoubleCoords(coords, destination,1, ignoreObstacles, allowAnyBuilding),
+            getNeighboursOfCellDoubleCoords(coords, destination,2, ignoreObstacles, allowAnyBuilding),
+            getNeighboursOfCellDoubleCoords(coords, destination,3, ignoreObstacles, allowAnyBuilding),
+            getNeighboursOfCellDoubleCoords(coords, destination,4, ignoreObstacles, allowAnyBuilding),
+            getNeighboursOfCellDoubleCoords(coords, destination,5, ignoreObstacles, allowAnyBuilding)
         ).filterNotNull()
     }
 
-    fun getNeighboursOfCellDoubleCoords(coords: Coordinates, destination: Coordinates, direction: Int, ignoreObstacles: Boolean): Coordinates? {
+    //TODO refactor this to use less flags ;-)
+    // allowAnyBuilding is used to find the resources for transport
+    fun getNeighboursOfCellDoubleCoords(coords: Coordinates, destination: Coordinates, direction: Int, ignoreObstacles: Boolean, allowAnyBuilding: Boolean): Coordinates? {
         val doubleHeightDirections = arrayOf(
             arrayOf(+1, +1), arrayOf(-1, +1), arrayOf(-2, 0),
             arrayOf(-1, -1), arrayOf(+1, -1), arrayOf(+2, 0)
@@ -78,9 +70,13 @@ open class MapManager(
 
         val dir = doubleHeightDirections[direction]
         val neighbour = Coordinates(coords.x + dir[0], coords.y + dir[1])
+        if (neighbour.x < 0 || neighbour.y < 0) { return null }
+        //TODO Add injectable tilesize to not need to comment in test :D
+        if (neighbour.x > tileGridSize - 1 || neighbour.y > (tileGridSize - 1) / 2) { return null }
+        //if (neighbour.x > 6 - 1 || neighbour.y > (6 - 1) / 2) { return null }
         if (neighbour == destination) { return neighbour }
         if (ignoreObstacles) { return neighbour }
-        if (isRoad(neighbour)) {
+        if (isRoad(neighbour) || allowAnyBuilding) {
         //if (queryBuilding(at = coords) != null) { //Refactor to roads
             return neighbour
         } else {

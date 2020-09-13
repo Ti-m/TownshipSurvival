@@ -49,4 +49,58 @@ class BreadthFirstSearchRouting(private val mapManager: MapManager) {
         //Return First Step. Drop all other steps
        return calcRoute(start, destiantion)?.steps?.first()
     }
+
+    fun calcRouteToItemInTransport(from: Coordinates, what: Resource): Coordinates? {
+        val frontier = mutableListOf(from)
+        val cameFrom = mutableMapOf<Coordinates, Coordinates>()
+
+        while (!frontier.isEmpty()) {
+            val current = frontier.removeFirst()
+            if (mapManager.queryInTransport(current).contains(what)) {
+                if (!mapManager.isTouched(current)) {
+                    return current
+                }
+            }
+
+            mapManager.getNeighboursOfCellDoubleCoords(
+                current,
+                Coordinates(1_000_000,1_000_000),//TODO unreachable, unused in this case
+                false,
+                true
+            ).forEach { next ->
+                if (!cameFrom.containsKey(next)) {
+                    frontier.add(next)
+                    cameFrom[next] = current
+                }
+            }
+        }
+        return null
+    }
+
+    fun calcRouteToItemInStorage(from: Coordinates, what: Resource): Coordinates? {
+        val frontier = mutableListOf(from)
+        val cameFrom = mutableMapOf<Coordinates, Coordinates>()
+
+        while (!frontier.isEmpty()) {
+            val current = frontier.removeFirst()
+            if (mapManager.queryInStorage(current).contains(what)) {
+                if (!mapManager.isTouched(current)) {
+                    return current
+                }
+            }
+
+            mapManager.getNeighboursOfCellDoubleCoords(
+                current,
+                Coordinates(1_000_000,1_000_000),//TODO unreachable, unused in this case
+                false,
+                true
+            ).forEach { next ->
+                if (!cameFrom.containsKey(next)) {
+                    frontier.add(next)
+                    cameFrom[next] = current
+                }
+            }
+        }
+        return null
+    }
 }

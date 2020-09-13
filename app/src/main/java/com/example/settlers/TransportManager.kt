@@ -28,14 +28,14 @@ class TransportManager(
         return states
     }
 
+    //TODO remove duplication
     private fun handleRequestsInTransport(request: TransportRequest): Collection<GameState> {
         val states: MutableList<GameState> = mutableListOf()
-        val closest = mapManager.whereIsResourceinTransportAt(request)
+        val closest = whereIsResourceinTransportAt(request)
         if (closest != null) {
             val to = calcRouteOneStep(
                 from = closest,
-                to = request.destination,
-                what = request.what
+                to = request.destination
             )?: return states
             val destinationCell = mapManager.findSpecificCell(to)!!
             if (destinationCell.transport.count() == 2) { return states } // Already fully occupies
@@ -52,14 +52,14 @@ class TransportManager(
         return states
     }
 
+    //TODO remove duplication
     private fun handleRequestsInStorage(request: TransportRequest): Collection<GameState> {
         val states: MutableList<GameState> = mutableListOf()
-        val closest2 = mapManager.whereIsResourceOfferedAt(request)
+        val closest2 = whereIsResourceInStoragedAt(request)
         if (closest2 != null) {
             val to = calcRouteOneStep(
                 from = closest2,
-                to = request.destination,
-                what = request.what
+                to = request.destination
             )?: return states
             val destinationCell = mapManager.findSpecificCell(to)!!
             if (destinationCell.transport.count() == 2) { return states } // Already fully occupies
@@ -75,10 +75,17 @@ class TransportManager(
         return states
     }
 
-    private fun calcRouteOneStep(from: Coordinates, to: Coordinates, what: Resource): Coordinates? {
+    private fun calcRouteOneStep(from: Coordinates, to: Coordinates): Coordinates? {
         return routing.calcRouteNextStep(from, to)
     }
 
+    fun whereIsResourceInStoragedAt(request: TransportRequest): Coordinates? {
+        return routing.calcRouteToItemInStorage(request.destination, request.what)
+    }
+
+    fun whereIsResourceinTransportAt(request: TransportRequest): Coordinates? {
+        return routing.calcRouteToItemInTransport(request.destination, request.what)
+    }
 //    private fun calcRoute(from: Coordinates, to: Coordinates, what: Resource) : TransportRoute {
 //        val route = routing.calcRoute(from, to)
 //        return TransportRoute(destination = to, what = what, route = route)

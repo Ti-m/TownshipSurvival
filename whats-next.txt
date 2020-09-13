@@ -5,9 +5,11 @@ Tasks - Open
 ** DONE Better to run the transports not in a loop. apply each Transport before calculating the next
 ** DONE BUt how to make sure, that a single item is not moved twice a round
 ** DONE Block the move ressources for a round. Add a touched property for destinationcell
-** Add circular search for items for transport, starting at the destination
-*** Atm this blocks the transport
-
+** DONE Add circular search for items for transport, starting at the destination
+*** DONE Atm this blocks the transport
+*** Refactor getNeighboursOfCellDoubleCoords
+*** Refactor calcRouteToItemInTransport/calcRouteToItemInStorage
+*** Refactor handleRequests
 
 
 ** DONE Refactor MapManager to delegate applyState
