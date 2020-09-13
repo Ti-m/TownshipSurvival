@@ -20,9 +20,9 @@ class TransportManager(
     //Convert an item from the storage list to the production list
     //This makes the item unavailable for further transports
     //This removes the item from the request list
-    fun convertStorageToProduction(): Collection<GameState> {
-        return(mapManager.matchStorageToProduction())
-    }
+//    fun convertStorageToProduction(): GameState {
+//        return(mapManager.matchStorageToProduction())
+//    }
 
     fun convertTransportToStorage(): Collection<GameState> {
         return(mapManager.matchTransportToStorage())

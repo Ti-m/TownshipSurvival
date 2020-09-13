@@ -124,18 +124,15 @@ open class MapManager(
         return cells.filterValues { it.requires.count() > 0 }
     }
 
-    //Figures out were an item in storage is ready to move to production
     //This only does a single step each tick
-    fun matchStorageToProduction(): List<GameState> {
+    fun convertStorageToProduction(cell: Cell): List<GameState> {
         val matched = mutableListOf<GameState>()
-        getCellsWhichRequireStuff().forEach { cell ->
-            cell.value.requires.forEach { required ->
-                if (cell.value.storage.contains(required)) {
-                    matched.add(GameState(cell.key, Operator.Set, Type.Production, required))
-                    matched.add(GameState(cell.key, Operator.Remove, Type.Storage, required))
-                    matched.add(GameState(cell.key, Operator.Remove, Type.Required, required))
-                    return matched //Only do a single loop
-                }
+        cell.requires.forEach { required ->
+            if (cell.storage.contains(required)) {
+                matched.add(GameState(cell.coordinates, Operator.Set, Type.Production, required))
+                matched.add(GameState(cell.coordinates, Operator.Remove, Type.Storage, required))
+                matched.add(GameState(cell.coordinates, Operator.Remove, Type.Required, required))
+                return matched //Only do a single loop
             }
         }
         return matched

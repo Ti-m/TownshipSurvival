@@ -73,7 +73,7 @@ class MapManagerTest {
     }
 
     @Test
-    fun getMatchedInStorage() {
+    fun convertStorageToProduction() {
         gameStateManager.applyStates(
             listOf(
                 GameState(coords, Operator.Set, Type.Required, Wood),
@@ -82,13 +82,17 @@ class MapManagerTest {
             )
         )
         //The specific coordinates are irrelevant here
-        val result = sut.matchStorageToProduction()
+        val result = sut.convertStorageToProduction(sut.findSpecificCell(coords)!!)
 
         assertEquals(listOf(
             GameState(coords, Operator.Set, Type.Production, Wood),
             GameState(coords, Operator.Remove, Type.Storage, Wood),
             GameState(coords, Operator.Remove, Type.Required, Wood),
         ), result)
+
+        gameStateManager.applyStates(result)
+
+        assertEquals(listOf(Wood), sut.queryInProduction(coords))
     }
 
     @Test

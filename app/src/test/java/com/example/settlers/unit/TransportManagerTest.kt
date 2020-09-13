@@ -34,27 +34,4 @@ class TransportManagerTest {
         gameStateManager.applyStates(sut.convertTransportToStorage())
         assertEquals(listOf(Wood), mapManager.queryInStorage(coords))
     }
-
-    @Test
-    fun tick_convertStorageToProduction() {
-        val coords = Coordinates(0,0)
-        gameStateManager.applyStates(listOf(
-            GameState(coords, Operator.Set, Type.Storage, Wood),
-            GameState(coords, Operator.Set, Type.Required, Wood)
-        ))
-        gameStateManager.applyStates(sut.convertStorageToProduction())
-        assertEquals(listOf(Wood), mapManager.queryInProduction(coords))
-    }
-
-    @Test
-    fun tick_convertTransportToProduction_bothSet() {
-        val coords = Coordinates(0,0)
-        gameStateManager.applyStates(listOf(
-            GameState(coords, Operator.Set, Type.Transport, Wood),
-            GameState(coords, Operator.Set, Type.Storage, Wood),
-            GameState(coords, Operator.Set, Type.Required, Wood)
-        ))
-        gameStateManager.applyStates(sut.convertStorageToProduction())
-        assertEquals(listOf(Wood), mapManager.queryInProduction(coords))
-    }
 }

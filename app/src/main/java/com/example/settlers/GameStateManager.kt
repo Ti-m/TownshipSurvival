@@ -9,7 +9,10 @@ class GameStateManager(
 ) {
     fun tick() {
         applyStates(transportManager.runProduction())
-        applyStates(transportManager.convertStorageToProduction())
+        mapManager.getCellsWhichRequireStuff().forEach { coords, cell ->
+            applyStates(mapManager.convertStorageToProduction(cell))
+        }
+        //applyStates(transportManager.convertStorageToProduction())
         applyStates(transportManager.convertTransportToStorage())
         applyStates(transportManager.moveResources())
     }
