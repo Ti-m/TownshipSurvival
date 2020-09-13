@@ -28,6 +28,7 @@ class GameRunLoop(
 
     private fun redraw() {
         tiles.forEach {
+            it.value.cell.touched = false // Allow Transports in next round
             if (it.value.cell.redraw) {
                 Log.i(TAG, "need to redraw")
                 it.value.invalidate()

@@ -22,6 +22,8 @@ data class Cell(
     //This resources are NOT available for transport, but are used for a pending production
     var production: MutableList<Resource> = mutableListOf(),
     var redraw: Boolean = false,
+    //Touched in Round x ignore this round for transports
+    var touched: Boolean = false
     //val value: Double//Used in map generation, remove?
 )
 

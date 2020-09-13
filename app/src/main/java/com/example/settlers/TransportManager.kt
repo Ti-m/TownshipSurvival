@@ -29,8 +29,16 @@ class TransportManager(
                 what = request.what
             )?: return states
 
+            val sourceCell = mapManager.findSpecificCell(closest)!!
+            if (sourceCell.touched) { return states }
+            sourceCell.touched = true
+            val destinationCell = mapManager.findSpecificCell(to)!!
+            if (destinationCell.touched) { return states }
+            destinationCell.touched = true//TODO move this to GameSTateManager?
+
             states.add(GameState(closest, Operator.Remove, Type.Transport, request.what))
             states.add(GameState(to, Operator.Set, Type.Transport, request.what))
+
         } else {
             val closest2 = mapManager.whereIsResourceOfferedAt(request)
             if (closest2 != null) {
@@ -39,6 +47,12 @@ class TransportManager(
                     to = request.destination,
                     what = request.what
                 )?: return states
+                val sourceCell = mapManager.findSpecificCell(closest2)!!
+                if (sourceCell.touched) { return states }
+                sourceCell.touched = true
+                val destinationCell = mapManager.findSpecificCell(to)!!
+                if (destinationCell.touched) { return states }
+                destinationCell.touched = true//TODO move this to GameSTateManager?
 
                 states.add(GameState(closest2, Operator.Remove, Type.Storage, request.what))
                 states.add(GameState(to, Operator.Set, Type.Transport, request.what))
