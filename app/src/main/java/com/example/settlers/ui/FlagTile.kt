@@ -132,7 +132,8 @@ class FlagTile(
             items = buildings.map { it.javaClass.simpleName }.toTypedArray(),//TODO Do something better here
             handler = { dialog, which ->
                 handler.onClick(cell, buildings[which])
-            }
+            },
+            coordinates = cell.coordinates
         )
         dialog.show((context as MainActivity).supportFragmentManager, TAG)
         //invalidate()

@@ -1,12 +1,12 @@
 Tasks - Open
 
 * Block cells which already applied submitted Gamestate objects for further changes. This helps in many cases
-** Is this really possible? Works bad with the granular states. The Game States cannot be atomic then
-** Better to run the transports not in a loop. apply each Transport before calculating the next
-** BUt how to make sure, that a single item is not moved twice a round
-** Block the move ressources for a round? Add a blocked property?
-** Some map with ids of items, wgich already have been moved?
-*** Use regular objects for the resources and create a list of memory adresses, which already have been moved this round?
+** DONE Is this really possible? Works bad with the granular states. The Game States cannot be atomic then
+** DONE Better to run the transports not in a loop. apply each Transport before calculating the next
+** DONE BUt how to make sure, that a single item is not moved twice a round
+** DONE Block the move ressources for a round. Add a touched property for destinationcell
+** Add circular search for items for transport, starting at the destination
+*** Atm this blocks the transport
 
 
 

@@ -35,7 +35,7 @@ open class MapManager(
     fun whereIsResourceOfferedAt(request: TransportRequest): Coordinates? {
         //TODO this search is kind of brute force
         return try {
-            cells.entries.first { it.value.storage.contains(request.what) }.key
+            cells.entries.filterNot { it.value.touched }.first { it.value.storage.contains(request.what) }.key
         } catch (e: NoSuchElementException) {
             null
         }
@@ -45,7 +45,7 @@ open class MapManager(
     fun whereIsResourceinTransportAt(request: TransportRequest): Coordinates? {
         //TODO this search is kind of brute force
         return try {
-            cells.entries.first { it.value.transport.contains(request.what) }.key
+            cells.entries.filterNot { it.value.touched }.first { it.value.transport.contains(request.what) }.key
         } catch (e: NoSuchElementException) {
             null
         }

@@ -21,6 +21,15 @@ class TransportManager(
 
     private fun handleRequests(request: TransportRequest): Collection<GameState> {
         val states: MutableList<GameState> = mutableListOf()
+        states.addAll(handleRequestsInTransport(request))
+        if (states.isEmpty()) {
+            states.addAll(handleRequestsInStorage(request))
+        }
+        return states
+    }
+
+    private fun handleRequestsInTransport(request: TransportRequest): Collection<GameState> {
+        val states: MutableList<GameState> = mutableListOf()
         val closest = mapManager.whereIsResourceinTransportAt(request)
         if (closest != null) {
             val to = calcRouteOneStep(
@@ -28,35 +37,40 @@ class TransportManager(
                 to = request.destination,
                 what = request.what
             )?: return states
-
-            val sourceCell = mapManager.findSpecificCell(closest)!!
-            if (sourceCell.touched) { return states }
-            sourceCell.touched = true
             val destinationCell = mapManager.findSpecificCell(to)!!
-            if (destinationCell.touched) { return states }
+            if (destinationCell.transport.count() == 2) { return states } // Already fully occupies
+            //if (destinationCell.touched) { return states }
+//            val sourceCell = mapManager.findSpecificCell(closest)!!
+//            if (sourceCell.touched) { return states }
             destinationCell.touched = true//TODO move this to GameSTateManager?
+            //sourceCell.touched = true
 
             states.add(GameState(closest, Operator.Remove, Type.Transport, request.what))
             states.add(GameState(to, Operator.Set, Type.Transport, request.what))
 
-        } else {
-            val closest2 = mapManager.whereIsResourceOfferedAt(request)
-            if (closest2 != null) {
-                val to = calcRouteOneStep(
-                    from = closest2,
-                    to = request.destination,
-                    what = request.what
-                )?: return states
-                val sourceCell = mapManager.findSpecificCell(closest2)!!
-                if (sourceCell.touched) { return states }
-                sourceCell.touched = true
-                val destinationCell = mapManager.findSpecificCell(to)!!
-                if (destinationCell.touched) { return states }
-                destinationCell.touched = true//TODO move this to GameSTateManager?
+        }
+        return states
+    }
 
-                states.add(GameState(closest2, Operator.Remove, Type.Storage, request.what))
-                states.add(GameState(to, Operator.Set, Type.Transport, request.what))
-            }
+    private fun handleRequestsInStorage(request: TransportRequest): Collection<GameState> {
+        val states: MutableList<GameState> = mutableListOf()
+        val closest2 = mapManager.whereIsResourceOfferedAt(request)
+        if (closest2 != null) {
+            val to = calcRouteOneStep(
+                from = closest2,
+                to = request.destination,
+                what = request.what
+            )?: return states
+            val destinationCell = mapManager.findSpecificCell(to)!!
+            if (destinationCell.transport.count() == 2) { return states } // Already fully occupies
+            //if (destinationCell.touched) { return states }
+//            val sourceCell = mapManager.findSpecificCell(closest2)!!
+//            if (sourceCell.touched) { return states }
+            //sourceCell.touched = true
+            destinationCell.touched = true//TODO move this to GameSTateManager?
+
+            states.add(GameState(closest2, Operator.Remove, Type.Storage, request.what))
+            states.add(GameState(to, Operator.Set, Type.Transport, request.what))
         }
         return states
     }
