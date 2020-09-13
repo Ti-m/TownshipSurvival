@@ -101,20 +101,17 @@ open class MapManager(
         return requests
     }
 
-    //Figures out were a transportation is ready to move to storage
     //This only does a single step each tick
     //It looks better for animations and otherwise I need ti allocate a lot of memory to create
     // copys of the requires and transport lists
-    fun matchTransportToStorage(): List<GameState> {
+    fun convertTransportToStorage(cell: Cell): List<GameState> {
         val matched = mutableListOf<GameState>()
-        getCellsWhichRequireStuff().forEach { cell ->
-            cell.value.requires.forEach { required ->
-                if (cell.value.transport.contains(required)) {
-                    matched.add(GameState(cell.key, Operator.Set, Type.Storage, required))
-                    matched.add(GameState(cell.key, Operator.Remove, Type.Transport, required))
-                    //matched.add(GameState(cell.key, Operator.Remove, Type.Required, required))
-                    return matched //Only do a single loop
-                }
+        cell.requires.forEach { required ->
+            if (cell.transport.contains(required)) {
+                matched.add(GameState(cell.coordinates, Operator.Set, Type.Storage, required))
+                matched.add(GameState(cell.coordinates, Operator.Remove, Type.Transport, required))
+                //matched.add(GameState(cell.key, Operator.Remove, Type.Required, required))
+                return matched //Only do a single loop
             }
         }
         return matched

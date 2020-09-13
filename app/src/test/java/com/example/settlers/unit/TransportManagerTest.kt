@@ -23,15 +23,4 @@ class TransportManagerTest {
         sut = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
         gameStateManager = GameStateManager(sut, mapManager, logger)
     }
-
-    @Test
-    fun tick_convertTransportToStorage() {
-        val coords = Coordinates(0,0)
-        gameStateManager.applyStates(listOf(
-            GameState(coords, Operator.Set, Type.Transport, Wood),
-            GameState(coords, Operator.Set, Type.Required, Wood)
-        ))
-        gameStateManager.applyStates(sut.convertTransportToStorage())
-        assertEquals(listOf(Wood), mapManager.queryInStorage(coords))
-    }
 }

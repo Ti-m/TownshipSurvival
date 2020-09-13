@@ -42,24 +42,6 @@ class MapManagerTest {
     }
 
     @Test
-    fun matchTransportToStorage() {
-        gameStateManager.applyStates(
-            listOf(
-                GameState(coords, Operator.Set, Type.Required, Wood),
-                GameState(coords, Operator.Set, Type.Required, Wood),
-                GameState(coords, Operator.Set, Type.Transport, Wood),
-            )
-        )
-        //The specific coordinates are irrelevant here
-        val result = sut.matchTransportToStorage()
-
-        assertEquals(listOf(
-            GameState(coords, Operator.Set, Type.Storage, Wood),
-            GameState(coords, Operator.Remove, Type.Transport, Wood)
-        ), result)
-    }
-
-    @Test
     fun getCellsWhichRequireStuff() {
         gameStateManager.applyStates(
             listOf(
@@ -70,6 +52,27 @@ class MapManagerTest {
             mapOf(Pair(coords, Cell(coords, GroundType.Desert, requires = mutableListOf(Wood)))),
             sut.getCellsWhichRequireStuff()
         )
+    }
+
+    @Test
+    fun matchTransportToStorage() {
+        gameStateManager.applyStates(
+            listOf(
+                GameState(coords, Operator.Set, Type.Required, Wood),
+                GameState(coords, Operator.Set, Type.Required, Wood),
+                GameState(coords, Operator.Set, Type.Transport, Wood),
+            )
+        )
+        //The specific coordinates are irrelevant here
+        val result = sut.convertTransportToStorage(sut.findSpecificCell(coords)!!)
+
+        assertEquals(listOf(
+            GameState(coords, Operator.Set, Type.Storage, Wood),
+            GameState(coords, Operator.Remove, Type.Transport, Wood)
+        ), result)
+
+        gameStateManager.applyStates(result)
+        assertEquals(listOf(Wood), sut.queryInStorage(coords))
     }
 
     @Test

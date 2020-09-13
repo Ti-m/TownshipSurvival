@@ -12,8 +12,11 @@ class GameStateManager(
         mapManager.getCellsWhichRequireStuff().forEach { coords, cell ->
             applyStates(mapManager.convertStorageToProduction(cell))
         }
+        mapManager.getCellsWhichRequireStuff().forEach { coords, cell ->
+            applyStates(mapManager.convertTransportToStorage(cell))
+        }
         //applyStates(transportManager.convertStorageToProduction())
-        applyStates(transportManager.convertTransportToStorage())
+        //applyStates(transportManager.convertTransportToStorage())
         applyStates(transportManager.moveResources())
     }
 
