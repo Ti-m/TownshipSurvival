@@ -36,7 +36,7 @@ class MapManagerTest {
     fun whereIsResourceOfferedAt() {
         gameStateManager.applyStates(listOf(GameState(coords, Operator.Set, Type.Storage, Wood)))
         //The coordinates are irrelevant here
-        val result = sut.whereIsResourceOfferedAt(TransportRequestNew(Coordinates(0,0), Wood))
+        val result = sut.whereIsResourceOfferedAt(TransportRequest(Coordinates(0,0), Wood))
 
         assertEquals(coords, result)
     }

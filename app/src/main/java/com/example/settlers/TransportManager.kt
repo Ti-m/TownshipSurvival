@@ -2,7 +2,7 @@ package com.example.settlers
 
 import com.example.settlers.util.Logger
 
-data class TransportRequestNew(val destination: Coordinates, val what: Resource)
+data class TransportRequest(val destination: Coordinates, val what: Resource)
 data class TransportRoute(val destination: Coordinates, val what: Resource, val route: Route)
 
 class TransportManager(
@@ -15,37 +15,33 @@ class TransportManager(
         return emptyList()
     }
 
-    fun moveResources(): Collection<GameState> {
-        val requests: Collection<TransportRequestNew> = mapManager.getRequests()
-        val states: Collection<GameState> = handleRequests(requests)
-        return states
+    fun moveResources(cell: Cell): Collection<GameState> {
+        return handleRequests(TransportRequest(cell.coordinates, cell.requires.first()))
     }
 
-    private fun handleRequests(requests: Collection<TransportRequestNew>): Collection<GameState> {
+    private fun handleRequests(request: TransportRequest): Collection<GameState> {
         val states: MutableList<GameState> = mutableListOf()
-        requests.forEach { request ->
-            val closest = mapManager.whereIsResourceinTransportAt(request)
-            if (closest != null) {
+        val closest = mapManager.whereIsResourceinTransportAt(request)
+        if (closest != null) {
+            val to = calcRouteOneStep(
+                from = closest,
+                to = request.destination,
+                what = request.what
+            )?: return states
+
+            states.add(GameState(closest, Operator.Remove, Type.Transport, request.what))
+            states.add(GameState(to, Operator.Set, Type.Transport, request.what))
+        } else {
+            val closest2 = mapManager.whereIsResourceOfferedAt(request)
+            if (closest2 != null) {
                 val to = calcRouteOneStep(
-                    from = closest,
+                    from = closest2,
                     to = request.destination,
                     what = request.what
-                )?: return@forEach
+                )?: return states
 
-                states.add(GameState(closest, Operator.Remove, Type.Transport, request.what))
+                states.add(GameState(closest2, Operator.Remove, Type.Storage, request.what))
                 states.add(GameState(to, Operator.Set, Type.Transport, request.what))
-            } else {
-                val closest2 = mapManager.whereIsResourceOfferedAt(request)
-                if (closest2 != null) {
-                    val to = calcRouteOneStep(
-                        from = closest2,
-                        to = request.destination,
-                        what = request.what
-                    )?: return@forEach
-
-                    states.add(GameState(closest2, Operator.Remove, Type.Storage, request.what))
-                    states.add(GameState(to, Operator.Set, Type.Transport, request.what))
-                }
             }
         }
         return states

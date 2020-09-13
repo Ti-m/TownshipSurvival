@@ -42,8 +42,8 @@ class TransportationTest {
         //transportManager.request(transportRequest)
         //val newStates = transportManager.tick()//It has to tick more then once, to do a transport more far
         gameStateManager.tick()
-        assertEquals(listOf(Wood, Wood), mapManager.queryInTransport(at = destiantion))
-        assertEquals(listOf(Wood, Stone, Stone, Stone), mapManager.queryInStorage(at = provider))
+        assertEquals(listOf(Wood), mapManager.queryInTransport(at = destiantion))
+        assertEquals(listOf(Wood, Wood, Stone, Stone, Stone), mapManager.queryInStorage(at = provider))
         assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = provider))
 
         //TODO Another tick to convert. Do I really want to do this here? This test gets really messy. Block Cells?

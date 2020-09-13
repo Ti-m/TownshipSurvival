@@ -8,16 +8,20 @@ class GameStateManager(
     private val log: Logger
 ) {
     fun tick() {
-        applyStates(transportManager.runProduction())
-        mapManager.getCellsWhichRequireStuff().forEach { coords, cell ->
+        //TODO applyStates(transportManager.runProduction())
+        mapManager.getCellsWhichRequireStuff().forEach { (_, cell) ->
             applyStates(mapManager.convertStorageToProduction(cell))
         }
-        mapManager.getCellsWhichRequireStuff().forEach { coords, cell ->
+        mapManager.getCellsWhichRequireStuff().forEach { (_, cell) ->
             applyStates(mapManager.convertTransportToStorage(cell))
+        }
+        mapManager.getCellsWhichRequireStuffWhichIsNotInStorage().forEach { (_, cell) ->
+            applyStates(transportManager.moveResources(cell))
         }
         //applyStates(transportManager.convertStorageToProduction())
         //applyStates(transportManager.convertTransportToStorage())
-        applyStates(transportManager.moveResources())
+        //applyStates(transportManager.moveResources())
+
     }
 
     //TODO Add overload without List

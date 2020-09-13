@@ -32,7 +32,7 @@ open class MapManager(
     }
 
     //TODO refactor to closest from destination. search in spirals
-    fun whereIsResourceOfferedAt(request: TransportRequestNew): Coordinates? {
+    fun whereIsResourceOfferedAt(request: TransportRequest): Coordinates? {
         //TODO this search is kind of brute force
         return try {
             cells.entries.first { it.value.storage.contains(request.what) }.key
@@ -42,7 +42,7 @@ open class MapManager(
     }
 
     //TODO refactor to closest from destination. search in spirals
-    fun whereIsResourceinTransportAt(request: TransportRequestNew): Coordinates? {
+    fun whereIsResourceinTransportAt(request: TransportRequest): Coordinates? {
         //TODO this search is kind of brute force
         return try {
             cells.entries.first { it.value.transport.contains(request.what) }.key
@@ -88,19 +88,6 @@ open class MapManager(
         }
     }
 
-    fun getRequests(): Collection<TransportRequestNew> {
-        val requests = mutableListOf<TransportRequestNew>()
-        cells.forEach { cell ->
-            cell.value.requires.forEach { item ->
-                //If the item is already in storage, it will be moved to production in next round
-                if (!cell.value.storage.contains(item)) {
-                    requests.add(TransportRequestNew(cell.key, item))
-                }
-            }
-        }
-        return requests
-    }
-
     //This only does a single step each tick
     //It looks better for animations and otherwise I need ti allocate a lot of memory to create
     // copys of the requires and transport lists
@@ -119,6 +106,19 @@ open class MapManager(
 
     fun getCellsWhichRequireStuff(): Map<Coordinates, Cell> {
         return cells.filterValues { it.requires.count() > 0 }
+    }
+
+    fun getCellsWhichRequireStuffWhichIsNotInStorage(): Map<Coordinates, Cell> {
+        return getCellsWhichRequireStuff().filterValues { cell ->
+            var tmp = true
+            cell.requires.forEach  { item ->
+                //If the item is already in storage, it will be moved to production in next round
+                if (cell.storage.contains(item)) {
+                    tmp = false
+                }
+            }
+            tmp
+        }
     }
 
     //This only does a single step each tick
