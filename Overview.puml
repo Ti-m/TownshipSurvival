@@ -1,0 +1,9 @@
+@startuml
+GameRunLoop o-- GameStateManager
+GameStateManager o-- MapManager
+GameStateManager o-- TransportManager
+
+TransportManager o-- MapManager
+TransportManager o-- BreadthFirstSearchRouting
+
+@enduml

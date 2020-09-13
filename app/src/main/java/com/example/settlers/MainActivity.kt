@@ -58,8 +58,6 @@ class MainActivity : AppCompatActivity() {
 
         val gameRunLoop = GameRunLoop(
             tiles = tiles,
-            mapManager = mapManager,
-            transportManager = transportManager,
             gameStateManager = gameStateManager
         )
         val delay = 1000L

@@ -5,8 +5,6 @@ import com.example.settlers.ui.FlagTile
 
 class GameRunLoop(
     private val tiles: Map<Coordinates, FlagTile>,
-    private val mapManager: MapManager,
-    private val transportManager: TransportManager,
     private val gameStateManager: GameStateManager
 ) {
     companion object {

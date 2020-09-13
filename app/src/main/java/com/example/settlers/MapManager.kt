@@ -105,9 +105,9 @@ open class MapManager(
     //This only does a single step each tick
     //It looks better for animations and otherwise I need ti allocate a lot of memory to create
     // copys of the requires and transport lists
-    fun matchTansportToStorage(): List<GameState> {
+    fun matchTransportToStorage(): List<GameState> {
         val matched = mutableListOf<GameState>()
-        cells.filterValues { it.requires.count() > 0 }.forEach { cell ->
+        getCellsWhichRequireStuff().forEach { cell ->
             cell.value.requires.forEach { required ->
                 if (cell.value.transport.contains(required)) {
                     matched.add(GameState(cell.key, Operator.Set, Type.Storage, required))
@@ -120,11 +120,15 @@ open class MapManager(
         return matched
     }
 
+    fun getCellsWhichRequireStuff(): Map<Coordinates, Cell> {
+        return cells.filterValues { it.requires.count() > 0 }
+    }
+
     //Figures out were an item in storage is ready to move to production
     //This only does a single step each tick
     fun matchStorageToProduction(): List<GameState> {
         val matched = mutableListOf<GameState>()
-        cells.filterValues { it.requires.count() > 0 }.forEach { cell ->
+        getCellsWhichRequireStuff().forEach { cell ->
             cell.value.requires.forEach { required ->
                 if (cell.value.storage.contains(required)) {
                     matched.add(GameState(cell.key, Operator.Set, Type.Production, required))

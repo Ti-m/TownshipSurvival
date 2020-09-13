@@ -25,7 +25,7 @@ class TransportManager(
     }
 
     fun convertTransportToStorage(): Collection<GameState> {
-        return(mapManager.matchTansportToStorage())
+        return(mapManager.matchTransportToStorage())
     }
 
     fun moveResources(): Collection<GameState> {
