@@ -47,6 +47,8 @@ Tasks - Open
 
 
 M1 MVP
+
+* Name - Idea "Township Survival"
 * Design MVP which is playable
 ** Gameloop
 *** What are must have buildings

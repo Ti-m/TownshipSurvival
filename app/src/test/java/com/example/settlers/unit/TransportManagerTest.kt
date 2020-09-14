@@ -86,7 +86,6 @@ class TransportManagerTest {
             GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
             GameState(dest, Operator.Set, Type.Building, Lumberjack())
         ))
-        //The coordinates are irrelevant here
         val result = sut.moveResources(mapManager.findSpecificCell(dest)!!)
 
         assertEquals(listOf(
@@ -103,7 +102,6 @@ class TransportManagerTest {
             GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
             GameState(dest, Operator.Set, Type.Building, Lumberjack())
         ))
-        //The coordinates are irrelevant here
         val result = sut.moveResources(mapManager.findSpecificCell(dest)!!)
 
         assertEquals(listOf(
@@ -119,9 +117,23 @@ class TransportManagerTest {
             GameState(dest, Operator.Set, Type.Transport, Wood),
             GameState(dest, Operator.Set, Type.Building, Lumberjack())
         ))
-        //The coordinates are irrelevant here
         val result = sut.moveResources(mapManager.findSpecificCell(dest)!!)
 
         assertEquals(listOf<GameState>(), result)
     }
+    @Test
+    fun `moveResources already touched`() {
+        val dest = Coordinates(2,2)
+        gameStateManager.applyStates(listOf(
+            GameState(Coordinates(0,0), Operator.Set, Type.Building, Townhall()),
+            GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
+            GameState(dest, Operator.Set, Type.Building, Lumberjack())
+        ))
+        mapManager.findSpecificCell(Coordinates(0,0))!!.touched = true
+        val result = sut.moveResources(mapManager.findSpecificCell(dest)!!)
+
+        assertEquals(listOf<GameState>(
+        ), result)
+    }
+
 }
