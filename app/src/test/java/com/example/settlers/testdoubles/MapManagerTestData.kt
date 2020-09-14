@@ -19,4 +19,4 @@ class MapManagerTestData(
         Pair(Coordinates(4,2), Cell(coordinates = Coordinates(4,2),type = GroundType.Desert))
     ),
     log: DisabledLogger = DisabledLogger()
-) : MapManager(cells, log)
+) : MapManager(cells, log, 6)

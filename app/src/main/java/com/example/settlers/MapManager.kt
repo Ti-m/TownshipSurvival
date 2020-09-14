@@ -5,7 +5,8 @@ import com.example.settlers.util.Logger
 
 open class MapManager(
     private val cells: Map<Coordinates, Cell>,
-    private val log: Logger
+    private val log: Logger,
+    private val mapsize: Int
 ) {
     //This should be never called with coordinates outside of the map
     fun queryInStorage(at: Coordinates): List<Resource> {
@@ -62,7 +63,7 @@ open class MapManager(
 
     //TODO refactor this to use less flags ;-)
     // allowAnyBuilding is used to find the resources for transport
-    fun getNeighboursOfCellDoubleCoords(coords: Coordinates, destination: Coordinates, direction: Int, ignoreObstacles: Boolean, allowAnyBuilding: Boolean): Coordinates? {
+    private fun getNeighboursOfCellDoubleCoords(coords: Coordinates, destination: Coordinates, direction: Int, ignoreObstacles: Boolean, allowAnyBuilding: Boolean): Coordinates? {
         val doubleHeightDirections = arrayOf(
             arrayOf(+1, +1), arrayOf(-1, +1), arrayOf(-2, 0),
             arrayOf(-1, -1), arrayOf(+1, -1), arrayOf(+2, 0)
@@ -71,13 +72,11 @@ open class MapManager(
         val dir = doubleHeightDirections[direction]
         val neighbour = Coordinates(coords.x + dir[0], coords.y + dir[1])
         if (neighbour.x < 0 || neighbour.y < 0) { return null }
-        //TODO Add injectable tilesize to not need to comment in test :D
-        if (neighbour.x > tileGridSize - 1 || neighbour.y > (tileGridSize - 1) / 2) { return null }
-        //if (neighbour.x > 6 - 1 || neighbour.y > (6 - 1) / 2) { return null }
+        if (neighbour.x > mapsize - 1 || neighbour.y > (mapsize - 1) / 2) { return null }
         if (neighbour == destination) { return neighbour }
         if (ignoreObstacles) { return neighbour }
-        if (isRoad(neighbour) || allowAnyBuilding) {
-        //if (queryBuilding(at = coords) != null) { //Refactor to roads
+        if (allowAnyBuilding && isBuilding(neighbour)) { return neighbour }
+        if (isRoad(neighbour)) {
             return neighbour
         } else {
             return null
