@@ -10,6 +10,7 @@ Tasks - Open
 *** Refactor getNeighboursOfCellDoubleCoords
 *** Refactor calcRouteToItemInTransport/calcRouteToItemInStorage
 *** Refactor handleRequests
+*** Bug: Sometimes and item will be jumping around between two destinations
 
 
 ** DONE Refactor MapManager to delegate applyState

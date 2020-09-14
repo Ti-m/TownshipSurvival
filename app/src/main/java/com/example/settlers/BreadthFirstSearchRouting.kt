@@ -47,7 +47,11 @@ class BreadthFirstSearchRouting(private val mapManager: MapManager) {
 
     fun calcRouteNextStep(start: Coordinates, destiantion: Coordinates): Coordinates? {
         //Return First Step. Drop all other steps
-       return calcRoute(start, destiantion)?.steps?.first()
+        return try {
+            calcRoute(start, destiantion)?.steps?.first()
+        } catch (e: NoSuchElementException) {
+            null
+        }
     }
 
     fun calcRouteToItemInTransport(from: Coordinates, what: Resource): Coordinates? {
