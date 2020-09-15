@@ -76,10 +76,10 @@ open class MapManager(
         if (neighbour == destination) { return neighbour }
         if (ignoreObstacles) { return neighbour }
         if (allowAnyBuilding && isBuilding(neighbour)) { return neighbour }
-        if (isRoad(neighbour)) {
-            return neighbour
+        return if (isRoad(neighbour)) {
+            neighbour
         } else {
-            return null
+            null
         }
     }
 

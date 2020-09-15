@@ -9,9 +9,9 @@ Tasks - Open
 *** DONE Atm this blocks the transport
 *** DONE Add Tests getNeighboursOfCellDoubleCoords
 *** Refactor getNeighboursOfCellDoubleCoords
-*** Add tests calcRouteToItemInTransport/calcRouteToItemInStorage
+*** DONE Add tests calcRouteToItemInTransport/calcRouteToItemInStorage
 *** Refactor calcRouteToItemInTransport/calcRouteToItemInStorage
-*** Add tests handleRequests
+*** DONE Add tests handleRequests
 *** Refactor handleRequests
 *** Bug: Sometimes and item will be jumping around between two destinations
 
