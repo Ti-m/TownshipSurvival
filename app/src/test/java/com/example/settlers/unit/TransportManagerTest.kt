@@ -27,19 +27,19 @@ class TransportManagerTest {
     }
 
     @Test
-    fun `whereIsResourceInTransportAt from same tile`() {
+    fun `whereIsNextResourceInTransportWithAccess from same tile`() {
         gameStateManager.applyStates(listOf(
             GameState(coords, Operator.Set, Type.Transport, Wood),
             GameState(coords, Operator.Set, Type.Building, Road())
         ))
         //The coordinates are irrelevant here
-        val result = sut.whereIsResourceinTransportAt(TransportRequest(coords, Wood))
+        val result = sut.whereIsNextResourceInTransportWithAccess(TransportRequest(coords, Wood))
 
         assertEquals(coords, result)
     }
 
     @Test
-    fun `whereIsResourceInTransportAt from one tile over`() {
+    fun `whereIsNextResourceInTransportWithAccess from one tile over`() {
         val dest = Coordinates(2,0)
         gameStateManager.applyStates(listOf(
             GameState(coords, Operator.Set, Type.Transport, Wood),
@@ -47,25 +47,25 @@ class TransportManagerTest {
             GameState(dest, Operator.Set, Type.Building, Road())
         ))
         //The coordinates are irrelevant here
-        val result = sut.whereIsResourceinTransportAt(TransportRequest(dest, Wood))
+        val result = sut.whereIsNextResourceInTransportWithAccess(TransportRequest(dest, Wood))
 
         assertEquals(coords, result)
     }
 
     @Test
-    fun `whereIsResourceInStoragedAt from same tile`() {
+    fun `whereIsNextResourceInStorageWithAccess from same tile`() {
         gameStateManager.applyStates(listOf(
             GameState(coords, Operator.Set, Type.Storage, Wood),
             GameState(coords, Operator.Set, Type.Building, Road())
         ))
         //The coordinates are irrelevant here
-        val result = sut.whereIsResourceInStoragedAt(TransportRequest(coords, Wood))
+        val result = sut.whereIsNextResourceInStorageWithAccess(TransportRequest(coords, Wood))
 
         assertEquals(coords, result)
     }
 
     @Test
-    fun `whereIsResourceInStorageAt from one tile over`() {
+    fun `whereIsNextResourceInStorageWithAccess from one tile over`() {
         val dest = Coordinates(2,0)
         gameStateManager.applyStates(listOf(
             GameState(coords, Operator.Set, Type.Storage, Wood),
@@ -73,7 +73,7 @@ class TransportManagerTest {
             GameState(dest, Operator.Set, Type.Building, Road())
         ))
         //The coordinates are irrelevant here
-        val result = sut.whereIsResourceInStoragedAt(TransportRequest(dest, Wood))
+        val result = sut.whereIsNextResourceInStorageWithAccess(TransportRequest(dest, Wood))
 
         assertEquals(coords, result)
     }

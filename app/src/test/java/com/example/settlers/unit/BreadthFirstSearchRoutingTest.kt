@@ -133,7 +133,7 @@ class BreadthFirstSearchRoutingTest {
     }
 
     @Test
-    fun `Route arround buildings`() {
+    fun `Route around buildings`() {
         val from = Coordinates(0,0)
         val to = Coordinates(2,2)
         gameStateManager.applyStates(listOf(
@@ -160,7 +160,7 @@ class BreadthFirstSearchRoutingTest {
     }
 
     @Test
-    fun `calcRouteNextStep 2 steps`() {
+    fun `calcRouteFirstStep 2 steps`() {
         val from = Coordinates(1,1)
         val to = Coordinates(4,2)
         gameStateManager.applyStates(listOf(
@@ -169,13 +169,13 @@ class BreadthFirstSearchRoutingTest {
             GameState(to, Operator.Set, Type.Building, Lumberjack())
         ))
 
-        val next = sut.calcRouteNextStep(from, to)
+        val next = sut.calcRouteFirstStep(from, to)
 
         assertEquals(Coordinates(2,2), next)
     }
 
     @Test
-    fun `calcRouteToItemInStorage 1 available 2 away`() {
+    fun `findNextItemWithAccessInStorage 1 available 2 away`() {
         val available = Coordinates(0,0)
         val requester = Coordinates(2,2)
         gameStateManager.applyStates(listOf(
@@ -185,13 +185,13 @@ class BreadthFirstSearchRoutingTest {
             GameState(requester, Operator.Set, Type.Building, Lumberjack())
         ))
 
-        val foundAt = sut.calcRouteToItemInStorage(requester, Wood)
+        val foundAt = sut.findNextItemWithAccessInStorage(requester, Wood)
 
         assertEquals(available, foundAt)
     }
 
     @Test
-    fun `calcRouteToItemInStorage 2 available at 2 different tiles`() {
+    fun `findNextItemWithAccessInStorage 2 available at 2 different tiles`() {
         val available = Coordinates(0,0)
         val requester = Coordinates(2,2)
         gameStateManager.applyStates(listOf(
@@ -202,13 +202,13 @@ class BreadthFirstSearchRoutingTest {
             GameState(requester, Operator.Set, Type.Building, Lumberjack())
         ))
 
-        val foundAt = sut.calcRouteToItemInStorage(requester, Wood)
+        val foundAt = sut.findNextItemWithAccessInStorage(requester, Wood)
 
         assertEquals(Coordinates(1,1), foundAt)
     }
 
     @Test
-    fun `calcRouteToItemInTransport nothing available`() {
+    fun `findNextItemWithAccessInTransport nothing available`() {
         val available = Coordinates(0,0)
         val requester = Coordinates(2,2)
         gameStateManager.applyStates(listOf(
@@ -217,13 +217,13 @@ class BreadthFirstSearchRoutingTest {
             GameState(requester, Operator.Set, Type.Building, Lumberjack())
         ))
 
-        val foundAt = sut.calcRouteToItemInTransport(requester, Wood)
+        val foundAt = sut.findNextItemWithAccessInTransport(requester, Wood)
 
         assertNull(foundAt)
     }
 
     @Test
-    fun `calcRouteToItemInTransport 2 available at 2 different tiles`() {
+    fun `findNextItemWithAccessInTransport 2 available at 2 different tiles`() {
         val available = Coordinates(0,0)
         val requester = Coordinates(2,2)
         gameStateManager.applyStates(listOf(
@@ -234,7 +234,7 @@ class BreadthFirstSearchRoutingTest {
             GameState(requester, Operator.Set, Type.Building, Lumberjack())
         ))
 
-        val foundAt = sut.calcRouteToItemInTransport(requester, Wood)
+        val foundAt = sut.findNextItemWithAccessInTransport(requester, Wood)
 
         assertEquals(Coordinates(1,1), foundAt)
     }

@@ -45,7 +45,7 @@ class BreadthFirstSearchRouting(private val mapManager: MapManager) {
         return Route(first, list)
     }
 
-    fun calcRouteNextStep(start: Coordinates, destiantion: Coordinates): Coordinates? {
+    fun calcRouteFirstStep(start: Coordinates, destiantion: Coordinates): Coordinates? {
         //Return First Step. Drop all other steps
         return try {
             calcRoute(start, destiantion)?.steps?.first()
@@ -54,16 +54,16 @@ class BreadthFirstSearchRouting(private val mapManager: MapManager) {
         }
     }
 
-    fun calcRouteToItemInTransport(from: Coordinates, what: Resource): Coordinates? {
-        return calcRouteToItemInner(from, what, Type.Transport)
+    fun findNextItemWithAccessInTransport(from: Coordinates, what: Resource): Coordinates? {
+        return findNextItemWithAccessInner(from, what, Type.Transport)
     }
 
-    fun calcRouteToItemInStorage(from: Coordinates, what: Resource): Coordinates? {
-        return calcRouteToItemInner(from, what, Type.Storage)
+    fun findNextItemWithAccessInStorage(from: Coordinates, what: Resource): Coordinates? {
+        return findNextItemWithAccessInner(from, what, Type.Storage)
     }
 
     //TODO is it really a good idea to use the Type enum here as parameter
-    private fun calcRouteToItemInner(from: Coordinates, what: Resource, type: Type): Coordinates? {
+    private fun findNextItemWithAccessInner(from: Coordinates, what: Resource, type: Type): Coordinates? {
         val frontier = mutableListOf(from)
         val cameFrom = mutableMapOf<Coordinates, Coordinates>()
 
