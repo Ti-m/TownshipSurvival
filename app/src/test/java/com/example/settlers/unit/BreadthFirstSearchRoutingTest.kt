@@ -160,7 +160,7 @@ class BreadthFirstSearchRoutingTest {
     }
 
     @Test
-    fun `calcRouteNextStep`() {
+    fun `calcRouteNextStep 2 steps`() {
         val from = Coordinates(1,1)
         val to = Coordinates(4,2)
         gameStateManager.applyStates(listOf(
@@ -172,5 +172,70 @@ class BreadthFirstSearchRoutingTest {
         val next = sut.calcRouteNextStep(from, to)
 
         assertEquals(Coordinates(2,2), next)
+    }
+
+    @Test
+    fun `calcRouteToItemInStorage 1 available 2 away`() {
+        val available = Coordinates(0,0)
+        val requester = Coordinates(2,2)
+        gameStateManager.applyStates(listOf(
+            GameState(available, Operator.Set, Type.Building, Road()),
+            GameState(available, Operator.Set, Type.Storage, Wood),
+            GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
+            GameState(requester, Operator.Set, Type.Building, Lumberjack())
+        ))
+
+        val foundAt = sut.calcRouteToItemInStorage(requester, Wood)
+
+        assertEquals(available, foundAt)
+    }
+
+    @Test
+    fun `calcRouteToItemInStorage 2 available at 2 different tiles`() {
+        val available = Coordinates(0,0)
+        val requester = Coordinates(2,2)
+        gameStateManager.applyStates(listOf(
+            GameState(available, Operator.Set, Type.Building, Road()),
+            GameState(available, Operator.Set, Type.Storage, Wood),
+            GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
+            GameState(Coordinates(1,1), Operator.Set, Type.Storage, Wood),
+            GameState(requester, Operator.Set, Type.Building, Lumberjack())
+        ))
+
+        val foundAt = sut.calcRouteToItemInStorage(requester, Wood)
+
+        assertEquals(Coordinates(1,1), foundAt)
+    }
+
+    @Test
+    fun `calcRouteToItemInTransport nothing available`() {
+        val available = Coordinates(0,0)
+        val requester = Coordinates(2,2)
+        gameStateManager.applyStates(listOf(
+            GameState(available, Operator.Set, Type.Building, Road()),
+            GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
+            GameState(requester, Operator.Set, Type.Building, Lumberjack())
+        ))
+
+        val foundAt = sut.calcRouteToItemInTransport(requester, Wood)
+
+        assertNull(foundAt)
+    }
+
+    @Test
+    fun `calcRouteToItemInTransport 2 available at 2 different tiles`() {
+        val available = Coordinates(0,0)
+        val requester = Coordinates(2,2)
+        gameStateManager.applyStates(listOf(
+            GameState(available, Operator.Set, Type.Building, Road()),
+            GameState(available, Operator.Set, Type.Transport, Wood),
+            GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
+            GameState(Coordinates(1,1), Operator.Set, Type.Transport, Wood),
+            GameState(requester, Operator.Set, Type.Building, Lumberjack())
+        ))
+
+        val foundAt = sut.calcRouteToItemInTransport(requester, Wood)
+
+        assertEquals(Coordinates(1,1), foundAt)
     }
 }
