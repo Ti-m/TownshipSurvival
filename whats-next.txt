@@ -7,8 +7,11 @@ Tasks - Open
 ** DONE Block the move ressources for a round. Add a touched property for destinationcell
 ** DONE Add circular search for items for transport, starting at the destination
 *** DONE Atm this blocks the transport
+*** DONE Add Tests getNeighboursOfCellDoubleCoords
 *** Refactor getNeighboursOfCellDoubleCoords
+*** Add tests calcRouteToItemInTransport/calcRouteToItemInStorage
 *** Refactor calcRouteToItemInTransport/calcRouteToItemInStorage
+*** Add tests handleRequests
 *** Refactor handleRequests
 *** Bug: Sometimes and item will be jumping around between two destinations
 

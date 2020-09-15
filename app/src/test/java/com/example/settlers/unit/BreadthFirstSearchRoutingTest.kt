@@ -28,7 +28,7 @@ class BreadthFirstSearchRoutingTest {
     }
 
     @Test
-    fun calcRoute() {
+    fun `calcRoute to neighbour`() {
         val from = Coordinates(1,1)
         val to = Coordinates(2,2)
         gameStateManager.applyStates(listOf(
@@ -50,7 +50,7 @@ class BreadthFirstSearchRoutingTest {
     }
 
     @Test
-    fun calcRoute2() {
+    fun `calcRoute two steps`() {
         val from = Coordinates(1,1)
         val to = Coordinates(4,2)
         gameStateManager.applyStates(listOf(
@@ -74,7 +74,7 @@ class BreadthFirstSearchRoutingTest {
     }
 
     @Test
-    fun calcRoute3() {
+    fun `calcRoute 3 steps`() {
         val from = Coordinates(0,0)
         val to = Coordinates(4,2)
         gameStateManager.applyStates(listOf(
@@ -101,7 +101,7 @@ class BreadthFirstSearchRoutingTest {
     }
 
     @Test
-    fun calcRoute_RoadMissing() {
+    fun `calcRoute road missing, so no route`() {
         val from = Coordinates(0,0)
         val to = Coordinates(4,2)
         gameStateManager.applyStates(listOf(
@@ -157,5 +157,20 @@ class BreadthFirstSearchRoutingTest {
             ),
             route
         )
+    }
+
+    @Test
+    fun `calcRouteNextStep`() {
+        val from = Coordinates(1,1)
+        val to = Coordinates(4,2)
+        gameStateManager.applyStates(listOf(
+            GameState(from, Operator.Set, Type.Building, Townhall()),
+            GameState(Coordinates(2,2), Operator.Set, Type.Building, Road()),
+            GameState(to, Operator.Set, Type.Building, Lumberjack())
+        ))
+
+        val next = sut.calcRouteNextStep(from, to)
+
+        assertEquals(Coordinates(2,2), next)
     }
 }

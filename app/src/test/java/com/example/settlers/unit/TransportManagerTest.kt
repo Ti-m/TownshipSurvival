@@ -121,6 +121,7 @@ class TransportManagerTest {
 
         assertEquals(listOf<GameState>(), result)
     }
+
     @Test
     fun `moveResources already touched`() {
         val dest = Coordinates(2,2)
