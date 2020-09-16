@@ -1,7 +1,6 @@
 package com.example.settlers.unit
 
 import com.example.settlers.*
-import com.example.settlers.testdoubles.MapManagerPreparedForTest
 import com.example.settlers.util.DisabledLogger
 import com.example.settlers.util.Logger
 import org.junit.Assert

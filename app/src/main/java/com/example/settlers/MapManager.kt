@@ -1,6 +1,6 @@
 package com.example.settlers
 
-import com.example.settlers.MainActivity.Companion.tileGridSize
+import com.example.settlers.util.DisabledLogger
 import com.example.settlers.util.Logger
 
 open class MapManager(
@@ -95,5 +95,28 @@ open class MapManager(
             }
         }
         return matched
+    }
+}
+
+class MapManagerPreparedForTest(
+    cells: Map<Coordinates, Cell> = mapOf(
+        Pair(Coordinates(0,0), Cell(coordinates = Coordinates(0,0),type = GroundType.Desert)),
+        Pair(Coordinates(2,0), Cell(coordinates = Coordinates(2,0),type = GroundType.Desert)),
+        Pair(Coordinates(4,0), Cell(coordinates = Coordinates(4,0),type = GroundType.Desert)),
+        Pair(Coordinates(1,1), Cell(coordinates = Coordinates(1,1),type = GroundType.Desert)),
+        Pair(Coordinates(3,1), Cell(coordinates = Coordinates(3,1),type = GroundType.Desert)),
+        Pair(Coordinates(5,1), Cell(coordinates = Coordinates(5,1),type = GroundType.Desert)),
+        Pair(Coordinates(0,2), Cell(coordinates = Coordinates(0,2),type = GroundType.Desert)),
+        Pair(Coordinates(2,2), Cell(coordinates = Coordinates(2,2),type = GroundType.Desert)),
+        Pair(Coordinates(4,2), Cell(coordinates = Coordinates(4,2),type = GroundType.Desert))
+    ),
+    log: DisabledLogger = DisabledLogger(),
+    mapSize: Int = 6
+) : MapManager(cells, log, mapSize) {
+
+    fun resetTouched() {
+        cells.forEach {
+            it.value.touched = false
+        }
     }
 }
