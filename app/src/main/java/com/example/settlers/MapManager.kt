@@ -4,7 +4,7 @@ import com.example.settlers.MainActivity.Companion.tileGridSize
 import com.example.settlers.util.Logger
 
 open class MapManager(
-    private val cells: Map<Coordinates, Cell>,
+    protected val cells: Map<Coordinates, Cell>,
     private val log: Logger,
     private val mapsize: Int
 ) {

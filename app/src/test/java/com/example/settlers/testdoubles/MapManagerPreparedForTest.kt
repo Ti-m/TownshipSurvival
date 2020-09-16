@@ -6,7 +6,7 @@ import com.example.settlers.GroundType
 import com.example.settlers.MapManager
 import com.example.settlers.util.DisabledLogger
 
-class MapManagerTestData(
+class MapManagerPreparedForTest(
     cells: Map<Coordinates, Cell> = mapOf(
         Pair(Coordinates(0,0), Cell(coordinates = Coordinates(0,0),type = GroundType.Desert)),
         Pair(Coordinates(2,0), Cell(coordinates = Coordinates(2,0),type = GroundType.Desert)),
@@ -19,4 +19,11 @@ class MapManagerTestData(
         Pair(Coordinates(4,2), Cell(coordinates = Coordinates(4,2),type = GroundType.Desert))
     ),
     log: DisabledLogger = DisabledLogger()
-) : MapManager(cells, log, 6)
+) : MapManager(cells, log, 6) {
+
+    fun resetTouched() {
+        cells.forEach {
+            it.value.touched = false
+        }
+    }
+}

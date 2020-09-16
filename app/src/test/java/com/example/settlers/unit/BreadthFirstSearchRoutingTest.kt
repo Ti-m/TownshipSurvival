@@ -1,7 +1,7 @@
 package com.example.settlers.unit
 
 import com.example.settlers.*
-import com.example.settlers.testdoubles.MapManagerTestData
+import com.example.settlers.testdoubles.MapManagerPreparedForTest
 import com.example.settlers.BreadthFirstSearchRouting
 import com.example.settlers.Route
 import com.example.settlers.util.DisabledLogger
@@ -12,7 +12,7 @@ import org.junit.Test
 
 class BreadthFirstSearchRoutingTest {
 
-    private lateinit var mapManager: MapManager
+    private lateinit var mapManager: MapManagerPreparedForTest
     private lateinit var transportManager: TransportManager
     private lateinit var logger: Logger
     private lateinit var gameStateManager: GameStateManager
@@ -20,7 +20,7 @@ class BreadthFirstSearchRoutingTest {
 
     @Before
     fun setup() {
-        mapManager = MapManagerTestData()
+        mapManager = MapManagerPreparedForTest()
         logger = DisabledLogger()
         sut = BreadthFirstSearchRouting(mapManager)
         transportManager = TransportManager(mapManager, sut, logger)
@@ -233,6 +233,7 @@ class BreadthFirstSearchRoutingTest {
             GameState(Coordinates(1,1), Operator.Set, Type.Transport, Wood),
             GameState(requester, Operator.Set, Type.Building, Lumberjack())
         ))
+        mapManager.resetTouched()
 
         val foundAt = sut.findNextItemWithAccessInTransport(requester, Wood)
 

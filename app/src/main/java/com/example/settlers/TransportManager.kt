@@ -28,19 +28,10 @@ class TransportManager(
         return states
     }
 
-    //TODO remove duplication
     private fun handleRequestsInTransport(request: TransportRequest): Collection<GameState> {
         val states: MutableList<GameState> = mutableListOf()
-        val closest = whereIsNextResourceInTransportWithAccess(request)
-        if (closest != null) {
-            val to = calcRouteFirstStep(
-                from = closest,
-                to = request.destination
-            )?: return states
-
-            val destinationCell = mapManager.findSpecificCell(to)!!
-            if (destinationCell.transport.count() == 2) { return states } // Already fully occupies
-            destinationCell.touched = true//TODO move this to GameSTateManager?
+        whereIsNextResourceInTransportWithAccess(request)?.let { closest ->
+            val to = validRouteNextStep(closest, request.destination)?: return states
 
             states.add(GameState(closest, Operator.Remove, Type.Transport, request.what))
             states.add(GameState(to, Operator.Set, Type.Transport, request.what))
@@ -49,24 +40,26 @@ class TransportManager(
         return states
     }
 
-    //TODO remove duplication
     private fun handleRequestsInStorage(request: TransportRequest): Collection<GameState> {
         val states: MutableList<GameState> = mutableListOf()
-        val closest2 = whereIsNextResourceInStorageWithAccess(request)
-        if (closest2 != null) {
-            val to = calcRouteFirstStep(
-                from = closest2,
-                to = request.destination
-            )?: return states
+        whereIsNextResourceInStorageWithAccess(request)?.let { closest ->
+            val to = validRouteNextStep(closest, request.destination)?: return states
 
-            val destinationCell = mapManager.findSpecificCell(to)!!
-            if (destinationCell.transport.count() == 2) { return states } // Already fully occupies
-            destinationCell.touched = true//TODO move this to GameSTateManager?
-
-            states.add(GameState(closest2, Operator.Remove, Type.Storage, request.what))
+            states.add(GameState(closest, Operator.Remove, Type.Storage, request.what))
             states.add(GameState(to, Operator.Set, Type.Transport, request.what))
         }
         return states
+    }
+
+    private fun validRouteNextStep(from: Coordinates, to: Coordinates): Coordinates? {
+        val step = calcRouteFirstStep(
+            from = from,
+            to = to
+        )?: return null
+
+        val destinationCell = mapManager.findSpecificCell(step)!!
+        if (destinationCell.transport.count() == 2) { return null } // Already fully occupies
+        return step
     }
 
     private fun calcRouteFirstStep(from: Coordinates, to: Coordinates): Coordinates? {

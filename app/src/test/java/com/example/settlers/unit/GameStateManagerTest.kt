@@ -1,7 +1,7 @@
 package com.example.settlers.unit
 
 import com.example.settlers.*
-import com.example.settlers.testdoubles.MapManagerTestData
+import com.example.settlers.testdoubles.MapManagerPreparedForTest
 import com.example.settlers.util.DisabledLogger
 import com.example.settlers.util.Logger
 import org.junit.Assert
@@ -11,14 +11,14 @@ import org.junit.Test
 class GameStateManagerTest {
 
     private val logger: Logger = DisabledLogger()
-    private lateinit var mapManager: MapManagerTestData
+    private lateinit var mapManager: MapManagerPreparedForTest
     private lateinit var transportManager: TransportManager
     private lateinit var sut: GameStateManager
     private lateinit var coords: Coordinates
 
     @Before
     fun prepare() {
-        mapManager = MapManagerTestData()
+        mapManager = MapManagerPreparedForTest()
         transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
         sut = GameStateManager(transportManager, mapManager, logger)
         coords = Coordinates(0,0)

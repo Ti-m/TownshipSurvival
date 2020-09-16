@@ -1,7 +1,7 @@
 package com.example.settlers.integration
 
 import com.example.settlers.*
-import com.example.settlers.testdoubles.MapManagerTestData
+import com.example.settlers.testdoubles.MapManagerPreparedForTest
 import com.example.settlers.BreadthFirstSearchRouting
 import com.example.settlers.util.DisabledLogger
 import com.example.settlers.util.Logger
@@ -26,7 +26,7 @@ class TransportationTest {
         val provider = Coordinates(0,0)
         val destiantion = Coordinates(1,1)//This test only works for a single tile, because the it ticks only once
         //val transportRequest = TransportRequestNew(destination = destiantion, what = Wood)
-        val mapManager = MapManagerTestData()
+        val mapManager = MapManagerPreparedForTest()
 
         val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
 

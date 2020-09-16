@@ -1,7 +1,7 @@
 package com.example.settlers.unit
 
 import com.example.settlers.*
-import com.example.settlers.testdoubles.MapManagerTestData
+import com.example.settlers.testdoubles.MapManagerPreparedForTest
 import com.example.settlers.BreadthFirstSearchRouting
 import com.example.settlers.util.DisabledLogger
 import com.example.settlers.util.Logger
@@ -22,7 +22,7 @@ class BuildDialogHandlerTest {
     @Before
     fun prepare() {
         cell = Cell(coordinates = Coordinates(0,0),type = GroundType.Desert)
-        mapManager = MapManagerTestData(
+        mapManager = MapManagerPreparedForTest(
             mapOf(//override defaults
                 Pair(Coordinates(0,0), cell)
             )

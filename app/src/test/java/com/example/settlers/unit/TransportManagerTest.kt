@@ -1,7 +1,7 @@
 package com.example.settlers.unit
 
 import com.example.settlers.*
-import com.example.settlers.testdoubles.MapManagerTestData
+import com.example.settlers.testdoubles.MapManagerPreparedForTest
 import com.example.settlers.BreadthFirstSearchRouting
 import com.example.settlers.util.DisabledLogger
 import com.example.settlers.util.Logger
@@ -11,7 +11,7 @@ import org.junit.Assert.*
 
 class TransportManagerTest {
 
-    private lateinit var mapManager: MapManager
+    private lateinit var mapManager: MapManagerPreparedForTest
     private lateinit var sut: TransportManager
     private lateinit var logger: Logger
     private lateinit var gameStateManager: GameStateManager
@@ -19,7 +19,7 @@ class TransportManagerTest {
 
     @Before
     fun prepare() {
-        mapManager = MapManagerTestData()
+        mapManager = MapManagerPreparedForTest()
         logger = DisabledLogger()
         sut = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
         gameStateManager = GameStateManager(sut, mapManager, logger)
@@ -32,6 +32,8 @@ class TransportManagerTest {
             GameState(coords, Operator.Set, Type.Transport, Wood),
             GameState(coords, Operator.Set, Type.Building, Road())
         ))
+        mapManager.resetTouched()
+
         //The coordinates are irrelevant here
         val result = sut.whereIsNextResourceInTransportWithAccess(TransportRequest(coords, Wood))
 
@@ -46,6 +48,8 @@ class TransportManagerTest {
             GameState(coords, Operator.Set, Type.Building, Road()),
             GameState(dest, Operator.Set, Type.Building, Road())
         ))
+        mapManager.resetTouched()
+
         //The coordinates are irrelevant here
         val result = sut.whereIsNextResourceInTransportWithAccess(TransportRequest(dest, Wood))
 
@@ -102,6 +106,8 @@ class TransportManagerTest {
             GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
             GameState(dest, Operator.Set, Type.Building, Lumberjack())
         ))
+        mapManager.resetTouched()
+
         val result = sut.moveResources(mapManager.findSpecificCell(dest)!!)
 
         assertEquals(listOf(

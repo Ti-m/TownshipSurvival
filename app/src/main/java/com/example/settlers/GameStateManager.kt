@@ -45,6 +45,7 @@ class GameStateManager(
                             throw IllegalStateException("$state :: ${selected.transport}")
                         }
                         selected.redraw = true
+                        selected.touched = true
                     }
                     Type.Storage -> {
                         selected.storage.add(state.data as Resource)
