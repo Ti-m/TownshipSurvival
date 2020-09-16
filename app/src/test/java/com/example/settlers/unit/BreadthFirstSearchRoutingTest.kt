@@ -22,7 +22,7 @@ class BreadthFirstSearchRoutingTest {
     fun setup() {
         mapManager = MapManagerPreparedForTest()
         logger = DisabledLogger()
-        sut = BreadthFirstSearchRouting(mapManager)
+        sut = BreadthFirstSearchRouting(mapManager, HexagonNeighbourCalculator(mapManager))
         transportManager = TransportManager(mapManager, sut, logger)
         gameStateManager = GameStateManager(transportManager, mapManager, logger)
     }

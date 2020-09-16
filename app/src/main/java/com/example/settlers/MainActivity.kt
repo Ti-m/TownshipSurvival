@@ -45,7 +45,8 @@ class MainActivity : AppCompatActivity() {
         val cells = mapGen.createMap(tileGridSize)
 
         val mapManager = MapManager(cells, logger, tileGridSize)
-        val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
+        val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
+        val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager, neighbourCalculator), logger)
         val gameStateManager = GameStateManager(transportManager, mapManager, logger)
         val buildDialogHandler = BuildDialogHandler(gameStateManager)
         val tiles = mapGen.createTiles(cells, buildDialogHandler, this)

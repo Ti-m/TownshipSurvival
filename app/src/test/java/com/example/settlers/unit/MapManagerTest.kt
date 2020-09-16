@@ -19,7 +19,8 @@ class MapManagerTest {
     @Before
     fun prepare() {
         sut = MapManagerPreparedForTest()
-        transportManager = TransportManager(sut, BreadthFirstSearchRouting(sut), logger)
+        transportManager = TransportManager(sut, BreadthFirstSearchRouting(sut, HexagonNeighbourCalculator(sut)),
+            logger)
         gameStateManager = GameStateManager(transportManager, sut, logger)
         coords = Coordinates(0,0)
     }
@@ -89,84 +90,5 @@ class MapManagerTest {
         assertEquals(listOf(Wood), sut.queryInProduction(coords))
     }
 
-    @Test
-    fun `getNeighbourOfCell ignore obstacles`() {
-        val middle = Coordinates(3,1)
-        val destination =  Coordinates(9,9) // This coordinate is randomly selected,
-        // makes no difference in this scenario
-        val neighbours: List<Coordinates> = sut.getNeighboursOfCellDoubleCoords(
-            middle,
-            destination,
-            true
-        )
-        assertEquals(listOf(
-            Coordinates(4,2),
-            Coordinates(2,2),
-            Coordinates(1,1),
-            Coordinates(2,0),
-            Coordinates(4,0),
-            Coordinates(5,1)
-        ), neighbours)
-    }
 
-    @Test
-    fun `getNeighbourOfCell with obstacles`() {
-        val middle = Coordinates(3,1)
-        val destination = Coordinates(4,2)
-        gameStateManager.applyStates(listOf(GameState(destination, Operator.Set, Type.Building, Road())))
-        val neighbours: List<Coordinates> = sut.getNeighboursOfCellDoubleCoords(middle, destination, false)
-        assertEquals(listOf(
-            Coordinates(4,2)
-        ), neighbours)
-    }
-
-    @Test
-    fun `getNeighbourOfCell ignore tiles of grid, index smaller then zero`() {
-        val middle = Coordinates(0,0)
-        val destination =  Coordinates(9,9) // This coordinate is randomly selected,
-        // makes no difference in this scenario
-        val neighbours: List<Coordinates> = sut.getNeighboursOfCellDoubleCoords(
-            middle,
-            destination,
-            true
-        )
-        assertEquals(listOf(
-            Coordinates(1,1),
-            Coordinates(2,0)
-        ), neighbours)
-    }
-
-    @Test
-    fun `getNeighbourOfCell ignore tiles of grid, index to high`() {
-        val middle = Coordinates(4,2)
-        val destination =  Coordinates(9,9) // This coordinate is randomly selected,
-        // makes no difference in this scenario
-        val neighbours: List<Coordinates> = sut.getNeighboursOfCellDoubleCoords(
-            middle,
-            destination,
-            true
-        )
-        assertEquals(listOf(
-            Coordinates(2,2),
-            Coordinates(3,1),
-            Coordinates(5,1),
-        ), neighbours)
-    }
-
-    @Test
-    fun `getNeighbourOfCell allow any building`() {
-        val middle = Coordinates(0,0)
-        val destination =  Coordinates(9,9) // This coordinate is randomly selected,
-        // makes no difference in this scenario
-        gameStateManager.applyStates(listOf(GameState(Coordinates(1,1), Operator.Set, Type.Building, Lumberjack())))
-        val neighbours: List<Coordinates> = sut.getNeighboursOfCellDoubleCoords(
-            middle,
-            destination,
-            false,
-            true
-        )
-        assertEquals(listOf(
-            Coordinates(1,1)
-        ), neighbours)
-    }
 }

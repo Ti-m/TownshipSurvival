@@ -10,11 +10,12 @@ Tasks - Open
 *** DONE Add Tests getNeighboursOfCellDoubleCoords
 *** Refactor getNeighboursOfCellDoubleCoords
 *** DONE Add tests calcRouteToItemInTransport/calcRouteToItemInStorage
-*** Refactor calcRouteToItemInTransport/calcRouteToItemInStorage
+*** DONE Refactor calcRouteToItemInTransport/calcRouteToItemInStorage
 *** DONE Add tests handleRequests
-*** Refactor handleRequests
+*** DONE Refactor handleRequests
 *** Bug: Sometimes and item will be jumping around between two destinations
 
+* Refactor TestSetup. Build Factory methods??
 
 ** DONE Refactor MapManager to delegate applyState
 *** DONE How to fix the cyclic dependency?

@@ -19,7 +19,7 @@ class GameStateManagerTest {
     @Before
     fun prepare() {
         mapManager = MapManagerPreparedForTest()
-        transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
+        transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager, HexagonNeighbourCalculator(mapManager)), logger)
         sut = GameStateManager(transportManager, mapManager, logger)
         coords = Coordinates(0,0)
     }

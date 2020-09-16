@@ -18,8 +18,9 @@ class MapManagerPreparedForTest(
         Pair(Coordinates(2,2), Cell(coordinates = Coordinates(2,2),type = GroundType.Desert)),
         Pair(Coordinates(4,2), Cell(coordinates = Coordinates(4,2),type = GroundType.Desert))
     ),
-    log: DisabledLogger = DisabledLogger()
-) : MapManager(cells, log, 6) {
+    log: DisabledLogger = DisabledLogger(),
+    mapSize: Int = 6
+) : MapManager(cells, log, mapSize) {
 
     fun resetTouched() {
         cells.forEach {

@@ -23,12 +23,14 @@ class BuildDialogHandlerTest {
     fun prepare() {
         cell = Cell(coordinates = Coordinates(0,0),type = GroundType.Desert)
         mapManager = MapManagerPreparedForTest(
-            mapOf(//override defaults
+            cells = mapOf(//override defaults
                 Pair(Coordinates(0,0), cell)
-            )
+            ),
+            mapSize = 1
         )
         logger = DisabledLogger()
-        transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
+        transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager, HexagonNeighbourCalculator(mapManager)),
+            logger)
         gameStateManager = GameStateManager(transportManager, mapManager, logger)
         sut = BuildDialogHandler(gameStateManager)
     }

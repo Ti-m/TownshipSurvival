@@ -21,7 +21,7 @@ class TransportManagerTest {
     fun prepare() {
         mapManager = MapManagerPreparedForTest()
         logger = DisabledLogger()
-        sut = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
+        sut = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager, HexagonNeighbourCalculator(mapManager)), logger)
         gameStateManager = GameStateManager(sut, mapManager, logger)
         coords = Coordinates(0,0)
     }

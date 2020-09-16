@@ -6,4 +6,8 @@ GameStateManager o-- TransportManager
 TransportManager o-- MapManager
 TransportManager o-- BreadthFirstSearchRouting
 
+HexagonNeighbourCalculator o-- MapManager
+
+BreadthFirstSearchRouting o-- MapManager
+BreadthFirstSearchRouting o-- HexagonNeighbourCalculator
 @enduml

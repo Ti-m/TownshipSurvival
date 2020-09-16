@@ -6,7 +6,10 @@ data class Route(
     val steps: MutableList<Coordinates>
 )
 
-class BreadthFirstSearchRouting(private val mapManager: MapManager) {
+class BreadthFirstSearchRouting(
+    private val mapManager: MapManager,
+    private val neighbourCalculator: HexagonNeighbourCalculator
+) {
 
     fun calcRoute(start: Coordinates, destiantion: Coordinates): Route? {
         val frontier = mutableListOf(start)
@@ -18,7 +21,7 @@ class BreadthFirstSearchRouting(private val mapManager: MapManager) {
                 break
             }
 
-            mapManager.getNeighboursOfCellDoubleCoords(current, destiantion, false).forEach { next ->
+            neighbourCalculator.getNeighboursOfCellDoubleCoords(current, destiantion, false).forEach { next ->
                 if (!cameFrom.containsKey(next)) {
                     frontier.add(next)
                     cameFrom[next] = current
@@ -83,7 +86,7 @@ class BreadthFirstSearchRouting(private val mapManager: MapManager) {
                 }
             }
 
-            mapManager.getNeighboursOfCellDoubleCoords(
+            neighbourCalculator.getNeighboursOfCellDoubleCoords(
                 current,
                 Coordinates(1_000_000,1_000_000),//TODO unreachable, unused in this case
                 false,

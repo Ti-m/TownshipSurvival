@@ -28,7 +28,7 @@ class TransportationTest {
         //val transportRequest = TransportRequestNew(destination = destiantion, what = Wood)
         val mapManager = MapManagerPreparedForTest()
 
-        val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager), logger)
+        val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager, HexagonNeighbourCalculator(mapManager)), logger)
 
         val gameStateManager = GameStateManager(transportManager, mapManager, DisabledLogger())
 
