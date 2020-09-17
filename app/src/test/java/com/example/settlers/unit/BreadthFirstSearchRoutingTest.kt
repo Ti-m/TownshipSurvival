@@ -13,17 +13,15 @@ class BreadthFirstSearchRoutingTest {
 
     private lateinit var mapManager: MapManagerPreparedForTest
     private lateinit var transportManager: TransportManager
-    private lateinit var logger: Logger
     private lateinit var gameStateManager: GameStateManager
     private lateinit var sut: BreadthFirstSearchRouting
 
     @Before
     fun setup() {
         mapManager = MapManagerPreparedForTest()
-        logger = DisabledLogger()
         sut = BreadthFirstSearchRouting(mapManager, HexagonNeighbourCalculator(mapManager))
-        transportManager = TransportManager(mapManager, sut, logger)
-        gameStateManager = GameStateManager(transportManager, mapManager, logger)
+        transportManager = TransportManagerPreparedForTest(mapManager, sut)
+        gameStateManager = GameStateManagerPreparedForTest(transportManager, mapManager)
     }
 
     @Test

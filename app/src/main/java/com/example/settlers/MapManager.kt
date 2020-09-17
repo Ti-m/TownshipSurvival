@@ -99,20 +99,27 @@ open class MapManager(
 }
 
 class MapManagerPreparedForTest(
-    cells: Map<Coordinates, Cell> = mapOf(
-        Pair(Coordinates(0,0), Cell(coordinates = Coordinates(0,0),type = GroundType.Desert)),
-        Pair(Coordinates(2,0), Cell(coordinates = Coordinates(2,0),type = GroundType.Desert)),
-        Pair(Coordinates(4,0), Cell(coordinates = Coordinates(4,0),type = GroundType.Desert)),
-        Pair(Coordinates(1,1), Cell(coordinates = Coordinates(1,1),type = GroundType.Desert)),
-        Pair(Coordinates(3,1), Cell(coordinates = Coordinates(3,1),type = GroundType.Desert)),
-        Pair(Coordinates(5,1), Cell(coordinates = Coordinates(5,1),type = GroundType.Desert)),
-        Pair(Coordinates(0,2), Cell(coordinates = Coordinates(0,2),type = GroundType.Desert)),
-        Pair(Coordinates(2,2), Cell(coordinates = Coordinates(2,2),type = GroundType.Desert)),
-        Pair(Coordinates(4,2), Cell(coordinates = Coordinates(4,2),type = GroundType.Desert))
-    ),
-    log: DisabledLogger = DisabledLogger(),
-    mapSize: Int = 6
+    cells: Map<Coordinates, Cell>,
+    log: Logger,
+    mapSize: Int
 ) : MapManager(cells, log, mapSize) {
+
+    constructor(cells: Map<Coordinates, Cell>, mapSize: Int) : this(cells, DisabledLogger(), mapSize)
+    constructor(log: Logger) : this( mapOf(
+            Pair(Coordinates(0,0), Cell(coordinates = Coordinates(0,0),type = GroundType.Desert)),
+            Pair(Coordinates(2,0), Cell(coordinates = Coordinates(2,0),type = GroundType.Desert)),
+            Pair(Coordinates(4,0), Cell(coordinates = Coordinates(4,0),type = GroundType.Desert)),
+            Pair(Coordinates(1,1), Cell(coordinates = Coordinates(1,1),type = GroundType.Desert)),
+            Pair(Coordinates(3,1), Cell(coordinates = Coordinates(3,1),type = GroundType.Desert)),
+            Pair(Coordinates(5,1), Cell(coordinates = Coordinates(5,1),type = GroundType.Desert)),
+            Pair(Coordinates(0,2), Cell(coordinates = Coordinates(0,2),type = GroundType.Desert)),
+            Pair(Coordinates(2,2), Cell(coordinates = Coordinates(2,2),type = GroundType.Desert)),
+            Pair(Coordinates(4,2), Cell(coordinates = Coordinates(4,2),type = GroundType.Desert))
+        ),
+        log,
+        6
+    )
+    constructor() : this(DisabledLogger())
 
     fun resetTouched() {
         cells.forEach {

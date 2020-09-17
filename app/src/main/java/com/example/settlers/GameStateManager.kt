@@ -1,8 +1,9 @@
 package com.example.settlers
 
+import com.example.settlers.util.DisabledLogger
 import com.example.settlers.util.Logger
 
-class GameStateManager(
+open class GameStateManager(
     private val transportManager: TransportManager,
     private val mapManager: MapManager,
     private val log: Logger
@@ -91,4 +92,14 @@ class GameStateManager(
             }
         }
     }
+}
+
+class GameStateManagerPreparedForTest(
+    transportManager: TransportManager,
+    mapManager: MapManager,
+    log: Logger
+) : GameStateManager(transportManager, mapManager, log) {
+    constructor(transportManager: TransportManager, mapManager: MapManager) : this(transportManager, mapManager, DisabledLogger())
+    constructor(mapManager: MapManager) : this(TransportManagerPreparedForTest(mapManager), mapManager)
+    constructor() : this(MapManagerPreparedForTest())
 }

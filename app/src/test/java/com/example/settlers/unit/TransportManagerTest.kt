@@ -12,16 +12,14 @@ class TransportManagerTest {
 
     private lateinit var mapManager: MapManagerPreparedForTest
     private lateinit var sut: TransportManager
-    private lateinit var logger: Logger
     private lateinit var gameStateManager: GameStateManager
     private lateinit var coords: Coordinates
 
     @Before
     fun prepare() {
         mapManager = MapManagerPreparedForTest()
-        logger = DisabledLogger()
-        sut = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager, HexagonNeighbourCalculator(mapManager)), logger)
-        gameStateManager = GameStateManager(sut, mapManager, logger)
+        sut = TransportManagerPreparedForTest(mapManager)
+        gameStateManager = GameStateManagerPreparedForTest(sut, mapManager)
         coords = Coordinates(0,0)
     }
 

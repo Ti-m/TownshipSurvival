@@ -13,7 +13,6 @@ class BuildDialogHandlerTest {
     private lateinit var cell: Cell
     private lateinit var transportManager: TransportManager
     private lateinit var mapManager: MapManager
-    private lateinit var logger: Logger
     private lateinit var gameStateManager: GameStateManager
 
     private lateinit var sut: BuildDialogHandler
@@ -27,10 +26,8 @@ class BuildDialogHandlerTest {
             ),
             mapSize = 1
         )
-        logger = DisabledLogger()
-        transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager, HexagonNeighbourCalculator(mapManager)),
-            logger)
-        gameStateManager = GameStateManager(transportManager, mapManager, logger)
+        transportManager = TransportManagerPreparedForTest(mapManager)
+        gameStateManager = GameStateManagerPreparedForTest(transportManager, mapManager)
         sut = BuildDialogHandler(gameStateManager)
     }
 

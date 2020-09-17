@@ -1,15 +1,12 @@
 package com.example.settlers.unit
 
 import com.example.settlers.*
-import com.example.settlers.util.DisabledLogger
-import com.example.settlers.util.Logger
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
 class GameStateManagerTest {
 
-    private val logger: Logger = DisabledLogger()
     private lateinit var mapManager: MapManagerPreparedForTest
     private lateinit var transportManager: TransportManager
     private lateinit var sut: GameStateManager
@@ -18,8 +15,8 @@ class GameStateManagerTest {
     @Before
     fun prepare() {
         mapManager = MapManagerPreparedForTest()
-        transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager, HexagonNeighbourCalculator(mapManager)), logger)
-        sut = GameStateManager(transportManager, mapManager, logger)
+        transportManager = TransportManagerPreparedForTest(mapManager)
+        sut = GameStateManagerPreparedForTest(transportManager, mapManager)
         coords = Coordinates(0,0)
     }
 

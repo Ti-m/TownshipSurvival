@@ -3,20 +3,11 @@ package com.example.settlers.integration
 import com.example.settlers.*
 import com.example.settlers.BreadthFirstSearchRouting
 import com.example.settlers.util.DisabledLogger
-import com.example.settlers.util.Logger
 import org.junit.Test
 
 import org.junit.Assert.*
-import org.junit.Before
 
 class TransportationTest {
-
-    lateinit var logger: Logger
-
-    @Before
-    fun setup() {
-        logger = DisabledLogger()
-    }
 
     @Test
     fun request() {
@@ -26,10 +17,8 @@ class TransportationTest {
         val destiantion = Coordinates(1,1)//This test only works for a single tile, because the it ticks only once
         //val transportRequest = TransportRequestNew(destination = destiantion, what = Wood)
         val mapManager = MapManagerPreparedForTest()
-
-        val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager, HexagonNeighbourCalculator(mapManager)), logger)
-
-        val gameStateManager = GameStateManager(transportManager, mapManager, DisabledLogger())
+        val transportManager = TransportManagerPreparedForTest(mapManager)
+        val gameStateManager = GameStateManagerPreparedForTest(transportManager, mapManager)
 
         gameStateManager.applyStates(listOf(
             GameState(provider, Operator.Set, Type.Building, Townhall()),

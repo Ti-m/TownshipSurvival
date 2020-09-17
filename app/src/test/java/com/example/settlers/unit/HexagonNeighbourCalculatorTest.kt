@@ -9,7 +9,6 @@ import org.junit.Test
 
 class HexagonNeighbourCalculatorTest {
 
-    private val logger: Logger = DisabledLogger()
     private lateinit var mapManager: MapManagerPreparedForTest
     private lateinit var gameStateManager: GameStateManager
     private lateinit var transportManager: TransportManager
@@ -20,9 +19,8 @@ class HexagonNeighbourCalculatorTest {
     fun prepare() {
         mapManager = MapManagerPreparedForTest()
         sut = HexagonNeighbourCalculator(mapManager)
-        transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager, sut),
-            logger)
-        gameStateManager = GameStateManager(transportManager, mapManager, logger)
+        transportManager = TransportManagerPreparedForTest(mapManager, BreadthFirstSearchRouting(mapManager, sut))
+        gameStateManager = GameStateManagerPreparedForTest(transportManager, mapManager)
         coords = Coordinates(0,0)
     }
 

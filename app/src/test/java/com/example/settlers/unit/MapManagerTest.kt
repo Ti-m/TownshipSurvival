@@ -9,7 +9,6 @@ import org.junit.Test
 
 class MapManagerTest {
 
-    private val logger: Logger = DisabledLogger()
     private lateinit var sut: MapManagerPreparedForTest
     private lateinit var gameStateManager: GameStateManager
     private lateinit var transportManager: TransportManager
@@ -18,9 +17,8 @@ class MapManagerTest {
     @Before
     fun prepare() {
         sut = MapManagerPreparedForTest()
-        transportManager = TransportManager(sut, BreadthFirstSearchRouting(sut, HexagonNeighbourCalculator(sut)),
-            logger)
-        gameStateManager = GameStateManager(transportManager, sut, logger)
+        transportManager = TransportManagerPreparedForTest(sut)
+        gameStateManager = GameStateManagerPreparedForTest(transportManager, sut)
         coords = Coordinates(0,0)
     }
 

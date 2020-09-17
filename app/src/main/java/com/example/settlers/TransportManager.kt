@@ -1,11 +1,12 @@
 package com.example.settlers
 
+import com.example.settlers.util.DisabledLogger
 import com.example.settlers.util.Logger
 
 data class TransportRequest(val destination: Coordinates, val what: Resource)
 data class TransportRoute(val destination: Coordinates, val what: Resource, val route: Route)
 
-class TransportManager(
+open class TransportManager(
     private val mapManager: MapManager,
     private val routing: BreadthFirstSearchRouting,
     private val log: Logger
@@ -77,5 +78,24 @@ class TransportManager(
 //        val route = routing.calcRoute(from, to)
 //        return TransportRoute(destination = to, what = what, route = route)
 //    }
+
+}
+
+class TransportManagerPreparedForTest(
+    mapManager: MapManager,
+    routing: BreadthFirstSearchRouting,
+    log: DisabledLogger,
+) : TransportManager(mapManager, routing, log) {
+    constructor(mapManager: MapManager, routing: BreadthFirstSearchRouting) : this(
+        mapManager,
+        routing,
+        DisabledLogger()
+    )
+    constructor(mapManager: MapManager) : this(
+        mapManager,
+        BreadthFirstSearchRouting(mapManager, HexagonNeighbourCalculator((mapManager))),
+        DisabledLogger()
+    )
+    constructor() : this(MapManagerPreparedForTest())
 
 }
