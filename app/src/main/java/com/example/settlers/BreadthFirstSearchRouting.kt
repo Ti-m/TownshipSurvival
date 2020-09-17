@@ -21,7 +21,11 @@ class BreadthFirstSearchRouting(
                 break
             }
 
-            neighbourCalculator.getNeighboursOfCellDoubleCoords(current, destiantion, false).forEach { next ->
+            neighbourCalculator.getNeighboursOfCellDoubleCoords(
+                coords = current,
+                destination = destiantion,
+                ignoreObstacles = false
+            ).forEach { next ->
                 if (!cameFrom.containsKey(next)) {
                     frontier.add(next)
                     cameFrom[next] = current
@@ -87,10 +91,9 @@ class BreadthFirstSearchRouting(
             }
 
             neighbourCalculator.getNeighboursOfCellDoubleCoords(
-                current,
-                Coordinates(1_000_000,1_000_000),//TODO unreachable, unused in this case
-                false,
-                true
+                coords = current,
+                ignoreObstacles = false,
+                allowAnyBuilding = true
             ).forEach { next ->
                 if (!cameFrom.containsKey(next)) {
                     frontier.add(next)

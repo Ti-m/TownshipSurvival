@@ -15,7 +15,8 @@ Tasks - Open
 *** DONE Refactor handleRequests
 *** Bug: Sometimes and item will be jumping around between two destinations
 
-* Refactor TestSetup. Build Factory methods??
+* Improve TestSetup
+** DONERefactor TestSetup. Build Factory methods??
 ** Maybe use of Hilt is better?
 
 ** DONE Refactor MapManager to delegate applyState

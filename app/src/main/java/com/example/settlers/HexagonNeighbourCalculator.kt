@@ -3,7 +3,14 @@ package com.example.settlers
 class HexagonNeighbourCalculator(
     private val mapManager: MapManager
 ) {
-    fun getNeighboursOfCellDoubleCoords(coords: Coordinates, destination: Coordinates, ignoreObstacles: Boolean = true, allowAnyBuilding: Boolean = false): List<Coordinates> {
+    companion object {
+        private val doubleHeightDirections = arrayOf(
+            arrayOf(+1, +1), arrayOf(-1, +1), arrayOf(-2, 0),
+            arrayOf(-1, -1), arrayOf(+1, -1), arrayOf(+2, 0)
+        )
+    }
+
+    fun getNeighboursOfCellDoubleCoords(coords: Coordinates, destination: Coordinates? = null, ignoreObstacles: Boolean = true, allowAnyBuilding: Boolean = false): List<Coordinates> {
         return listOf(
             getNeighboursOfCellDoubleCoords(coords, destination,0, ignoreObstacles, allowAnyBuilding),
             getNeighboursOfCellDoubleCoords(coords, destination,1, ignoreObstacles, allowAnyBuilding),
@@ -14,19 +21,16 @@ class HexagonNeighbourCalculator(
         ).filterNotNull()
     }
 
-    //TODO refactor this to use less flags ;-)
-    // allowAnyBuilding is used to find the resources for transport
     private fun getNeighboursOfCellDoubleCoords(
         coords: Coordinates,
-        destination: Coordinates,
+        //destination is only used to determine if the neighbour is already the destination.
+        // In the other usecases of the function, it can be set to null
+        destination: Coordinates? = null,
         direction: Int,
         ignoreObstacles: Boolean,
+        // allowAnyBuilding is used to find the resources for transport
         allowAnyBuilding: Boolean
     ): Coordinates? {
-        val doubleHeightDirections = arrayOf(
-            arrayOf(+1, +1), arrayOf(-1, +1), arrayOf(-2, 0),
-            arrayOf(-1, -1), arrayOf(+1, -1), arrayOf(+2, 0)
-        )
 
         val dir = doubleHeightDirections[direction]
         val neighbour = Coordinates(coords.x + dir[0], coords.y + dir[1])
