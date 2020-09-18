@@ -71,16 +71,15 @@ class HexagonNeighbourCalculatorTest {
 
     @Test
     fun `getNeighbourOfCell ignore tiles of grid, index to high`() {
-        val middle = Coordinates(4,2)
+        val middle = Coordinates(7,3)
         val neighbours: List<Coordinates> = sut.getNeighboursOfCellDoubleCoords(
             coords = middle,
             ignoreObstacles = true
         )
         Assert.assertEquals(
             listOf(
-                Coordinates(2, 2),
-                Coordinates(3, 1),
-                Coordinates(5, 1),
+                Coordinates(5, 3),
+                Coordinates(6, 2),
             ), neighbours
         )
     }

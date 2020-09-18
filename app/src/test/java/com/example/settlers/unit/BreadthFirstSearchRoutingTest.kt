@@ -181,6 +181,7 @@ class BreadthFirstSearchRoutingTest {
             GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
             GameState(requester, Operator.Set, Type.Building, Lumberjack())
         ))
+        mapManager.resetTouched()
 
         val foundAt = sut.findNextItemWithAccessInStorage(requester, Wood)
 
@@ -198,6 +199,7 @@ class BreadthFirstSearchRoutingTest {
             GameState(Coordinates(1,1), Operator.Set, Type.Storage, Wood),
             GameState(requester, Operator.Set, Type.Building, Lumberjack())
         ))
+        mapManager.resetTouched()
 
         val foundAt = sut.findNextItemWithAccessInStorage(requester, Wood)
 

@@ -59,6 +59,7 @@ class TransportManagerTest {
             GameState(coords, Operator.Set, Type.Storage, Wood),
             GameState(coords, Operator.Set, Type.Building, Road())
         ))
+        mapManager.resetTouched()
         //The coordinates are irrelevant here
         val result = sut.whereIsNextResourceInStorageWithAccess(TransportRequest(coords, Wood))
 
@@ -73,6 +74,7 @@ class TransportManagerTest {
             GameState(coords, Operator.Set, Type.Building, Road()),
             GameState(dest, Operator.Set, Type.Building, Road())
         ))
+        mapManager.resetTouched()
         //The coordinates are irrelevant here
         val result = sut.whereIsNextResourceInStorageWithAccess(TransportRequest(dest, Wood))
 
@@ -87,6 +89,7 @@ class TransportManagerTest {
             GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
             GameState(dest, Operator.Set, Type.Building, Lumberjack())
         ))
+        mapManager.resetTouched()
         val result = sut.moveResources(mapManager.findSpecificCell(dest)!!)
 
         assertEquals(listOf(

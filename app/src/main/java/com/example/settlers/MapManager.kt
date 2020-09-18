@@ -23,6 +23,11 @@ open class MapManager(
         return findSpecificCell(at)!!.production
     }
 
+    //This should be never called with coordinates outside of the map
+    fun queryRequires(at: Coordinates): List<Resource> {
+        return findSpecificCell(at)!!.requires
+    }
+
     fun queryBuilding(at: Coordinates): Building? {
         //This is queried sometimes of the map, in case its calculating the neighbours of cells
         return findSpecificCell(at)?.building
@@ -96,6 +101,12 @@ open class MapManager(
         }
         return matched
     }
+
+    fun resetTouched() {
+        cells.forEach {
+            it.value.touched = false
+        }
+    }
 }
 
 class MapManagerPreparedForTest(
@@ -109,21 +120,22 @@ class MapManagerPreparedForTest(
             Pair(Coordinates(0,0), Cell(coordinates = Coordinates(0,0),type = GroundType.Desert)),
             Pair(Coordinates(2,0), Cell(coordinates = Coordinates(2,0),type = GroundType.Desert)),
             Pair(Coordinates(4,0), Cell(coordinates = Coordinates(4,0),type = GroundType.Desert)),
+            Pair(Coordinates(6,0), Cell(coordinates = Coordinates(6,0),type = GroundType.Desert)),
             Pair(Coordinates(1,1), Cell(coordinates = Coordinates(1,1),type = GroundType.Desert)),
             Pair(Coordinates(3,1), Cell(coordinates = Coordinates(3,1),type = GroundType.Desert)),
             Pair(Coordinates(5,1), Cell(coordinates = Coordinates(5,1),type = GroundType.Desert)),
+            Pair(Coordinates(7,1), Cell(coordinates = Coordinates(7,1),type = GroundType.Desert)),
             Pair(Coordinates(0,2), Cell(coordinates = Coordinates(0,2),type = GroundType.Desert)),
             Pair(Coordinates(2,2), Cell(coordinates = Coordinates(2,2),type = GroundType.Desert)),
-            Pair(Coordinates(4,2), Cell(coordinates = Coordinates(4,2),type = GroundType.Desert))
+            Pair(Coordinates(4,2), Cell(coordinates = Coordinates(4,2),type = GroundType.Desert)),
+            Pair(Coordinates(6,2), Cell(coordinates = Coordinates(6,2),type = GroundType.Desert)),
+            Pair(Coordinates(1,3), Cell(coordinates = Coordinates(1,3),type = GroundType.Desert)),
+            Pair(Coordinates(3,3), Cell(coordinates = Coordinates(3,3),type = GroundType.Desert)),
+            Pair(Coordinates(5,3), Cell(coordinates = Coordinates(5,3),type = GroundType.Desert)),
+            Pair(Coordinates(7,3), Cell(coordinates = Coordinates(5,3),type = GroundType.Desert)),
         ),
         log,
-        6
+        8
     )
     constructor() : this(DisabledLogger())
-
-    fun resetTouched() {
-        cells.forEach {
-            it.value.touched = false
-        }
-    }
 }
