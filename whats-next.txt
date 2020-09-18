@@ -8,12 +8,14 @@ Tasks - Open
 ** DONE Add circular search for items for transport, starting at the destination
 *** DONE Atm this blocks the transport
 *** DONE Add Tests getNeighboursOfCellDoubleCoords
-*** Refactor getNeighboursOfCellDoubleCoords
+*** DONE Refactor getNeighboursOfCellDoubleCoords
 *** DONE Add tests calcRouteToItemInTransport/calcRouteToItemInStorage
 *** DONE Refactor calcRouteToItemInTransport/calcRouteToItemInStorage
 *** DONE Add tests handleRequests
 *** DONE Refactor handleRequests
-*** Bug: Sometimes and item will be jumping around between two destinations
+*** DONE Bug: Sometimes and item will be jumping around between two destinations
+**** DONE Build a mechanism to init the gameworld to a specific state. It should not be necessary to recreate it fpr every test
+**** Add a test in Transportation for this case?
 
 * Improve TestSetup
 ** DONERefactor TestSetup. Build Factory methods??

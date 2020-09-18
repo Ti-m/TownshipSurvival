@@ -25,7 +25,6 @@ open class GameStateManager(
 
     }
 
-    //TODO Add overload without List
     fun applyStates(newStates: Collection<GameState>) {
         newStates.forEach { state ->
             applyState(state)
@@ -50,6 +49,8 @@ open class GameStateManager(
                     }
                     Type.Storage -> {
                         selected.storage.add(state.data as Resource)
+                        selected.redraw = true
+                        selected.touched = true
                     }
                     Type.Building -> {
                         selected.building = state.data as Building
@@ -88,6 +89,7 @@ open class GameStateManager(
                     }
                     Type.Building -> TODO()
                     Type.Required -> selected.requires.remove(state.data as Resource)
+                    Type.Production -> TODO()
                 }
             }
         }
@@ -102,4 +104,20 @@ class GameStateManagerPreparedForTest(
     constructor(transportManager: TransportManager, mapManager: MapManager) : this(transportManager, mapManager, DisabledLogger())
     constructor(mapManager: MapManager) : this(TransportManagerPreparedForTest(mapManager), mapManager)
     constructor() : this(MapManagerPreparedForTest())
+}
+
+object GameStateCreator {
+    fun L3_T3_unfinishedRoad(): List<GameState> {
+        return listOf(
+            GameState(Coordinates(2,0), Operator.Set, Type.Building, Townhall()),
+            GameState(Coordinates(1,1), Operator.Set, Type.Building, Townhall()),
+            GameState(Coordinates(2,2), Operator.Set, Type.Building, Townhall()),
+            GameState(Coordinates(5,1), Operator.Set, Type.Building, Road()),
+            GameState(Coordinates(7,1), Operator.Set, Type.Building, Road()),
+            GameState(Coordinates(9,1), Operator.Set, Type.Building, Road()),
+            GameState(Coordinates(9,1), Operator.Set, Type.Building, Lumberjack()),
+            GameState(Coordinates(8,0), Operator.Set, Type.Building, Lumberjack()),
+            GameState(Coordinates(8,2), Operator.Set, Type.Building, Lumberjack()),
+        )
+    }
 }

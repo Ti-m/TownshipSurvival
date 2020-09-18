@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
         val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager, neighbourCalculator), logger)
         val gameStateManager = GameStateManager(transportManager, mapManager, logger)
+        gameStateManager.applyStates(GameStateCreator.L3_T3_unfinishedRoad())//TODO for debugging
         val buildDialogHandler = BuildDialogHandler(gameStateManager)
         val tiles = mapGen.createTiles(cells, buildDialogHandler, this)
         val gw2 = GameWorld(tiles = tiles, context = this)
@@ -73,4 +74,3 @@ class MainActivity : AppCompatActivity() {
         return super.onTouchEvent(event)
     }
 }
-
