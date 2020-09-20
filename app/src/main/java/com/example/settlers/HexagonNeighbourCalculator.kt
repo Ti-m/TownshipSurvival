@@ -34,6 +34,7 @@ class HexagonNeighbourCalculator(
 
         val dir = doubleHeightDirections[direction]
         val neighbour = Coordinates(coords.x + dir[0], coords.y + dir[1])
+        if (mapManager.isTouched(neighbour)) return null
         if (neighbour.x < 0 || neighbour.y < 0) { return null }
         if (neighbour.x > mapManager.mapsize - 1 || neighbour.y > (mapManager.mapsize - 1) / 2) { return null }
         if (neighbour == destination) { return neighbour }

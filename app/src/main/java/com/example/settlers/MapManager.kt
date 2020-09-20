@@ -44,7 +44,8 @@ open class MapManager(
     }
 
     fun isTouched(at: Coordinates): Boolean {
-        return findSpecificCell(at)!!.touched
+        //Default is true to ignore unavailable cells
+        return findSpecificCell(at)?.touched ?: true
     }
 
     fun findSpecificCell(coordinates: Coordinates): Cell? {

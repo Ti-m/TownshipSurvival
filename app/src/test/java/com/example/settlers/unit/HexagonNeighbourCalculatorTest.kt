@@ -42,6 +42,26 @@ class HexagonNeighbourCalculatorTest {
     }
 
     @Test
+    fun `getNeighbourOfCell ignore touched`() {
+        val middle = Coordinates(3,1)
+        mapManager.findSpecificCell(Coordinates(2,2))!!.touched = true
+        val neighbours: List<Coordinates> = sut.getNeighboursOfCellDoubleCoords(
+            coords = middle,
+            ignoreObstacles = true
+        )
+        Assert.assertEquals(
+            listOf(
+                Coordinates(4, 2),
+                //Coordinates(2, 2), is touched
+                Coordinates(1, 1),
+                Coordinates(2, 0),
+                Coordinates(4, 0),
+                Coordinates(5, 1)
+            ), neighbours
+        )
+    }
+
+    @Test
     fun `getNeighbourOfCell with obstacles`() {
         val middle = Coordinates(3,1)
         val destination = Coordinates(4,2)
