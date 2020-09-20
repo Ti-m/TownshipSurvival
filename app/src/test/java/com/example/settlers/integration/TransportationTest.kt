@@ -35,6 +35,11 @@ class TransportationTest {
         assertEquals(listOf(Wood, Wood, Wood, Stone, Stone, Stone), mapManager.queryInStorage(at = provider))
 
         gameStateManager.tick()
+        assertEquals(listOf(Wood), mapManager.queryInTransport(at = provider))
+        assertEquals(listOf(Wood, Wood, Stone, Stone, Stone), mapManager.queryInStorage(at = provider))
+        assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = provider))
+
+        gameStateManager.tick()
         assertEquals(listOf(Wood), mapManager.queryInTransport(at = destiantion))
         assertEquals(listOf(Wood, Wood, Stone, Stone, Stone), mapManager.queryInStorage(at = provider))
         assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = provider))
@@ -46,7 +51,7 @@ class TransportationTest {
         assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = provider))
 
         gameStateManager.tick()
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = provider))
+        assertEquals(listOf(Wood), mapManager.queryInTransport(at = provider))
         assertEquals(listOf(Wood, Stone, Stone, Stone), mapManager.queryInStorage(at = provider))
         assertEquals(listOf(Wood), mapManager.queryInProduction(at = destiantion))
     }

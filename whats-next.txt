@@ -15,7 +15,9 @@ Tasks - Open
 *** DONE Refactor handleRequests
 *** DONE Bug: Sometimes and item will be jumping around between two destinations
 **** DONE Build a mechanism to init the gameworld to a specific state. It should not be necessary to recreate it fpr every test
-**** Add a test in Transportation for this case?
+**** DONE Add a test in Transportation for this case?
+** Add Step move from storage to transport in place
+* Only allow setting of one item each round at a cell?
 
 * Improve TestSetup
 ** DONERefactor TestSetup. Build Factory methods??

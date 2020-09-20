@@ -94,12 +94,30 @@ class TransportManagerTest {
 
         assertEquals(listOf(
             GameState(Coordinates(x=0, y=0), Operator.Remove, Type.Storage, Wood),
-            GameState(Coordinates(x=1, y=1), Operator.Set, Type.Transport, Wood)
+            GameState(Coordinates(x=0, y=0), Operator.Set, Type.Transport, Wood)
         ), result)
     }
 
     @Test
     fun `moveResources step #2`() {
+        val dest = Coordinates(2,2)
+        gameStateManager.applyStates(listOf(
+            GameState(Coordinates(0,0), Operator.Set, Type.Transport, Wood),
+            GameState(Coordinates(0,0), Operator.Set, Type.Building, Road()),
+            GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
+            GameState(dest, Operator.Set, Type.Building, Lumberjack())
+        ))
+        mapManager.resetTouched()
+        val result = sut.moveResources(mapManager.findSpecificCell(dest)!!)
+
+        assertEquals(listOf(
+            GameState(Coordinates(x=0, y=0), Operator.Remove, Type.Transport, Wood),
+            GameState(Coordinates(x=1, y=1), Operator.Set, Type.Transport, Wood)
+        ), result)
+    }
+
+    @Test
+    fun `moveResources step #3`() {
         val dest = Coordinates(2,2)
         gameStateManager.applyStates(listOf(
             GameState(Coordinates(1,1), Operator.Set, Type.Transport, Wood),
@@ -117,7 +135,7 @@ class TransportManagerTest {
     }
 
     @Test
-    fun `moveResources step #3`() {
+    fun `moveResources step #4`() {
         val dest = Coordinates(2,2)
         gameStateManager.applyStates(listOf(
             GameState(dest, Operator.Set, Type.Transport, Wood),

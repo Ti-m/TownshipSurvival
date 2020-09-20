@@ -41,13 +41,14 @@ open class TransportManager(
         return states
     }
 
+    //Move from storage to transport
     private fun handleRequestsInStorage(request: TransportRequest): Collection<GameState> {
         val states: MutableList<GameState> = mutableListOf()
         whereIsNextResourceInStorageWithAccess(request)?.let { closest ->
-            val to = validRouteNextStep(closest, request.destination)?: return states
+            //val to = validRouteNextStep(closest, request.destination)?: return states
 
             states.add(GameState(closest, Operator.Remove, Type.Storage, request.what))
-            states.add(GameState(to, Operator.Set, Type.Transport, request.what))
+            states.add(GameState(closest, Operator.Set, Type.Transport, request.what))
         }
         return states
     }
