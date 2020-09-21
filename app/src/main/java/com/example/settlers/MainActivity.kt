@@ -2,18 +2,22 @@ package com.example.settlers
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import com.example.settlers.terrain.MapGenerator
 import com.example.settlers.terrain.TerrainInterpolator
 import com.example.settlers.ui.GameWorld
 import com.example.settlers.util.DefaultLogger
-import com.example.settlers.util.RepeatHelper
 import com.otaliastudios.zoom.ZoomApi.Companion.MAX_ZOOM_DEFAULT_TYPE
 import com.otaliastudios.zoom.ZoomApi.Companion.MIN_ZOOM_DEFAULT_TYPE
 import com.otaliastudios.zoom.ZoomLayout
+import kotlinx.android.synthetic.main.view_top_bar.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -26,18 +30,25 @@ class MainActivity : AppCompatActivity() {
         val gameBoardBorder = (4 * flagDistance).toInt()
     }
 
+    private val handler = Handler()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //val baseLayout = layoutInflater.inflate(R.layout.activity_main, null)
+        val constraintLayout = ConstraintLayout(this)
+        val topBar = layoutInflater.inflate(R.layout.view_top_bar, constraintLayout, false)
 
         val zoomingLayout = ZoomLayout( context = this)
         zoomingLayout.setBackgroundColor(Color.parseColor("#333333"))
         //zoomingLayout.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
-        zoomingLayout.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        zoomingLayout.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         zoomingLayout.isHorizontalScrollBarEnabled = true
         zoomingLayout.isVerticalScrollBarEnabled = true
         zoomingLayout.setMinZoom(4.0f, MIN_ZOOM_DEFAULT_TYPE)
         zoomingLayout.setMaxZoom(8.0f, MAX_ZOOM_DEFAULT_TYPE)
         zoomingLayout.setHasClickableChildren(true)
+        zoomingLayout.id = View.generateViewId()//creates error message "Invalid ID" in logcat, but seems to work anyway?
 
         val logger = DefaultLogger()
 
@@ -56,17 +67,24 @@ class MainActivity : AppCompatActivity() {
         gw2.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
 //        gw2.setBackgroundColor(Color.parseColor("#aaaaaa"))
         zoomingLayout.addView(gw2)
-        setContentView(zoomingLayout)
+        constraintLayout.addView(topBar)
+        constraintLayout.addView(zoomingLayout)
+
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(constraintLayout)
+        constraintSet.connect(zoomingLayout.id, ConstraintSet.TOP, topBar.id, ConstraintSet.BOTTOM)
+        constraintSet.applyTo(constraintLayout)
+
+        setContentView(constraintLayout)
 
         val gameRunLoop = GameRunLoop(
             tiles = tiles,
             gameStateManager = gameStateManager
         )
-        val delay = 1000L
-        RepeatHelper.repeatDelayed(delay) {
-            Log.i(TAG, "every second")
-            gameRunLoop.tick()
-        }
+
+        val switchHandler = GameRunLoopControlHandler(gameRunLoop = gameRunLoop, handler = handler)
+        switchAutoPause.setOnCheckedChangeListener(switchHandler)
+
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

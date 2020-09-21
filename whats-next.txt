@@ -1,5 +1,12 @@
 Tasks - Open
 
+* DONE Remove Title Bar
+* Inflate layout, then add Zoominglayout in code
+* Add PAuse button
+* Disable automatic gameloop if pause pressed
+
+* BuildDialogHandler: Redraw FlagTile right away
+
 * Block cells which already applied submitted Gamestate objects for further changes. This helps in many cases
 ** DONE Is this really possible? Works bad with the granular states. The Game States cannot be atomic then
 ** DONE Better to run the transports not in a loop. apply each Transport before calculating the next

@@ -1,6 +1,8 @@
 package com.example.settlers
 
+import android.os.Handler
 import android.util.Log
+import android.widget.CompoundButton
 import com.example.settlers.ui.FlagTile
 
 class GameRunLoop(
@@ -37,4 +39,36 @@ class GameRunLoop(
             }
         }
     }
+}
+
+class GameRunLoopControlHandler(
+    private val gameRunLoop: GameRunLoop,
+    private val handler: Handler
+) : CompoundButton.OnCheckedChangeListener {
+
+    companion object {
+        private val TAG = "GameRunLoop"
+        val delay = 1000L
+    }
+
+    var keepRunning = true
+
+    val loop = object : Runnable {
+        override fun run() {
+//            todo()
+                Log.i(TAG, "every second")
+                gameRunLoop.tick()
+            if (keepRunning) {
+                handler.postDelayed(this, delay)
+            }
+        }
+    }
+
+    override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+        keepRunning = isChecked
+        if(isChecked) {
+            handler.postDelayed(loop, delay)
+        }
+    }
+
 }
