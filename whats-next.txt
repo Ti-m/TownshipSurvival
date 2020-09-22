@@ -1,9 +1,11 @@
 Tasks - Open
 
 * DONE Remove Title Bar
-* Inflate layout, then add Zoominglayout in code
-* Add PAuse button
-* Disable automatic gameloop if pause pressed
+* DONE Inflate layout, then add Zoominglayout in code
+* DONE Add PAuse button
+* DONE Disable automatic gameloop if pause pressed
+** Add singlestep button
+** GameRunLoopControlHandler refactor the positions of the interfaces
 
 * BuildDialogHandler: Redraw FlagTile right away
 

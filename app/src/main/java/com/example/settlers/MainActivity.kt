@@ -84,6 +84,7 @@ class MainActivity : AppCompatActivity() {
 
         val switchHandler = GameRunLoopControlHandler(gameRunLoop = gameRunLoop, handler = handler)
         switchAutoPause.setOnCheckedChangeListener(switchHandler)
+        stepButton.setOnClickListener(switchHandler)
 
     }
 

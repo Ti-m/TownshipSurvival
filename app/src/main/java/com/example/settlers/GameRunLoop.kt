@@ -2,6 +2,7 @@ package com.example.settlers
 
 import android.os.Handler
 import android.util.Log
+import android.view.View
 import android.widget.CompoundButton
 import com.example.settlers.ui.FlagTile
 
@@ -44,7 +45,8 @@ class GameRunLoop(
 class GameRunLoopControlHandler(
     private val gameRunLoop: GameRunLoop,
     private val handler: Handler
-) : CompoundButton.OnCheckedChangeListener {
+) : CompoundButton.OnCheckedChangeListener,
+    View.OnClickListener {
 
     companion object {
         private val TAG = "GameRunLoop"
@@ -64,11 +66,19 @@ class GameRunLoopControlHandler(
         }
     }
 
+    //TODO Use innerclasses or something else to set the interfaces?
+
+    //CompoundButton.OnCheckedChangeListener
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
         keepRunning = isChecked
         if(isChecked) {
             handler.postDelayed(loop, delay)
         }
+    }
+
+    //View.OnClickListener
+    override fun onClick(v: View?) {
+        gameRunLoop.tick()
     }
 
 }
