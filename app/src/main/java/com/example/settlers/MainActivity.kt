@@ -61,8 +61,8 @@ class MainActivity : AppCompatActivity() {
         val gameStateManager = GameStateManager(transportManager, mapManager, logger)
         gameStateManager.applyStates(GameStateCreator().L3_T3_unfinishedRoad())//TODO for debugging
         val buildDialogHandler = BuildDialogHandler(gameStateManager)
-        val tiles = mapGen.createTiles(cells, buildDialogHandler, this)
-        val gw2 = GameWorld(tiles = tiles, context = this)
+        val tileManager = TileManager(tiles = mapGen.createTiles(cells, buildDialogHandler, this))
+        val gw2 = GameWorld(tileManager = tileManager, context = this)
         //gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         gw2.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
 //        gw2.setBackgroundColor(Color.parseColor("#aaaaaa"))
@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(constraintLayout)
 
         val gameRunLoop = GameRunLoop(
-            tiles = tiles,
+            tileManager = tileManager,
             gameStateManager = gameStateManager
         )
 

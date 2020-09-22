@@ -4,11 +4,10 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.CompoundButton
-import com.example.settlers.ui.FlagTile
 
 class GameRunLoop(
-    private val tiles: Map<Coordinates, FlagTile>,
-    private val gameStateManager: GameStateManager
+    private val gameStateManager: GameStateManager,
+    private val tileManager: TileManager
 ) {
     companion object {
         private val TAG = "GameRunLoop"
@@ -21,24 +20,12 @@ class GameRunLoop(
 
     fun tick() {
         moveRessources()
-        redraw()
+        tileManager.redrawAllRequestedTiles()
     }
 
     private fun moveRessources() {
         Log.i(TAG, "moveRessources")
         gameStateManager.tick()
-    }
-
-    private fun redraw() {
-        tiles.forEach {
-            //Moved to GameStateManager.tick()
-            //it.value.cell.touched = false // Allow Transports in next round
-            if (it.value.cell.redraw) {
-                Log.i(TAG, "need to redraw")
-                it.value.invalidate()
-                it.value.cell.redraw = false
-            }
-        }
     }
 }
 

@@ -1,5 +1,7 @@
 @startuml
 GameRunLoop o-- GameStateManager
+GameRunLoop o-- TileManager
+
 GameStateManager o-- MapManager
 GameStateManager o-- TransportManager
 
@@ -10,4 +12,23 @@ HexagonNeighbourCalculator o-- MapManager
 
 BreadthFirstSearchRouting o-- MapManager
 BreadthFirstSearchRouting o-- HexagonNeighbourCalculator
+
+BuildDialogHandler o-- GameStateManager
+
+GameWorld o-- Context
+GameWorld o-- TileManager
+
+class TileManager {
+    "Map<Coordinates, FlagTile>"
+}
+TileManager o-- FlagTile
+
+class MapManager {
+    "Map<Coordinates, Cell>"
+}
+MapManager o-- Cell
+
+FlagTile o-- Cell
+FlagTile o-- BuildDialogHandler
+FlagTile o-- Context
 @enduml

@@ -7,14 +7,18 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup
 import com.example.settlers.Coordinates
+import com.example.settlers.TileManager
 
-class GameWorld(private val tiles: Map<Coordinates, FlagTile>, context: Context?) : ViewGroup(context) {
+class GameWorld(
+    context: Context?,
+    private val tileManager: TileManager
+) : ViewGroup(context) {
     companion object {
         val TAG = "GameWorld"
     }
 
     init {
-        tiles.forEach {
+        tileManager.tiles.forEach {
             this.addView(it.value)
         }
     }
@@ -31,7 +35,7 @@ class GameWorld(private val tiles: Map<Coordinates, FlagTile>, context: Context?
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
 
-        tiles.forEach {
+        tileManager.tiles.forEach {
             val w = it.value.coords.w
             val h = it.value.coords.h
             if (it.value.cell.coordinates.y.rem(2) == 0) {
