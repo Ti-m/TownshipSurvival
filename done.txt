@@ -1,5 +1,32 @@
 Tasks - Done
 
+* DONE Block cells which already applied submitted Gamestate objects for further changes. This helps in many cases
+** DONE Is this really possible? Works bad with the granular states. The Game States cannot be atomic then
+** DONE Better to run the transports not in a loop. apply each Transport before calculating the next
+** DONE BUt how to make sure, that a single item is not moved twice a round
+** DONE Block the move ressources for a round. Add a touched property for destinationcell
+** DONE Add circular search for items for transport, starting at the destination
+*** DONE Atm this blocks the transport
+*** DONE Add Tests getNeighboursOfCellDoubleCoords
+*** DONE Refactor getNeighboursOfCellDoubleCoords
+*** DONE Add tests calcRouteToItemInTransport/calcRouteToItemInStorage
+*** DONE Refactor calcRouteToItemInTransport/calcRouteToItemInStorage
+*** DONE Add tests handleRequests
+*** DONE Refactor handleRequests
+*** DONE Bug: Sometimes and item will be jumping around between two destinations
+**** DONE Build a mechanism to init the gameworld to a specific state. It should not be necessary to recreate it fpr every test
+**** DONE Add a test in Transportation for this case?
+** DONE Add Step move from storage to transport in place
+* DONE Only allow setting of one item each round at a cell?
+
+* DONE BuildDialogHandler: Redraw FlagTile right away
+
+* DONE Remove Title Bar
+* DONE Inflate layout, then add Zoominglayout in code
+* DONE Add PAuse button
+* DONE Disable automatic gameloop if pause pressed
+** DONE Add singlestep button
+
 ** DONE Only allow transports on roads
 *** DONE calcRoute_RoadMissing
 *** DONE Atm any type of building is allowed, refactor to only allow roads, but at any building at start or destiantion
