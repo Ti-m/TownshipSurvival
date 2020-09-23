@@ -1,7 +1,6 @@
 Tasks - Open
 
-* Fix transport only every second round
-* Fix "transport of 3 items - full disclosure"
+* Fix "transport only every second round" - there are gaps in transports
 
 * GameRunLoopControlHandler refactor the positions of the interfaces
 
