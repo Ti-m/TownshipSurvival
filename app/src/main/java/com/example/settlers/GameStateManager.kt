@@ -133,4 +133,17 @@ class GameStateCreator {
             GameState(L3, Operator.Set, Type.Building, Lumberjack()),
         )
     }
+
+    fun G1_L2_T3_unfinishedRoad(): List<GameState> {
+        return listOf(
+            GameState(T1, Operator.Set, Type.Building, Townhall()),
+            GameState(T2, Operator.Set, Type.Building, Townhall()),
+            GameState(T3, Operator.Set, Type.Building, Townhall()),
+            GameState(R2, Operator.Set, Type.Building, Road()),
+//            GameState(R3, Operator.Set, Type.Building, Road()),
+            GameState(L1, Operator.Set, Type.Building, Lumberjack()),
+            GameState(L2, Operator.Set, Type.Building, Tower()),
+            GameState(L3, Operator.Set, Type.Building, Lumberjack()),
+        )
+    }
 }

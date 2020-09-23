@@ -1,5 +1,10 @@
 Tasks - Open
 
+* Dont use constructor arguments in BuildDialog?
+* Add Building Tower, needs 1 Wood 2 Stone
+* Add Building StoneMason, needs 2 Wood
+** Produces stone every 10 TIcks
+
 * Fix "transport only every second round" - there are gaps in transports
 
 * GameRunLoopControlHandler refactor the positions of the interfaces

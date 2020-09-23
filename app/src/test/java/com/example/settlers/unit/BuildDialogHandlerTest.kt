@@ -39,6 +39,8 @@ class BuildDialogHandlerTest {
         assertTrue(cell.building is Lumberjack)
         sut.onClick(cell, Road())
         assertTrue(cell.building is Road)
+        sut.onClick(cell, Tower())
+        assertTrue(cell.building is Tower)
     }
 
     @Test
@@ -49,6 +51,8 @@ class BuildDialogHandlerTest {
         assertEquals(listOf(Wood, Wood), cell.building!!.requires)
         sut.onClick(cell, Road())
         assertEquals(emptyList<Resource>(), cell.building!!.requires)
+        sut.onClick(cell, Tower())
+        assertEquals(listOf(Wood, Stone, Stone), cell.building!!.requires)
     }
 
     @Test
@@ -58,6 +62,8 @@ class BuildDialogHandlerTest {
         sut.onClick(cell, Lumberjack())
         assertEquals(emptyList<Resource>(), cell.building!!.offers)
         sut.onClick(cell, Road())
+        assertEquals(emptyList<Resource>(), cell.building!!.offers)
+        sut.onClick(cell, Tower())
         assertEquals(emptyList<Resource>(), cell.building!!.offers)
     }
 

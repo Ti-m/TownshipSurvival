@@ -89,6 +89,7 @@ class FlagTile(
                 is Townhall ->"T"
                 is Lumberjack -> "L"
                 is Road -> "R"
+                is Tower -> "G"
                 else -> throw NotImplementedError()
             }
             canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
@@ -127,7 +128,7 @@ class FlagTile(
     }
 
     override fun performClick(): Boolean {
-        val buildings = arrayOf(Townhall(), Lumberjack(), Road())
+        val buildings = arrayOf(Townhall(), Lumberjack(), Tower(), Road())
         val dialog = BuildDialog(
             items = buildings.map { it.javaClass.simpleName }.toTypedArray(),//TODO Do something better here
             handler = { dialog, which ->

@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
         val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager, neighbourCalculator), logger)
         val gameStateManager = GameStateManager(transportManager, mapManager, logger)
-        gameStateManager.applyStates(GameStateCreator().L3_T3_unfinishedRoad())//TODO for debugging
+        gameStateManager.applyStates(GameStateCreator().G1_L2_T3_unfinishedRoad())//TODO for debugging
         val buildDialogHandler = BuildDialogHandler(gameStateManager)
         val tileManager = TileManager(tiles = mapGen.createTiles(cells, buildDialogHandler, this))
         val gw2 = GameWorld(tileManager = tileManager, context = this)

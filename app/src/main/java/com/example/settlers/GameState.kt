@@ -43,3 +43,9 @@ class Road : Building() {
     override var offers: MutableList<Resource> = mutableListOf()
 //    override var requested: MutableList<Resource> = mutableListOf()
 }
+
+class Tower : Building() {
+    override var requires: MutableList<Resource> = mutableListOf(Wood, Stone, Stone)
+    override var offers: MutableList<Resource> = mutableListOf()
+//    override var requested: MutableList<Resource> = mutableListOf()
+}
