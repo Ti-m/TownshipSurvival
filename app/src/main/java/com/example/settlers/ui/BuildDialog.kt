@@ -7,17 +7,18 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.example.settlers.Coordinates
 
-class BuildDialog(
-    private val items: Array<String>,
-    private val handler: DialogInterface.OnClickListener,
-    private val coordinates: Coordinates //For debugging
-) : DialogFragment() {
+class BuildDialog : DialogFragment() {
+//TODO will this work this way? There is a zero argument constructor now. But the values will not get set on recreation
+    var items: Array<String>? = null
+    var clickListener: DialogInterface.OnClickListener? = null
+    var coordinates: Coordinates? = null //For debugging
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = AlertDialog.Builder(context)
         //dialog.setMessage("Pick something")
         dialog.setTitle("Pick a building\n$coordinates")
 //        dialog.setItems(items.toTypedArray(), handler)
-        dialog.setItems(items, handler)
+        dialog.setItems(items, clickListener)
         return dialog.create()
     }
 }

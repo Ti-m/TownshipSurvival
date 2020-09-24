@@ -5,7 +5,9 @@ Tasks - Open
 * Add Building StoneMason, needs 2 Wood
 ** Produces stone every 10 TIcks
 
-* Fix "transport only every second round" - there are gaps in transports
+* TransportManager
+** If there is no road connection, but a connection including buildings, items will be put from storage into transport
+** Fix "transport only every second round" - there are gaps in transports
 
 * GameRunLoopControlHandler refactor the positions of the interfaces
 

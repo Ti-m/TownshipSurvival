@@ -1,6 +1,7 @@
 package com.example.settlers.ui
 
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Canvas
 import android.graphics.Path
 import android.util.Log
@@ -129,14 +130,16 @@ class FlagTile(
 
     override fun performClick(): Boolean {
         val buildings = arrayOf(Townhall(), Lumberjack(), Tower(), Road())
-        val dialog = BuildDialog(
-            items = buildings.map { it.javaClass.simpleName }.toTypedArray(),//TODO Do something better here
-            handler = { dialog, which ->
+        val dialog = BuildDialog()
+        dialog.items = buildings.map { it.javaClass.simpleName }.toTypedArray()//TODO Do something better here
+        dialog.clickListener = object : DialogInterface.OnClickListener {
+            override fun onClick(dialog: DialogInterface?, which: Int) {
                 handler.onClick(cell, buildings[which])
                 invalidate()//redraw in single step mode and without delay
-            },
-            coordinates = cell.coordinates
-        )
+            }
+        }
+        dialog.coordinates = cell.coordinates
+
         dialog.show((context as MainActivity).supportFragmentManager, TAG)
         //invalidate()
         return super.performClick()
