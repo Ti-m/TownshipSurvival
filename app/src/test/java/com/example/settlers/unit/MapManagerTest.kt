@@ -87,5 +87,29 @@ class MapManagerTest {
         assertEquals(listOf(Wood), sut.queryInProduction(coords))
     }
 
+    @Test
+    fun getCellsWithBuildings() {
+        val c2 = Coordinates(1,1)
+        val c3 = Coordinates(0,2)
+        gameStateManager.applyStates(
+            listOf(
+                GameState(coords, Operator.Set, Type.Building, Lumberjack()),
+                GameState(c2, Operator.Set, Type.Building, Townhall()),
+                GameState(c3, Operator.Set, Type.Building, Road()),
+            )
+        )
+        val cell1 = sut.findSpecificCell(coords)!!
+        val cell2 = sut.findSpecificCell(c2)!!
+        val cell3 = sut.findSpecificCell(c3)!!
+
+        val result = sut.getCellsWithBuildings()
+
+        assertEquals(mapOf(
+            Pair(coords, cell1),
+            Pair(c2, cell2),
+            Pair(c3, cell3)
+        ), result)
+    }
+
 
 }

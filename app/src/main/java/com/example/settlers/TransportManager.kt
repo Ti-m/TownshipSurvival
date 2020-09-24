@@ -12,8 +12,8 @@ open class TransportManager(
     private val log: Logger
 ) {
 
-    fun runProduction(): Collection<GameState> {
-        return emptyList()
+    fun runProduction(cell: Cell): Collection<GameState> {
+        return cell.building!!.produce(cell.coordinates)
     }
 
     fun moveResources(cell: Cell): Collection<GameState> {

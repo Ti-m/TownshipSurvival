@@ -108,6 +108,14 @@ open class MapManager(
             it.value.touched = false
         }
     }
+
+    fun getCellsWhichShallRunAProduction(): Map<Coordinates, Cell> {
+        return getCellsWithBuildings()
+    }
+
+    fun getCellsWithBuildings(): Map<Coordinates, Cell> {
+        return cells.filterValues { it.building != null }
+    }
 }
 
 class MapManagerPreparedForTest(

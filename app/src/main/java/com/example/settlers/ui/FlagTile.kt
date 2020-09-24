@@ -29,7 +29,7 @@ class FlagTile(
     private val path = Path()
 
     override fun onDraw(canvas: Canvas?) {
-        Log.i(TAG, "onDraw chords ${cell.coordinates} res1 ${cell.transport}")
+        //Log.i(TAG, "onDraw chords ${cell.coordinates} res1 ${cell.transport}")
         super.onDraw(canvas!!)
         drawGround(canvas)
         drawFlag(canvas)
@@ -139,6 +139,7 @@ class FlagTile(
             }
         }
         dialog.coordinates = cell.coordinates
+        dialog.storage = cell.storage.joinToString { it.javaClass.simpleName }
 
         dialog.show((context as MainActivity).supportFragmentManager, TAG)
         //invalidate()

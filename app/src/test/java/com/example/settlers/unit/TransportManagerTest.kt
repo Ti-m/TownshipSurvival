@@ -161,4 +161,23 @@ class TransportManagerTest {
         ), result)
     }
 
+    @Test
+    fun `run production`() {
+        gameStateManager.applyState(
+            GameState(coords, Operator.Set, Type.Building, Lumberjack())
+        )
+        val cell = mapManager.findSpecificCell(coords)!!
+        sut.runProduction(cell)
+        sut.runProduction(cell)
+        sut.runProduction(cell)
+        sut.runProduction(cell)
+        sut.runProduction(cell)
+        sut.runProduction(cell)
+        sut.runProduction(cell)
+        sut.runProduction(cell)
+        sut.runProduction(cell)
+        val states = sut.runProduction(cell)
+        assertEquals(listOf(GameState(coords, Operator.Set, Type.Storage, Wood)), states)
+
+    }
 }

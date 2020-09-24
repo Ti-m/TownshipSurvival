@@ -1,7 +1,22 @@
 Tasks - Open
 
-* Dont use constructor arguments in BuildDialog?
-* Add Building Tower, needs 1 Wood 2 Stone
+* Cell Dialog
+** A Dialog is needed to query the state of a cell
+** What is in storage
+** What is requested
+** Production progress
+** Building progress
+
+*Building buildtime
+** Add a construction time conzept like the production conzeot
+** Only finished buildings do produce
+
+* Production
+** DONE Lumberjack Produce wood every 10 ticks
+** Reduce townhall start resources to 2 Wood
+
+* DONE Dont use constructor arguments in BuildDialog?
+* DONE Add Building Tower, needs 1 Wood 2 Stone
 * Add Building StoneMason, needs 2 Wood
 ** Produces stone every 10 TIcks
 
