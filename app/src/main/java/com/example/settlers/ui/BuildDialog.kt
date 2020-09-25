@@ -13,7 +13,6 @@ class BuildDialog : DialogFragment() {
     var items: Array<String>? = null
     var clickListener: DialogInterface.OnClickListener? = null
     var coordinates: Coordinates? = null //For debugging
-    var storage: String? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = AlertDialog.Builder(context)
@@ -26,13 +25,27 @@ class BuildDialog : DialogFragment() {
 }
 
 class InspectDialog : DialogFragment() {
-    var coordinates: Coordinates? = null
+    //var coordinates: Coordinates? = null
+    var x = null
+    var y = null
     var content: String? = null
+
+    companion object {
+        fun newInstance(title: String, message: String): InspectDialog {
+            val dialog = InspectDialog()
+            val bundle = Bundle()
+            bundle.putString("title", title)
+            bundle.putString("message", message)
+            dialog.arguments = bundle
+            return dialog
+        }
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = AlertDialog.Builder(context)
-        dialog.setMessage(content)
-        dialog.setTitle("Inspect :: (x=${coordinates!!.x}, y=${coordinates!!.y})")
+        dialog.setTitle(arguments!!.getString("title"))
+        dialog.setMessage(arguments!!.getString("message"))
+        //dialog.setTitle("Inspect :: (x=${x}, y=${y})")
 //        dialog.setItems(items.toTypedArray(), handler)
 //        dialog.setItems(items, clickListener)
         return dialog.create()

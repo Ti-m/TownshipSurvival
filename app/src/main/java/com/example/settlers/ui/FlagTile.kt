@@ -142,14 +142,28 @@ class FlagTile(
                 }
             }
             dialog.coordinates = cell.coordinates
-            dialog.storage = cell.storage.joinToString { it.javaClass.simpleName }
 
             dialog.show((context as MainActivity).supportFragmentManager, TAG)
         } else {
-            val dialog = InspectDialog()
-            dialog.content = "sdfsd"
-            dialog.coordinates = cell.coordinates
+            //TODO use mapManger API here when extracting the method
+            val content = """
+                Storage: ${cell.storage.joinToString { it.javaClass.simpleName }}
+                Production: ${cell.production.joinToString { it.javaClass.simpleName }}
+                Requires: ${cell.requires.joinToString { it.javaClass.simpleName }}                
+            """.trimIndent()
+            val buildingContent = if (cell.building != null) {
+                """
+                    Building:
+                    Progress : ${cell.building!!.productionCount}
+                """.trimIndent()
+            } else {
+                null
+            }
 
+            val dialog = InspectDialog.newInstance(
+                title = "Inspect :: (x=${x}, y=${y})",
+                message = "$content\n$buildingContent"
+            )
             dialog.show((context as MainActivity).supportFragmentManager, TAG)
         }
 
