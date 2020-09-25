@@ -18,7 +18,7 @@ class BuildDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = AlertDialog.Builder(context)
         //dialog.setMessage("Pick something")
-        dialog.setTitle("Pick a building\n$coordinates")
+        dialog.setTitle("Pick a building :: (x=${coordinates!!.x}, y=${coordinates!!.y})")
 //        dialog.setItems(items.toTypedArray(), handler)
         dialog.setItems(items, clickListener)
         return dialog.create()
@@ -32,7 +32,7 @@ class InspectDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = AlertDialog.Builder(context)
         dialog.setMessage(content)
-        dialog.setTitle("Inspect\n$coordinates")
+        dialog.setTitle("Inspect :: (x=${coordinates!!.x}, y=${coordinates!!.y})")
 //        dialog.setItems(items.toTypedArray(), handler)
 //        dialog.setItems(items, clickListener)
         return dialog.create()
