@@ -7,6 +7,9 @@ Tasks - Open
 ** Production progress
 ** Building progress
 
+* Refactor
+** FlagTile.onCLick extract
+
 *Building buildtime
 ** Add a construction time conzept like the production conzeot
 ** Only finished buildings do produce

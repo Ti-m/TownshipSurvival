@@ -61,7 +61,8 @@ class MainActivity : AppCompatActivity() {
         val gameStateManager = GameStateManager(transportManager, mapManager, logger)
         gameStateManager.applyStates(GameStateCreator().G1_L2_T3_unfinishedRoad())//TODO for debugging
         val buildDialogHandler = BuildDialogHandler(gameStateManager)
-        val tileManager = TileManager(tiles = mapGen.createTiles(cells, buildDialogHandler, this))
+        val modeController = ModeController()
+        val tileManager = TileManager(tiles = mapGen.createTiles(cells, buildDialogHandler, modeController, this))
         val gw2 = GameWorld(tileManager = tileManager, context = this)
         //gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         gw2.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
@@ -86,6 +87,7 @@ class MainActivity : AppCompatActivity() {
         switchAutoPause.setOnCheckedChangeListener(switchHandler)
         stepButton.setOnClickListener(switchHandler)
 
+        switchBuildMode.setOnCheckedChangeListener(modeController)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

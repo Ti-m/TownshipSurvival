@@ -55,7 +55,12 @@ class MapGenerator(private val interpolator: TerrainInterpolator) {
         return cellresult
     }
 
-    fun createTiles(input: Map<Coordinates, Cell>, buildDialogHandler: BuildDialogHandler, context: Context): Map<Coordinates, FlagTile> {
-        return input.mapValues { FlagTile(it.value, buildDialogHandler, context) }
+    fun createTiles(
+        input: Map<Coordinates, Cell>,
+        buildDialogHandler: BuildDialogHandler,
+        modeController: ModeController,
+        context: Context
+    ): Map<Coordinates, FlagTile> {
+        return input.mapValues { FlagTile(it.value, buildDialogHandler, modeController, context) }
     }
 }

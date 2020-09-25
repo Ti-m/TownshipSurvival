@@ -24,3 +24,17 @@ class BuildDialog : DialogFragment() {
         return dialog.create()
     }
 }
+
+class InspectDialog : DialogFragment() {
+    var coordinates: Coordinates? = null
+    var content: String? = null
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = AlertDialog.Builder(context)
+        dialog.setMessage(content)
+        dialog.setTitle("Inspect\n$coordinates")
+//        dialog.setItems(items.toTypedArray(), handler)
+//        dialog.setItems(items, clickListener)
+        return dialog.create()
+    }
+}

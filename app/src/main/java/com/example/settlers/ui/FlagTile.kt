@@ -13,6 +13,7 @@ import com.example.settlers.MainActivity.Companion.flagDistance
 class FlagTile(
     val cell: Cell,
     private val handler: BuildDialogHandler,
+    private val modeController: ModeController,
     context: Context?
 ) : View(context) {
 
@@ -128,20 +129,30 @@ class FlagTile(
         return true
     }
 
+    //TODO maybe extract this method to own class?
     override fun performClick(): Boolean {
-        val buildings = arrayOf(Townhall(), Lumberjack(), Tower(), Road())
-        val dialog = BuildDialog()
-        dialog.items = buildings.map { it.javaClass.simpleName }.toTypedArray()//TODO Do something better here
-        dialog.clickListener = object : DialogInterface.OnClickListener {
-            override fun onClick(dialog: DialogInterface?, which: Int) {
-                handler.onClick(cell, buildings[which])
-                invalidate()//redraw in single step mode and without delay
+        if (modeController.mode == DialogMode.Build) {
+            val buildings = arrayOf(Townhall(), Lumberjack(), Tower(), Road())
+            val dialog = BuildDialog()
+            dialog.items = buildings.map { it.javaClass.simpleName }.toTypedArray()//TODO Do something better here
+            dialog.clickListener = object : DialogInterface.OnClickListener {
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                    handler.onClick(cell, buildings[which])
+                    invalidate()//redraw in single step mode and without delay
+                }
             }
-        }
-        dialog.coordinates = cell.coordinates
-        dialog.storage = cell.storage.joinToString { it.javaClass.simpleName }
+            dialog.coordinates = cell.coordinates
+            dialog.storage = cell.storage.joinToString { it.javaClass.simpleName }
 
-        dialog.show((context as MainActivity).supportFragmentManager, TAG)
+            dialog.show((context as MainActivity).supportFragmentManager, TAG)
+        } else {
+            val dialog = InspectDialog()
+            dialog.content = "sdfsd"
+            dialog.coordinates = cell.coordinates
+
+            dialog.show((context as MainActivity).supportFragmentManager, TAG)
+        }
+
         //invalidate()
         return super.performClick()
     }
