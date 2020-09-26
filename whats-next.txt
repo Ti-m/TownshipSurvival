@@ -1,17 +1,18 @@
 Tasks - Open
 
 * Cell Dialog
-** A Dialog is needed to query the state of a cell
-** What is in storage
-** What is requested
-** Production progress
+** DONE A Dialog is needed to query the state of a cell
+** DONE What is in storage
+** DONE What is requested
+** DONE Production progress
 ** Building progress
 
 * Refactor
+** Dialogs: Pass an object ina a bundle
 ** FlagTile.onCLick extract
 
 *Building buildtime
-** Add a construction time conzept like the production conzeot
+** Add a construction time concept like the production concept
 ** Only finished buildings do produce
 
 * Production

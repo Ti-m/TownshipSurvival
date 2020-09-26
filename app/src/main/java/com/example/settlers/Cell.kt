@@ -1,5 +1,7 @@
 package com.example.settlers
 
+import java.io.Serializable
+
 /*
 A cell can offer resources, in case a transport is aborted
 A Building can offer resources (Like a warehouse)
@@ -27,7 +29,7 @@ data class Cell(
     //val value: Double//Used in map generation, remove?
 )
 
-data class Coordinates(val x: Int, val y: Int)
+data class Coordinates(val x: Int, val y: Int) : Serializable
 enum class GroundType { Water, Grass, Desert, Mountain }
 enum class Worker { Construction }
 

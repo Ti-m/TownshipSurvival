@@ -133,7 +133,9 @@ class FlagTile(
     override fun performClick(): Boolean {
         if (modeController.mode == DialogMode.Build) {
             val buildings = arrayOf(Townhall(), Lumberjack(), Tower(), Road())
-            val dialog = BuildDialog()
+            val dialog = BuildDialog.newInstance(
+                cell.coordinates
+            )
             dialog.items = buildings.map { it.javaClass.simpleName }.toTypedArray()//TODO Do something better here
             dialog.clickListener = object : DialogInterface.OnClickListener {
                 override fun onClick(dialog: DialogInterface?, which: Int) {
@@ -141,7 +143,6 @@ class FlagTile(
                     invalidate()//redraw in single step mode and without delay
                 }
             }
-            dialog.coordinates = cell.coordinates
 
             dialog.show((context as MainActivity).supportFragmentManager, TAG)
         } else {
