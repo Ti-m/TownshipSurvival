@@ -29,7 +29,6 @@ class MapManager {
 MapManager o-- Cell
 
 FlagTile o-- Cell
-FlagTile o-- BuildDialogHandler
 FlagTile o-- ModeController
 FlagTile o-- Context
 @enduml

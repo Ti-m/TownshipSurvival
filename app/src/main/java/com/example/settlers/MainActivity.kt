@@ -12,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.example.settlers.terrain.MapGenerator
 import com.example.settlers.terrain.TerrainInterpolator
+import com.example.settlers.ui.BuildDialogCallback
 import com.example.settlers.ui.GameWorld
 import com.example.settlers.util.DefaultLogger
 import com.otaliastudios.zoom.ZoomApi.Companion.MAX_ZOOM_DEFAULT_TYPE
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val handler = Handler()
+    lateinit var buildDialogClickHandler: BuildDialogCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,9 +62,8 @@ class MainActivity : AppCompatActivity() {
         val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager, neighbourCalculator), logger)
         val gameStateManager = GameStateManager(transportManager, mapManager, logger)
         gameStateManager.applyStates(GameStateCreator().G1_L2_T3_unfinishedRoad())//TODO for debugging
-        val buildDialogHandler = BuildDialogHandler(gameStateManager)
         val modeController = ModeController()
-        val tileManager = TileManager(tiles = mapGen.createTiles(cells, buildDialogHandler, modeController, this))
+        val tileManager = TileManager(tiles = mapGen.createTiles(cells, modeController, this))
         val gw2 = GameWorld(tileManager = tileManager, context = this)
         //gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         gw2.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
@@ -88,6 +89,17 @@ class MainActivity : AppCompatActivity() {
         stepButton.setOnClickListener(switchHandler)
 
         switchBuildMode.setOnCheckedChangeListener(modeController)
+
+        val buildDialogHandler = BuildDialogHandler(gameStateManager)
+
+        //This Proxy keeps the TileManager out of the BuildDialogHandler
+        buildDialogClickHandler = object : BuildDialogCallback {
+            override fun selectedCallback(selectedBuilding: Building, coordinates: Coordinates) {
+                buildDialogHandler.selectedCallback(selectedBuilding, coordinates)
+                tileManager.redrawTileWithCoordinates(coordinates)
+            }
+
+        }
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

@@ -1,18 +1,21 @@
 package com.example.settlers.ui
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Canvas
 import android.graphics.Path
+import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import androidx.fragment.app.DialogFragment
 import com.example.settlers.*
 import com.example.settlers.MainActivity.Companion.flagDistance
 
 class FlagTile(
     val cell: Cell,
-    private val handler: BuildDialogHandler,
     private val modeController: ModeController,
     context: Context?
 ) : View(context) {
@@ -129,21 +132,9 @@ class FlagTile(
         return true
     }
 
-    //TODO maybe extract this method to own class?
     override fun performClick(): Boolean {
         if (modeController.mode == DialogMode.Build) {
-            val buildings = arrayOf(Townhall(), Lumberjack(), Tower(), Road())
-            val dialog = BuildDialog.newInstance(
-                cell.coordinates
-            )
-            dialog.items = buildings.map { it.javaClass.simpleName }.toTypedArray()//TODO Do something better here
-            dialog.clickListener = object : DialogInterface.OnClickListener {
-                override fun onClick(dialog: DialogInterface?, which: Int) {
-                    handler.onClick(cell, buildings[which])
-                    invalidate()//redraw in single step mode and without delay
-                }
-            }
-
+            val dialog = BuildDialog.newInstance(cell.coordinates)
             dialog.show((context as MainActivity).supportFragmentManager, TAG)
         } else {
             //TODO use mapManger API here when extracting the method
@@ -168,7 +159,6 @@ class FlagTile(
             dialog.show((context as MainActivity).supportFragmentManager, TAG)
         }
 
-        //invalidate()
         return super.performClick()
     }
 }

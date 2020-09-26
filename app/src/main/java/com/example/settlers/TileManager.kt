@@ -18,4 +18,8 @@ class TileManager(val tiles: Map<Coordinates, FlagTile>) {
             }
         }
     }
+
+    fun redrawTileWithCoordinates(coordinates: Coordinates) {
+        (tiles[coordinates] ?: error("The coordinates are not part of the map!")).invalidate()
+    }
 }
