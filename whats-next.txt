@@ -1,7 +1,7 @@
 Tasks - Open
 
 *Building buildtime
-** Add a construction time concept like the production concept
+** DONE Add a construction time concept like the production concept
 ** Only finished buildings do produce
 
 * Cell Dialog
