@@ -33,4 +33,27 @@ class BuildingTest {
         assertEquals(0, sut.productionCount)
         assertEquals(listOf(GameState(dummyCoordinates, Operator.Set, Type.Storage, Wood)), states)
     }
+
+    @Test
+    fun construct() {
+        val sut = Lumberjack()
+        sut.construct(dummyCoordinates)
+        assertEquals(10, sut.constructionCount)
+        sut.construct(dummyCoordinates)
+        assertEquals(20, sut.constructionCount)
+        sut.construct(dummyCoordinates)
+        sut.construct(dummyCoordinates)
+        sut.construct(dummyCoordinates)
+        sut.construct(dummyCoordinates)
+        sut.construct(dummyCoordinates)
+        sut.construct(dummyCoordinates)
+        sut.construct(dummyCoordinates)
+        assertEquals(90, sut.constructionCount)
+        assertEquals(false, sut.isConstructed())
+        sut.construct(dummyCoordinates)
+        assertEquals(100, sut.constructionCount)
+        assertEquals(true, sut.isConstructed())
+        sut.construct(dummyCoordinates)
+        assertEquals(100, sut.constructionCount) //Still 100
+    }
 }

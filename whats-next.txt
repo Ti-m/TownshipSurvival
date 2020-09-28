@@ -1,5 +1,9 @@
 Tasks - Open
 
+*Building buildtime
+** Add a construction time concept like the production concept
+** Only finished buildings do produce
+
 * Cell Dialog
 ** DONE A Dialog is needed to query the state of a cell
 ** DONE What is in storage
@@ -8,12 +12,10 @@ Tasks - Open
 ** Building progress
 
 * Refactor
-** Dialogs: Pass an object ina a bundle
-** FlagTile.onCLick extract
 
-*Building buildtime
-** Add a construction time concept like the production concept
-** Only finished buildings do produce
+* Bug
+** Just after starting, the screen flickers, like reloading the app. Whats the issue here?
+** View.generateViewId() creates error message "Invalid ID" in logcat, but seems to work anyway?
 
 * Production
 ** DONE Lumberjack Produce wood every 10 ticks

@@ -116,6 +116,14 @@ open class MapManager(
     fun getCellsWithBuildings(): Map<Coordinates, Cell> {
         return cells.filterValues { it.building != null }
     }
+
+    fun getCellsWhichShallRunAConstruction(): Map<Coordinates, Cell> {
+        return getCellsWithBuildings().filterValues { !it.building!!.isConstructed() }
+    }
+
+    fun runConstruchtion(cell: Cell) {
+        return cell.building!!.construct(cell.coordinates)
+    }
 }
 
 class MapManagerPreparedForTest(

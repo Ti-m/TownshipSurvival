@@ -111,5 +111,61 @@ class MapManagerTest {
         ), result)
     }
 
+    @Test
+    fun getCellsWhichShallRunAProduction() {
+        //does the same as getCellsWithBuildings
+    }
+
+    @Test
+    fun `getCellsWhichShallRunAConstruction nothing finished`() {
+        val c1 = Coordinates(1,1)
+        val c2 = Coordinates(0,2)
+        gameStateManager.applyStates(
+            listOf(
+                GameState(c1, Operator.Set, Type.Building, Lumberjack()),
+                GameState(c2, Operator.Set, Type.Building, Lumberjack()),
+            )
+        )
+        val cell1 = sut.findSpecificCell(c1)!!
+        val cell2 = sut.findSpecificCell(c2)!!
+
+        val result = sut.getCellsWhichShallRunAConstruction()
+
+        assertEquals(mapOf(
+            Pair(c1, cell1),
+            Pair(c2, cell2)
+        ), result)
+    }
+
+    @Test
+    fun `getCellsWhichShallRunAConstruction one already finished`() {
+        val c1 = Coordinates(1,1)
+        val c2 = Coordinates(0,2)
+        gameStateManager.applyStates(
+            listOf(
+                GameState(c1, Operator.Set, Type.Building, Lumberjack()),
+                GameState(c2, Operator.Set, Type.Building, Lumberjack()),
+            )
+        )
+        val cell1 = sut.findSpecificCell(c1)!!
+        val cell2 = sut.findSpecificCell(c2)!!
+
+        cell2.building!!.construct(cell2.coordinates)
+        cell2.building!!.construct(cell2.coordinates)
+        cell2.building!!.construct(cell2.coordinates)
+        cell2.building!!.construct(cell2.coordinates)
+        cell2.building!!.construct(cell2.coordinates)
+        cell2.building!!.construct(cell2.coordinates)
+        cell2.building!!.construct(cell2.coordinates)
+        cell2.building!!.construct(cell2.coordinates)
+        cell2.building!!.construct(cell2.coordinates)
+        cell2.building!!.construct(cell2.coordinates)
+        val result = sut.getCellsWhichShallRunAConstruction()
+
+        assertEquals(mapOf(
+            Pair(c1, cell1),
+            //Pair(c2, cell2) //c2 is done
+        ), result)
+    }
 
 }

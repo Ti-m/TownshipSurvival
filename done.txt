@@ -1,5 +1,9 @@
 Tasks - Done
 
+* Refactor
+** DONE Dialogs: Pass an object ina a bundle
+** DONEFlagTile.onCLick extract
+
 * DONE Block cells which already applied submitted Gamestate objects for further changes. This helps in many cases
 ** DONE Is this really possible? Works bad with the granular states. The Game States cannot be atomic then
 ** DONE Better to run the transports not in a loop. apply each Transport before calculating the next
