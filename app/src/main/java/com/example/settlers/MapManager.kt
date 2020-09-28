@@ -122,7 +122,7 @@ open class MapManager(
     }
 
     fun runConstruchtion(cell: Cell) {
-        return cell.building!!.construct(cell.coordinates)
+        return cell.building!!.construct()
     }
 }
 

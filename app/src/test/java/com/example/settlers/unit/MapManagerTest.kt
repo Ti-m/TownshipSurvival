@@ -150,16 +150,10 @@ class MapManagerTest {
         val cell1 = sut.findSpecificCell(c1)!!
         val cell2 = sut.findSpecificCell(c2)!!
 
-        cell2.building!!.construct(cell2.coordinates)
-        cell2.building!!.construct(cell2.coordinates)
-        cell2.building!!.construct(cell2.coordinates)
-        cell2.building!!.construct(cell2.coordinates)
-        cell2.building!!.construct(cell2.coordinates)
-        cell2.building!!.construct(cell2.coordinates)
-        cell2.building!!.construct(cell2.coordinates)
-        cell2.building!!.construct(cell2.coordinates)
-        cell2.building!!.construct(cell2.coordinates)
-        cell2.building!!.construct(cell2.coordinates)
+        for (x in 0 ..9 ) {
+            cell2.building!!.construct()
+        }
+
         val result = sut.getCellsWhichShallRunAConstruction()
 
         assertEquals(mapOf(

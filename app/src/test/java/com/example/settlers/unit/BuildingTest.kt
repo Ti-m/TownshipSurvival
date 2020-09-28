@@ -17,17 +17,20 @@ class BuildingTest {
     @Test
     fun produce() {
         val sut = Lumberjack()
+        //sut.produce(dummyCoordinates)
+        //assertEquals(0, sut.productionCount)
+        //First needs to finish construction
+        for (x in 0 .. 9) {
+            sut.construct()
+        }
+
         sut.produce(dummyCoordinates)
         assertEquals(10, sut.productionCount)
         sut.produce(dummyCoordinates)
         assertEquals(20, sut.productionCount)
-        sut.produce(dummyCoordinates)
-        sut.produce(dummyCoordinates)
-        sut.produce(dummyCoordinates)
-        sut.produce(dummyCoordinates)
-        sut.produce(dummyCoordinates)
-        sut.produce(dummyCoordinates)
-        sut.produce(dummyCoordinates)
+        for (x in 0 .. 6) {
+            sut.produce(dummyCoordinates)
+        }
         assertEquals(90, sut.productionCount)
         val states = sut.produce(dummyCoordinates)
         assertEquals(0, sut.productionCount)
@@ -37,23 +40,19 @@ class BuildingTest {
     @Test
     fun construct() {
         val sut = Lumberjack()
-        sut.construct(dummyCoordinates)
+        sut.construct()
         assertEquals(10, sut.constructionCount)
-        sut.construct(dummyCoordinates)
+        sut.construct()
         assertEquals(20, sut.constructionCount)
-        sut.construct(dummyCoordinates)
-        sut.construct(dummyCoordinates)
-        sut.construct(dummyCoordinates)
-        sut.construct(dummyCoordinates)
-        sut.construct(dummyCoordinates)
-        sut.construct(dummyCoordinates)
-        sut.construct(dummyCoordinates)
+        for (x in 0 .. 6) {
+            sut.construct()
+        }
         assertEquals(90, sut.constructionCount)
         assertEquals(false, sut.isConstructed())
-        sut.construct(dummyCoordinates)
+        sut.construct()
         assertEquals(100, sut.constructionCount)
         assertEquals(true, sut.isConstructed())
-        sut.construct(dummyCoordinates)
+        sut.construct()
         assertEquals(100, sut.constructionCount) //Still 100
     }
 }
