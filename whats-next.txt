@@ -17,6 +17,7 @@ Tasks - Open
 ** Show Building progress
 
 * Refactor
+** Map Manager does to much stuff
 
 * Bug
 ** Just after starting, the screen flickers, like reloading the app. Whats the issue here?

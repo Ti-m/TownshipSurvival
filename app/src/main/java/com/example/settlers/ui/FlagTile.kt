@@ -1,16 +1,11 @@
 package com.example.settlers.ui
 
-import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Canvas
 import android.graphics.Path
-import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import androidx.fragment.app.DialogFragment
 import com.example.settlers.*
 import com.example.settlers.MainActivity.Companion.flagDistance
 
@@ -144,9 +139,14 @@ class FlagTile(
                 Requires: ${cell.requires.joinToString { it.javaClass.simpleName }}                
             """.trimIndent()
             val buildingContent = if (cell.building != null) {
+                val progress = if (cell.building!!.isConstructed()) {
+                    cell.building!!.productionCount
+                } else {
+                    cell.building!!.constructionCount
+                }
                 """
                     Building:
-                    Progress : ${cell.building!!.productionCount}
+                    Progress : $progress
                 """.trimIndent()
             } else {
                 null
