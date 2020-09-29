@@ -138,7 +138,11 @@ class MapManagerTest {
         gameStateManager.applyStates(
             listOf(
                 GameState(c1, Operator.Set, Type.Building, Lumberjack()),
+                GameState(c1, Operator.Set, Type.Production, Wood),
+                GameState(c1, Operator.Set, Type.Production, Wood),
                 GameState(c2, Operator.Set, Type.Building, Lumberjack()),
+                GameState(c2, Operator.Set, Type.Production, Wood),
+                GameState(c2, Operator.Set, Type.Production, Wood)
             )
         )
         val cell1 = sut.findSpecificCell(c1)!!
@@ -159,6 +163,8 @@ class MapManagerTest {
         gameStateManager.applyStates(
             listOf(
                 GameState(c1, Operator.Set, Type.Building, Lumberjack()),
+                GameState(c1, Operator.Set, Type.Production, Wood),
+                GameState(c1, Operator.Set, Type.Production, Wood),
                 GameState(c2, Operator.Set, Type.Building, Lumberjack()),
             )
         )

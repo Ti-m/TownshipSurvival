@@ -2,14 +2,19 @@ Tasks - Open
 
 *Building buildtime
 ** DONE Add a construction time concept like the production concept
-** Only finished buildings do produce
+** DONE Only finished buildings do produce
+** DONE Only construct, if building material is available
 
 * Cell Dialog
 ** DONE A Dialog is needed to query the state of a cell
 ** DONE What is in storage
 ** DONE What is requested
 ** DONE Production progress
-** Building progress
+** Show Building progress
+
+* Map
+** Show construction progress
+** Show Building progress
 
 * Refactor
 
