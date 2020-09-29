@@ -167,15 +167,11 @@ class TransportManagerTest {
             GameState(coords, Operator.Set, Type.Building, Lumberjack())
         )
         val cell = mapManager.findSpecificCell(coords)!!
-        sut.runProduction(cell)
-        sut.runProduction(cell)
-        sut.runProduction(cell)
-        sut.runProduction(cell)
-        sut.runProduction(cell)
-        sut.runProduction(cell)
-        sut.runProduction(cell)
-        sut.runProduction(cell)
-        sut.runProduction(cell)
+        cell.building!!.setConstructionFinished()
+        for (x in 0 .. 8) {
+            sut.runProduction(cell)
+
+        }
         val states = sut.runProduction(cell)
         assertEquals(listOf(GameState(coords, Operator.Set, Type.Storage, Wood)), states)
 

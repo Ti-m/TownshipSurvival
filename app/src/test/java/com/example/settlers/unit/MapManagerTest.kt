@@ -113,7 +113,22 @@ class MapManagerTest {
 
     @Test
     fun getCellsWhichShallRunAProduction() {
-        //does the same as getCellsWithBuildings
+        val c1 = Coordinates(1,1)
+        val c2 = Coordinates(0,2)
+        gameStateManager.applyStates(
+            listOf(
+                GameState(c1, Operator.Set, Type.Building, Lumberjack()),
+                GameState(c2, Operator.Set, Type.Building, Lumberjack()),
+            )
+        )
+        val cell1 = sut.findSpecificCell(c1)!!
+        cell1.building!!.setConstructionFinished()
+
+        val result = sut.getCellsWhichShallRunAProduction()
+
+        assertEquals(mapOf(
+            Pair(c1, cell1)
+        ), result)
     }
 
     @Test
@@ -149,10 +164,7 @@ class MapManagerTest {
         )
         val cell1 = sut.findSpecificCell(c1)!!
         val cell2 = sut.findSpecificCell(c2)!!
-
-        for (x in 0 ..9 ) {
-            cell2.building!!.construct()
-        }
+        cell2.building!!.setConstructionFinished()
 
         val result = sut.getCellsWhichShallRunAConstruction()
 

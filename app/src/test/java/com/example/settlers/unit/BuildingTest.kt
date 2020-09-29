@@ -17,12 +17,10 @@ class BuildingTest {
     @Test
     fun produce() {
         val sut = Lumberjack()
-        //sut.produce(dummyCoordinates)
-        //assertEquals(0, sut.productionCount)
+        sut.produce(dummyCoordinates)
+        assertEquals(0, sut.productionCount)
         //First needs to finish construction
-        for (x in 0 .. 9) {
-            sut.construct()
-        }
+        sut.setConstructionFinished()
 
         sut.produce(dummyCoordinates)
         assertEquals(10, sut.productionCount)

@@ -28,7 +28,7 @@ open class GameStateManager(
         }
 
         mapManager.getCellsWhichShallRunAConstruction().forEach { (_, cell) ->
-            mapManager.runConstruchtion(cell)
+            mapManager.runConstruction(cell)
         }
         //applyStates(transportManager.convertStorageToProduction())
         //applyStates(transportManager.convertTransportToStorage())

@@ -110,7 +110,11 @@ open class MapManager(
     }
 
     fun getCellsWhichShallRunAProduction(): Map<Coordinates, Cell> {
-        return getCellsWithBuildings()
+        return filterForFinishedConstruction(getCellsWithBuildings())
+    }
+
+    private fun filterForFinishedConstruction(input: Map<Coordinates, Cell>): Map<Coordinates, Cell> {
+        return input.filterValues { it.building!!.isConstructed() }
     }
 
     fun getCellsWithBuildings(): Map<Coordinates, Cell> {
@@ -121,7 +125,7 @@ open class MapManager(
         return getCellsWithBuildings().filterValues { !it.building!!.isConstructed() }
     }
 
-    fun runConstruchtion(cell: Cell) {
+    fun runConstruction(cell: Cell) {
         return cell.building!!.construct()
     }
 }

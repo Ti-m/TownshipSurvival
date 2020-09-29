@@ -1,6 +1,6 @@
 package com.example.settlers
 
-abstract class Building : GameObject(){
+abstract class Building : GameObject() {
 
     //TODO shall these counters also be part of the GameStateObjects? Or is it ok, that the
     // buildings handle stuff on their own?
@@ -17,6 +17,8 @@ abstract class Building : GameObject(){
         }
     }
 
+    fun setConstructionFinished() { constructionCount = 100 }
+
     //This is a blueprint for the items needed to construct a building
     abstract var requires: MutableList<Resource>
     //This is a blueprint for the items produced in the moment construction of the building happens and be put into storage
@@ -27,6 +29,7 @@ abstract class Building : GameObject(){
         return constructionCount == 100
     }
 }
+
 class Townhall : Building() {
     override var requires: MutableList<Resource> = mutableListOf()//mutableListOf(Ressource.Wood, Ressource.Wood, Ressource.Stone, Ressource.Stone, Ressource.Stone)//TODO set the real cost, atm its for free
     override var offers: MutableList<Resource> = mutableListOf(Wood, Wood, Wood, Stone, Stone, Stone)
@@ -41,6 +44,7 @@ class Lumberjack : Building() {
     override var offers: MutableList<Resource> = mutableListOf()
 
     override fun produce(coordinates: Coordinates): Collection<GameState> {
+        if (!isConstructed()) return emptyList()
         val result = mutableListOf<GameState>()
         for (x in 0..9) {
             productionCount++
