@@ -95,13 +95,15 @@ class FlagTile(
             canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
 
             //Show progress
-            val progress = it.constructionCount.toString()[0].toString()
-            canvas.drawText(
-                progress,
-                coords.center.first + coords.w / 1.75f,
-                coords.center.second + textPaint.textSize * 0.3f,
-                textPaint
-            )
+            if (it.constructionCount != 100) {
+                val progress = it.constructionCount.toString()[0].toString()
+                canvas.drawText(
+                    progress,
+                    coords.center.first + coords.w / 1.75f,
+                    coords.center.second + textPaint.textSize * 0.3f,
+                    textPaint
+                )
+            }
         }
 
 //        if  (cell.carrier) {

@@ -6,7 +6,7 @@ abstract class Building : GameObject() {
     // buildings handle stuff on their own?
     //raises from 0 to 100
     var productionCount = 0
-    var constructionCount = 0
+    open var constructionCount = 0
 
     abstract fun produce(coordinates: Coordinates): Collection<GameState>
     fun construct() {
@@ -37,6 +37,9 @@ class Townhall : Building() {
     override fun produce(coordinates: Coordinates): Collection<GameState> {
         return emptyList()
     }
+
+    //no build time
+    override var constructionCount: Int = 100
 }
 
 class Lumberjack : Building() {
@@ -64,6 +67,9 @@ class Road : Building() {
     override fun produce(coordinates: Coordinates): Collection<GameState> {
         return emptyList()
     }
+
+    //no build time
+    override var constructionCount: Int = 100
 }
 
 class Tower : Building() {
