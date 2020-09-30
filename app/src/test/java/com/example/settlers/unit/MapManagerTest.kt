@@ -157,6 +157,28 @@ class MapManagerTest {
     }
 
     @Test
+    fun `getCellsWhichShallRunAConstruction Test Building Material availability`() {
+        val c1 = Coordinates(1,1)
+        val c2 = Coordinates(0,2)
+        gameStateManager.applyStates(
+            listOf(
+                GameState(c1, Operator.Set, Type.Building, Lumberjack()),
+                GameState(c1, Operator.Set, Type.Production, Wood),
+                GameState(c1, Operator.Set, Type.Production, Wood),
+                GameState(c2, Operator.Set, Type.Building, Lumberjack()),
+                GameState(c2, Operator.Set, Type.Production, Wood)//One is missing
+            )
+        )
+        val cell1 = sut.findSpecificCell(c1)!!
+
+        val result = sut.getCellsWhichShallRunAConstruction()
+
+        assertEquals(mapOf(
+            Pair(c1, cell1)
+        ), result)
+    }
+
+    @Test
     fun `getCellsWhichShallRunAConstruction one already finished`() {
         val c1 = Coordinates(1,1)
         val c2 = Coordinates(0,2)

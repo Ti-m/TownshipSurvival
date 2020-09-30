@@ -130,7 +130,22 @@ open class MapManager(
     }
 
     private fun Map<Coordinates, Cell>.filterForAllConstructionMaterialsAvailable(): Map<Coordinates, Cell> {
-        return filterValues { it.production.containsAll(it.building!!.requires) }
+        return filterValues {
+            val requires = it.building!!.requires.toMutableList()
+            val production = it.production.toMutableList()
+            //If the list size is not the same, the element is missing materials
+            if (requires.count() != production.count()) {
+                false
+            } else {
+                var allRequiredResourcesAvailable = true
+                requires.forEach { resource ->
+                    if (!production.remove(resource)) {// returns false, if not in the list
+                        allRequiredResourcesAvailable = false
+                    }
+                }
+                allRequiredResourcesAvailable
+            }
+        }
     }
 
     fun runConstruction(cell: Cell) {
