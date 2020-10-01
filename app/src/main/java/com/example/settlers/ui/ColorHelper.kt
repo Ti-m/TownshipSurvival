@@ -35,12 +35,12 @@ object ColorHelper {
         }
     }
 
-    fun getSelectedPaint() : Paint {
+    fun getBuildingProgressPaint() : Paint {
         return Paint().apply {
             this.color = Color.RED
-            this.style = Paint.Style.FILL_AND_STROKE
-            this.strokeWidth = 1.0f
-            //this.textAlign = Paint.Align.CENTER
+            this.style = Paint.Style.FILL
+            this.strokeWidth = 10.0f
+            this.textAlign = Paint.Align.CENTER
         }
     }
 

@@ -1,5 +1,12 @@
 Tasks - Open
 
+*Graphics
+** Replace single color backgrounds with simple images
+
+* Map
+** DONE Show construction progress
+** DONE Show Production progress
+
 DONE Construction starts to early??
 
 *Building buildtime
@@ -14,9 +21,6 @@ DONE Construction starts to early??
 ** DONE Production progress
 ** DONE Show Building progress
 
-* Map
-** Show construction progress
-** Show Building progress
 
 * Refactor
 ** Map Manager does to much stuff

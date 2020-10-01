@@ -5,14 +5,15 @@ abstract class Building : GameObject() {
     //TODO shall these counters also be part of the GameStateObjects? Or is it ok, that the
     // buildings handle stuff on their own?
     //raises from 0 to 100
-    var productionCount = 0
-    open var constructionCount = 0
+    abstract var productionCount: Int?
+    abstract var constructionCount: Int?
 
     abstract fun produce(coordinates: Coordinates): Collection<GameState>
     fun construct() {
+        if (constructionCount == null) return
         for (x in 0..9) {
-            if (constructionCount < 100) {
-                constructionCount++
+            if (constructionCount!! < 100) {
+                constructionCount = constructionCount!! + 1
             }
         }
     }
@@ -31,18 +32,25 @@ abstract class Building : GameObject() {
 }
 
 class Townhall : Building() {
+
+    //no build time
+    override var constructionCount: Int? = null
+    //no production
+    override var productionCount: Int? = null
+
     override var requires: MutableList<Resource> = mutableListOf()//mutableListOf(Ressource.Wood, Ressource.Wood, Ressource.Stone, Ressource.Stone, Ressource.Stone)//TODO set the real cost, atm its for free
     override var offers: MutableList<Resource> = mutableListOf(Wood, Wood, Wood, Stone, Stone, Stone)
 
     override fun produce(coordinates: Coordinates): Collection<GameState> {
         return emptyList()
     }
-
-    //no build time
-    override var constructionCount: Int = 100
 }
 
 class Lumberjack : Building() {
+
+    override var constructionCount: Int? = 0
+    override var productionCount: Int? = 0
+
     override var requires: MutableList<Resource> = mutableListOf(Wood, Wood)
     override var offers: MutableList<Resource> = mutableListOf()
 
@@ -50,7 +58,7 @@ class Lumberjack : Building() {
         if (!isConstructed()) return emptyList()
         val result = mutableListOf<GameState>()
         for (x in 0..9) {
-            productionCount++
+            productionCount = productionCount!! + 1
             if (productionCount == 100) {
                 result.add(GameState(coordinates, Operator.Set, Type.Storage, Wood))
                 productionCount = 0
@@ -61,18 +69,24 @@ class Lumberjack : Building() {
 }
 
 class Road : Building() {
+    //no build time
+    override var constructionCount: Int? = null
+    //no production
+    override var productionCount: Int? = null
+
     override var requires: MutableList<Resource> = mutableListOf()
     override var offers: MutableList<Resource> = mutableListOf()
 
     override fun produce(coordinates: Coordinates): Collection<GameState> {
         return emptyList()
     }
-
-    //no build time
-    override var constructionCount: Int = 100
 }
 
 class Tower : Building() {
+    override var constructionCount: Int? = 0
+    //no production //TODO can i use this for shooting "progress"?
+    override var productionCount: Int? = null
+
     override var requires: MutableList<Resource> = mutableListOf(Wood, Stone, Stone)
     override var offers: MutableList<Resource> = mutableListOf()
 

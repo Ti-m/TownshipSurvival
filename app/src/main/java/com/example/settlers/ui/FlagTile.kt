@@ -21,7 +21,7 @@ class FlagTile(
 
     val coords: Hexagon = Hexagon(w = flagDistance / 2)
     private val flagPaint = ColorHelper.getFlagPaint()
-    private val selectedPaint = ColorHelper.getSelectedPaint()
+    private val selectedPaint = ColorHelper.getBuildingProgressPaint()
     private val groundPaint = ColorHelper.getGroundPaint(cell.type)
     private val textPaint = ColorHelper.getTextPaint()
     private val buildingPaint = ColorHelper.getBuildingPaint()
@@ -95,8 +95,16 @@ class FlagTile(
             canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
 
             //Show progress
-            if (it.constructionCount != 100) {
+            if (it.constructionCount != null && !it.isConstructed()) {
                 val progress = it.constructionCount.toString()[0].toString()
+                canvas.drawText(
+                    progress,
+                    coords.center.first + coords.w / 1.75f,
+                    coords.center.second + textPaint.textSize * 0.3f,
+                    selectedPaint
+                )
+            } else if (it.productionCount != null) {
+                val progress = it.productionCount.toString()[0].toString()
                 canvas.drawText(
                     progress,
                     coords.center.first + coords.w / 1.75f,
