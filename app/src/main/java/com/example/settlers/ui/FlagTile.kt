@@ -27,7 +27,9 @@ class GraphicalFlagTile(
     private val road: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_1_32, null)
     private val townhall: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.townhall_1_32, null)
     private val tower: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_1_32, null)
+    private val towerConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_construction_1_32, null)
     private val lumberjack: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_1_32, null)
+    private val lumberjackConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_construction_1_32, null)
 
 
     override fun drawGround(canvas: Canvas) {
@@ -49,13 +51,23 @@ class GraphicalFlagTile(
     }
 
     override fun drawTower(canvas: Canvas) {
-        tower!!.bounds = canvas.clipBounds
-        tower.draw(canvas)
+        if (cell.building!!.isConstructed()) {
+            tower!!.bounds = canvas.clipBounds
+            tower.draw(canvas)
+        } else {
+            towerConstruction!!.bounds = canvas.clipBounds
+            towerConstruction.draw(canvas)
+        }
     }
 
     override fun drawLumberjack(canvas: Canvas) {
-        lumberjack!!.bounds = canvas.clipBounds
-        lumberjack.draw(canvas)
+        if (cell.building!!.isConstructed()) {
+            lumberjack!!.bounds = canvas.clipBounds
+            lumberjack.draw(canvas)
+        } else {
+            lumberjackConstruction!!.bounds = canvas.clipBounds
+            lumberjackConstruction.draw(canvas)
+        }
     }
 }
 
