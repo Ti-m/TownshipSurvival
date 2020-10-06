@@ -22,8 +22,13 @@ class GraphicalFlagTile(
     context: Context?
 ) : FlagTile(cell, modeController, context) {
 
+    //TODO can these stay here? or init only once?
     private val image: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.hexagon_outline_32, null)
     private val road: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_1_32, null)
+    private val townhall: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.townhall_1_32, null)
+    private val tower: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_1_32, null)
+    private val lumberjack: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_1_32, null)
+
 
     override fun drawGround(canvas: Canvas) {
         super.drawGround(canvas)
@@ -34,10 +39,23 @@ class GraphicalFlagTile(
     }
 
     override fun drawRoad(canvas: Canvas) {
-        //super.drawRoad(canvas)
-        val bounds = canvas.clipBounds
-        road!!.bounds = bounds
+        road!!.bounds = canvas.clipBounds
         road.draw(canvas)
+    }
+
+    override fun drawTownhall(canvas: Canvas) {
+        townhall!!.bounds = canvas.clipBounds
+        townhall.draw(canvas)
+    }
+
+    override fun drawTower(canvas: Canvas) {
+        tower!!.bounds = canvas.clipBounds
+        tower.draw(canvas)
+    }
+
+    override fun drawLumberjack(canvas: Canvas) {
+        lumberjack!!.bounds = canvas.clipBounds
+        lumberjack.draw(canvas)
     }
 }
 
