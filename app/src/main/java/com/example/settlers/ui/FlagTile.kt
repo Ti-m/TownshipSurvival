@@ -1,22 +1,56 @@
 package com.example.settlers.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Path
+import android.graphics.Rect
+import android.graphics.drawable.Drawable
+import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import com.example.settlers.*
 import com.example.settlers.MainActivity.Companion.flagDistance
 
-class FlagTile(
+//Only used from code
+@SuppressLint("ViewConstructor")
+class GraphicalFlagTile(
+    cell: Cell,
+     modeController: ModeController,
+    context: Context?
+) : FlagTile(cell, modeController, context) {
+
+    private val image: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.hexagon_outline_32, null)
+    private val road: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_1_32, null)
+
+    override fun drawGround(canvas: Canvas) {
+        super.drawGround(canvas)
+        val bounds = canvas.clipBounds
+        image!!.bounds = bounds
+        //image!!.bounds = Rect(bounds.left+7, bounds.top+5, bounds.right-7, bounds.bottom-5)
+        image.draw(canvas)
+    }
+
+    override fun drawRoad(canvas: Canvas) {
+        //super.drawRoad(canvas)
+        val bounds = canvas.clipBounds
+        road!!.bounds = bounds
+        road.draw(canvas)
+    }
+}
+
+//Only used from code
+@SuppressLint("ViewConstructor")
+open class FlagTile(
     val cell: Cell,
     private val modeController: ModeController,
     context: Context?
 ) : View(context) {
 
     companion object {
-        private val TAG = "FlagTile"
+        private const val TAG = "FlagTile"
     }
 
     val coords: Hexagon = Hexagon(w = flagDistance / 2)
@@ -35,7 +69,7 @@ class FlagTile(
         drawText(canvas)
     }
 
-    private fun drawGround(canvas: Canvas) {
+    protected open fun drawGround(canvas: Canvas) {
         path.reset()
         path.moveTo(coords.p1.first, coords.p1.second)
         path.lineTo(coords.p2.first, coords.p2.second)
@@ -57,6 +91,26 @@ class FlagTile(
         }
 
 
+    }
+
+    open fun drawRoad(canvas: Canvas) {
+        val letter = "R"
+        canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
+    }
+
+    open fun drawTownhall(canvas: Canvas) {
+        val letter = "T"
+        canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
+    }
+
+    open fun drawLumberjack(canvas: Canvas) {
+        val letter = "L"
+        canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
+    }
+
+    open fun drawTower(canvas: Canvas) {
+        val letter = "T"
+        canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
     }
 
     private fun drawText(canvas: Canvas) {
@@ -85,14 +139,13 @@ class FlagTile(
         }
 
         cell.building?.let {
-            val letter = when (it) {
-                is Townhall ->"T"
-                is Lumberjack -> "L"
-                is Road -> "R"
-                is Tower -> "G"
+            when (it) {
+                is Townhall -> drawTownhall(canvas)
+                is Lumberjack -> drawLumberjack(canvas)
+                is Road -> drawRoad(canvas)
+                is Tower -> drawTower(canvas)
                 else -> throw NotImplementedError()
             }
-            canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
 
             //Show progress
             if (it.constructionCount != null && !it.isConstructed()) {

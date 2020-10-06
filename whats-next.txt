@@ -2,6 +2,11 @@ Tasks - Open
 
 *Graphics
 ** Replace single color backgrounds with simple images
+*** Learn how to draw pixelart in Gimp?
+**** How many pixels needs the png to fill a hexagon. seems like less then 20px*20px
+**** How to draw a drawable which is not square
+**** Find the right hexagon grid transparency layer in gimp to fill the hexagons
+*** Or draw it straight in android studio with paths?
 
 * Map
 ** DONE Show construction progress

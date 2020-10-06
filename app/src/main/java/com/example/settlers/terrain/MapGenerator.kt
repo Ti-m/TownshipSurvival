@@ -3,6 +3,7 @@ package com.example.settlers.terrain
 import android.content.Context
 import com.example.settlers.*
 import com.example.settlers.ui.FlagTile
+import com.example.settlers.ui.GraphicalFlagTile
 import com.example.settlers.util.CoordinateTransformer
 
 data class MapGeneratorCell(
@@ -60,6 +61,6 @@ class MapGenerator(private val interpolator: TerrainInterpolator) {
         modeController: ModeController,
         context: Context
     ): Map<Coordinates, FlagTile> {
-        return input.mapValues { FlagTile(it.value, modeController, context) }
+        return input.mapValues { GraphicalFlagTile(it.value, modeController, context) }
     }
 }

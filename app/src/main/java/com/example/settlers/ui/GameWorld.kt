@@ -38,26 +38,12 @@ class GameWorld(
         tileManager.tiles.forEach {
             val w = it.value.coords.w
             val h = it.value.coords.h
-            if (it.value.cell.coordinates.y.rem(2) == 0) {
-                it.value.layout(
-                    (it.value.cell.coordinates.y * 1.5 * w).toInt(),
-                    (it.value.cell.coordinates.x * h + 2 * h).toInt(),
-                    (it.value.cell.coordinates.y * 1.5 * w + 2 * w).toInt(),
-                    (it.value.cell.coordinates.x * h + 2 * h + 2 * h).toInt()
-                )
-            } else {
-                it.value.layout(
-                    (it.value.cell.coordinates.y * 1.5 * w).toInt(),
-                    (it.value.cell.coordinates.x * h + 2 * h).toInt(),
-                    (it.value.cell.coordinates.y * 1.5 * w + 2 * w).toInt(),
-                    (it.value.cell.coordinates.x * h + 2 * 3 * h).toInt()
-                )
-            }
+            it.value.layout(
+                (it.value.cell.coordinates.y * 1.5 * w).toInt(),
+                (it.value.cell.coordinates.x * h + 2 * h).toInt(),
+                (it.value.cell.coordinates.y * 1.5 * w + 2 * w).toInt(),
+                (it.value.cell.coordinates.x * h + 4 * h).toInt()
+            )
         }
-    }
-
-    private val overlayBackgroundPaint = Paint().apply {
-        this.color = Color.WHITE
-        this.style = Paint.Style.FILL_AND_STROKE
     }
 }
