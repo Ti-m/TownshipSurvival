@@ -18,7 +18,7 @@ import com.example.settlers.MainActivity.Companion.flagDistance
 @SuppressLint("ViewConstructor")
 class GraphicalFlagTile(
     cell: Cell,
-     modeController: ModeController,
+    modeController: ModeController,
     context: Context?
 ) : FlagTile(cell, modeController, context) {
 
@@ -30,6 +30,8 @@ class GraphicalFlagTile(
     private val towerConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_construction_1_32, null)
     private val lumberjack: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_1_32, null)
     private val lumberjackConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_construction_1_32, null)
+    private val tree: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tree_1_32, null)
+    private val cactus: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.cactus_1_32, null)
 
 
 //    override fun drawGround(canvas: Canvas) {
@@ -68,6 +70,16 @@ class GraphicalFlagTile(
             lumberjackConstruction!!.bounds = canvas.clipBounds
             lumberjackConstruction.draw(canvas)
         }
+    }
+
+    override fun drawTree(canvas: Canvas) {
+        tree!!.bounds = canvas.clipBounds
+        tree.draw(canvas)
+    }
+
+    override fun drawCactus(canvas: Canvas) {
+        cactus!!.bounds = canvas.clipBounds
+        cactus.draw(canvas)
     }
 }
 
@@ -115,12 +127,19 @@ open class FlagTile(
 //        } else {
 //            canvas.drawPath(path, groundPaint)
 //        }
-         if (cell.building != null) {
-             canvas.drawPath(path, buildingPaint)
-         } else {
+        if (cell.building != null) {
+            canvas.drawPath(path, buildingPaint)
+        } else {
             canvas.drawPath(path, groundPaint)
         }
 
+        if (cell.hasResources) {
+            if (cell.type == GroundType.Grass) {
+                drawTree(canvas)
+            } else if (cell.type == GroundType.Desert) {
+                drawCactus(canvas)
+            }
+        }
 
     }
 
@@ -142,6 +161,14 @@ open class FlagTile(
     open fun drawTower(canvas: Canvas) {
         val letter = "T"
         canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
+    }
+
+    open fun drawTree(canvas: Canvas) {
+        //overwrite
+    }
+
+    open fun drawCactus(canvas: Canvas) {
+        //overwrite
     }
 
     private fun drawBuilding(canvas: Canvas) {

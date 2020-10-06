@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private val TAG = "MainActivity"
         val flagDistance = 33.0f //33.0f
-        val flagDiameter = flagDistance / 10
+        val flagDiameter = flagDistance / 20
         val tileGridSize = 33
         val gameBoardBorder = (4 * flagDistance).toInt()
     }

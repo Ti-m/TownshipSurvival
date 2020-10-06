@@ -9,8 +9,9 @@ Tasks - Open
 *** DONE Or draw it straight in android studio with paths?
 *** DONE Add building in construction graphic
 *** DONE Always print text on top of building graphics
-*** Add trees to some green fields
-*** Add cacteen to some yellow fields
+*** DONE Add trees to some green fields
+*** DONE Add cacteen to some yellow fields
+*** Add road connection graphics
 
 * Map
 ** DONE Show construction progress

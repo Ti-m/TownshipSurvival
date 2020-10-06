@@ -12,6 +12,8 @@ A building can request resources
 data class Cell(
     var coordinates: Coordinates,
     var type: GroundType,
+    //Has trees, cacteen, stones etc.
+    var hasResources: Boolean = false,
     var building: Building? = null,
     //var carrier: Boolean = false,
     var worker: Worker? = null,

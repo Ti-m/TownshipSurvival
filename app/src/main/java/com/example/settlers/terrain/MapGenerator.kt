@@ -5,6 +5,7 @@ import com.example.settlers.*
 import com.example.settlers.ui.FlagTile
 import com.example.settlers.ui.GraphicalFlagTile
 import com.example.settlers.util.CoordinateTransformer
+import kotlin.random.Random
 
 data class MapGeneratorCell(
     var coordinates: Coordinates,
@@ -51,7 +52,9 @@ class MapGenerator(private val interpolator: TerrainInterpolator) {
                 else -> GroundType.Water
             }
 
-            Cell(coordinates = it.value.coordinates, type = type)
+            val hasResource = Random.nextInt(0, 100)
+
+            Cell(coordinates = it.value.coordinates, type = type, hasResources = hasResource < 25)
         }
         return cellresult
     }
