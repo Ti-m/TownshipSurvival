@@ -23,7 +23,7 @@ class GraphicalFlagTile(
 ) : FlagTile(cell, modeController, context) {
 
     //TODO can these stay here? or init only once?
-    private val image: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.hexagon_outline_32, null)
+    //private val image: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.hexagon_outline_32, null)
     private val road: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_1_32, null)
     private val townhall: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.townhall_1_32, null)
     private val tower: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_1_32, null)
@@ -32,13 +32,13 @@ class GraphicalFlagTile(
     private val lumberjackConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_construction_1_32, null)
 
 
-    override fun drawGround(canvas: Canvas) {
-        super.drawGround(canvas)
-        val bounds = canvas.clipBounds
-        image!!.bounds = bounds
-        //image!!.bounds = Rect(bounds.left+7, bounds.top+5, bounds.right-7, bounds.bottom-5)
-        image.draw(canvas)
-    }
+//    override fun drawGround(canvas: Canvas) {
+//        super.drawGround(canvas)
+//        val bounds = canvas.clipBounds
+//        image!!.bounds = bounds
+//        //image!!.bounds = Rect(bounds.left+7, bounds.top+5, bounds.right-7, bounds.bottom-5)
+//        image.draw(canvas)
+//    }
 
     override fun drawRoad(canvas: Canvas) {
         road!!.bounds = canvas.clipBounds
@@ -96,6 +96,7 @@ open class FlagTile(
         super.onDraw(canvas!!)
         drawGround(canvas)
         drawFlag(canvas)
+        drawBuilding(canvas)
         drawText(canvas)
     }
 
@@ -143,31 +144,7 @@ open class FlagTile(
         canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
     }
 
-    private fun drawText(canvas: Canvas) {
-
-        cell.transport.forEachIndexed { index, resource ->
-            val letter = when (resource) {
-                is Wood -> "w"
-                is Stone -> "s"
-                else -> throw NotImplementedError()
-            }
-            if (index == 0) {
-                canvas.drawText(
-                    letter,
-                    coords.center.first - textPaint.textSize / 2,
-                    coords.center.second - textPaint.textSize * 0.75f,
-                    textPaint
-                )
-            } else {
-                canvas.drawText(
-                    letter,
-                    coords.center.first + textPaint.textSize / 2,
-                    coords.center.second - textPaint.textSize * 0.75f,
-                    textPaint
-                )
-            }
-        }
-
+    private fun drawBuilding(canvas: Canvas) {
         cell.building?.let {
             when (it) {
                 is Townhall -> drawTownhall(canvas)
@@ -192,6 +169,32 @@ open class FlagTile(
                     progress,
                     coords.center.first + coords.w / 1.75f,
                     coords.center.second + textPaint.textSize * 0.3f,
+                    textPaint
+                )
+            }
+        }
+    }
+
+    private fun drawText(canvas: Canvas) {
+
+        cell.transport.forEachIndexed { index, resource ->
+            val letter = when (resource) {
+                is Wood -> "w"
+                is Stone -> "s"
+                else -> throw NotImplementedError()
+            }
+            if (index == 0) {
+                canvas.drawText(
+                    letter,
+                    coords.center.first - textPaint.textSize / 2,
+                    coords.center.second - textPaint.textSize * 0.75f,
+                    textPaint
+                )
+            } else {
+                canvas.drawText(
+                    letter,
+                    coords.center.first + textPaint.textSize / 2,
+                    coords.center.second - textPaint.textSize * 0.75f,
                     textPaint
                 )
             }
