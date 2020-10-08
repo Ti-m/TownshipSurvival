@@ -28,11 +28,9 @@ class GraphicalFlagTile(
     private val roadNW: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_nw_32, null)
     private val roadN: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_n_32, null)
     private val roadNE: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_ne_32, null)
-    private val roadE: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_e_32, null)
     private val roadS: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_s_32, null)
     private val roadSW: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_sw_32, null)
     private val roadSE: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_se_32, null)
-    private val roadW: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_w_32, null)
     private val townhall: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.townhall_1_32, null)
     private val tower: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_1_32, null)
     private val towerConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_construction_1_32, null)
@@ -56,10 +54,6 @@ class GraphicalFlagTile(
         val neighbours = neighbourCalculator.getRoadConnections(cell.coordinates)
         neighbours.forEach {
             when (it) {
-                RoadConnections.East -> {
-                    roadE!!.bounds = canvas.clipBounds
-                    roadE.draw(canvas)
-                }
                 RoadConnections.NorthWest -> {
                     roadNW!!.bounds = canvas.clipBounds
                     roadNW.draw(canvas)
@@ -69,8 +63,8 @@ class GraphicalFlagTile(
                     roadN.draw(canvas)
                 }
                 RoadConnections.NorthEast -> {
-                    roadE!!.bounds = canvas.clipBounds
-                    roadE.draw(canvas)
+                    roadNE!!.bounds = canvas.clipBounds
+                    roadNE.draw(canvas)
                 }
                 RoadConnections.SouthEast -> {
                     roadSE!!.bounds = canvas.clipBounds
@@ -83,10 +77,6 @@ class GraphicalFlagTile(
                 RoadConnections.SouthWest -> {
                     roadSW!!.bounds = canvas.clipBounds
                     roadSW.draw(canvas)
-                }
-                RoadConnections.West -> {
-                    roadW!!.bounds = canvas.clipBounds
-                    roadW.draw(canvas)
                 }
             }
         }

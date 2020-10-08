@@ -1,7 +1,7 @@
 package com.example.settlers
 
 enum class RoadConnections {
-    NorthWest, North, NorthEast, East, SouthEast, South, SouthWest, West
+    NorthWest, North, NorthEast, SouthEast, South, SouthWest
 }
 
 class HexagonNeighbourCalculator(
