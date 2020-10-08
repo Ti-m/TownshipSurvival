@@ -19,12 +19,20 @@ import com.example.settlers.MainActivity.Companion.flagDistance
 class GraphicalFlagTile(
     cell: Cell,
     modeController: ModeController,
-    context: Context?
+    context: Context?,
+    private val neighbourCalculator: HexagonNeighbourCalculator
 ) : FlagTile(cell, modeController, context) {
 
     //TODO can these stay here? or init only once?
     //private val image: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.hexagon_outline_32, null)
-    private val road: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_1_32, null)
+    private val roadNW: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_nw_32, null)
+    private val roadN: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_n_32, null)
+    private val roadNE: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_ne_32, null)
+    private val roadE: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_e_32, null)
+    private val roadS: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_s_32, null)
+    private val roadSW: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_sw_32, null)
+    private val roadSE: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_se_32, null)
+    private val roadW: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_w_32, null)
     private val townhall: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.townhall_1_32, null)
     private val tower: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_1_32, null)
     private val towerConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_construction_1_32, null)
@@ -43,8 +51,48 @@ class GraphicalFlagTile(
 //    }
 
     override fun drawRoad(canvas: Canvas) {
-        road!!.bounds = canvas.clipBounds
-        road.draw(canvas)
+        //val neighbours = neighbourCalculator.getNeighboursOfCellDoubleCoords(cell.coordinates, allowAnyBuilding = true)//search for road Neighbours
+
+        val neighbours = neighbourCalculator.getRoadConnections(cell.coordinates)
+        neighbours.forEach {
+            when (it) {
+                RoadConnections.East -> {
+                    roadE!!.bounds = canvas.clipBounds
+                    roadE.draw(canvas)
+                }
+                RoadConnections.NorthWest -> {
+                    roadNW!!.bounds = canvas.clipBounds
+                    roadNW.draw(canvas)
+                }
+                RoadConnections.North -> {
+                    roadN!!.bounds = canvas.clipBounds
+                    roadN.draw(canvas)
+                }
+                RoadConnections.NorthEast -> {
+                    roadE!!.bounds = canvas.clipBounds
+                    roadE.draw(canvas)
+                }
+                RoadConnections.SouthEast -> {
+                    roadSE!!.bounds = canvas.clipBounds
+                    roadSE.draw(canvas)
+                }
+                RoadConnections.South -> {
+                    roadS!!.bounds = canvas.clipBounds
+                    roadS.draw(canvas)
+                }
+                RoadConnections.SouthWest -> {
+                    roadSW!!.bounds = canvas.clipBounds
+                    roadSW.draw(canvas)
+                }
+                RoadConnections.West -> {
+                    roadW!!.bounds = canvas.clipBounds
+                    roadW.draw(canvas)
+                }
+            }
+        }
+
+//        road!!.bounds = canvas.clipBounds
+//        road.draw(canvas)
     }
 
     override fun drawTownhall(canvas: Canvas) {

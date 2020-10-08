@@ -119,4 +119,10 @@ class HexagonNeighbourCalculatorTest {
             ), neighbours
         )
     }
+
+    @Test
+    fun `getNeighbourOfCell cells which have a road connection`() {
+
+    }
+
 }

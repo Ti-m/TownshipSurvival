@@ -31,4 +31,5 @@ MapManager o-- Cell
 FlagTile o-- Cell
 FlagTile o-- ModeController
 FlagTile o-- Context
+FlagTile o-- HexagonNeighbourCalculator
 @enduml

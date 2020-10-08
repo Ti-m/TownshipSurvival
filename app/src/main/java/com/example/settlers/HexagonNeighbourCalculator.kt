@@ -1,5 +1,9 @@
 package com.example.settlers
 
+enum class RoadConnections {
+    NorthWest, North, NorthEast, East, SouthEast, South, SouthWest, West
+}
+
 class HexagonNeighbourCalculator(
     private val mapManager: MapManager
 ) {
@@ -45,5 +49,14 @@ class HexagonNeighbourCalculator(
         } else {
             null
         }
+    }
+
+    fun getRoadConnections(coords: Coordinates) : List<RoadConnections> {
+        return listOf(
+            RoadConnections.South,
+            RoadConnections.SouthWest,
+            RoadConnections.East,
+            RoadConnections.North
+        )
     }
 }

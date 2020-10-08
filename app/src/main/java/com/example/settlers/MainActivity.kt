@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         val gameStateManager = GameStateManager(transportManager, mapManager, logger)
         gameStateManager.applyStates(GameStateCreator().G1_L2_T3_unfinishedRoad())//TODO for debugging
         val modeController = ModeController()
-        val tileManager = TileManager(tiles = mapGen.createTiles(cells, modeController, this))
+        val tileManager = TileManager(tiles = mapGen.createTiles(cells, modeController, neighbourCalculator, this))
         val gw2 = GameWorld(tileManager = tileManager, context = this)
         //gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         gw2.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())

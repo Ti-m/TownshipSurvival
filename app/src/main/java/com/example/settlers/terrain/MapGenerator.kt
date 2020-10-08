@@ -62,8 +62,9 @@ class MapGenerator(private val interpolator: TerrainInterpolator) {
     fun createTiles(
         input: Map<Coordinates, Cell>,
         modeController: ModeController,
+        neighbourCalculator: HexagonNeighbourCalculator,
         context: Context
     ): Map<Coordinates, FlagTile> {
-        return input.mapValues { GraphicalFlagTile(it.value, modeController, context) }
+        return input.mapValues { GraphicalFlagTile(it.value, modeController, context, neighbourCalculator) }
     }
 }

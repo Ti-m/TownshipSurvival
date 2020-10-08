@@ -12,6 +12,7 @@ Tasks - Open
 *** DONE Add trees to some green fields
 *** DONE Add cacteen to some yellow fields
 *** Add road connection graphics
+*** Add algorithm to determine the road connections
 
 * Map
 ** DONE Show construction progress
