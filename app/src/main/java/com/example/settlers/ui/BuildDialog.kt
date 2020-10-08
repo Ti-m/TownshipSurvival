@@ -12,7 +12,13 @@ interface BuildDialogCallback {
     fun selectedCallback(selectedBuilding: Building, coordinates: Coordinates)
 }
 
-class BuildDialog : DialogFragment() {
+abstract class BaseDialog : DialogFragment() {
+    companion object {
+        val COORDINATES = "coordinates"
+    }
+}
+
+class BuildDialog : BaseDialog() {
 
     private lateinit var callback: BuildDialogCallback
 
@@ -27,8 +33,6 @@ class BuildDialog : DialogFragment() {
         }
 
         private val ITEMS = "items"
-        private val COORDINATES = "coordinates"
-
         private val availableBuildings = arrayOf(Townhall(), Lumberjack(), Tower(), Road())
     }
 
@@ -52,25 +56,25 @@ class BuildDialog : DialogFragment() {
     }
 }
 
-class InspectDialog : DialogFragment() {
+class InspectDialog : BaseDialog() {
 
     companion object {
-        fun newInstance(title: String, message: String): InspectDialog {
+        fun newInstance(coordinates: Coordinates, message: String): InspectDialog {
             val dialog = InspectDialog()
             val bundle = Bundle()
-            bundle.putString(TITLE, title)
+            bundle.putSerializable(COORDINATES, coordinates)
             bundle.putString(MESSAGE, message)
             dialog.arguments = bundle
             return dialog
         }
 
-        private val TITLE = "TITLE"
         private val MESSAGE = "message"
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = AlertDialog.Builder(context)
-        dialog.setTitle(arguments!!.getString(TITLE))
+        val coordinates = (arguments!!.getSerializable(COORDINATES) as Coordinates)
+        dialog.setTitle( "Inspect :: (x=${coordinates.x}, y=${coordinates.y})")
         dialog.setMessage(arguments!!.getString(MESSAGE))
         return dialog.create()
     }

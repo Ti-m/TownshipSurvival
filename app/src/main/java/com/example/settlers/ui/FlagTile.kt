@@ -333,7 +333,7 @@ open class FlagTile(
             }
 
             val dialog = InspectDialog.newInstance(
-                title = "Inspect :: (x=${x}, y=${y})",
+                coordinates = cell.coordinates,
                 message = "$content\n$buildingContent"
             )
             dialog.show((context as MainActivity).supportFragmentManager, TAG)
