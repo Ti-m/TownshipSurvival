@@ -11,8 +11,10 @@ Tasks - Open
 *** DONE Always print text on top of building graphics
 *** DONE Add trees to some green fields
 *** DONE Add cacteen to some yellow fields
-*** Add road connection graphics
+*** DONE Add road connection graphics
 *** Add algorithm to determine the road connections
+**** Townhalls are missing atm
+**** Redraw neighbour roads on building new roads
 
 * Map
 ** DONE Show construction progress

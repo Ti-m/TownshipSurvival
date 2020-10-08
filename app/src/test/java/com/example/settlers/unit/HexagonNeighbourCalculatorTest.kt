@@ -1,7 +1,7 @@
 package com.example.settlers.unit
 
 import com.example.settlers.*
-import org.junit.Assert
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
@@ -29,7 +29,7 @@ class HexagonNeighbourCalculatorTest {
             coords = middle,
             ignoreObstacles = true
         )
-        Assert.assertEquals(
+        assertEquals(
             listOf(
                 Coordinates(4, 2),
                 Coordinates(2, 2),
@@ -49,7 +49,7 @@ class HexagonNeighbourCalculatorTest {
             coords = middle,
             ignoreObstacles = true
         )
-        Assert.assertEquals(
+        assertEquals(
             listOf(
                 Coordinates(4, 2),
                 //Coordinates(2, 2), is touched
@@ -67,7 +67,7 @@ class HexagonNeighbourCalculatorTest {
         val destination = Coordinates(4,2)
         gameStateManager.applyStates(listOf(GameState(destination, Operator.Set, Type.Building, Road())))
         val neighbours: List<Coordinates> = sut.getNeighboursOfCellDoubleCoords(middle, destination, false)
-        Assert.assertEquals(
+        assertEquals(
             listOf(
                 Coordinates(4, 2)
             ), neighbours
@@ -81,7 +81,7 @@ class HexagonNeighbourCalculatorTest {
             coords = middle,
             ignoreObstacles = true
         )
-        Assert.assertEquals(
+        assertEquals(
             listOf(
                 Coordinates(1, 1),
                 Coordinates(2, 0)
@@ -96,7 +96,7 @@ class HexagonNeighbourCalculatorTest {
             coords = middle,
             ignoreObstacles = true
         )
-        Assert.assertEquals(
+        assertEquals(
             listOf(
                 Coordinates(5, 3),
                 Coordinates(6, 2),
@@ -113,7 +113,7 @@ class HexagonNeighbourCalculatorTest {
             ignoreObstacles = false,
             allowAnyBuilding = true
         )
-        Assert.assertEquals(
+        assertEquals(
             listOf(
                 Coordinates(1, 1)
             ), neighbours
@@ -121,8 +121,46 @@ class HexagonNeighbourCalculatorTest {
     }
 
     @Test
-    fun `getNeighbourOfCell cells which have a road connection`() {
+    fun `getNeighbourOfCell cells which have a road connection trivial Test`() {
+        val middle = Coordinates(3,1)
+        val actual = sut.getRoadConnections(middle)
+        assertEquals(emptyList<RoadConnections>(), actual)
+    }
 
+    @Test
+    fun `getNeighbourOfCell cells which have a road connection #1`() {
+        val middle = Coordinates(3,1)
+        gameStateManager.applyStates(listOf(
+            GameState(Coordinates(1,1), Operator.Set, Type.Building, Lumberjack()),
+            GameState(Coordinates(2,0), Operator.Set, Type.Building, Road())
+        ))
+        val actual = sut.getRoadConnections(middle)
+        assertEquals(
+            listOf(
+                RoadConnections.North,
+                RoadConnections.NorthWest
+            ), actual
+        )
+    }
+
+    @Test
+    fun `getNeighbourOfCell cells which have a road connection #2`() {
+        val middle = Coordinates(3,1)
+        gameStateManager.applyStates(listOf(
+            GameState(Coordinates(2,2), Operator.Set, Type.Building, Lumberjack()),
+            GameState(Coordinates(4,2), Operator.Set, Type.Building, Road()),
+            GameState(Coordinates(5,1), Operator.Set, Type.Building, Tower()),
+            GameState(Coordinates(4,0), Operator.Set, Type.Building, Townhall()),
+        ))
+        val actual = sut.getRoadConnections(middle)
+        assertEquals(
+            listOf(
+                RoadConnections.SouthEast,
+                RoadConnections.NorthEast,
+                RoadConnections.SouthWest,
+                RoadConnections.South
+            ), actual
+        )
     }
 
 }

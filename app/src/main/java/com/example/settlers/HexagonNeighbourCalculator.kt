@@ -9,20 +9,24 @@ class HexagonNeighbourCalculator(
 ) {
     companion object {
         private val doubleHeightDirections = arrayOf(
-            arrayOf(+1, +1), arrayOf(-1, +1), arrayOf(-2, 0),
-            arrayOf(-1, -1), arrayOf(+1, -1), arrayOf(+2, 0)
+            arrayOf(+1, +1),
+            arrayOf(-1, +1),
+            arrayOf(-2, 0),
+            arrayOf(-1, -1),
+            arrayOf(+1, -1),
+            arrayOf(+2, 0)
         )
     }
 
     fun getNeighboursOfCellDoubleCoords(coords: Coordinates, destination: Coordinates? = null, ignoreObstacles: Boolean = true, allowAnyBuilding: Boolean = false): List<Coordinates> {
-        return listOf(
+        return listOfNotNull(
             getNeighboursOfCellDoubleCoords(coords, destination,0, ignoreObstacles, allowAnyBuilding),
             getNeighboursOfCellDoubleCoords(coords, destination,1, ignoreObstacles, allowAnyBuilding),
             getNeighboursOfCellDoubleCoords(coords, destination,2, ignoreObstacles, allowAnyBuilding),
             getNeighboursOfCellDoubleCoords(coords, destination,3, ignoreObstacles, allowAnyBuilding),
             getNeighboursOfCellDoubleCoords(coords, destination,4, ignoreObstacles, allowAnyBuilding),
             getNeighboursOfCellDoubleCoords(coords, destination,5, ignoreObstacles, allowAnyBuilding)
-        ).filterNotNull()
+        )
     }
 
     private fun getNeighboursOfCellDoubleCoords(
@@ -30,15 +34,18 @@ class HexagonNeighbourCalculator(
         //destination is only used to determine if the neighbour is already the destination.
         // In the other usecases of the function, it can be set to null
         destination: Coordinates? = null,
+        //which neighbour is checked in the call
         direction: Int,
         ignoreObstacles: Boolean,
         // allowAnyBuilding is used to find the resources for transport
-        allowAnyBuilding: Boolean
+        allowAnyBuilding: Boolean,
+        //Used for evaluation of the road connections
+        ignoreTouched: Boolean = false
     ): Coordinates? {
 
         val dir = doubleHeightDirections[direction]
         val neighbour = Coordinates(coords.x + dir[0], coords.y + dir[1])
-        if (mapManager.isTouched(neighbour)) return null
+        if (!ignoreTouched && mapManager.isTouched(neighbour)) return null
         if (neighbour.x < 0 || neighbour.y < 0) { return null }
         if (neighbour.x > mapManager.mapsize - 1 || neighbour.y > (mapManager.mapsize - 1) / 2) { return null }
         if (neighbour == destination) { return neighbour }
@@ -52,11 +59,13 @@ class HexagonNeighbourCalculator(
     }
 
     fun getRoadConnections(coords: Coordinates) : List<RoadConnections> {
-        return listOf(
-            RoadConnections.South,
-            RoadConnections.SouthWest,
-            RoadConnections.East,
-            RoadConnections.North
+        return listOfNotNull(
+            if (getNeighboursOfCellDoubleCoords(coords = coords, direction = 0, ignoreObstacles = false, allowAnyBuilding = true, ignoreTouched = true) != null) RoadConnections.SouthEast else null,
+            if (getNeighboursOfCellDoubleCoords(coords = coords, direction = 1, ignoreObstacles = false, allowAnyBuilding = true, ignoreTouched = true) != null) RoadConnections.NorthEast else null,
+            if (getNeighboursOfCellDoubleCoords(coords = coords, direction = 2, ignoreObstacles = false, allowAnyBuilding = true, ignoreTouched = true) != null) RoadConnections.North else null,
+            if (getNeighboursOfCellDoubleCoords(coords = coords, direction = 3, ignoreObstacles = false, allowAnyBuilding = true, ignoreTouched = true) != null) RoadConnections.NorthWest else null,
+            if (getNeighboursOfCellDoubleCoords(coords = coords, direction = 4, ignoreObstacles = false, allowAnyBuilding = true, ignoreTouched = true) != null) RoadConnections.SouthWest else null,
+            if (getNeighboursOfCellDoubleCoords(coords = coords, direction = 5, ignoreObstacles = false, allowAnyBuilding = true, ignoreTouched = true) != null) RoadConnections.South else null
         )
     }
 }
