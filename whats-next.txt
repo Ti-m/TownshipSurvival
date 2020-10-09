@@ -34,7 +34,8 @@ Tasks - Open
 
 DONE Construction starts to early??
 
-*Building buildtime
+*Building
+** If a building is replaced with another, the requests need to be deleted. Atm stuff is still transported
 ** DONE Add a construction time concept like the production concept
 ** DONE Only finished buildings do produce
 ** DONE Only construct, if building material is available
