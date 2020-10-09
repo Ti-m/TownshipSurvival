@@ -12,8 +12,9 @@ Tasks - Open
 *** DONE Add trees to some green fields
 *** DONE Add cacteen to some yellow fields
 *** DONE Add road connection graphics
-*** Add algorithm to determine the road connections
-**** Townhalls are missing atm
+*** DONE Add algorithm to determine the road connections
+**** DONE Townhalls are missing atm
+*** The graphics of the diagonal roads are not fitting together
 **** Redraw neighbour roads on building new roads
 
 * Map
