@@ -1,8 +1,8 @@
 Tasks - Open
 
 *Graphics
-** Replace single color backgrounds with simple images
-*** Learn how to draw pixelart in Gimp?
+** DONE Replace single color backgrounds with simple images
+*** DONE Learn how to draw pixelart in Gimp?
 **** DONE How many pixels needs the png to fill a hexagon. seems like less then 20px*20px
 **** DONE How to draw a drawable which is not square
 **** DONE Find the right hexagon grid transparency layer in gimp to fill the hexagons
@@ -14,8 +14,19 @@ Tasks - Open
 *** DONE Add road connection graphics
 *** DONE Add algorithm to determine the road connections
 **** DONE Townhalls are missing atm
-*** The graphics of the diagonal roads are not fitting together
-**** Redraw neighbour roads on building new roads
+*** DONE The graphics of the diagonal roads are not fitting together
+**** DONE Redraw neighbour roads on building new roads
+
+* Combat
+** Tower shoots arrows
+*** 1 Dmg
+*** Progressbar for reload (production)
+** Zombies spawner in SE map border. Created with Townhall
+** Spawn a Zombie every 100 Ticks (Production)
+*** Zombies move 1 tile per tick
+** Buildings have Health
+*** 1 At the beginning
+*** Zombies explode when they reach a building dealing 1 dmg. So the Building is destroyed
 
 * Map
 ** DONE Show construction progress

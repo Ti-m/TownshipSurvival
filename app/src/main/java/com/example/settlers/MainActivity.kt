@@ -97,6 +97,10 @@ class MainActivity : AppCompatActivity() {
             override fun selectedCallback(selectedBuilding: Building, coordinates: Coordinates) {
                 buildDialogHandler.selectedCallback(selectedBuilding, coordinates)
                 tileManager.redrawTileWithCoordinates(coordinates)
+
+                neighbourCalculator.getNeighboursOfCellDoubleCoords(coordinates).forEach {
+                    tileManager.redrawTileWithCoordinates(it)
+                }
             }
 
         }
