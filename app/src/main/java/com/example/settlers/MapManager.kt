@@ -152,6 +152,16 @@ open class MapManager(
         cell.redraw = true //TODO put draw somewhere else?
         return cell.building!!.construct()
     }
+
+    //https://www.redblobgames.com/grids/hexagons/#coordinates-doubled
+    //Columns are simply incremented with double coordinates
+    fun getMaxColumn() = getMaxRow() / 2
+    //The row index is doubled for each consecutive row
+    fun getMaxRow() = mapsize - 1
+
+    fun getSouthEastEdge(): Coordinates {
+        return Coordinates(getMaxRow(), getMaxColumn())
+    }
 }
 
 class MapManagerPreparedForTest(
@@ -161,7 +171,7 @@ class MapManagerPreparedForTest(
 ) : MapManager(cells, log, mapSize) {
 
     constructor(cells: Map<Coordinates, Cell>, mapSize: Int) : this(cells, DisabledLogger(), mapSize)
-    constructor(log: Logger) : this( mapOf(
+    constructor(log: Logger) : this( mapOf( //4x4 grid
             Pair(Coordinates(0,0), Cell(coordinates = Coordinates(0,0),type = GroundType.Desert)),
             Pair(Coordinates(2,0), Cell(coordinates = Coordinates(2,0),type = GroundType.Desert)),
             Pair(Coordinates(4,0), Cell(coordinates = Coordinates(4,0),type = GroundType.Desert)),
@@ -177,7 +187,7 @@ class MapManagerPreparedForTest(
             Pair(Coordinates(1,3), Cell(coordinates = Coordinates(1,3),type = GroundType.Desert)),
             Pair(Coordinates(3,3), Cell(coordinates = Coordinates(3,3),type = GroundType.Desert)),
             Pair(Coordinates(5,3), Cell(coordinates = Coordinates(5,3),type = GroundType.Desert)),
-            Pair(Coordinates(7,3), Cell(coordinates = Coordinates(5,3),type = GroundType.Desert)),
+            Pair(Coordinates(7,3), Cell(coordinates = Coordinates(7,3),type = GroundType.Desert)),
         ),
         log,
         8

@@ -202,4 +202,9 @@ class MapManagerTest {
         ), result)
     }
 
+    @Test
+    fun `getSouthEastEdge one already finished`() {
+        val coords: Coordinates = sut.getSouthEastEdge()
+        assertEquals(Coordinates(7,3), coords)
+    }
 }

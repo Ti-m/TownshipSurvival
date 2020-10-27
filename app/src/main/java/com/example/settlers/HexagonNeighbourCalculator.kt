@@ -47,7 +47,7 @@ class HexagonNeighbourCalculator(
         val neighbour = Coordinates(coords.x + dir[0], coords.y + dir[1])
         if (!ignoreTouched && mapManager.isTouched(neighbour)) return null
         if (neighbour.x < 0 || neighbour.y < 0) { return null }
-        if (neighbour.x > mapManager.mapsize - 1 || neighbour.y > (mapManager.mapsize - 1) / 2) { return null }
+        if (neighbour.x > mapManager.getMaxRow() || neighbour.y > mapManager.getMaxColumn()) { return null }
         if (neighbour == destination) { return neighbour }
         if (ignoreObstacles) { return neighbour }
         if (allowAnyBuilding && mapManager.isBuilding(neighbour)) { return neighbour }
