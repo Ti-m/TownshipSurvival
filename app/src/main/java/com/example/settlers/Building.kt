@@ -94,3 +94,16 @@ class Tower : Building() {
         return emptyList()
     }
 }
+
+class Spawner : Building() {
+    override var productionCount: Int? = 0
+    override var constructionCount: Int? = null
+
+    override fun produce(coordinates: Coordinates): Collection<GameState> {
+        TODO("Not yet implemented")
+    }
+
+    override var requires: MutableList<Resource> = mutableListOf()
+    override var offers: MutableList<Resource> = mutableListOf()
+
+}

@@ -1,5 +1,10 @@
 Tasks - Open
 
+* DONE Implement Test testCreateSapwnerAtFarEdge
+** Implement Spawner Building
+*** Produce is missing
+** Create spawner on first townhall building
+
 *Graphics
 ** DONE Replace single color backgrounds with simple images
 *** DONE Learn how to draw pixelart in Gimp?

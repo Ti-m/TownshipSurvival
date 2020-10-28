@@ -36,4 +36,8 @@ class GameStateCreator {
             GameState(L3, Operator.Set, Type.Building, Lumberjack()),
         )
     }
+
+    fun createSpawner(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Set, Type.Building, Spawner())
+    }
 }
