@@ -77,6 +77,11 @@ open class GameStateManager(
                         selected.building!!.offers.forEach { resource ->
                             applyState(GameState(selected.coordinates, Operator.Set, Type.Storage, resource))
                         }
+                        //TODO how to generify this?
+                        if (state.data is Townhall) {
+                            //TODO only for the first?
+                            applyState(GameState(mapManager.getSouthEastEdge(), Operator.Set, Type.Building, Spawner()))
+                        }
                     }
                     Type.Required -> {
                         selected.requires.add(state.data as Resource)

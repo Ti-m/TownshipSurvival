@@ -36,6 +36,7 @@ class GraphicalFlagTile(
     private val towerConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_construction_1_32, null)
     private val lumberjack: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_1_32, null)
     private val lumberjackConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_construction_1_32, null)
+    private val spawner: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.spawner_1_32, null)
     private val tree: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tree_1_32, null)
     private val cactus: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.cactus_1_32, null)
 
@@ -108,6 +109,11 @@ class GraphicalFlagTile(
             lumberjackConstruction!!.bounds = canvas.clipBounds
             lumberjackConstruction.draw(canvas)
         }
+    }
+
+    override fun drawSpawner(canvas: Canvas) {
+        spawner!!.bounds = canvas.clipBounds
+        spawner.draw(canvas)
     }
 
     override fun drawTree(canvas: Canvas) {
@@ -201,6 +207,10 @@ open class FlagTile(
         canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
     }
 
+    open fun drawSpawner(canvas: Canvas) {
+        //overwrite
+    }
+
     open fun drawTree(canvas: Canvas) {
         //overwrite
     }
@@ -216,6 +226,7 @@ open class FlagTile(
                 is Lumberjack -> drawLumberjack(canvas)
                 is Road -> drawRoad(canvas)
                 is Tower -> drawTower(canvas)
+                is Spawner -> drawSpawner(canvas) //TODO Add spawner graphics
                 else -> throw NotImplementedError()
             }
 

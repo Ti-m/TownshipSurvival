@@ -72,4 +72,13 @@ class GameStateManagerTest {
         sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Building, Road())))
         Assert.assertTrue(mapManager.queryBuilding(coords) is Road)
     }
+
+    @Test
+    fun `create spawner when first townhall is created`() {
+        sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Building, Townhall())))
+        Assert.assertTrue(mapManager.queryBuilding(coords) is Townhall)
+        val southEastEdge = mapManager.getSouthEastEdge()
+        Assert.assertTrue(mapManager.queryBuilding(southEastEdge) is Spawner)
+
+    }
 }

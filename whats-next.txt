@@ -4,6 +4,7 @@ Tasks - Open
 ** Implement Spawner Building
 *** Produce is missing
 ** Create spawner on first townhall building
+** Add Spawner Graphics
 
 *Graphics
 ** DONE Replace single color backgrounds with simple images
