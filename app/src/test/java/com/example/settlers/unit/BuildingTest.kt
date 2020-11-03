@@ -53,4 +53,18 @@ class BuildingTest {
         sut.construct()
         assertEquals(100, sut.constructionCount) //Still 100
     }
+
+    @Test
+    fun `Spawner produce Zombie`() {
+        val sut = Spawner()
+        sut.produce(dummyCoordinates)
+        assertEquals(1, sut.productionCount)
+        sut.produce(dummyCoordinates)
+        assertEquals(2, sut.productionCount)
+        for (x in 0 .. 96)  sut.produce(dummyCoordinates)
+        assertEquals(99, sut.productionCount)
+        val states = sut.produce(dummyCoordinates)
+        assertEquals(0, sut.productionCount)
+        assertEquals(listOf(GameState(dummyCoordinates, Operator.Set, Type.MovingObject, Zombie)), states)
+    }
 }

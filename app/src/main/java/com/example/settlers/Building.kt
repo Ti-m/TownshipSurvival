@@ -97,10 +97,17 @@ class Tower : Building() {
 
 class Spawner : Building() {
     override var productionCount: Int? = 0
-    override var constructionCount: Int? = null
+    override var constructionCount: Int? = 100//no build time yet
 
     override fun produce(coordinates: Coordinates): Collection<GameState> {
-        TODO("Not yet implemented")
+        if (!isConstructed()) return emptyList()
+        val result = mutableListOf<GameState>()
+        productionCount = productionCount!! + 1
+        if (productionCount == 100) {
+            result.add(GameState(coordinates, Operator.Set, Type.MovingObject, Zombie))
+            productionCount = 0
+        }
+        return result
     }
 
     override var requires: MutableList<Resource> = mutableListOf()

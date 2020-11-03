@@ -17,6 +17,8 @@ data class Cell(
     var building: Building? = null,
     //var carrier: Boolean = false,
     var worker: Worker? = null,
+    //Zombies i.e, what else? Merge with workers?
+    var movingObject: MovingObject? = null,
     //Resources in transport. visible on the map
     var transport: MutableList<Resource> = mutableListOf(),
     //This resources are requested for transport

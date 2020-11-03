@@ -61,7 +61,9 @@ class MainActivity : AppCompatActivity() {
         val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
         val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager, neighbourCalculator), logger)
         val gameStateManager = GameStateManager(transportManager, mapManager, logger)
-        gameStateManager.applyStates(GameStateCreator().G1_L2_T3_unfinishedRoad())//TODO for debugging
+
+        MainActivityHelper.createInitialState(gameStateManager, mapManager)
+
         val modeController = ModeController()
         val tileManager = TileManager(tiles = mapGen.createTiles(cells, modeController, neighbourCalculator, this))
         val gw2 = GameWorld(tileManager = tileManager, context = this)
@@ -109,5 +111,14 @@ class MainActivity : AppCompatActivity() {
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         Log.i(TAG, "onTouchEvent")
         return super.onTouchEvent(event)
+    }
+}
+
+object MainActivityHelper {
+    fun createInitialState(gameStateManager: GameStateManager, mapManager: MapManager) {
+        val gameStateCreator = GameStateCreator()
+        gameStateManager.applyStates(gameStateCreator.G1_L2_T3_unfinishedRoad())//TODO for debugging
+        //Set initial spawner
+        gameStateManager.applyState(gameStateCreator.createSpawner(mapManager.getSouthEastEdge()))
     }
 }

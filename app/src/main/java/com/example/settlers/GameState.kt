@@ -10,7 +10,8 @@ enum class Type {
     Storage, // available for transport
     Production, // Not available for transport
     Required,
-    Building
+    Building,
+    MovingObject //Enemeys i.e.
 }
 
 abstract class GameObject
@@ -19,3 +20,8 @@ abstract class Resource : GameObject()
 object Wood : Resource()
 object Stone : Resource()
 
+abstract class MovingObject : GameObject()
+object Zombie : MovingObject() {
+    val health = 1
+    val dmg = 1
+}

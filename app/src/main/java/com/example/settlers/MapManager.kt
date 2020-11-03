@@ -155,9 +155,15 @@ open class MapManager(
 
     //https://www.redblobgames.com/grids/hexagons/#coordinates-doubled
     //Columns are simply incremented with double coordinates
-    fun getMaxColumn() = getMaxRow() / 2
+    fun getMaxColumn() = mapsize - 1
     //The row index is doubled for each consecutive row
-    fun getMaxRow() = mapsize - 1
+    fun getMaxRow(): Int {
+        if (getMaxColumn() % 2 == 0) {
+           return (mapsize - 1)  * 2
+        } else {
+           return mapsize * 2 - 1
+        }
+    }
 
     fun getSouthEastEdge(): Coordinates {
         return Coordinates(getMaxRow(), getMaxColumn())
@@ -190,7 +196,7 @@ class MapManagerPreparedForTest(
             Pair(Coordinates(7,3), Cell(coordinates = Coordinates(7,3),type = GroundType.Desert)),
         ),
         log,
-        8
+        4
     )
     constructor() : this(DisabledLogger())
 }

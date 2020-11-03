@@ -1,10 +1,12 @@
 Tasks - Open
 
+Der eine Test hat Probleme, weil der MapGenerator zufällig kakteen erzeugt. Wieso war das vorher kein problem?
+
 * DONE Implement Test testCreateSapwnerAtFarEdge
-** Implement Spawner Building
+** DONE Implement Spawner Building
 *** Produce is missing
-** Create spawner on first townhall building
-** Add Spawner Graphics
+** DONE Create spawner on first townhall building
+** DONE Add Spawner Graphics
 
 *Graphics
 ** DONE Replace single color backgrounds with simple images
@@ -27,8 +29,9 @@ Tasks - Open
 ** Tower shoots arrows
 *** 1 Dmg
 *** Progressbar for reload (production)
-** Zombies spawner in SE map border. Created with Townhall
-** Spawn a Zombie every 100 Ticks (Production)
+** DONE Zombies spawner in SE map border. Created with Townhall
+** DONE Spawn a Zombie every 100 Ticks (Production)
+*** Add Zombie graphics
 *** Zombies move 1 tile per tick
 ** Buildings have Health
 *** 1 At the beginning
