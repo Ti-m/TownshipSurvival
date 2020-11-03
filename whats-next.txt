@@ -1,6 +1,6 @@
 Tasks - Open
 
-Der eine Test hat Probleme, weil der MapGenerator zufällig kakteen erzeugt. Wieso war das vorher kein problem?
+* DONE Der eine Test hat Probleme, weil der MapGenerator zufällig kakteen erzeugt. Wieso war das vorher kein problem?
 
 * DONE Implement Test testCreateSapwnerAtFarEdge
 ** DONE Implement Spawner Building

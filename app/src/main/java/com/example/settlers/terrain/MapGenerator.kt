@@ -13,7 +13,7 @@ data class MapGeneratorCell(
     val value: Double
 )
 
-class MapGenerator(private val interpolator: TerrainInterpolator) {
+class MapGenerator(private val interpolator: TerrainInterpolator, private val randomGenerator: Random) {
     fun createMap(size: Int): Map<Coordinates, Cell> {
         val mapArray = Array(size) {
             Array<Double?>(size) {
@@ -52,7 +52,7 @@ class MapGenerator(private val interpolator: TerrainInterpolator) {
                 else -> GroundType.Water
             }
 
-            val hasResource = Random.nextInt(0, 100)
+            val hasResource = randomGenerator.nextInt(0, 100)
 
             Cell(coordinates = it.value.coordinates, type = type, hasResources = hasResource < 25)
         }
@@ -67,4 +67,12 @@ class MapGenerator(private val interpolator: TerrainInterpolator) {
     ): Map<Coordinates, FlagTile> {
         return input.mapValues { GraphicalFlagTile(it.value, modeController, context, neighbourCalculator) }
     }
+}
+
+class TestDoubleRandom : Random() {
+    override fun nextBits(bitCount: Int): Int {
+        TODO("Not yet implemented")
+    }
+
+    override fun nextInt(): Int = 50
 }

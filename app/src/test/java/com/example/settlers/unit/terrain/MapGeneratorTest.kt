@@ -5,12 +5,15 @@ import com.example.settlers.Coordinates
 import com.example.settlers.GroundType
 import com.example.settlers.terrain.MapGenerator
 import com.example.settlers.terrain.TerrainInterpolator
+import com.example.settlers.terrain.TestDoubleRandom
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import kotlin.random.Random
 
 class MapGeneratorTest {
     lateinit var terrainInterpolator: TerrainInterpolator
+    lateinit var randomGenerator: Random
 
     lateinit var sut: MapGenerator
 
@@ -28,7 +31,8 @@ class MapGeneratorTest {
     @Before
     fun prepare() {
         terrainInterpolator = TestInterpolator()
-        sut = MapGenerator(terrainInterpolator)
+        randomGenerator = TestDoubleRandom()
+        sut = MapGenerator(terrainInterpolator, randomGenerator)
     }
 
     @Test

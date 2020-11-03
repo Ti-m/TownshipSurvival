@@ -19,6 +19,7 @@ import com.otaliastudios.zoom.ZoomApi.Companion.MAX_ZOOM_DEFAULT_TYPE
 import com.otaliastudios.zoom.ZoomApi.Companion.MIN_ZOOM_DEFAULT_TYPE
 import com.otaliastudios.zoom.ZoomLayout
 import kotlinx.android.synthetic.main.view_top_bar.*
+import kotlin.random.Random
 
 
 class MainActivity : AppCompatActivity() {
@@ -54,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 
         val logger = DefaultLogger()
 
-        val mapGen = MapGenerator(TerrainInterpolator())
+        val mapGen = MapGenerator(TerrainInterpolator(), Random)
         val cells = mapGen.createMap(tileGridSize)
 
         val mapManager = MapManager(cells, logger, tileGridSize)
