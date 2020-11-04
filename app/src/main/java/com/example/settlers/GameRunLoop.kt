@@ -19,13 +19,8 @@ class GameRunLoop(
 //    }
 
     fun tick() {
-        moveRessources()
-        tileManager.redrawAllRequestedTiles()
-    }
-
-    private fun moveRessources() {
-        Log.i(TAG, "moveRessources")
         gameStateManager.tick()
+        tileManager.redrawAllRequestedTiles()
     }
 }
 

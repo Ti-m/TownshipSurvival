@@ -31,7 +31,7 @@ Tasks - Open
 *** Progressbar for reload (production)
 ** DONE Zombies spawner in SE map border. Created with Townhall
 ** DONE Spawn a Zombie every 100 Ticks (Production)
-*** Add Zombie graphics
+*** Add Zombie graphics - go on here
 *** Zombies move 1 tile per tick
 ** Buildings have Health
 *** 1 At the beginning

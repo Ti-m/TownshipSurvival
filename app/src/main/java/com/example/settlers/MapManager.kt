@@ -113,6 +113,10 @@ open class MapManager(
         return getCellsWithBuildings().filterForFinishedConstruction()
     }
 
+    fun getCellsWithMovingObjects(): Map<Coordinates, Cell> {
+        return cells.filterValues { it.movingObject != null }
+    }
+
     private fun Map<Coordinates, Cell>.filterForFinishedConstruction(): Map<Coordinates, Cell> {
         return filterValues { it.building?.isConstructed() ?: false }
     }

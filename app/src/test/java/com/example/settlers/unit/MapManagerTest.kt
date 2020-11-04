@@ -203,6 +203,30 @@ class MapManagerTest {
     }
 
     @Test
+    fun `getCellsWithMovingObjects two cells`() {
+        val c1 = Coordinates(1,1)
+        val c2 = Coordinates(0,2)
+        val gameStateCreator = GameStateCreator()
+        gameStateManager.applyStates(
+            listOf(
+                gameStateCreator.createZombie(c1),
+                gameStateCreator.createZombie(c2)
+            )
+        )
+        val cell1 = sut.findSpecificCell(c1)!!
+        val cell2 = sut.findSpecificCell(c2)!!
+
+        val result = sut.getCellsWithMovingObjects()
+
+        assertEquals(mapOf(
+            Pair(c1, cell1),
+            Pair(c2, cell2)
+        ), result)
+    }
+
+
+
+    @Test
     fun `getSouthEastEdge one already finished`() {
         val coords: Coordinates = sut.getSouthEastEdge()
         assertEquals(Coordinates(7,3), coords)

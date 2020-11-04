@@ -185,6 +185,10 @@ open class FlagTile(
             }
         }
 
+        if (cell.movingObject != null) {
+            drawZombie(canvas)
+        }
+
     }
 
     open fun drawRoad(canvas: Canvas) {
@@ -217,6 +221,11 @@ open class FlagTile(
 
     open fun drawCactus(canvas: Canvas) {
         //overwrite
+    }
+
+    open fun drawZombie(canvas: Canvas) {
+        val letter = "Z"
+        canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
     }
 
     private fun drawBuilding(canvas: Canvas) {

@@ -40,4 +40,8 @@ class GameStateCreator {
     fun createSpawner(coords: Coordinates): GameState {
         return GameState(coords, Operator.Set, Type.Building, Spawner())
     }
+
+    fun createZombie(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Set, Type.MovingObject, Zombie)
+    }
 }
