@@ -1,7 +1,7 @@
 package com.example.settlers
 
 //Any is Resource or Building type currently
-data class GameState(val coordinates: Coordinates, val operator: Operator, val type: Type, val data: GameObject)
+data class GameState(val coordinates: Coordinates, val operator: Operator, val type: Type, val data: GameObject?)
 
 enum class Operator { Set, Remove }
 //Always move Transport -> Storage -> Production

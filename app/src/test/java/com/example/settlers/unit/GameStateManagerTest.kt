@@ -1,7 +1,7 @@
 package com.example.settlers.unit
 
 import com.example.settlers.*
-import org.junit.Assert
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
@@ -24,10 +24,10 @@ class GameStateManagerTest {
     fun applyStates_SetRemoveResourceOffered() {
         //Set
         sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Storage, Wood)))
-        Assert.assertEquals(listOf(Wood), mapManager.queryInStorage(coords))
+        assertEquals(listOf(Wood), mapManager.queryInStorage(coords))
         //Remove
         sut.applyStates(listOf(GameState(coords, Operator.Remove, Type.Storage, Wood)))
-        Assert.assertEquals(listOf<Resource>(), mapManager.queryInStorage(coords))
+        assertEquals(listOf<Resource>(), mapManager.queryInStorage(coords))
     }
 
     @Test
@@ -39,7 +39,7 @@ class GameStateManagerTest {
                 GameState(coords, Operator.Set, Type.Transport, Wood)
             )
         )
-        Assert.assertEquals(listOf(Wood, Wood), mapManager.queryInTransport(coords))
+        assertEquals(listOf(Wood, Wood), mapManager.queryInTransport(coords))
         //Remove
         sut.applyStates(
             listOf(
@@ -47,15 +47,15 @@ class GameStateManagerTest {
                 GameState(coords, Operator.Remove, Type.Transport, Wood)
             )
         )
-        Assert.assertEquals(emptyList<Resource>(), mapManager.queryInTransport(coords))
+        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(coords))
     }
 
     @Test
     fun applyStates_SetTownhall() {
         sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Building, Townhall())))
-        Assert.assertTrue(mapManager.queryBuilding(coords) is Townhall)
+        assertTrue(mapManager.queryBuilding(coords) is Townhall)
 
-        Assert.assertEquals(
+        assertEquals(
             listOf(Wood, Wood, Wood, Stone, Stone, Stone),
             mapManager.queryInStorage(coords)
         )
@@ -64,13 +64,13 @@ class GameStateManagerTest {
     @Test
     fun applyStates_SetLumberjack() {
         sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Building, Lumberjack())))
-        Assert.assertTrue(mapManager.queryBuilding(coords) is Lumberjack)
+        assertTrue(mapManager.queryBuilding(coords) is Lumberjack)
     }
 
     @Test
     fun applyStates_SetRoad() {
         sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Building, Road())))
-        Assert.assertTrue(mapManager.queryBuilding(coords) is Road)
+        assertTrue(mapManager.queryBuilding(coords) is Road)
     }
 
     @Test
@@ -86,15 +86,50 @@ class GameStateManagerTest {
         mapManager.resetTouched()
         sut.tick()
 
-        Assert.assertEquals(Zombie, mapManager.findSpecificCell(Coordinates(1, 1))!!.movingObject)
-        Assert.assertEquals(null, mapManager.findSpecificCell(Coordinates(2, 2))!!.movingObject)
+        assertEquals(Zombie, mapManager.findSpecificCell(Coordinates(1, 1))!!.movingObject)
+        assertEquals(null, mapManager.findSpecificCell(Coordinates(2, 2))!!.movingObject)
 
         //another step
         mapManager.resetTouched()
         sut.tick()
 
-        Assert.assertEquals(Zombie, mapManager.findSpecificCell(Coordinates(0, 0))!!.movingObject)
-        Assert.assertEquals(null, mapManager.findSpecificCell(Coordinates(1, 1))!!.movingObject)
-        Assert.assertEquals(null, mapManager.findSpecificCell(Coordinates(2, 2))!!.movingObject)
+        assertEquals(Zombie, mapManager.findSpecificCell(Coordinates(0, 0))!!.movingObject)
+        assertEquals(null, mapManager.findSpecificCell(Coordinates(1, 1))!!.movingObject)
+        assertEquals(null, mapManager.findSpecificCell(Coordinates(2, 2))!!.movingObject)
+    }
+
+    @Test
+    fun `Removing a building removes requested items`() {
+        val cell = mapManager.findSpecificCell(Coordinates(0, 0))!!
+        sut.applyState(GameState(Coordinates(0,0), Operator.Set, Type.Building, Lumberjack()))
+        sut.applyState(GameState(Coordinates(0,0), Operator.Set, Type.Transport, Wood))
+        sut.applyState(GameState(Coordinates(0,0), Operator.Set, Type.Production, Wood))
+        sut.applyState(GameState(Coordinates(0,0), Operator.Set, Type.Storage, Wood))
+        assertEquals(2, cell.requires.count())
+        sut.applyState(GameState(Coordinates(0,0), Operator.Remove, Type.Building, null))
+        assertEquals(0, cell.production.count())
+        assertEquals(0, cell.storage.count())
+        assertEquals(0, cell.transport.count())
+        assertNull(cell.building)
+    }
+
+    @Test
+    fun `Replacing a building updates requested items`() {
+        sut.applyState(GameState(Coordinates(0,0), Operator.Set, Type.Building, Lumberjack()))
+        assertEquals(2, mapManager.findSpecificCell(Coordinates(0, 0))!!.requires.count())
+        assertEquals(0, mapManager.findSpecificCell(Coordinates(0, 0))!!.storage.count())
+        sut.applyState(GameState(Coordinates(0,0), Operator.Set, Type.Building, Townhall()))
+        assertEquals(0, mapManager.findSpecificCell(Coordinates(0, 0))!!.requires.count())
+        assertEquals(6, mapManager.findSpecificCell(Coordinates(0, 0))!!.storage.count())
+    }
+
+    @Test
+    fun `Replacing a building does not delete the storage`() {
+        sut.applyState(GameState(Coordinates(0,0), Operator.Set, Type.Building, Townhall()))
+        assertEquals(0, mapManager.findSpecificCell(Coordinates(0, 0))!!.requires.count())
+        assertEquals(6, mapManager.findSpecificCell(Coordinates(0, 0))!!.storage.count())
+        sut.applyState(GameState(Coordinates(0,0), Operator.Set, Type.Building, Lumberjack()))
+        assertEquals(2, mapManager.findSpecificCell(Coordinates(0, 0))!!.requires.count())
+        assertEquals(6, mapManager.findSpecificCell(Coordinates(0, 0))!!.storage.count())
     }
 }

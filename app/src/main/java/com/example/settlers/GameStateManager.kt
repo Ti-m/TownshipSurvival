@@ -69,6 +69,7 @@ open class GameStateManager(
                     Type.Building -> {
                         selected.building = state.data as Building
                         selected.redraw = true
+                        selected.requires.clear()//Make sure old requests are deleted, in case of building replacement
                         selected.building!!.requires.forEach { needed ->
                             applyState(GameState(selected.coordinates, Operator.Set, Type.Required, needed))
 //                            val transportRequest = TransportRequestNew(
@@ -106,7 +107,14 @@ open class GameStateManager(
                     Type.Storage -> {
                         selected.storage.remove(state.data as Resource)
                     }
-                    Type.Building -> TODO()
+                    Type.Building -> {
+                        selected.redraw = true
+                        selected.requires.clear()
+                        selected.building = null
+                        selected.production.clear()
+                        selected.storage.clear()
+                        selected.transport.clear()
+                    }
                     Type.Required -> selected.requires.remove(state.data as Resource)
                     Type.Production -> TODO()
                     Type.MovingObject -> {
