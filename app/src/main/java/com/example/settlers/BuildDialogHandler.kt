@@ -1,6 +1,5 @@
 package com.example.settlers
 
-import com.example.settlers.ui.BuildDialog
 import com.example.settlers.ui.BuildDialogCallback
 
 class BuildDialogHandler (

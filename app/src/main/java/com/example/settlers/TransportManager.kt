@@ -65,8 +65,8 @@ open class TransportManager(
         return step
     }
 
-    private fun calcRouteFirstStep(from: Coordinates, to: Coordinates): Coordinates? {
-        return routing.calcRouteFirstStep(from, to)
+    private fun calcRouteFirstStep(from: Coordinates, to: Coordinates, ignoreObstacles: Boolean = false): Coordinates? {
+        return routing.calcRouteFirstStep(from, to, ignoreObstacles)
     }
 
     fun whereIsNextResourceInStorageWithAccess(request: TransportRequest): Coordinates? {
@@ -81,6 +81,18 @@ open class TransportManager(
 //        return TransportRoute(destination = to, what = what, route = route)
 //    }
 
+    private fun findTarget(start: Coordinates): Coordinates? {
+        return routing.findClosestBuilding(start)
+    }
+
+    fun move(start: Coordinates): List<GameState> {
+        val target = findTarget(start) ?: return emptyList()
+        val step = calcRouteFirstStep(from = start, to = target, ignoreObstacles = true) ?: return emptyList()
+        return listOf(
+            GameState(start, Operator.Remove, Type.MovingObject, Zombie),
+            GameState(step, Operator.Set, Type.MovingObject, Zombie)
+        )
+    }
 }
 
 class TransportManagerPreparedForTest(

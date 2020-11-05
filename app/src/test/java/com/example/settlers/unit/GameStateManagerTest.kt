@@ -72,4 +72,29 @@ class GameStateManagerTest {
         sut.applyStates(listOf(GameState(coords, Operator.Set, Type.Building, Road())))
         Assert.assertTrue(mapManager.queryBuilding(coords) is Road)
     }
+
+    @Test
+    fun `Test Zombie movement - Find targets and move there`() {
+        val destination = Coordinates(0,0)
+        val wrongTarget = Coordinates(7,3)
+        val spawner = Coordinates(2,2)
+        sut.applyStates(listOf(
+            GameState(wrongTarget, Operator.Set, Type.Building, Tower()),
+            GameState(destination, Operator.Set, Type.Building, Townhall()),
+            GameState(spawner, Operator.Set, Type.MovingObject, Zombie)
+        ))
+        mapManager.resetTouched()
+        sut.tick()
+
+        Assert.assertEquals(Zombie, mapManager.findSpecificCell(Coordinates(1, 1))!!.movingObject)
+        Assert.assertEquals(null, mapManager.findSpecificCell(Coordinates(2, 2))!!.movingObject)
+
+        //another step
+        mapManager.resetTouched()
+        sut.tick()
+
+        Assert.assertEquals(Zombie, mapManager.findSpecificCell(Coordinates(0, 0))!!.movingObject)
+        Assert.assertEquals(null, mapManager.findSpecificCell(Coordinates(1, 1))!!.movingObject)
+        Assert.assertEquals(null, mapManager.findSpecificCell(Coordinates(2, 2))!!.movingObject)
+    }
 }

@@ -1,8 +1,6 @@
 package com.example.settlers.integration
 
 import com.example.settlers.*
-import com.example.settlers.BreadthFirstSearchRouting
-import com.example.settlers.util.DisabledLogger
 import org.junit.Test
 
 import org.junit.Assert.*

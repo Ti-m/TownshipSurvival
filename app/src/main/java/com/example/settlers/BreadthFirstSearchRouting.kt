@@ -11,7 +11,7 @@ class BreadthFirstSearchRouting(
     private val neighbourCalculator: HexagonNeighbourCalculator
 ) {
 
-    fun calcRoute(start: Coordinates, destiantion: Coordinates): Route? {
+    fun calcRoute(start: Coordinates, destiantion: Coordinates, ignoreObstacles: Boolean = false): Route? {
         val frontier = mutableListOf(start)
         val cameFrom = mutableMapOf<Coordinates, Coordinates>()
 
@@ -24,7 +24,7 @@ class BreadthFirstSearchRouting(
             neighbourCalculator.getNeighboursOfCellDoubleCoords(
                 coords = current,
                 destination = destiantion,
-                ignoreObstacles = false
+                ignoreObstacles = ignoreObstacles
             ).forEach { next ->
                 if (!cameFrom.containsKey(next)) {
                     frontier.add(next)
@@ -52,10 +52,10 @@ class BreadthFirstSearchRouting(
         return Route(first, list)
     }
 
-    fun calcRouteFirstStep(start: Coordinates, destiantion: Coordinates): Coordinates? {
+    fun calcRouteFirstStep(start: Coordinates, destiantion: Coordinates, ignoreObstacles: Boolean = false): Coordinates? {
         //Return First Step. Drop all other steps
         return try {
-            calcRoute(start, destiantion)?.steps?.first()
+            calcRoute(start, destiantion, ignoreObstacles)?.steps?.first()
         } catch (e: NoSuchElementException) {
             null
         }
@@ -93,6 +93,33 @@ class BreadthFirstSearchRouting(
             neighbourCalculator.getNeighboursOfCellDoubleCoords(
                 coords = current,
                 ignoreObstacles = false,
+                allowAnyBuilding = true
+            ).forEach { next ->
+                if (!cameFrom.containsKey(next)) {
+                    frontier.add(next)
+                    cameFrom[next] = current
+                }
+            }
+        }
+        return null
+    }
+
+    //TODO this needs to ignore the current tile? In case its the spawner?
+    fun findClosestBuilding(start: Coordinates): Coordinates? {
+        val frontier = mutableListOf(start)
+        val cameFrom = mutableMapOf<Coordinates, Coordinates>()
+
+        while (!frontier.isEmpty()) {
+            val current = frontier.removeFirst()
+            if (mapManager.isBuilding(current)) {
+                if (!mapManager.isTouched(current)) {//TODO ignore touched?
+                    return current
+                }
+            }
+
+            neighbourCalculator.getNeighboursOfCellDoubleCoords(
+                coords = current,
+                ignoreObstacles = true,
                 allowAnyBuilding = true
             ).forEach { next ->
                 if (!cameFrom.containsKey(next)) {

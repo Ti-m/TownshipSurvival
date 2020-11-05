@@ -12,6 +12,9 @@ open class GameStateManager(
         //Is this to expensive to do the iteration here?
         mapManager.resetTouched()
 
+        mapManager.getCellsWithMovingObjects().forEach { (coordinates, _) ->
+            applyStates(transportManager.move(coordinates))
+        }
         //TODO applyStates(transportManager.runProduction())
         mapManager.getCellsWhichRequireStuff().forEach { (_, cell) ->
             applyStates(mapManager.convertStorageToProduction(cell))
@@ -29,10 +32,6 @@ open class GameStateManager(
 
         mapManager.getCellsWhichShallRunAConstruction().forEach { (_, cell) ->
             mapManager.runConstruction(cell)
-        }
-
-        mapManager.getCellsWithMovingObjects().forEach { (_, cell) ->
-            //mapManager.move(cell)
         }
         //applyStates(transportManager.convertStorageToProduction())
         //applyStates(transportManager.convertTransportToStorage())
@@ -88,7 +87,11 @@ open class GameStateManager(
                     Type.Production -> {
                         selected.production.add(state.data as Resource)
                     }
-                    Type.MovingObject -> selected.movingObject = state.data as MovingObject
+                    Type.MovingObject -> {
+                        selected.movingObject = state.data as MovingObject
+                        selected.redraw = true
+                        selected.touched = true
+                    }
                 }
             }
             Operator.Remove -> {
@@ -106,7 +109,10 @@ open class GameStateManager(
                     Type.Building -> TODO()
                     Type.Required -> selected.requires.remove(state.data as Resource)
                     Type.Production -> TODO()
-                    Type.MovingObject -> selected.movingObject = null
+                    Type.MovingObject -> {
+                        selected.movingObject = null
+                        selected.redraw = true
+                    }
                 }
             }
         }

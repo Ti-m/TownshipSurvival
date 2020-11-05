@@ -31,8 +31,9 @@ Tasks - Open
 *** Progressbar for reload (production)
 ** DONE Zombies spawner in SE map border. Created with Townhall
 ** DONE Spawn a Zombie every 100 Ticks (Production)
-*** Add Zombie graphics - go on here
-*** Zombies move 1 tile per tick
+*** Add Zombie graphics
+*** DONE Zombies move 1 tile per tick
+*** DONE At the moment the old zombies are not deleted in a proper way. so the zombies are blurred over the map
 ** Buildings have Health
 *** 1 At the beginning
 *** Zombies explode when they reach a building dealing 1 dmg. So the Building is destroyed

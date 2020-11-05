@@ -64,6 +64,7 @@ class MainActivity : AppCompatActivity() {
         val gameStateManager = GameStateManager(transportManager, mapManager, logger)
 
         MainActivityHelper.createInitialState(gameStateManager, mapManager)
+        MainActivityHelper.setAZombie(gameStateManager)
 
         val modeController = ModeController()
         val tileManager = TileManager(tiles = mapGen.createTiles(cells, modeController, neighbourCalculator, this))
@@ -121,5 +122,10 @@ object MainActivityHelper {
         gameStateManager.applyStates(gameStateCreator.G1_L2_T3_unfinishedRoad())//TODO for debugging
         //Set initial spawner
         gameStateManager.applyState(gameStateCreator.createSpawner(mapManager.getSouthEastEdge()))
+    }
+
+    fun setAZombie(gameStateManager: GameStateManager) {
+        val gameStateCreator = GameStateCreator()
+        gameStateManager.applyState(gameStateCreator.createZombie(Coordinates(29,11)))
     }
 }

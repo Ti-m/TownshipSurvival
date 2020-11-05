@@ -19,6 +19,7 @@ class GameRunLoop(
 //    }
 
     fun tick() {
+        Log.i(TAG, "tick")
         gameStateManager.tick()
         tileManager.redrawAllRequestedTiles()
     }
