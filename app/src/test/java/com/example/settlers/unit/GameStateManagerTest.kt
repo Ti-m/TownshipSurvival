@@ -140,4 +140,20 @@ class GameStateManagerTest {
         sut.tick()
         assertNull(mapManager.findSpecificCell(Coordinates(0, 0))!!.building)
     }
+
+    @Test
+    fun `A Building gets destroyed, if a zombie steps into its cell, but ignore roads`() {
+        sut.applyState(GameState(Coordinates(0,0), Operator.Set, Type.Building, Road()))
+        sut.applyState(GameState(Coordinates(0,0), Operator.Set, Type.MovingObject, Zombie))
+        sut.tick()
+        assertTrue(mapManager.findSpecificCell(Coordinates(0, 0))!!.building is Road)
+    }
+
+    @Test
+    fun `A Building gets destroyed, if a zombie steps into its cell, but ignore spawners`() {
+        sut.applyState(GameState(Coordinates(0,0), Operator.Set, Type.Building, Spawner()))
+        sut.applyState(GameState(Coordinates(0,0), Operator.Set, Type.MovingObject, Zombie))
+        sut.tick()
+        assertTrue(mapManager.findSpecificCell(Coordinates(0, 0))!!.building is Spawner)
+    }
 }

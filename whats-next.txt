@@ -33,10 +33,11 @@ Tasks - Open
 ** DONE Spawn a Zombie every 100 Ticks (Production)
 *** Add Zombie graphics
 *** DONE Zombies move 1 tile per tick
+**** Zombies ignore Roads and spawners
 *** DONE At the moment the old zombies are not deleted in a proper way. so the zombies are blurred over the map
 ** Buildings have Health
-*** 1 At the beginning
-*** Zombies explode when they reach a building dealing 1 dmg. So the Building is destroyed <--
+*** DONE 1 At the beginning
+*** DONE Zombies explode when they reach a building dealing 1 dmg. So the Building is destroyed
 
 * Map
 ** DONE Show construction progress

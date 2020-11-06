@@ -43,7 +43,11 @@ open class GameStateManager(
     }
 
     private fun destruction(cell: Cell): Collection<GameState> {
-        if (cell.movingObject is Zombie && cell.building != null) {
+        if (cell.movingObject is Zombie &&
+            cell.building != null &&
+            cell.building !is Road &&
+            cell.building !is Spawner
+        ) {
             return listOf(
                 GameState(cell.coordinates, Operator.Remove, Type.Building, null),
                 GameState(cell.coordinates, Operator.Remove, Type.MovingObject, null)

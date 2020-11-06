@@ -104,16 +104,18 @@ class BreadthFirstSearchRouting(
         return null
     }
 
-    //TODO this needs to ignore the current tile? In case its the spawner?
-    fun findClosestBuilding(start: Coordinates): Coordinates? {
+    fun findTargetForZombie(start: Coordinates): Coordinates? {
         val frontier = mutableListOf(start)
         val cameFrom = mutableMapOf<Coordinates, Coordinates>()
 
         while (!frontier.isEmpty()) {
             val current = frontier.removeFirst()
             if (mapManager.isBuilding(current)) {
-                if (!mapManager.isTouched(current)) {//TODO ignore touched?
-                    return current
+                val building = mapManager.findSpecificCell(current)!!.building
+                if (building !is Spawner && building !is Road) {
+                    if (!mapManager.isTouched(current)) {//TODO ignore touched?
+                        return current
+                    }
                 }
             }
 

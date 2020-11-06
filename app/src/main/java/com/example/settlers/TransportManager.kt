@@ -82,7 +82,7 @@ open class TransportManager(
 //    }
 
     private fun findTarget(start: Coordinates): Coordinates? {
-        return routing.findClosestBuilding(start)
+        return routing.findTargetForZombie(start)
     }
 
     fun move(start: Coordinates): List<GameState> {
