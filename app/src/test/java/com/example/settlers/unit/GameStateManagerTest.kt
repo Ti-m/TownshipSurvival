@@ -132,4 +132,12 @@ class GameStateManagerTest {
         assertEquals(2, mapManager.findSpecificCell(Coordinates(0, 0))!!.requires.count())
         assertEquals(6, mapManager.findSpecificCell(Coordinates(0, 0))!!.storage.count())
     }
+
+    @Test
+    fun `A Building gets destroyed, if a zombie steps into its cell`() {
+        sut.applyState(GameState(Coordinates(0,0), Operator.Set, Type.Building, Townhall()))
+        sut.applyState(GameState(Coordinates(0,0), Operator.Set, Type.MovingObject, Zombie))
+        sut.tick()
+        assertNull(mapManager.findSpecificCell(Coordinates(0, 0))!!.building)
+    }
 }

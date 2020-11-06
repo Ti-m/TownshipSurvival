@@ -36,7 +36,7 @@ Tasks - Open
 *** DONE At the moment the old zombies are not deleted in a proper way. so the zombies are blurred over the map
 ** Buildings have Health
 *** 1 At the beginning
-*** Zombies explode when they reach a building dealing 1 dmg. So the Building is destroyed
+*** Zombies explode when they reach a building dealing 1 dmg. So the Building is destroyed <--
 
 * Map
 ** DONE Show construction progress

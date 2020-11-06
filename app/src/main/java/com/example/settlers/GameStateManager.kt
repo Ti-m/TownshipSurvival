@@ -12,6 +12,9 @@ open class GameStateManager(
         //Is this to expensive to do the iteration here?
         mapManager.resetTouched()
 
+        mapManager.getCellsWithMovingObjects().forEach { (_, cell) ->
+            applyStates(destruction(cell))
+        }
         mapManager.getCellsWithMovingObjects().forEach { (coordinates, _) ->
             applyStates(transportManager.move(coordinates))
         }
@@ -37,6 +40,16 @@ open class GameStateManager(
         //applyStates(transportManager.convertTransportToStorage())
         //applyStates(transportManager.moveResources())
 
+    }
+
+    private fun destruction(cell: Cell): Collection<GameState> {
+        if (cell.movingObject is Zombie && cell.building != null) {
+            return listOf(
+                GameState(cell.coordinates, Operator.Remove, Type.Building, null),
+                GameState(cell.coordinates, Operator.Remove, Type.MovingObject, null)
+            )
+        }
+        return emptyList()
     }
 
     fun applyStates(newStates: Collection<GameState>) {
