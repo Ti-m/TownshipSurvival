@@ -37,6 +37,7 @@ class GraphicalFlagTile(
     private val lumberjack: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_1_32, null)
     private val lumberjackConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_construction_1_32, null)
     private val spawner: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.spawner_1_32, null)
+    private val zombie: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.zombie_1_32, null)
     private val tree: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tree_1_32, null)
     private val cactus: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.cactus_1_32, null)
 
@@ -124,6 +125,11 @@ class GraphicalFlagTile(
     override fun drawCactus(canvas: Canvas) {
         cactus!!.bounds = canvas.clipBounds
         cactus.draw(canvas)
+    }
+
+    override fun drawZombie(canvas: Canvas) {
+        zombie!!.bounds = canvas.clipBounds
+        zombie.draw(canvas)
     }
 }
 
