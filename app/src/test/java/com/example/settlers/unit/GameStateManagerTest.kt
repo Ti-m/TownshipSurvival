@@ -156,4 +156,17 @@ class GameStateManagerTest {
         sut.tick()
         assertTrue(mapManager.findSpecificCell(Coordinates(0, 0))!!.building is Spawner)
     }
+
+    @Test
+    fun `Set explosion animation and check the progress`() {
+        sut.applyState(GameState(Coordinates(0,0), Operator.Set, Type.Animation, ExplosionAnimation()))
+        assertTrue(mapManager.findSpecificCell(Coordinates(0, 0))!!.animation is ExplosionAnimation)
+        assertTrue(mapManager.findSpecificCell(Coordinates(0, 0))!!.animation!!.progress == AnimationProgress.One)
+        sut.tick()
+        assertTrue(mapManager.findSpecificCell(Coordinates(0, 0))!!.animation!!.progress == AnimationProgress.Two)
+        sut.tick()
+        assertTrue(mapManager.findSpecificCell(Coordinates(0, 0))!!.animation!!.progress == AnimationProgress.Three)
+        sut.tick()
+        assertTrue(mapManager.findSpecificCell(Coordinates(0, 0))!!.animation!!.progress == null)
+    }
 }

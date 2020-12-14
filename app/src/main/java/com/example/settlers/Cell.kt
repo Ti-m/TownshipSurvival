@@ -27,6 +27,8 @@ data class Cell(
     var storage: MutableList<Resource> = mutableListOf(),
     //This resources are NOT available for transport, but are used for a pending production
     var production: MutableList<Resource> = mutableListOf(),
+    // next animation
+    var animation: Animation? = null,
     var redraw: Boolean = false,
     //Touched in Round x ignore this round for transports
     var touched: Boolean = false
@@ -36,5 +38,3 @@ data class Cell(
 data class Coordinates(val x: Int, val y: Int) : Serializable
 enum class GroundType { Water, Grass, Desert, Mountain }
 enum class Worker { Construction }
-
-

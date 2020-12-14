@@ -40,6 +40,8 @@ class GraphicalFlagTile(
     private val zombie: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.zombie_1_32, null)
     private val tree: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tree_1_32, null)
     private val cactus: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.cactus_1_32, null)
+    private val explosion_1: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.explosion_1_32, null)
+    private val explosion_2: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.explosion_2_32, null)
 
 
 //    override fun drawGround(canvas: Canvas) {
@@ -131,6 +133,30 @@ class GraphicalFlagTile(
         zombie!!.bounds = canvas.clipBounds
         zombie.draw(canvas)
     }
+
+    override fun drawAnimation(canvas: Canvas) {
+        when (cell.animation) {
+            is ExplosionAnimation -> {
+                when (cell.animation!!.progress) {
+                    AnimationProgress.One -> {
+                        explosion_1!!.bounds = canvas.clipBounds
+                        explosion_1.draw(canvas)
+                    }
+                    AnimationProgress.Two -> {
+                        explosion_2!!.bounds = canvas.clipBounds
+                        explosion_2.draw(canvas)
+                    }
+                    AnimationProgress.Three -> {
+                        explosion_1!!.bounds = canvas.clipBounds
+                        explosion_1.draw(canvas)
+                    }
+                    else -> {
+                        //Nothing
+                    }
+                }
+            }
+        }
+    }
 }
 
 //Only used from code
@@ -195,6 +221,10 @@ open class FlagTile(
             drawZombie(canvas)
         }
 
+        if (cell.animation != null) {
+            drawAnimation(canvas)
+        }
+
     }
 
     open fun drawRoad(canvas: Canvas) {
@@ -226,6 +256,10 @@ open class FlagTile(
     }
 
     open fun drawCactus(canvas: Canvas) {
+        //overwrite
+    }
+
+    open fun drawAnimation(canvas: Canvas) {
         //overwrite
     }
 

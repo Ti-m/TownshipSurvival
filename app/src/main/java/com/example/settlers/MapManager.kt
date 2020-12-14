@@ -172,6 +172,10 @@ open class MapManager(
     fun getSouthEastEdge(): Coordinates {
         return Coordinates(getMaxRow(), getMaxColumn())
     }
+
+    fun getCellsWhichShallRunAnAnimation(): Map<Coordinates, Cell> {
+        return cells.filterValues { it.animation != null }
+    }
 }
 
 class MapManagerPreparedForTest(

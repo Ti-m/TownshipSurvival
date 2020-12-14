@@ -8,6 +8,9 @@ Tasks - Open
 ** DONE Create spawner on first townhall building
 ** DONE Add Spawner Graphics
 
+* Add Animation infrastucture
+** Add 3 tick Explosion animation
+
 *Graphics
 ** DONE Replace single color backgrounds with simple images
 *** DONE Learn how to draw pixelart in Gimp?

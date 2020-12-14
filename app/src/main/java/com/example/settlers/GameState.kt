@@ -11,7 +11,8 @@ enum class Type {
     Production, // Not available for transport
     Required,
     Building,
-    MovingObject //Enemeys i.e.
+    MovingObject, //Enemeys i.e.
+    Animation
 }
 
 abstract class GameObject

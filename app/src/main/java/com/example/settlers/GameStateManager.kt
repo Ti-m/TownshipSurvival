@@ -6,11 +6,17 @@ import com.example.settlers.util.Logger
 open class GameStateManager(
     private val transportManager: TransportManager,
     private val mapManager: MapManager,
+    private val animationManager: AnimationManager,
     private val log: Logger
 ) {
     fun tick() {
         //Is this to expensive to do the iteration here?
         mapManager.resetTouched()
+
+        mapManager.getCellsWhichShallRunAnAnimation().forEach { (_, cell) ->
+            applyState(runAnimation(cell))
+            prepareNextAnimation(cell)
+        }
 
         mapManager.getCellsWithMovingObjects().forEach { (_, cell) ->
             applyStates(destruction(cell))
@@ -42,6 +48,14 @@ open class GameStateManager(
 
     }
 
+    private fun runAnimation(cell: Cell): GameState {
+        return GameState(cell.coordinates, Operator.Set, Type.Animation, cell.animation)
+    }
+
+    private fun prepareNextAnimation(cell: Cell) {
+        animationManager.nextAnimation(cell.animation!!)
+    }
+
     private fun destruction(cell: Cell): Collection<GameState> {
         if (cell.movingObject is Zombie &&
             cell.building != null &&
@@ -50,7 +64,8 @@ open class GameStateManager(
         ) {
             return listOf(
                 GameState(cell.coordinates, Operator.Remove, Type.Building, null),
-                GameState(cell.coordinates, Operator.Remove, Type.MovingObject, null)
+                GameState(cell.coordinates, Operator.Remove, Type.MovingObject, null),
+                GameState(cell.coordinates, Operator.Set, Type.Animation, ExplosionAnimation()),
             )
         }
         return emptyList()
@@ -110,6 +125,10 @@ open class GameStateManager(
                         selected.redraw = true
                         selected.touched = true
                     }
+                    Type.Animation -> {
+                        selected.animation = state.data as Animation
+                        selected.redraw = true
+                    }
                 }
             }
             Operator.Remove -> {
@@ -138,6 +157,10 @@ open class GameStateManager(
                         selected.movingObject = null
                         selected.redraw = true
                     }
+                    Type.Animation -> {
+                        selected.animation = null
+                        selected.redraw = true
+                    }
                 }
             }
         }
@@ -147,9 +170,11 @@ open class GameStateManager(
 class GameStateManagerPreparedForTest(
     transportManager: TransportManager,
     mapManager: MapManager,
-    log: Logger
-) : GameStateManager(transportManager, mapManager, log) {
-    constructor(transportManager: TransportManager, mapManager: MapManager) : this(transportManager, mapManager, DisabledLogger())
+    animationManager: AnimationManager,
+    log: Logger,
+) : GameStateManager(transportManager, mapManager, animationManager, log) {
+    constructor(transportManager: TransportManager, mapManager: MapManager, animationManager: AnimationManager) : this(transportManager, mapManager, animationManager, DisabledLogger())
+    constructor(transportManager: TransportManager, mapManager: MapManager) : this(transportManager, mapManager, AnimationManager(), DisabledLogger())
     constructor(mapManager: MapManager) : this(TransportManagerPreparedForTest(mapManager), mapManager)
     constructor() : this(MapManagerPreparedForTest())
 }

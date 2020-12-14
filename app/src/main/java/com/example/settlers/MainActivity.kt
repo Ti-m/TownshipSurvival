@@ -61,10 +61,12 @@ class MainActivity : AppCompatActivity() {
         val mapManager = MapManager(cells, logger, tileGridSize)
         val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
         val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager, neighbourCalculator), logger)
-        val gameStateManager = GameStateManager(transportManager, mapManager, logger)
+        val animationManager = AnimationManager()
+        val gameStateManager = GameStateManager(transportManager, mapManager, animationManager, logger)
 
         MainActivityHelper.createInitialState(gameStateManager, mapManager)
         MainActivityHelper.setAZombie(gameStateManager)
+        MainActivityHelper.setExplosion(gameStateManager)
 
         val modeController = ModeController()
         val tileManager = TileManager(tiles = mapGen.createTiles(cells, modeController, neighbourCalculator, this))
@@ -127,5 +129,10 @@ object MainActivityHelper {
     fun setAZombie(gameStateManager: GameStateManager) {
         val gameStateCreator = GameStateCreator()
         gameStateManager.applyState(gameStateCreator.createZombie(Coordinates(29,11)))
+    }
+
+    fun setExplosion(gameStateManager: GameStateManager) {
+        val gameStateCreator = GameStateCreator()
+        gameStateManager.applyState(gameStateCreator.createExplosion(Coordinates(9,9)))
     }
 }

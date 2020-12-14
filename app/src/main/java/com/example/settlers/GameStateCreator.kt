@@ -44,4 +44,9 @@ class GameStateCreator {
     fun createZombie(coords: Coordinates): GameState {
         return GameState(coords, Operator.Set, Type.MovingObject, Zombie)
     }
+
+    fun createExplosion(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Set, Type.Animation, ExplosionAnimation())
+    }
+
 }
