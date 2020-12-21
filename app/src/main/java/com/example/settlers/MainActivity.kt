@@ -124,6 +124,10 @@ object MainActivityHelper {
         gameStateManager.applyStates(gameStateCreator.G1_L2_T3_unfinishedRoad())//TODO for debugging
         //Set initial spawner
         gameStateManager.applyState(gameStateCreator.createSpawner(mapManager.getSouthEastEdge()))
+
+        //Finish construction of the tower to allow shooting
+        //TODO Remove this again
+        mapManager.getCellsWithTowers().values.first().building!!.setConstructionFinished()
     }
 
     fun setAZombie(gameStateManager: GameStateManager) {

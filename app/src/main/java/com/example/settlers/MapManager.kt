@@ -43,6 +43,10 @@ open class MapManager(
         return queryBuilding(at) != null
     }
 
+    fun isMovingObject(at: Coordinates): Boolean {
+        return findSpecificCell(at)?.movingObject != null
+    }
+
     fun isTouched(at: Coordinates): Boolean {
         //Default is true to ignore unavailable cells
         return findSpecificCell(at)?.touched ?: true
@@ -175,6 +179,14 @@ open class MapManager(
 
     fun getCellsWhichShallRunAnAnimation(): Map<Coordinates, Cell> {
         return cells.filterValues { it.animation != null }
+    }
+
+    fun getCellsWithTowers(): Map<Coordinates, Cell> {
+        return getCellsWithBuildings().filterValues { it.building is Tower }
+    }
+
+    fun getCellsWithFinishedTowers(): Map<Coordinates, Cell> {
+        return getCellsWithTowers().filterForFinishedConstruction()
     }
 }
 

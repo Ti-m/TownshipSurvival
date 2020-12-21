@@ -169,4 +169,73 @@ class GameStateManagerTest {
         sut.tick()
         assertTrue(mapManager.findSpecificCell(Coordinates(0, 0))!!.animation!!.progress == null)
     }
+
+    @Test
+    fun `engageTarget with ammu`() {
+        val tower = Coordinates(0,0)
+        val zombie = Coordinates(4,0)// 2 away
+        sut.applyStates(listOf(
+            GameState(tower, Operator.Set, Type.Building, Tower()),
+            GameState(tower, Operator.Set, Type.Production, Arrow),
+            GameState(zombie, Operator.Set, Type.MovingObject, Zombie)
+        ))
+        //Finish construction of the tower to allow shooting
+        mapManager.getCellsWithTowers().values.first().building!!.setConstructionFinished()
+        assertTrue(mapManager.isMovingObject(zombie))//not destroyed
+        sut.tick()
+        assertFalse(mapManager.isMovingObject(zombie))//destroyed
+        assertFalse(mapManager.isMovingObject(Coordinates(2,0)))//check if the zombie just moved away
+    }
+
+    @Test
+    fun `engageTarget with ammu and range check`() {
+        val tower = Coordinates(0,0)
+        val zombie = Coordinates(7,3)// 5 away
+        sut.applyStates(listOf(
+            GameState(tower, Operator.Set, Type.Building, Tower()),
+            GameState(tower, Operator.Set, Type.Production, Arrow),
+            GameState(zombie, Operator.Set, Type.MovingObject, Zombie)
+        ))
+        //Finish construction of the tower to allow shooting
+        mapManager.getCellsWithTowers().values.first().building!!.setConstructionFinished()
+        assertTrue(mapManager.isMovingObject(zombie))//not destroyed
+        sut.tick()
+        //not destroyed - out of range, but moved closer
+        assertFalse(mapManager.isMovingObject(zombie))
+        assertTrue(mapManager.isMovingObject(Coordinates(5,3)))//moved closer
+        //again
+        sut.tick()
+        //not destroyed - out of range, but moved closer
+        assertFalse(mapManager.isMovingObject(Coordinates(5,3)))
+        assertTrue(mapManager.isMovingObject(Coordinates(3,3)))//moved closer
+        sut.tick()
+        //destroyed
+        assertFalse(mapManager.isMovingObject(Coordinates(3,3)))
+        assertFalse(mapManager.isMovingObject(Coordinates(2,2)))//not moved closer
+    }
+
+    @Test
+    fun `engageTarget no ammu`() {
+        val tower = Coordinates(0,0)
+        val zombie = Coordinates(4,0)// 2 away
+        sut.applyStates(listOf(
+            GameState(tower, Operator.Set, Type.Building, Tower()),
+            GameState(zombie, Operator.Set, Type.MovingObject, Zombie),
+        ))
+        //Finish construction of the tower to allow shooting
+        mapManager.getCellsWithTowers().values.first().building!!.setConstructionFinished()
+        assertTrue(mapManager.isMovingObject(zombie))//not destroyed
+        sut.tick()
+        //Check all cells to recognize if the zombie is duplicated
+        assertFalse(mapManager.isMovingObject(Coordinates(0,0)))
+        assertTrue(mapManager.isMovingObject(Coordinates(2,0)))//still not destroyed, but the zombie moved to here
+        assertFalse(mapManager.isMovingObject(Coordinates(4,0)))
+        assertFalse(mapManager.isMovingObject(Coordinates(1,1)))
+        assertFalse(mapManager.isMovingObject(Coordinates(3,1)))
+        assertFalse(mapManager.isMovingObject(Coordinates(5,1)))
+        assertFalse(mapManager.isMovingObject(Coordinates(0,2)))
+        assertFalse(mapManager.isMovingObject(Coordinates(2,2)))
+        assertFalse(mapManager.isMovingObject(Coordinates(4,2)))
+    }
+
 }

@@ -81,17 +81,28 @@ open class TransportManager(
 //        return TransportRoute(destination = to, what = what, route = route)
 //    }
 
-    private fun findTarget(start: Coordinates): Coordinates? {
+    private fun findTargetForZombie(start: Coordinates): Coordinates? {
         return routing.findTargetForZombie(start)
     }
 
     fun move(start: Coordinates): List<GameState> {
-        val target = findTarget(start) ?: return emptyList()
+        val target = findTargetForZombie(start) ?: return emptyList()
         val step = calcRouteFirstStep(from = start, to = target, ignoreObstacles = true) ?: return emptyList()
         return listOf(
             GameState(start, Operator.Remove, Type.MovingObject, Zombie),
             GameState(step, Operator.Set, Type.MovingObject, Zombie)
         )
+    }
+
+    fun shootWithTowerCalculatePath(start: Coordinates, range: Int): TargetCoordinates? {
+        val destination = routing.findTargetForTower(start, range) ?: return null
+        val path = routing.calcRoute(start, destination, ignoreObstacles = true)!!.steps //If there is a target, there should be a path in all cases.
+        path.removeLast()
+        return TargetCoordinates(start, path, destination)
+    }
+
+    fun cellHasArrow(cell: Cell): Boolean {
+        return cell.production.contains(Arrow)
     }
 }
 

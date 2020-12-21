@@ -89,6 +89,7 @@ class Tower : Building() {
 
     override var requires: MutableList<Resource> = mutableListOf(Wood, Stone, Stone)
     override var offers: MutableList<Resource> = mutableListOf()
+    val range = 3
 
     override fun produce(coordinates: Coordinates): Collection<GameState> {
         return emptyList()

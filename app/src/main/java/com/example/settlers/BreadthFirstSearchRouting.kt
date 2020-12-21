@@ -15,7 +15,7 @@ class BreadthFirstSearchRouting(
         val frontier = mutableListOf(start)
         val cameFrom = mutableMapOf<Coordinates, Coordinates>()
 
-        while (!frontier.isEmpty()) {
+        while (frontier.isNotEmpty()) {
             val current = frontier.removeFirst()
             if (current == destiantion) {
                 break
@@ -117,6 +117,31 @@ class BreadthFirstSearchRouting(
                         return current
                     }
                 }
+            }
+
+            neighbourCalculator.getNeighboursOfCellDoubleCoords(
+                coords = current,
+                ignoreObstacles = true,
+                allowAnyBuilding = true
+            ).forEach { next ->
+                if (!cameFrom.containsKey(next)) {
+                    frontier.add(next)
+                    cameFrom[next] = current
+                }
+            }
+        }
+        return null
+    }
+
+    fun findTargetForTower(start: Coordinates, range: Int): Coordinates? {
+        val frontier = mutableListOf(start)
+        val cameFrom = mutableMapOf<Coordinates, Coordinates>()
+
+        while (frontier.isNotEmpty()) {
+            val current = frontier.removeFirst()
+            if (DoubleCoordsDistance.distance(start, current) > range) return null
+            if (mapManager.isMovingObject(current)) {
+                return current
             }
 
             neighbourCalculator.getNeighboursOfCellDoubleCoords(

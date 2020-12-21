@@ -33,6 +33,7 @@ class GameStateCreator {
 //            GameState(R3, Operator.Set, Type.Building, Road()),
             GameState(L1, Operator.Set, Type.Building, Lumberjack()),
             GameState(L2, Operator.Set, Type.Building, Tower()),
+            GameState(L2, Operator.Set, Type.Production, Arrow),//TODO remove here again?
             GameState(L3, Operator.Set, Type.Building, Lumberjack()),
         )
     }

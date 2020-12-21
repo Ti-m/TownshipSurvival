@@ -173,4 +173,37 @@ class TransportManagerTest {
         assertEquals(listOf(GameState(coords, Operator.Set, Type.Storage, Wood)), states)
 
     }
+
+    @Test
+    fun `shootWithTowerCalculatePath all Conditions green`() {
+        val tower = Tower()
+        val towerCoordinates = Coordinates(0,0)
+        val zombie = Coordinates(4,0)// 2 away
+        gameStateManager.applyStates(listOf(
+            GameState(towerCoordinates, Operator.Set, Type.Building, tower),
+            GameState(zombie, Operator.Set, Type.MovingObject, Zombie)
+        ))
+        mapManager.resetTouched()
+        val targetCoordinates = sut.shootWithTowerCalculatePath(towerCoordinates, tower.range)
+
+        assertEquals(TargetCoordinates(
+            start = towerCoordinates,
+            path = listOf(Coordinates(x=2, y=0)),
+            destination = zombie
+        ), targetCoordinates)
+    }
+
+    @Test
+    fun `shootWithTowerCalculatePath no target`() {
+        val tower = Tower()
+        val towerCoordinates = Coordinates(0,0)
+        gameStateManager.applyStates(listOf(
+            GameState(towerCoordinates, Operator.Set, Type.Building, tower)
+        ))
+        mapManager.resetTouched()
+        val targetCoordinates = sut.shootWithTowerCalculatePath(towerCoordinates, tower.range)
+
+        assertNull(targetCoordinates)
+    }
+
 }

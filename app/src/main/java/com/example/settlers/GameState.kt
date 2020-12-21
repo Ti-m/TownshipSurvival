@@ -12,7 +12,8 @@ enum class Type {
     Required,
     Building,
     MovingObject, //Enemeys i.e.
-    Animation
+    Animation,
+    Damage //To Moving Objects, Buildings
 }
 
 abstract class GameObject
@@ -21,8 +22,20 @@ abstract class Resource : GameObject()
 object Wood : Resource()
 object Stone : Resource()
 
-abstract class MovingObject : GameObject()
-object Zombie : MovingObject() {
-    val health = 1
-    val dmg = 1
+abstract class Ammunition : Resource() {
+    abstract val damage: Int
 }
+object Arrow : Ammunition(){
+    override val damage = 1
+}
+
+abstract class MovingObject : GameObject() {
+    abstract val health: Int
+    abstract val damage: Int
+}
+object Zombie : MovingObject() {
+    override val health = 1
+    override val damage = 1
+}
+
+class Damage(val value: Int): GameObject()

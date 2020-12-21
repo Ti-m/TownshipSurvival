@@ -1,5 +1,8 @@
 Tasks - Open
 
+*Bug: Buildings are not constructing, if the are additional ressources in production.
+** Example is the tower if an arrow is in front of the list
+
 * DONE Der eine Test hat Probleme, weil der MapGenerator zufällig kakteen erzeugt. Wieso war das vorher kein problem?
 
 * DONE Implement Test testCreateSapwnerAtFarEdge
@@ -8,8 +11,9 @@ Tasks - Open
 ** DONE Create spawner on first townhall building
 ** DONE Add Spawner Graphics
 
-* Add Animation infrastucture
-** Add 3 tick Explosion animation
+* DONE Add Animation infrastucture
+** DONE Add 3 tick Explosion animation
+** Make a nice flame/explosion icon
 
 *Graphics
 ** DONE Replace single color backgrounds with simple images
@@ -29,8 +33,17 @@ Tasks - Open
 **** DONE Redraw neighbour roads on building new roads
 
 * Combat
-** Tower shoots arrows <-
-*** 1 Dmg
+** Tower shoots arrows <--
+*** DONE Add range property
+**** DONE Find a Target within range.
+**** DONE Every tower searches its surrounding each tick for a valid target
+*** DONE The tower will shoot an arrow in a straight line at a zombie within range
+**** This is a one tick action, but show an animation at the full shooting path
+***** Shooting animation tower
+***** red line in the path
+***** Get hit animation at zombie
+** DONE Add ammunition for towers as new ressource which needs to be in production
+*** 1 Dmg, later a dmg property?
 *** Progressbar for reload (production)
 ** DONE Zombies spawner in SE map border. Created with Townhall
 ** DONE Spawn a Zombie every 100 Ticks (Production)
@@ -41,7 +54,7 @@ Tasks - Open
 ** Buildings have Health
 *** DONE 1 At the beginning
 *** DONE Zombies explode when they reach a building dealing 1 dmg. So the Building is destroyed
-**** Add explosion animation
+**** DONE Add explosion animation
 
 * Map
 ** DONE Show construction progress

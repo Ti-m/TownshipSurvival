@@ -253,4 +253,68 @@ class BreadthFirstSearchRoutingTest {
 
         assertEquals(townhall, foundAt)
     }
+///////////////////////// findTargetForTower ////////////////////////////////////////
+
+    @Test
+    fun `findTargetForTower, no target`() {
+        val coordinates = Coordinates(0,0)
+        val tower = Tower()
+
+        gameStateManager.applyStates(listOf(
+            GameState(coordinates, Operator.Set, Type.Building, tower)
+        ))
+        mapManager.resetTouched()
+        val foundAt = sut.findTargetForTower(coordinates, tower.range)
+
+        assertEquals(null, foundAt)
+    }
+
+    @Test
+    fun `findTargetForTower, one target`() {
+        val tower = Tower()
+        val towerCoordinates = Coordinates(0,0)
+        val zombie = Coordinates(4,0)// 2 away
+        gameStateManager.applyStates(listOf(
+            GameState(towerCoordinates, Operator.Set, Type.Building, tower),
+            GameState(zombie, Operator.Set, Type.MovingObject, Zombie)
+        ))
+        mapManager.resetTouched()
+
+        val foundAt = sut.findTargetForTower(towerCoordinates, tower.range)
+
+        assertEquals(zombie, foundAt)
+    }
+
+    @Test
+    fun `findTargetForTower,two targets`() {
+        val tower = Tower()
+        val towerCoordinates = Coordinates(0,0)
+        val zombie = Coordinates(4,0)// 2 away
+        val zombie2 = Coordinates(1,1) //1 away
+        gameStateManager.applyStates(listOf(
+            GameState(towerCoordinates, Operator.Set, Type.Building, tower),
+            GameState(zombie, Operator.Set, Type.MovingObject, Zombie),
+            GameState(zombie2, Operator.Set, Type.MovingObject, Zombie)
+        ))
+        mapManager.resetTouched()
+        val foundAt = sut.findTargetForTower(towerCoordinates, tower.range)
+
+        assertEquals(zombie2, foundAt)
+    }
+
+    @Test
+    fun `findTargetForTower, one target - out of range`() {
+        val tower = Tower()
+        val towerCoordinates = Coordinates(0,0)
+        val zombie = Coordinates(6,2)// 4 away
+        gameStateManager.applyStates(listOf(
+            GameState(towerCoordinates, Operator.Set, Type.Building, tower),
+            GameState(zombie, Operator.Set, Type.MovingObject, Zombie)
+        ))
+        mapManager.resetTouched()
+
+        val foundAt = sut.findTargetForTower(towerCoordinates, tower.range)
+
+        assertNull(foundAt)
+    }
 }

@@ -13,6 +13,10 @@ open class GameStateManager(
         //Is this to expensive to do the iteration here?
         mapManager.resetTouched()
 
+        mapManager.getCellsWithFinishedTowers().forEach { (_, cell) ->
+            applyStates(engageTarget(cell))
+        }
+
         mapManager.getCellsWhichShallRunAnAnimation().forEach { (_, cell) ->
             applyState(runAnimation(cell))
             prepareNextAnimation(cell)
@@ -46,6 +50,32 @@ open class GameStateManager(
         //applyStates(transportManager.convertTransportToStorage())
         //applyStates(transportManager.moveResources())
 
+    }
+
+    private fun engageTarget(cell: Cell): List<GameState> {
+        val range = (mapManager.queryBuilding(cell.coordinates) as Tower).range
+        transportManager.shootWithTowerCalculatePath(cell.coordinates, range)?.let { target ->
+            if (transportManager.cellHasArrow(cell)) {//TODO generalize to ammunition
+                return shootArrow(target)
+            }
+        }
+        return emptyList()
+    }
+
+    private fun shootArrow(target: TargetCoordinates): List<GameState> {
+        val result = mutableListOf(
+            GameState(target.start, Operator.Remove, Type.Production, Arrow),//TODO generalize to ammunition
+            GameState(target.start, Operator.Set, Type.Animation, ShootAnimation()),
+            GameState(target.destination, Operator.Set, Type.Damage, Damage(1)),
+//            GameState(path, Operator.Set, Type.Animation, ShootPathAnimation()),
+//            GameState(target, Operator.Set, Type.Animation, ExplosionAnimation()),
+
+        )
+        result.addAll(target.path.map {
+            GameState(it, Operator.Set, Type.Animation, ProjectileAnimation())
+        })
+
+        return result
     }
 
     private fun runAnimation(cell: Cell): GameState {
@@ -103,7 +133,14 @@ open class GameStateManager(
                         selected.redraw = true
                         selected.requires.clear()//Make sure old requests are deleted, in case of building replacement
                         selected.building!!.requires.forEach { needed ->
-                            applyState(GameState(selected.coordinates, Operator.Set, Type.Required, needed))
+                            applyState(
+                                GameState(
+                                    selected.coordinates,
+                                    Operator.Set,
+                                    Type.Required,
+                                    needed
+                                )
+                            )
 //                            val transportRequest = TransportRequestNew(
 //                                destination = selected.coordinates,
 //                                what = needed
@@ -111,7 +148,14 @@ open class GameStateManager(
 //                            transportManager.request(transportRequest)
                         }
                         selected.building!!.offers.forEach { resource ->
-                            applyState(GameState(selected.coordinates, Operator.Set, Type.Storage, resource))
+                            applyState(
+                                GameState(
+                                    selected.coordinates,
+                                    Operator.Set,
+                                    Type.Storage,
+                                    resource
+                                )
+                            )
                         }
                     }
                     Type.Required -> {
@@ -128,6 +172,21 @@ open class GameStateManager(
                     Type.Animation -> {
                         selected.animation = state.data as Animation
                         selected.redraw = true
+                    }
+                    Type.Damage -> {
+                        //TODO handle damage to buildings?
+                        val a = selected.movingObject!!.health.minus((state.data as Damage).value)
+                        if (a <= 0) {
+                            selected.movingObject = null
+                            applyState(
+                                GameState(
+                                    selected.coordinates,
+                                    Operator.Set,
+                                    Type.Animation,
+                                    ExplosionAnimation()
+                                )
+                            )
+                        }
                     }
                 }
             }
@@ -152,7 +211,7 @@ open class GameStateManager(
                         selected.transport.clear()
                     }
                     Type.Required -> selected.requires.remove(state.data as Resource)
-                    Type.Production -> TODO()
+                    Type.Production -> selected.production.remove(state.data as Resource)
                     Type.MovingObject -> {
                         selected.movingObject = null
                         selected.redraw = true
@@ -161,6 +220,7 @@ open class GameStateManager(
                         selected.animation = null
                         selected.redraw = true
                     }
+                    Type.Damage -> throw IllegalStateException()
                 }
             }
         }
