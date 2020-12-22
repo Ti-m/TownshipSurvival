@@ -33,6 +33,10 @@ open class MapManager(
         return findSpecificCell(at)?.building
     }
 
+    fun queryAnimation(at: Coordinates): Animation? {
+        return findSpecificCell(at)?.animation
+    }
+
     fun isRoad(at: Coordinates): Boolean {
         //This is queried sometimes of the map, in case its calculating the neighbours of cells
         return queryBuilding(at) is Road

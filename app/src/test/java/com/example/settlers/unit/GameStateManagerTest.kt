@@ -159,15 +159,15 @@ class GameStateManagerTest {
 
     @Test
     fun `Set explosion animation and check the progress`() {
-        sut.applyState(GameState(Coordinates(0,0), Operator.Set, Type.Animation, ExplosionAnimation()))
-        assertTrue(mapManager.findSpecificCell(Coordinates(0, 0))!!.animation is ExplosionAnimation)
-        assertTrue(mapManager.findSpecificCell(Coordinates(0, 0))!!.animation!!.progress == AnimationProgress.One)
+        sut.applyState(GameState(coords, Operator.Set, Type.Animation, ExplosionAnimation()))
+        assertTrue(mapManager.queryAnimation(coords)!! is ExplosionAnimation)
+        assertTrue(mapManager.queryAnimation(coords)!!.progress == AnimationProgress.One)
         sut.tick()
-        assertTrue(mapManager.findSpecificCell(Coordinates(0, 0))!!.animation!!.progress == AnimationProgress.Two)
+        assertTrue(mapManager.queryAnimation(coords)!!.progress == AnimationProgress.Two)
         sut.tick()
-        assertTrue(mapManager.findSpecificCell(Coordinates(0, 0))!!.animation!!.progress == AnimationProgress.Three)
+        assertTrue(mapManager.queryAnimation(coords)!!.progress == AnimationProgress.Three)
         sut.tick()
-        assertTrue(mapManager.findSpecificCell(Coordinates(0, 0))!!.animation!!.progress == null)
+        assertNull(mapManager.queryAnimation(coords)) //Remove animation, when the cycle is over
     }
 
     @Test
@@ -237,5 +237,4 @@ class GameStateManagerTest {
         assertFalse(mapManager.isMovingObject(Coordinates(2,2)))
         assertFalse(mapManager.isMovingObject(Coordinates(4,2)))
     }
-
 }

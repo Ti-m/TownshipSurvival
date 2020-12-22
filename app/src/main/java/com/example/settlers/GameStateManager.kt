@@ -84,6 +84,9 @@ open class GameStateManager(
 
     private fun prepareNextAnimation(cell: Cell) {
         animationManager.nextAnimation(cell.animation!!)
+        if (cell.animation!!.progress == null) {
+            cell.animation = null //Remove animation
+        }
     }
 
     private fun destruction(cell: Cell): Collection<GameState> {
