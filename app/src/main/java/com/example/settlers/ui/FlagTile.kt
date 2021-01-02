@@ -135,25 +135,34 @@ class GraphicalFlagTile(
     }
 
     override fun drawAnimation(canvas: Canvas) {
-        when (cell.animation) {
-            is ExplosionAnimation -> {
-                when (cell.animation!!.progress) {
-                    AnimationProgress.One -> {
-                        explosion_1!!.bounds = canvas.clipBounds
-                        explosion_1.draw(canvas)
-                    }
-                    AnimationProgress.Two -> {
-                        explosion_2!!.bounds = canvas.clipBounds
-                        explosion_2.draw(canvas)
-                    }
-                    AnimationProgress.Three -> {
-                        explosion_1!!.bounds = canvas.clipBounds
-                        explosion_1.draw(canvas)
-                    }
-                    else -> {
-                        //Nothing
-                    }
-                }
+        when (cell.animation!!.parts.firstOrNull()) {
+            is ExplosionAnimationOne -> {
+                explosion_1!!.bounds = canvas.clipBounds
+                explosion_1.draw(canvas)
+            }
+            is ExplosionAnimationTwo -> {
+                explosion_2!!.bounds = canvas.clipBounds
+                explosion_2.draw(canvas)
+            }
+            is ExplosionAnimationThree -> {
+                explosion_1!!.bounds = canvas.clipBounds
+                explosion_1.draw(canvas)
+            }
+            is ShootAnimationOne -> {
+                explosion_1!!.bounds = canvas.clipBounds //TODO Add the right animation
+                explosion_1.draw(canvas)
+            }
+            is ShootAnimationTwo -> {
+                explosion_2!!.bounds = canvas.clipBounds //TODO Add the right animation
+                explosion_2.draw(canvas)
+            }
+            is ProjectileAnimationOne -> {
+                explosion_1!!.bounds = canvas.clipBounds //TODO Add the right animation
+                explosion_1.draw(canvas)
+            }
+            is ProjectileAnimationTwo -> {
+                explosion_2!!.bounds = canvas.clipBounds //TODO Add the right animation
+                explosion_2.draw(canvas)
             }
         }
     }
@@ -275,7 +284,7 @@ open class FlagTile(
                 is Lumberjack -> drawLumberjack(canvas)
                 is Road -> drawRoad(canvas)
                 is Tower -> drawTower(canvas)
-                is Spawner -> drawSpawner(canvas) //TODO Add spawner graphics
+                is Spawner -> drawSpawner(canvas)
                 else -> throw NotImplementedError()
             }
 

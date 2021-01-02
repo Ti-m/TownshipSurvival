@@ -3,55 +3,48 @@ package com.example.settlers
 //An animation is an overlay picture which is printed in the next Game tick. An Animation is always
 // a cycle of multiple animations which are run in a certain order
 abstract class Animation : GameObject() {
-    var progress: AnimationProgress? = AnimationProgress.One
-        protected set //Should only be set by itself
-    abstract fun calcNextAnimation()
+    //A list of animation parts which will run one after another
+    //Always run element 0. Pop afterwards
+    abstract var parts: MutableList<AnimationPart>
 }
 
-enum class AnimationProgress {
-    One, Two, Three, Four
-}
+//Baseclass for the steps of the animation
+abstract class AnimationPart
+
+//Clears the Animation
+class EmptyAnimation : AnimationPart()
+
+class ExplosionAnimationOne : AnimationPart()
+class ExplosionAnimationTwo : AnimationPart()
+class ExplosionAnimationThree : AnimationPart()
 
 class ExplosionAnimation : Animation() {
-
-    override fun calcNextAnimation() {
-        progress = when (progress) {
-            //This is a three step animation
-            AnimationProgress.One -> AnimationProgress.Two
-            AnimationProgress.Two -> AnimationProgress.Three
-            AnimationProgress.Three -> null
-            else -> null
-        }
-    }
+    override var parts: MutableList<AnimationPart> = mutableListOf(
+        ExplosionAnimationOne(),
+        ExplosionAnimationTwo(),
+        ExplosionAnimationThree(),
+        EmptyAnimation()
+    )
 }
+
+class ShootAnimationOne : AnimationPart()
+class ShootAnimationTwo : AnimationPart()
 
 class ShootAnimation: Animation() {
-    override fun calcNextAnimation() {
-        progress = when (progress) {
-            //This is a three step animation
-            AnimationProgress.One -> AnimationProgress.Two
-            AnimationProgress.Two -> null
-            else -> null
-        }
-    }
+    override var parts: MutableList<AnimationPart> = mutableListOf(
+        ShootAnimationOne(),
+        ShootAnimationTwo(),
+        EmptyAnimation()
+    )
 }
+
+class ProjectileAnimationOne : AnimationPart()
+class ProjectileAnimationTwo : AnimationPart()
 
 class ProjectileAnimation: Animation() {
-    override fun calcNextAnimation() {
-        progress = when (progress) {
-            //This is a three step animation
-            AnimationProgress.One -> AnimationProgress.Two
-            AnimationProgress.Two -> null
-            else -> null
-        }
-    }
-
-}
-
-//The AnimationManager handles the logic to calculate the next animation.
-class AnimationManager {
-    //This method sets the next Picture in an animation cycle based on the previous
-    fun nextAnimation(current: Animation) {
-        current.calcNextAnimation()
-    }
+    override var parts: MutableList<AnimationPart> = mutableListOf(
+        ProjectileAnimationOne(),
+        ProjectileAnimationTwo(),
+        EmptyAnimation()
+    )
 }

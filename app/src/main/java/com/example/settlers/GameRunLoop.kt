@@ -20,7 +20,10 @@ class GameRunLoop(
 
     fun tick() {
         Log.i(TAG, "tick")
+        //First calculate a complete redraw
         gameStateManager.tick()
+        //Then redraw everything
+        //TODO Maybe skip this step and just redraw everything? It's only once a second anyway?
         tileManager.redrawAllRequestedTiles()
     }
 }

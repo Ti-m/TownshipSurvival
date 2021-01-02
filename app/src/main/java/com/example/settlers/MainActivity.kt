@@ -61,8 +61,7 @@ class MainActivity : AppCompatActivity() {
         val mapManager = MapManager(cells, logger, tileGridSize)
         val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
         val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager, neighbourCalculator), logger)
-        val animationManager = AnimationManager()
-        val gameStateManager = GameStateManager(transportManager, mapManager, animationManager, logger)
+        val gameStateManager = GameStateManager(transportManager, mapManager, logger)
 
         MainActivityHelper.createInitialState(gameStateManager, mapManager)
         MainActivityHelper.setAZombie(gameStateManager)

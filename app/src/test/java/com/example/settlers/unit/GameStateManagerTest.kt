@@ -161,11 +161,13 @@ class GameStateManagerTest {
     fun `Set explosion animation and check the progress`() {
         sut.applyState(GameState(coords, Operator.Set, Type.Animation, ExplosionAnimation()))
         assertTrue(mapManager.queryAnimation(coords)!! is ExplosionAnimation)
-        assertTrue(mapManager.queryAnimation(coords)!!.progress == AnimationProgress.One)
+        assertTrue(mapManager.queryAnimation(coords)!!.parts.first() is ExplosionAnimationOne)
         sut.tick()
-        assertTrue(mapManager.queryAnimation(coords)!!.progress == AnimationProgress.Two)
+        assertTrue(mapManager.queryAnimation(coords)!!.parts.first() is ExplosionAnimationTwo)
         sut.tick()
-        assertTrue(mapManager.queryAnimation(coords)!!.progress == AnimationProgress.Three)
+        assertTrue(mapManager.queryAnimation(coords)!!.parts.first() is ExplosionAnimationThree)
+        sut.tick()
+        assertTrue(mapManager.queryAnimation(coords)!!.parts.first() is EmptyAnimation)
         sut.tick()
         assertNull(mapManager.queryAnimation(coords)) //Remove animation, when the cycle is over
     }

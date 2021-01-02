@@ -2,24 +2,28 @@ package com.example.settlers
 
 import com.example.settlers.util.DisabledLogger
 import com.example.settlers.util.Logger
+import java.util.*
 
 open class GameStateManager(
     private val transportManager: TransportManager,
     private val mapManager: MapManager,
-    private val animationManager: AnimationManager,
     private val log: Logger
 ) {
     fun tick() {
         //Is this to expensive to do the iteration here?
         mapManager.resetTouched()
+//            Make GameStateManger the only thing which is allowed to change state?
+//            Make everything immutable and only changeable by GamestateManager?
+//            So even handle the production progress by GameStateManger?
+        mapManager.getCellsWhichShallRunAnAnimation().forEach { (_, cell) ->
+            prepareNextAnimation(cell)
+            if (cell.animation != null) {
+                applyState(runAnimation(cell))
+            }
+        }
 
         mapManager.getCellsWithFinishedTowers().forEach { (_, cell) ->
             applyStates(engageTarget(cell))
-        }
-
-        mapManager.getCellsWhichShallRunAnAnimation().forEach { (_, cell) ->
-            applyState(runAnimation(cell))
-            prepareNextAnimation(cell)
         }
 
         mapManager.getCellsWithMovingObjects().forEach { (_, cell) ->
@@ -79,12 +83,13 @@ open class GameStateManager(
     }
 
     private fun runAnimation(cell: Cell): GameState {
+        //This will only trigger a redraw, because the animation is already set
         return GameState(cell.coordinates, Operator.Set, Type.Animation, cell.animation)
     }
 
     private fun prepareNextAnimation(cell: Cell) {
-        animationManager.nextAnimation(cell.animation!!)
-        if (cell.animation!!.progress == null) {
+        cell.animation!!.parts.removeFirstOrNull()
+        if (cell.animation!!.parts.count() == 0 ) {
             cell.animation = null //Remove animation
         }
     }
@@ -110,7 +115,8 @@ open class GameStateManager(
         }
     }
 
-    fun applyState(state: GameState){
+    //A GameState is a request to change the game state, this method handles them
+    fun applyState(state: GameState) {
         log.logi("GameStateManager", "apply State: $state")
         val selected = mapManager.findSpecificCell(state.coordinates)!!
         when (state.operator) {
@@ -233,11 +239,9 @@ open class GameStateManager(
 class GameStateManagerPreparedForTest(
     transportManager: TransportManager,
     mapManager: MapManager,
-    animationManager: AnimationManager,
     log: Logger,
-) : GameStateManager(transportManager, mapManager, animationManager, log) {
-    constructor(transportManager: TransportManager, mapManager: MapManager, animationManager: AnimationManager) : this(transportManager, mapManager, animationManager, DisabledLogger())
-    constructor(transportManager: TransportManager, mapManager: MapManager) : this(transportManager, mapManager, AnimationManager(), DisabledLogger())
+) : GameStateManager(transportManager, mapManager, log) {
+    constructor(transportManager: TransportManager, mapManager: MapManager) : this(transportManager, mapManager, DisabledLogger())
     constructor(mapManager: MapManager) : this(TransportManagerPreparedForTest(mapManager), mapManager)
     constructor() : this(MapManagerPreparedForTest())
 }
