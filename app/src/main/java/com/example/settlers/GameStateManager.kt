@@ -80,6 +80,7 @@ open class GameStateManager(
     }
 
     private fun prepareNextAnimation(cell: Cell) {
+        //TODO create a GameStateObject here, which handles the removal?
         cell.animation!!.parts.removeFirstOrNull()
         if (cell.animation!!.parts.count() == 0 ) {
             cell.animation = null //Remove animation

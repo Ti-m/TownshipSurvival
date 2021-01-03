@@ -40,6 +40,7 @@ Combat
 Map
 
 Building
+* DONE Construction shall consume the items for construction, at the beginning of construction
 ** Add a fletcher which produces 1 arrow from 1 wood
 ** Bug: Buildings are not constructing, if the are additional ressources in production.
 *** Example is the tower if an arrow is in front of the list
@@ -53,6 +54,8 @@ Building
 Dialog
 
 Production
+* Produce does not check if items are requirements are fulfilled
+** Remove items at the start of production
 ** Reduce townhall start resources to 2 Wood
 
 TestSetup

@@ -134,11 +134,18 @@ open class MapManager(
     }
 
     fun getCellsWhichShallRunAConstruction(): Map<Coordinates, Cell> {
-        return getCellsWithBuildings().filterForUnfinishedConstruction().filterForAllConstructionMaterialsAvailable()
+        val buildings = getCellsWithBuildings().filterForUnfinishedConstruction()
+        val ret = buildings.filterForAllConstructionMaterialsAvailable().toMutableMap()
+        ret.putAll(buildings.filterForConstructionStarted())
+        return ret
     }
 
     private fun Map<Coordinates, Cell>.filterForUnfinishedConstruction(): Map<Coordinates, Cell> {
         return filterValues { it.building != null && !it.building!!.isConstructed() }
+    }
+
+    private fun Map<Coordinates, Cell>.filterForConstructionStarted(): Map<Coordinates, Cell> {
+        return filterValues { it.building != null && it.building!!.isConstructionInProgress() }
     }
 
     private fun Map<Coordinates, Cell>.filterForAllConstructionMaterialsAvailable(): Map<Coordinates, Cell> {
@@ -161,10 +168,13 @@ open class MapManager(
     }
 
     fun runConstruction(cell: Cell) : Collection<GameState> {
-        if (cell.building!!.construct()) {
+        if (!cell.building!!.isConstructionInProgress()) {
+            cell.building!!.construct()
             return removeItemsFromProduction(cell)
+        } else {
+            cell.building!!.construct()
+            return emptyList()
         }
-        return emptyList()
     }
 
     private fun removeItemsFromProduction(cell: Cell) : Collection<GameState> {

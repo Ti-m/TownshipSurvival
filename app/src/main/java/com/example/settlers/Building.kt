@@ -10,15 +10,13 @@ abstract class Building : GameObject() {
 
     abstract fun produce(coordinates: Coordinates): Collection<GameState>
 
-    //true if finished in this invocation
-    fun construct() : Boolean {
-        if (isConstructed()) return false
+    fun construct() {
+        if (isConstructed()) return
         for (x in 0..9) {
             if (constructionCount < 100) {
                 constructionCount += 1
             }
         }
-        return isConstructed()
     }
 
     fun setConstructionFinished() { constructionCount = 100 }
@@ -31,6 +29,10 @@ abstract class Building : GameObject() {
 
     fun isConstructed() : Boolean {
         return constructionCount == 100
+    }
+
+    fun isConstructionInProgress() : Boolean {
+        return constructionCount in 1..99
     }
 }
 

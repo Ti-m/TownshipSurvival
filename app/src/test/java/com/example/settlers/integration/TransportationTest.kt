@@ -168,7 +168,7 @@ class TransportationTest {
         assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = Coordinates(7,1)))
         assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = Coordinates(6,2)))
 
-        assertEquals(listOf(Wood, Wood), mapManager.queryInProduction(at = Coordinates(6,0)))
+        assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = Coordinates(6,0)))
         assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = Coordinates(7,1)))
         assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = Coordinates(6,2)))
 

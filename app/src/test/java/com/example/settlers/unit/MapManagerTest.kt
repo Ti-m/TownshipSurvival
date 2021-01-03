@@ -230,7 +230,7 @@ class MapManagerTest {
     }
 
     @Test
-    fun `runConstruction - remove items from production afterwards`() {
+    fun `runConstruction - remove items from production as start of construction`() {
         //init
         gameStateManager.applyStates(listOf(
             GameStateCreator.createLumberjack(coords),
@@ -240,10 +240,7 @@ class MapManagerTest {
 
         //construct
         assertEquals(0, sut.queryBuilding(coords)!!.constructionCount)
-        for (i in 0..9) {
-            gameStateManager.applyStates(sut.runConstruction(sut.findSpecificCell(coords)!!))
-        }
-        assertTrue(sut.queryBuilding(coords)!!.isConstructed())
+        gameStateManager.applyStates(sut.runConstruction(sut.findSpecificCell(coords)!!))
 
         //check
         assertEquals(emptyList<Resource>(), sut.queryInProduction(coords))
