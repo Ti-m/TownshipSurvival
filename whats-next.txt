@@ -3,6 +3,13 @@ Tasks - Open
 *Bug: Buildings are not constructing, if the are additional ressources in production.
 ** Example is the tower if an arrow is in front of the list
 
+*Bug: After finishing construction, the materials in production are not removed.
+
+* GameState Redesign Ideas:
+** Currently it handles sideeffects of other actions.
+*** I.E. If a destruction of a building is requested, it deletes all items associated
+
+
 * DONE Der eine Test hat Probleme, weil der MapGenerator zufällig kakteen erzeugt. Wieso war das vorher kein problem?
 
 * DONE Implement Test testCreateSapwnerAtFarEdge
@@ -38,7 +45,7 @@ Tasks - Open
 **** DONE Find a Target within range.
 **** DONE Every tower searches its surrounding each tick for a valid target
 *** DONE The tower will shoot an arrow in a straight line at a zombie within range
-**** This is a one tick action, but show an animation at the full shooting path
+**** DONE This is a one tick action, but show an animation at the full shooting path
 ***** Shooting animation tower
 ***** red line in the path
 ***** Get hit animation at zombie
@@ -63,6 +70,7 @@ Tasks - Open
 DONE Construction starts to early??
 
 *Building
+** Add a fletcher which produces 1 arrow from 1 wood
 ** DONE If a building is replaced with another, the requests need to be deleted. Atm stuff is still transported
 ** Add an option to delete a building
 ** DONE Add a construction time concept like the production concept

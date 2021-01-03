@@ -256,6 +256,11 @@ open class FlagTile(
         canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
     }
 
+    open fun drawFletcher(canvas: Canvas) {
+        val letter = "F"
+        canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
+    }
+
     open fun drawSpawner(canvas: Canvas) {
         //overwrite
     }
@@ -284,12 +289,13 @@ open class FlagTile(
                 is Lumberjack -> drawLumberjack(canvas)
                 is Road -> drawRoad(canvas)
                 is Tower -> drawTower(canvas)
+                is Fletcher -> drawFletcher(canvas)
                 is Spawner -> drawSpawner(canvas)
                 else -> throw NotImplementedError()
             }
 
             //Show progress
-            if (it.constructionCount != null && !it.isConstructed()) {
+            if (!it.isConstructed()) {
                 val progress = it.constructionCount.toString()[0].toString()
                 canvas.drawText(
                     progress,

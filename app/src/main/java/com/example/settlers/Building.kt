@@ -1,19 +1,21 @@
 package com.example.settlers
 
+import android.os.Build
+
 abstract class Building : GameObject() {
 
     //TODO shall these counters also be part of the GameStateObjects? Or is it ok, that the
     // buildings handle stuff on their own?
     //raises from 0 to 100
     abstract var productionCount: Int?
-    abstract var constructionCount: Int?
+    abstract var constructionCount: Int
 
     abstract fun produce(coordinates: Coordinates): Collection<GameState>
     fun construct() {
-        if (constructionCount == null) return
+        if (isConstructed()) return
         for (x in 0..9) {
-            if (constructionCount!! < 100) {
-                constructionCount = constructionCount!! + 1
+            if (constructionCount < 100) {
+                constructionCount += 1
             }
         }
     }
@@ -34,7 +36,7 @@ abstract class Building : GameObject() {
 class Townhall : Building() {
 
     //no build time
-    override var constructionCount: Int? = null
+    override var constructionCount: Int = 100
     //no production
     override var productionCount: Int? = null
 
@@ -48,7 +50,7 @@ class Townhall : Building() {
 
 class Lumberjack : Building() {
 
-    override var constructionCount: Int? = 0
+    override var constructionCount: Int = 0
     override var productionCount: Int? = 0
 
     override var requires: MutableList<Resource> = mutableListOf(Wood, Wood)
@@ -70,7 +72,7 @@ class Lumberjack : Building() {
 
 class Road : Building() {
     //no build time
-    override var constructionCount: Int? = null
+    override var constructionCount: Int = 100
     //no production
     override var productionCount: Int? = null
 
@@ -83,7 +85,7 @@ class Road : Building() {
 }
 
 class Tower : Building() {
-    override var constructionCount: Int? = 0
+    override var constructionCount: Int = 0
     //no production //TODO can i use this for shooting "progress"?
     override var productionCount: Int? = null
 
@@ -97,8 +99,8 @@ class Tower : Building() {
 }
 
 class Spawner : Building() {
+    override var constructionCount: Int = 100//no build time yet
     override var productionCount: Int? = 0
-    override var constructionCount: Int? = 100//no build time yet
 
     override fun produce(coordinates: Coordinates): Collection<GameState> {
         if (!isConstructed()) return emptyList()
@@ -113,5 +115,28 @@ class Spawner : Building() {
 
     override var requires: MutableList<Resource> = mutableListOf()
     override var offers: MutableList<Resource> = mutableListOf()
+
+}
+
+class Fletcher : Building() {
+    override var productionCount: Int? = 0
+    override var constructionCount: Int = 0
+
+    override var requires: MutableList<Resource> = mutableListOf(Wood, Wood)
+    override var offers: MutableList<Resource> = mutableListOf()
+
+    override fun produce(coordinates: Coordinates): Collection<GameState> {
+        if (!isConstructed()) return emptyList()
+        //TODO only do, if wood is available
+        val result = mutableListOf<GameState>()
+        for (x in 0..9) {
+            productionCount = productionCount!! + 1
+            if (productionCount == 100) {
+                result.add(GameState(coordinates, Operator.Set, Type.Storage, Arrow))
+                productionCount = 0
+            }
+        }
+        return result
+    }
 
 }
