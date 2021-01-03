@@ -3,6 +3,7 @@ package com.example.settlers
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -34,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var bindingViewTopBar: ViewTopBarBinding
 
-    private val handler = Handler()
+    private val handler = Handler(Looper.getMainLooper())
     lateinit var buildDialogClickHandler: BuildDialogCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
