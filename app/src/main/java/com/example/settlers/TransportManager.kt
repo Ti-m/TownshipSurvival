@@ -13,7 +13,6 @@ open class TransportManager(
 ) {
 
     fun runProduction(cell: Cell): Collection<GameState> {
-        cell.redraw = true //TODO put draw somewhere else?
         return cell.building!!.produce(cell.coordinates)
     }
 

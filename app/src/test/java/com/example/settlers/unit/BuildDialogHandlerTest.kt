@@ -69,11 +69,4 @@ class BuildDialogHandlerTest {
         sut.selectedCallback(Tower(), coordinates)
         assertEquals(emptyList<Resource>(), cell.building!!.offers)
     }
-
-    @Test
-    fun onClick_redraw() {
-        assertEquals(false, cell.redraw)
-        sut.selectedCallback(Townhall(), coordinates)
-        assertEquals(true, cell.redraw)
-    }
 }

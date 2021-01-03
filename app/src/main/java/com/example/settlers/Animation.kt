@@ -11,9 +11,6 @@ abstract class Animation : GameObject() {
 //Baseclass for the steps of the animation
 abstract class AnimationPart
 
-//Clears the Animation
-class EmptyAnimation : AnimationPart()
-
 class ExplosionAnimationOne : AnimationPart()
 class ExplosionAnimationTwo : AnimationPart()
 class ExplosionAnimationThree : AnimationPart()
@@ -22,8 +19,7 @@ class ExplosionAnimation : Animation() {
     override var parts: MutableList<AnimationPart> = mutableListOf(
         ExplosionAnimationOne(),
         ExplosionAnimationTwo(),
-        ExplosionAnimationThree(),
-        EmptyAnimation()
+        ExplosionAnimationThree()
     )
 }
 
@@ -33,8 +29,7 @@ class ShootAnimationTwo : AnimationPart()
 class ShootAnimation: Animation() {
     override var parts: MutableList<AnimationPart> = mutableListOf(
         ShootAnimationOne(),
-        ShootAnimationTwo(),
-        EmptyAnimation()
+        ShootAnimationTwo()
     )
 }
 
@@ -44,7 +39,6 @@ class ProjectileAnimationTwo : AnimationPart()
 class ProjectileAnimation: Animation() {
     override var parts: MutableList<AnimationPart> = mutableListOf(
         ProjectileAnimationOne(),
-        ProjectileAnimationTwo(),
-        EmptyAnimation()
+        ProjectileAnimationTwo()
     )
 }

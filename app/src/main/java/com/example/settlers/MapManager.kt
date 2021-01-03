@@ -161,7 +161,6 @@ open class MapManager(
     }
 
     fun runConstruction(cell: Cell) {
-        cell.redraw = true //TODO put draw somewhere else?
         return cell.building!!.construct()
     }
 

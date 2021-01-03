@@ -1,6 +1,5 @@
 package com.example.settlers
 
-import android.util.Log
 import com.example.settlers.ui.FlagTile
 
 class TileManager(val tiles: Map<Coordinates, FlagTile>) {
@@ -9,17 +8,13 @@ class TileManager(val tiles: Map<Coordinates, FlagTile>) {
         private val TAG = "TileManager"
     }
 
-    fun redrawAllRequestedTiles() {
+    fun redrawAllTiles() {
         tiles.forEach {
-            if (it.value.cell.redraw) {
-                Log.i(TAG, "need to redraw")
-                it.value.invalidate()
-                it.value.cell.redraw = false
-            }
+            it.value.invalidate()
         }
     }
 
-    fun redrawTileWithCoordinates(coordinates: Coordinates) {
-        (tiles[coordinates] ?: error("The coordinates are not part of the map!")).invalidate()
-    }
+//    fun redrawTileWithCoordinates(coordinates: Coordinates) {
+//        (tiles[coordinates] ?: error("The coordinates are not part of the map!")).invalidate()
+//    }
 }

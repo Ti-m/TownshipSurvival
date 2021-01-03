@@ -17,9 +17,6 @@ open class GameStateManager(
 //            So even handle the production progress by GameStateManger?
         mapManager.getCellsWhichShallRunAnAnimation().forEach { (_, cell) ->
             prepareNextAnimation(cell)
-            if (cell.animation != null) {
-                applyState(runAnimation(cell))
-            }
         }
 
         mapManager.getCellsWithFinishedTowers().forEach { (_, cell) ->
@@ -82,11 +79,6 @@ open class GameStateManager(
         return result
     }
 
-    private fun runAnimation(cell: Cell): GameState {
-        //This will only trigger a redraw, because the animation is already set
-        return GameState(cell.coordinates, Operator.Set, Type.Animation, cell.animation)
-    }
-
     private fun prepareNextAnimation(cell: Cell) {
         cell.animation!!.parts.removeFirstOrNull()
         if (cell.animation!!.parts.count() == 0 ) {
@@ -129,17 +121,14 @@ open class GameStateManager(
                         } else {
                             throw IllegalStateException("$state :: ${selected.transport}")
                         }
-                        selected.redraw = true
                         selected.touched = true
                     }
                     Type.Storage -> {
                         selected.storage.add(state.data as Resource)
-                        selected.redraw = true
                         selected.touched = true
                     }
                     Type.Building -> {
                         selected.building = state.data as Building
-                        selected.redraw = true
                         selected.requires.clear()//Make sure old requests are deleted, in case of building replacement
                         selected.building!!.requires.forEach { needed ->
                             applyState(
@@ -175,12 +164,10 @@ open class GameStateManager(
                     }
                     Type.MovingObject -> {
                         selected.movingObject = state.data as MovingObject
-                        selected.redraw = true
                         selected.touched = true
                     }
                     Type.Animation -> {
                         selected.animation = state.data as Animation
-                        selected.redraw = true
                     }
                     Type.Damage -> {
                         //TODO handle damage to buildings?
@@ -206,13 +193,11 @@ open class GameStateManager(
                         if (!selected.transport.remove(res)) {
                             throw IllegalStateException()
                         }
-                        selected.redraw = true
                     }
                     Type.Storage -> {
                         selected.storage.remove(state.data as Resource)
                     }
                     Type.Building -> {
-                        selected.redraw = true
                         selected.requires.clear()
                         selected.building = null
                         selected.production.clear()
@@ -223,11 +208,9 @@ open class GameStateManager(
                     Type.Production -> selected.production.remove(state.data as Resource)
                     Type.MovingObject -> {
                         selected.movingObject = null
-                        selected.redraw = true
                     }
                     Type.Animation -> {
                         selected.animation = null
-                        selected.redraw = true
                     }
                     Type.Damage -> throw IllegalStateException()
                 }

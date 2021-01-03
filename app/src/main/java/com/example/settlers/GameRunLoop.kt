@@ -13,18 +13,12 @@ class GameRunLoop(
         private val TAG = "GameRunLoop"
     }
 
-//    fun calcTransports() {
-//        Log.i(TAG, "calcTransports")
-//
-//    }
-
     fun tick() {
         Log.i(TAG, "tick")
-        //First calculate a complete redraw
+        //First calculate a new gamestate
         gameStateManager.tick()
         //Then redraw everything
-        //TODO Maybe skip this step and just redraw everything? It's only once a second anyway?
-        tileManager.redrawAllRequestedTiles()
+        tileManager.redrawAllTiles()
     }
 }
 

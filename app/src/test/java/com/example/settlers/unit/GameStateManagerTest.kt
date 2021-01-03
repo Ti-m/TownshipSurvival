@@ -167,8 +167,6 @@ class GameStateManagerTest {
         sut.tick()
         assertTrue(mapManager.queryAnimation(coords)!!.parts.first() is ExplosionAnimationThree)
         sut.tick()
-        assertTrue(mapManager.queryAnimation(coords)!!.parts.first() is EmptyAnimation)
-        sut.tick()
         assertNull(mapManager.queryAnimation(coords)) //Remove animation, when the cycle is over
     }
 

@@ -4,7 +4,6 @@ import java.io.Serializable
 
 //CellBase handles the utility functions for proper drawing from the Cell.
 open class CellBase(
-    var redraw: Boolean = false,
     //Touched in Round x ignore this round for transports
     var touched: Boolean = false
 )
