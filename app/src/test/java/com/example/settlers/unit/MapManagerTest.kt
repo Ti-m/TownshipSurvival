@@ -204,11 +204,10 @@ class MapManagerTest {
     fun `getCellsWithMovingObjects two cells`() {
         val c1 = Coordinates(1,1)
         val c2 = Coordinates(0,2)
-        val gameStateCreator = GameStateCreator()
         gameStateManager.applyStates(
             listOf(
-                gameStateCreator.createZombie(c1),
-                gameStateCreator.createZombie(c2)
+                GameStateCreator.createZombie(c1),
+                GameStateCreator.createZombie(c2)
             )
         )
         val cell1 = sut.findSpecificCell(c1)!!
@@ -228,5 +227,25 @@ class MapManagerTest {
     fun `getSouthEastEdge one already finished`() {
         val coords: Coordinates = sut.getSouthEastEdge()
         assertEquals(Coordinates(7,3), coords)
+    }
+
+    @Test
+    fun `runConstruction - remove items from production afterwards`() {
+        //init
+        gameStateManager.applyStates(listOf(
+            GameStateCreator.createLumberjack(coords),
+            GameStateCreator.addWoodToProduction(coords),
+            GameStateCreator.addWoodToProduction(coords)
+        ))
+
+        //construct
+        assertEquals(0, sut.queryBuilding(coords)!!.constructionCount)
+        for (i in 0..9) {
+            gameStateManager.applyStates(sut.runConstruction(sut.findSpecificCell(coords)!!))
+        }
+        assertTrue(sut.queryBuilding(coords)!!.isConstructed())
+
+        //check
+        assertEquals(emptyList<Resource>(), sut.queryInProduction(coords))
     }
 }

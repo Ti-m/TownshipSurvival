@@ -118,10 +118,9 @@ class MainActivity : AppCompatActivity() {
 
 object MainActivityHelper {
     fun createInitialState(gameStateManager: GameStateManager, mapManager: MapManager) {
-        val gameStateCreator = GameStateCreator()
-        gameStateManager.applyStates(gameStateCreator.G1_L2_T3_unfinishedRoad())//TODO for debugging
+        gameStateManager.applyStates(GameStateCreator.G1_L2_T3_unfinishedRoad())//TODO for debugging
         //Set initial spawner
-        gameStateManager.applyState(gameStateCreator.createSpawner(mapManager.getSouthEastEdge()))
+        gameStateManager.applyState(GameStateCreator.createSpawner(mapManager.getSouthEastEdge()))
 
         //Finish construction of the tower to allow shooting
         //TODO Remove this again
@@ -129,12 +128,10 @@ object MainActivityHelper {
     }
 
     fun setAZombie(gameStateManager: GameStateManager) {
-        val gameStateCreator = GameStateCreator()
-        gameStateManager.applyState(gameStateCreator.createZombie(Coordinates(29,11)))
+        gameStateManager.applyState(GameStateCreator.createZombie(Coordinates(29,11)))
     }
 
     fun setExplosion(gameStateManager: GameStateManager) {
-        val gameStateCreator = GameStateCreator()
-        gameStateManager.applyState(gameStateCreator.createExplosion(Coordinates(9,9)))
+        gameStateManager.applyState(GameStateCreator.createExplosion(Coordinates(9,9)))
     }
 }

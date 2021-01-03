@@ -16,13 +16,12 @@ class GameStateCreatorTest {
     fun setUp() {
         mapManager = MapManagerPreparedForTest()
         gameStateManager = GameStateManagerPreparedForTest(mapManager)
-        sut = GameStateCreator()
     }
 
     @Test
     fun testCreateSapwnerAtFarEdge() {
         val coords: Coordinates = mapManager.getSouthEastEdge()
-        gameStateManager.applyState(sut.createSpawner(coords))
+        gameStateManager.applyState(GameStateCreator.createSpawner(coords))
         val building = mapManager.queryBuilding(coords)
         assertTrue(building is Spawner)
     }

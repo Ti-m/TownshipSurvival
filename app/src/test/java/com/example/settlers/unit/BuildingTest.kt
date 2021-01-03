@@ -36,7 +36,7 @@ class BuildingTest {
     }
 
     @Test
-    fun construct() {
+    fun `construct - track progress`() {
         val sut = Lumberjack()
         sut.construct()
         assertEquals(10, sut.constructionCount)

@@ -1,7 +1,5 @@
 package com.example.settlers
 
-import android.os.Build
-
 abstract class Building : GameObject() {
 
     //TODO shall these counters also be part of the GameStateObjects? Or is it ok, that the
@@ -11,13 +9,16 @@ abstract class Building : GameObject() {
     abstract var constructionCount: Int
 
     abstract fun produce(coordinates: Coordinates): Collection<GameState>
-    fun construct() {
-        if (isConstructed()) return
+
+    //true if finished in this invocation
+    fun construct() : Boolean {
+        if (isConstructed()) return false
         for (x in 0..9) {
             if (constructionCount < 100) {
                 constructionCount += 1
             }
         }
+        return isConstructed()
     }
 
     fun setConstructionFinished() { constructionCount = 100 }

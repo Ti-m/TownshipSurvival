@@ -160,8 +160,17 @@ open class MapManager(
         }
     }
 
-    fun runConstruction(cell: Cell) {
-        return cell.building!!.construct()
+    fun runConstruction(cell: Cell) : Collection<GameState> {
+        if (cell.building!!.construct()) {
+            return removeItemsFromProduction(cell)
+        }
+        return emptyList()
+    }
+
+    private fun removeItemsFromProduction(cell: Cell) : Collection<GameState> {
+        return cell.building!!.requires.map {
+            GameState(coordinates = cell.coordinates, operator = Operator.Remove, type = Type.Production, data = it)
+        }
     }
 
     //https://www.redblobgames.com/grids/hexagons/#coordinates-doubled

@@ -56,7 +56,7 @@ class TransportationTest {
 
     @Test
     fun `transport of 3 items - full disclosure`() {
-        gameStateManager.applyStates(GameStateCreator().L3_T3_unfinishedRoad())
+        gameStateManager.applyStates(GameStateCreator.L3_T3_unfinishedRoad())
         gameStateManager.applyState(GameState(Coordinates(3,1), Operator.Set, Type.Building, Road()))//Finish road
 
 

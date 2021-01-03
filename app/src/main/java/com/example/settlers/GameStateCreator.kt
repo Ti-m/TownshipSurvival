@@ -1,6 +1,6 @@
 package com.example.settlers
 
-class GameStateCreator {
+object GameStateCreator {
 
     private val T1 = Coordinates(2, 0)
     private val T2 = Coordinates(1, 1)
@@ -42,12 +42,20 @@ class GameStateCreator {
         return GameState(coords, Operator.Set, Type.Building, Spawner())
     }
 
+    fun createLumberjack(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Set, Type.Building, Lumberjack())
+    }
+
     fun createZombie(coords: Coordinates): GameState {
         return GameState(coords, Operator.Set, Type.MovingObject, Zombie)
     }
 
     fun createExplosion(coords: Coordinates): GameState {
         return GameState(coords, Operator.Set, Type.Animation, ExplosionAnimation())
+    }
+
+    fun addWoodToProduction(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Set, Type.Production, Wood)
     }
 
 }
