@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import com.example.settlers.databinding.ViewTopBarBinding
 import com.example.settlers.terrain.MapGenerator
 import com.example.settlers.terrain.TerrainInterpolator
 import com.example.settlers.ui.BuildDialogCallback
@@ -18,7 +19,6 @@ import com.example.settlers.util.DefaultLogger
 import com.otaliastudios.zoom.ZoomApi.Companion.MAX_ZOOM_DEFAULT_TYPE
 import com.otaliastudios.zoom.ZoomApi.Companion.MIN_ZOOM_DEFAULT_TYPE
 import com.otaliastudios.zoom.ZoomLayout
-import kotlinx.android.synthetic.main.view_top_bar.*
 import kotlin.random.Random
 
 
@@ -32,6 +32,8 @@ class MainActivity : AppCompatActivity() {
         val gameBoardBorder = (4 * flagDistance).toInt()
     }
 
+    private lateinit var bindingViewTopBar: ViewTopBarBinding
+
     private val handler = Handler()
     lateinit var buildDialogClickHandler: BuildDialogCallback
 
@@ -40,7 +42,8 @@ class MainActivity : AppCompatActivity() {
 
         //val baseLayout = layoutInflater.inflate(R.layout.activity_main, null)
         val constraintLayout = ConstraintLayout(this)
-        val topBar = layoutInflater.inflate(R.layout.view_top_bar, constraintLayout, false)
+        bindingViewTopBar = ViewTopBarBinding.inflate(layoutInflater, constraintLayout, false)
+        val topBar = bindingViewTopBar.root
 
         val zoomingLayout = ZoomLayout( context = this)
         zoomingLayout.setBackgroundColor(Color.parseColor("#333333"))
@@ -90,10 +93,9 @@ class MainActivity : AppCompatActivity() {
         )
 
         val switchHandler = GameRunLoopControlHandler(gameRunLoop = gameRunLoop, handler = handler)
-        switchAutoPause.setOnCheckedChangeListener(switchHandler)
-        stepButton.setOnClickListener(switchHandler)
-
-        switchBuildMode.setOnCheckedChangeListener(modeController)
+        bindingViewTopBar.switchAutoPause.setOnCheckedChangeListener(switchHandler)
+        bindingViewTopBar.stepButton.setOnClickListener(switchHandler)
+        bindingViewTopBar.switchBuildMode.setOnCheckedChangeListener(modeController)
 
         val buildDialogHandler = BuildDialogHandler(gameStateManager)
 
