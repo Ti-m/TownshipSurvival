@@ -1,45 +1,19 @@
 Tasks - Open
 
-*Bug: Buildings are not constructing, if the are additional ressources in production.
-** Example is the tower if an arrow is in front of the list
-
-*Bug: DONE After finishing construction, the materials in production are not removed.
-
+Refactor
+* Map Manager does to much stuff
 * GameState Redesign Ideas:
 ** Currently it handles sideeffects of other actions.
 *** I.E. If a destruction of a building is requested, it deletes all items associated
 
-
-* DONE Der eine Test hat Probleme, weil der MapGenerator zufällig kakteen erzeugt. Wieso war das vorher kein problem?
-
-* DONE Implement Test testCreateSapwnerAtFarEdge
-** DONE Implement Spawner Building
-*** Produce is missing
-** DONE Create spawner on first townhall building
-** DONE Add Spawner Graphics
-
+Graphics
 * DONE Add Animation infrastucture
 ** DONE Add 3 tick Explosion animation
 ** Make a nice flame/explosion icon
+* Bug: Just after starting, the screen flickers, like reloading the app. Whats the issue here?
+* Bug: View.generateViewId() creates error message "Invalid ID" in logcat, but seems to work anyway?
 
-*Graphics
-** DONE Replace single color backgrounds with simple images
-*** DONE Learn how to draw pixelart in Gimp?
-**** DONE How many pixels needs the png to fill a hexagon. seems like less then 20px*20px
-**** DONE How to draw a drawable which is not square
-**** DONE Find the right hexagon grid transparency layer in gimp to fill the hexagons
-*** DONE Or draw it straight in android studio with paths?
-*** DONE Add building in construction graphic
-*** DONE Always print text on top of building graphics
-*** DONE Add trees to some green fields
-*** DONE Add cacteen to some yellow fields
-*** DONE Add road connection graphics
-*** DONE Add algorithm to determine the road connections
-**** DONE Townhalls are missing atm
-*** DONE The graphics of the diagonal roads are not fitting together
-**** DONE Redraw neighbour roads on building new roads
-
-* Combat
+Combat
 ** Tower shoots arrows <--
 *** DONE Add range property
 **** DONE Find a Target within range.
@@ -63,70 +37,35 @@ Tasks - Open
 *** DONE Zombies explode when they reach a building dealing 1 dmg. So the Building is destroyed
 **** DONE Add explosion animation
 
-* Map
-** DONE Show construction progress
-** DONE Show Production progress
+Map
 
-DONE Construction starts to early??
-
-*Building
+Building
 ** Add a fletcher which produces 1 arrow from 1 wood
+** Bug: Buildings are not constructing, if the are additional ressources in production.
+*** Example is the tower if an arrow is in front of the list
 ** Limit Building storage to 5 items
 ** Add an option to delete a building
-** DONE If a building is replaced with another, the requests need to be deleted. Atm stuff is still transported
-** DONE Add a construction time concept like the production concept
-** DONE Only finished buildings do produce
-** DONE Only construct, if building material is available
-
-* Cell Dialog
-** DONE A Dialog is needed to query the state of a cell
-** DONE What is in storage
-** DONE What is requested
-** DONE Production progress
-** DONE Show Building progress
-
-
-* Refactor
-** Map Manager does to much stuff
-
-* Bug
-** Just after starting, the screen flickers, like reloading the app. Whats the issue here?
-** View.generateViewId() creates error message "Invalid ID" in logcat, but seems to work anyway?
-
-* Production
-** DONE Lumberjack Produce wood every 10 ticks
-** Reduce townhall start resources to 2 Wood
-
-* DONE Dont use constructor arguments in BuildDialog?
-* DONE Add Building Tower, needs 1 Wood 2 Stone
 * Add Building StoneMason, needs 2 Wood
-** Produces stone every 10 TIcks
-
-* TransportManager
-** If there is no road connection, but a connection including buildings, items will be put from storage into transport
-** Fix "transport only every second round" - there are gaps in transports
-
-* GameRunLoopControlHandler refactor the positions of the interfaces
-
-* Improve TestSetup
-** DONERefactor TestSetup. Build Factory methods??
-** Maybe use of Hilt is better?
-
-** DONE Refactor MapManager to delegate applyState
-*** DONE How to fix the cyclic dependency?
-** DONE BuildDialog: Set buildings through GameStateObjects
-** How handle buildings? They sould not behave as roads, only for start or destination
-*** Add obstacles to routing
-** A single cell shall transport only a single item each round
-*** The transport system ignores how many things are already on a field. So if lumberjack requests
-    3 items of wood it crashes
-** What happens if the route of an active transport is interrrupted
-
+** Produces stone every 10 Ticks
 * Monument
 ** Add Build Pyramids for 100 Wood
 
+Dialog
 
+Production
+** Reduce townhall start resources to 2 Wood
 
+TestSetup
+** Maybe use of Hilt is better?
+
+Transport
+** What happens if the route of an active transport is interrrupted
+
+Routing
+
+UI
+
+--------------------------------------------------------------------------------------------------
 M1 MVP
 
 * Name - Idea "Township Survival"

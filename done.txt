@@ -1,9 +1,108 @@
 Tasks - Done
 
-* Refactor
-** DONE Dialogs: Pass an object ina a bundle
-** DONEFlagTile.onCLick extract
+Build
+* DONE Bug: After finishing construction, the materials in production are not removed.
+* DONE Implement Test testCreateSapwnerAtFarEdge
+** DONE Implement Spawner Building
+*** DONE Produce is missing
+** DONE Create spawner on first townhall building
+** DONE Add Spawner Graphics
+* DONE If a building is replaced with another, the requests need to be deleted. Atm stuff is still transported
+* DONE Add a construction time concept like the production concept
+* DONE Only finished buildings do produce
+* DONE Only construct, if building material is available
+* Redo item storage spaces in buildings
+** DONE Add storage list
+** DONE Add requires list
+** DONE Add production list
+** DONE Add resource list
+** DONE How to handle the search for an item:
+*** DONE When it is searched for transport and storage, it has to be seperated between the GameState command to remove the object
 
+Production
+* DONE Lumberjack Produce wood every 10 ticks
+
+Graphics
+* DONE Replace single color backgrounds with simple images
+** DONE Learn how to draw pixelart in Gimp?
+*** DONE How many pixels needs the png to fill a hexagon. seems like less then 20px*20px
+*** DONE How to draw a drawable which is not square
+*** DONE Find the right hexagon grid transparency layer in gimp to fill the hexagons
+** DONE Or draw it straight in android studio with paths?
+** DONE Add building in construction graphic
+** DONE Always print text on top of building graphics
+** DONE Add trees to some green fields
+** DONE Add cacteen to some yellow fields
+** DONE Add road connection graphics
+** DONE Add algorithm to determine the road connections
+*** DONE Townhalls are missing atm
+** DONE The graphics of the diagonal roads are not fitting together
+*** DONE Redraw neighbour roads on building new roads
+
+Map
+** DONE Show construction progress
+** DONE Show Production progress
+
+Transport
+* DONE: A single cell shall transport only a single item each round
+** DONE The transport system ignores how many things are already on a field. So if lumberjack requests
+    3 items of wood it crashes
+* DONETransport only on roads
+* DONE First allow any building, instead of only roads
+* DONE Generalize the Commands?
+* DONE MoveTransports
+** DONE always recalc each route at the beginning of a tick?
+** DONE This will bypass obstacles
+** DONE This will remove the dependency loop ..
+** DONE This needs to loop through all cells to find requests..
+* DONE convertStorageToProduction
+** DONE Convert an item from the storage list to the production list. This makes the item unavailable
+   for further transports. This removes the item from the request list.
+** DONECrash when a transport is finished should be fixed then
+* DONE Improve coordinate grid
+** DONE Das Zeichnen der Hexes fixen. Ist das GameWold?
+** DONE Test für MapGenerator bauen - wie createMap sinnvoll aufsplitten. Ist MapGeneratorTest der richtige Weg?
+** DONE Double Coordinates Koordinatensystem benutzen
+** DONE Eine Hashmap anstelle von einer Liste benutzen? https://www.redblobgames.com/grids/hexagons/#map-storage
+** DONE Beim Transport kommt: java.util.NoSuchElementException: Key Coordinates(x=12, y=7) is missing in the map.
+** DONE The Transportation tests fails. but in the real app it works
+** DONE Try to remove the coords from Cell/Flagtile. Seems not to work. Build dialog handler needs it
+*** DONE Implement the Routing in TransportManager
+**** DONE Find pseudo code for A*, is optimized for arrays https://rosettacode.org/wiki/A*_search_algorithm#Java . Does not work nice with my Lists
+**** DONE Try A* with TestData
+**** DONE Find variant with hexagons. Find out if its a worth read to build own algorithm with hexagons- https://www.redblobgames.com/grids/hexagons/
+**** DONE Create a skeleton for the routing algorithm
+**** DONE Implement get Neighbour Function
+**** DONE A* Tutorial von ihm https://www.redblobgames.com/pathfinding/a-star/introduction.html -  Für den Anfang reicht https://www.redblobgames.com/pathfinding/a-star/introduction.html#breadth-first-search
+**** DONE Integration in TransportManager
+*** DONE Improve CommandQuerySepartion at TransportManager
+**** DONE Build specific tests for transportManager
+**** DONE All interactions with cells should go through the GameState Objects
+**** DONE Apply the new architecture of TransportManager to the project
+**** DONE Apply the new architecture of MapManager to the project
+**** DONE Create the routing algorithm
+
+Dialog
+* DONE A Dialog is needed to query the state of a cell
+* DONE What is in storage
+* DONE What is requested
+* DONE Production progress
+* DONE Show Building progress
+** DONE The fragmentManager should not be passed down
+** DONE Handle the Request in independent class
+** DONE Add UnitTests. See BuildDialogHandlerTest
+* DONE Create a dependency diagramm out of the .jar with a tool
+** DONE Automatisch geht nur mit der Intellij Ultimate Edition
+** DONE Alternative ist PlantUML, hier kann man das UML Diagram von Hand schreiben.
+** DONE Allerdings gibts es einen Code Generator nur für Java
+** DONE Scrollable map
+*** DONE Run on small phones to see if the scrollable map works
+*** DONE ALternative is some grid system, which expands to a single cell on a bigger grid
+**** DONE Works ok on Pixel 5 with 5" screen
+* DONE Understand how to apply Next Action Approach by watching the video
+** DONE Figure out what is the next single step. Decide based on that step what is the next
+
+Routing
 * DONE Block cells which already applied submitted Gamestate objects for further changes. This helps in many cases
 ** DONE Is this really possible? Works bad with the granular states. The Game States cannot be atomic then
 ** DONE Better to run the transports not in a loop. apply each Transport before calculating the next
@@ -22,87 +121,13 @@ Tasks - Done
 **** DONE Add a test in Transportation for this case?
 ** DONE Add Step move from storage to transport in place
 * DONE Only allow setting of one item each round at a cell?
+* DONE Only allow transports on roads
+** DONE calcRoute_RoadMissing
+** DONE Atm any type of building is allowed, refactor to only allow roads, but at any building at start or destiantion
 
-* DONE BuildDialogHandler: Redraw FlagTile right away
-
+UI
 * DONE Remove Title Bar
 * DONE Inflate layout, then add Zoominglayout in code
 * DONE Add PAuse button
 * DONE Disable automatic gameloop if pause pressed
 ** DONE Add singlestep button
-
-** DONE Only allow transports on roads
-*** DONE calcRoute_RoadMissing
-*** DONE Atm any type of building is allowed, refactor to only allow roads, but at any building at start or destiantion
-
-* DONE Refactor the CommandTypes/
-
-* Transport system.
-** DONETransport only on roads
-** DONE First allow any building, instead of only roads
-** DONE Generalize the Commands?
-** DONE MoveTransports
-*** DONE always recalc each route at the beginning of a tick?
-*** DONE This will bypass obstacles
-*** DONE This will remove the dependency loop ..
-*** DONE This needs to loop through all cells to find requests..
-** DONE convertStorageToProduction
-*** DONE Convert an item from the storage list to the production list. This makes the item unavailable
-    for further transports. This removes the item from the request list.
-*** DONECrash when a transport is finished should be fixed then
-
-* Redo item storage spaces in buildings
-** DONE Add storage list
-** DONE Add requires list
-** DONE Add production list
-** DONE Add resource list
-** DONE How to handle the search for an item:
-*** DONE When it is searched for transport and storage, it has to be seperated between the GameState command to remove the object
-
-* DONE Improve coordinate grid
-** DONE Das Zeichnen der Hexes fixen. Ist das GameWold?
-** DONE Test für MapGenerator bauen - wie createMap sinnvoll aufsplitten. Ist MapGeneratorTest der richtige Weg?
-** DONE Double Coordinates Koordinatensystem benutzen
-** DONE Eine Hashmap anstelle von einer Liste benutzen? https://www.redblobgames.com/grids/hexagons/#map-storage
-** DONE Beim Transport kommt: java.util.NoSuchElementException: Key Coordinates(x=12, y=7) is missing in the map.
-** DONE The Transportation tests fails. but in the real app it works
-** DONE Try to remove the coords from Cell/Flagtile. Seems not to work. Build dialog handler needs it
-
-*** DONE Implement the Routing in TransportManager
-**** DONE Find pseudo code for A*, is optimized for arrays https://rosettacode.org/wiki/A*_search_algorithm#Java . Does not work nice with my Lists
-**** DONE Try A* with TestData
-**** DONE Find variant with hexagons. Find out if its a worth read to build own algorithm with hexagons- https://www.redblobgames.com/grids/hexagons/
-**** DONE Create a skeleton for the routing algorithm
-**** DONE Implement get Neighbour Function
-**** DONE A* Tutorial von ihm https://www.redblobgames.com/pathfinding/a-star/introduction.html -  Für den Anfang reicht https://www.redblobgames.com/pathfinding/a-star/introduction.html#breadth-first-search
-**** DONE Integration in TransportManager
-
-*** DONE Improve CommandQuerySepartion at TransportManager
-**** DONE Build specific tests for transportManager
-**** DONE All interactions with cells should go through the GameState Objects
-**** DONE Apply the new architecture of TransportManager to the project
-**** DONE Apply the new architecture of MapManager to the project
-**** DONE Create the routing algorithm
-
-
-** DONE Refactor that the list operations are hidden by methods of a Manager class.
-*** DONE Implement ExampleUnitTest.request the unit test to drive the design
-**** DONE TransportManagerNew.createActiveTransports() needs to generate a route
-**** DONE The current Test is a little wide. Build tests for MapManager
-**** DONE Make the test work
-
-
-* DONE Refactor BuilDialog
-** DONE The fragmentManager should not be passed down
-** DONE Handle the Request in independent class
-** DONE Add UnitTests. See BuildDialogHandlerTest
-* DONE Create a dependency diagramm out of the .jar with a tool
-** DONE Automatisch geht nur mit der Intellij Ultimate Edition
-** DONE Alternative ist PlantUML, hier kann man das UML Diagram von Hand schreiben.
-** DONE Allerdings gibts es einen Code Generator nur für Java
-** DONE Scrollable map
-*** DONE Run on small phones to see if the scrollable map works
-*** DONE ALternative is some grid system, which expands to a single cell on a bigger grid
-**** DONE Works ok on Pixel 5 with 5" screen
-* DONE Understand how to apply Next Action Approach by watching the video
-** DONE Figure out what is the next single step. Decide based on that step what is the next
