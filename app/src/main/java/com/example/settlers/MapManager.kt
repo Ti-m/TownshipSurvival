@@ -118,7 +118,10 @@ open class MapManager(
     }
 
     fun getCellsWhichShallRunAProduction(): Map<Coordinates, Cell> {
-        return getCellsWithBuildings().filterForFinishedConstruction()
+        val buildings = getCellsWithBuildings().filterForFinishedConstruction()
+        val ret = buildings.filterForAllProductionMaterialsAvailable().toMutableMap()
+        ret.putAll(buildings.filterForProductionStarted())
+        return ret
     }
 
     fun getCellsWithMovingObjects(): Map<Coordinates, Cell> {
@@ -150,10 +153,9 @@ open class MapManager(
 
     private fun Map<Coordinates, Cell>.filterForAllConstructionMaterialsAvailable(): Map<Coordinates, Cell> {
         return filterValues {
-            val requires = it.building!!.requires.toMutableList()
+            val requires = it.building!!.requiresConstruction.toMutableList()
             val production = it.production.toMutableList()
-            //If the list size is not the same, the element is missing materials
-            if (requires.count() != production.count()) {
+            if (requires.count() < production.count()) {
                 false
             } else {
                 var allRequiredResourcesAvailable = true
@@ -177,8 +179,30 @@ open class MapManager(
         }
     }
 
+    private fun Map<Coordinates, Cell>.filterForAllProductionMaterialsAvailable(): Map<Coordinates, Cell> {
+        return filterValues {
+            val requires = it.building!!.requiresProduction.toMutableList()
+            val production = it.production.toMutableList()
+            if (requires.count() < production.count()) {
+                false
+            } else {
+                var allRequiredResourcesAvailable = true
+                requires.forEach { resource ->
+                    if (!production.remove(resource)) {// returns false, if not in the list
+                        allRequiredResourcesAvailable = false
+                    }
+                }
+                allRequiredResourcesAvailable
+            }
+        }
+    }
+
+    private fun Map<Coordinates, Cell>.filterForProductionStarted(): Map<Coordinates, Cell> {
+        return filterValues { it.building != null && it.building!!.isProductionInProgress() }
+    }
+
     private fun removeItemsFromProduction(cell: Cell) : Collection<GameState> {
-        return cell.building!!.requires.map {
+        return cell.building!!.requiresConstruction.map {
             GameState(coordinates = cell.coordinates, operator = Operator.Remove, type = Type.Production, data = it)
         }
     }
@@ -209,6 +233,26 @@ open class MapManager(
 
     fun getCellsWithFinishedTowers(): Map<Coordinates, Cell> {
         return getCellsWithTowers().filterForFinishedConstruction()
+    }
+
+    fun getCellsWhichNeedToUpdateProductionRequirements(): Map<Coordinates, Cell> {
+        return getCellsWithBuildings()
+            .filterForFinishedConstruction()
+            .filterForProductionBuildings()
+            .filterForRequiredIsEmpty()
+            .filterForProductionStorageIsEmpty()
+    }
+
+    private fun Map<Coordinates, Cell>.filterForProductionBuildings(): Map<Coordinates, Cell> {
+        return filterValues { it.building != null && it.building!! is Fletcher }
+    }
+
+    private fun Map<Coordinates, Cell>.filterForRequiredIsEmpty(): Map<Coordinates, Cell> {
+        return filterValues { it.requires.isEmpty() }
+    }
+
+    private fun Map<Coordinates, Cell>.filterForProductionStorageIsEmpty(): Map<Coordinates, Cell> {
+        return filterValues { it.production.isEmpty() }
     }
 }
 

@@ -12,8 +12,26 @@ open class TransportManager(
     private val log: Logger
 ) {
 
+    fun refreshProductionRequirements(cell: Cell): Collection<GameState> {
+        return cell.building!!.requiresProduction.map {
+            GameState(cell.coordinates, Operator.Set, Type.Required, it)
+        }
+    }
+
     fun runProduction(cell: Cell): Collection<GameState> {
-        return cell.building!!.produce(cell.coordinates)
+        return if (!cell.building!!.isProductionInProgress()) {
+            val states = cell.building!!.produce(cell.coordinates).toMutableList()
+            states.addAll(removeItemsFromProduction(cell))
+            states
+        } else {
+            cell.building!!.produce(cell.coordinates)
+        }
+    }
+
+    private fun removeItemsFromProduction(cell: Cell) : Collection<GameState> {
+        return cell.building!!.requiresProduction.map {
+            GameState(coordinates = cell.coordinates, operator = Operator.Remove, type = Type.Production, data = it)
+        }
     }
 
     fun moveResources(cell: Cell): Collection<GameState> {

@@ -40,9 +40,10 @@ Combat
 Map
 
 Building
+* requiresProduction/requiresConstruction: MutableList<Resource> - Use an immutable list?
 * DONE Construction shall consume the items for construction, at the beginning of construction
 ** Add a fletcher which produces 1 arrow from 1 wood
-** Bug: Buildings are not constructing, if the are additional ressources in production.
+** Bug: Buildings are not constructing, if the are additional ressources in production. <- Should be fixed
 *** Example is the tower if an arrow is in front of the list
 ** Limit Building storage to 5 items
 ** Add an option to delete a building
@@ -55,8 +56,12 @@ Dialog
 
 Production
 * Produce does not check if items are requirements are fulfilled
-** Remove items at the start of production
-** Reduce townhall start resources to 2 Wood
+** Requests items for production
+*** Add a new step in tick which scans production buildings and sets a request if production storage is empty and no request is pending
+*** if building is finished
+*** only request stuff for the next production, not two more
+** D Remove items at the start of production
+* Reduce townhall start resources to 2 Wood
 
 TestSetup
 ** Maybe use of Hilt is better?

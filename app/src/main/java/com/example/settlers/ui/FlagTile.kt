@@ -303,7 +303,7 @@ open class FlagTile(
                     coords.center.second + textPaint.textSize * 0.3f,
                     selectedPaint
                 )
-            } else if (it.productionCount != null) {
+            } else if (it.productionCount != 0) {
                 val progress = it.productionCount.toString()[0].toString()
                 canvas.drawText(
                     progress,

@@ -2,7 +2,6 @@ package com.example.settlers
 
 import com.example.settlers.util.DisabledLogger
 import com.example.settlers.util.Logger
-import java.util.*
 
 open class GameStateManager(
     private val transportManager: TransportManager,
@@ -29,6 +28,11 @@ open class GameStateManager(
         mapManager.getCellsWithMovingObjects().forEach { (coordinates, _) ->
             applyStates(transportManager.move(coordinates))
         }
+
+        mapManager.getCellsWhichNeedToUpdateProductionRequirements().forEach { (_, cell) ->
+            applyStates(transportManager.refreshProductionRequirements(cell))
+        }
+
         //TODO applyStates(transportManager.runProduction())
         mapManager.getCellsWhichRequireStuff().forEach { (_, cell) ->
             applyStates(mapManager.convertStorageToProduction(cell))
@@ -131,7 +135,7 @@ open class GameStateManager(
                     Type.Building -> {
                         selected.building = state.data as Building
                         selected.requires.clear()//Make sure old requests are deleted, in case of building replacement
-                        selected.building!!.requires.forEach { needed ->
+                        selected.building!!.requiresConstruction.forEach { needed ->
                             applyState(
                                 GameState(
                                     selected.coordinates,

@@ -46,6 +46,10 @@ object GameStateCreator {
         return GameState(coords, Operator.Set, Type.Building, Lumberjack())
     }
 
+    fun createFletcher(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Set, Type.Building, Fletcher())
+    }
+
     fun createZombie(coords: Coordinates): GameState {
         return GameState(coords, Operator.Set, Type.MovingObject, Zombie)
     }

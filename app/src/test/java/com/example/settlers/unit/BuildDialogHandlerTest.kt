@@ -1,9 +1,6 @@
 package com.example.settlers.unit
 
 import com.example.settlers.*
-import com.example.settlers.BreadthFirstSearchRouting
-import com.example.settlers.util.DisabledLogger
-import com.example.settlers.util.Logger
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -49,13 +46,13 @@ class BuildDialogHandlerTest {
     @Test
     fun onClick_requires() {
         sut.selectedCallback(Townhall(), coordinates)
-        assertEquals(emptyList<Resource>(), cell.building!!.requires)
+        assertEquals(emptyList<Resource>(), cell.building!!.requiresConstruction)
         sut.selectedCallback(Lumberjack(), coordinates)
-        assertEquals(listOf(Wood, Wood), cell.building!!.requires)
+        assertEquals(listOf(Wood, Wood), cell.building!!.requiresConstruction)
         sut.selectedCallback(Road(), coordinates)
-        assertEquals(emptyList<Resource>(), cell.building!!.requires)
+        assertEquals(emptyList<Resource>(), cell.building!!.requiresConstruction)
         sut.selectedCallback(Tower(), coordinates)
-        assertEquals(listOf(Wood, Stone, Stone), cell.building!!.requires)
+        assertEquals(listOf(Wood, Stone, Stone), cell.building!!.requiresConstruction)
     }
 
     @Test

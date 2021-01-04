@@ -245,4 +245,75 @@ class MapManagerTest {
         //check
         assertEquals(emptyList<Resource>(), sut.queryInProduction(coords))
     }
+
+    @Test
+    fun `getCellsWhichNeedToUpdateProductionRequirements() - trivial `() {
+        //init
+        gameStateManager.applyStates(listOf(
+            GameStateCreator.createFletcher(coords),
+            //Finished manually, so clear required.
+            GameState(coords, Operator.Remove, Type.Required, Wood),
+            GameState(coords, Operator.Remove, Type.Required, Wood)
+        ))
+        sut.queryBuilding(coords)!!.setConstructionFinished()
+
+        //check
+        assertEquals(1, sut.getCellsWhichNeedToUpdateProductionRequirements().size)
+    }
+
+    @Test
+    fun `getCellsWhichNeedToUpdateProductionRequirements() - There is stuff in required, therefore, dont request `() {
+        //init
+        gameStateManager.applyStates(listOf(
+            GameStateCreator.createFletcher(coords)
+            //The initial requirements are not removed manually
+        ))
+        sut.queryBuilding(coords)!!.setConstructionFinished()
+
+        //check
+        assertEquals(0, sut.getCellsWhichNeedToUpdateProductionRequirements().size)
+    }
+
+    @Test
+    fun `getCellsWhichNeedToUpdateProductionRequirements() - There is stuff in production, therefore, dont request `() {
+        //init
+        gameStateManager.applyStates(listOf(
+            GameStateCreator.createFletcher(coords),
+            //Finished manually, so clear required.
+            GameState(coords, Operator.Remove, Type.Required, Wood),
+            GameState(coords, Operator.Remove, Type.Required, Wood),
+            //Add to production manually
+            GameStateCreator.addWoodToProduction(coords)
+        ))
+        sut.queryBuilding(coords)!!.setConstructionFinished()
+
+        //check
+        assertEquals(0, sut.getCellsWhichNeedToUpdateProductionRequirements().size)
+    }
+
+    @Test
+    fun `getCellsWhichShallRunAProduction() - production, because all materials are available`() {
+        //Init
+        gameStateManager.applyStates(listOf(
+            GameStateCreator.createFletcher(coords),
+            GameStateCreator.addWoodToProduction(coords)
+        ))
+        sut.queryBuilding(coords)!!.setConstructionFinished()
+
+        //Check
+        assertEquals(1, sut.getCellsWhichShallRunAProduction().size)
+    }
+
+    @Test
+    fun `getCellsWhichShallRunAProduction() - production, because production is already running`() {
+        //Init
+        gameStateManager.applyStates(listOf(
+            GameStateCreator.createFletcher(coords)
+        ))
+        sut.queryBuilding(coords)!!.setConstructionFinished()
+        sut.queryBuilding(coords)!!.productionCount = 50 //set by hand
+
+        //Check
+        assertEquals(1, sut.getCellsWhichShallRunAProduction().size)
+    }
 }
