@@ -15,6 +15,8 @@ Graphics
 
 Combat
 ** Tower shoots arrows <--
+*** DONE Request arrows for 'production'
+**** DONE Bug: Arrow disappears, after dilivery into tower
 *** DONE Add range property
 **** DONE Find a Target within range.
 **** DONE Every tower searches its surrounding each tick for a valid target
@@ -55,12 +57,12 @@ Building
 Dialog
 
 Production
-* Produce does not check if items are requirements are fulfilled
-** Requests items for production
-*** Add a new step in tick which scans production buildings and sets a request if production storage is empty and no request is pending
-*** if building is finished
-*** only request stuff for the next production, not two more
-** D Remove items at the start of production
+* DONE Produce does not check if items are requirements are fulfilled
+** DONE Requests items for production
+*** DONE Add a new step in tick which scans production buildings and sets a request if production storage is empty and no request is pending
+*** DONE if building is finished
+*** DONE only request stuff for the next production, not two more
+** DONE Remove items at the start of production
 * Reduce townhall start resources to 2 Wood
 
 TestSetup

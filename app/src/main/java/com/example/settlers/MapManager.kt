@@ -118,7 +118,9 @@ open class MapManager(
     }
 
     fun getCellsWhichShallRunAProduction(): Map<Coordinates, Cell> {
-        val buildings = getCellsWithBuildings().filterForFinishedConstruction()
+        val buildings = getCellsWithBuildings()
+            .filterForFinishedConstruction()
+            .filterForProductionBuildings()
         val ret = buildings.filterForAllProductionMaterialsAvailable().toMutableMap()
         ret.putAll(buildings.filterForProductionStarted())
         return ret
@@ -172,7 +174,7 @@ open class MapManager(
     fun runConstruction(cell: Cell) : Collection<GameState> {
         if (!cell.building!!.isConstructionInProgress()) {
             cell.building!!.construct()
-            return removeItemsFromProduction(cell)
+            return cell.building!!.removeConstructionRequirementsFromProduction(cell.coordinates)
         } else {
             cell.building!!.construct()
             return emptyList()
@@ -199,12 +201,6 @@ open class MapManager(
 
     private fun Map<Coordinates, Cell>.filterForProductionStarted(): Map<Coordinates, Cell> {
         return filterValues { it.building != null && it.building!!.isProductionInProgress() }
-    }
-
-    private fun removeItemsFromProduction(cell: Cell) : Collection<GameState> {
-        return cell.building!!.requiresConstruction.map {
-            GameState(coordinates = cell.coordinates, operator = Operator.Remove, type = Type.Production, data = it)
-        }
     }
 
     //https://www.redblobgames.com/grids/hexagons/#coordinates-doubled
@@ -238,13 +234,12 @@ open class MapManager(
     fun getCellsWhichNeedToUpdateProductionRequirements(): Map<Coordinates, Cell> {
         return getCellsWithBuildings()
             .filterForFinishedConstruction()
-            .filterForProductionBuildings()
             .filterForRequiredIsEmpty()
             .filterForProductionStorageIsEmpty()
     }
 
     private fun Map<Coordinates, Cell>.filterForProductionBuildings(): Map<Coordinates, Cell> {
-        return filterValues { it.building != null && it.building!! is Fletcher }
+        return filterValues { it.building != null && it.building!!.isProductionBuilding }
     }
 
     private fun Map<Coordinates, Cell>.filterForRequiredIsEmpty(): Map<Coordinates, Cell> {

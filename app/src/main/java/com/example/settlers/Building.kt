@@ -40,6 +40,20 @@ abstract class Building : GameObject() {
     fun isProductionInProgress() : Boolean {
         return productionCount in 1..99
     }
+
+    open var isProductionBuilding = false
+
+    fun removeProductionRequirementsFromProduction(coordinates: Coordinates) : Collection<GameState> {
+        return requiresProduction.map {
+            GameState(coordinates = coordinates, operator = Operator.Remove, type = Type.Production, data = it)
+        }
+    }
+
+    fun removeConstructionRequirementsFromProduction(coordinates: Coordinates) : Collection<GameState> {
+        return requiresConstruction.map {
+            GameState(coordinates = coordinates, operator = Operator.Remove, type = Type.Production, data = it)
+        }
+    }
 }
 
 class Townhall : Building() {
@@ -68,6 +82,8 @@ class Lumberjack : Building() {
     override var requiresProduction: MutableList<Resource> = mutableListOf()
 
     override var offers: MutableList<Resource> = mutableListOf()
+
+    override var isProductionBuilding: Boolean = true
 
     override fun produce(coordinates: Coordinates): Collection<GameState> {
         if (!isConstructed()) return emptyList()
@@ -105,7 +121,7 @@ class Tower : Building() {
     override var productionCount: Int = 0
 
     override var requiresConstruction: MutableList<Resource> = mutableListOf(Wood, Stone, Stone)
-    override var requiresProduction: MutableList<Resource> = mutableListOf()//TODO set arrow?
+    override var requiresProduction: MutableList<Resource> = mutableListOf(Arrow)
 
     override var offers: MutableList<Resource> = mutableListOf()
     val range = 3
@@ -118,6 +134,8 @@ class Tower : Building() {
 class Spawner : Building() {
     override var constructionCount: Int = 100//no build time yet
     override var productionCount: Int = 0
+
+    override var isProductionBuilding: Boolean = true
 
     override fun produce(coordinates: Coordinates): Collection<GameState> {
         if (!isConstructed()) return emptyList()
@@ -140,13 +158,14 @@ class Fletcher : Building() {
     override var productionCount: Int = 0
     override var constructionCount: Int = 0
 
+    override var isProductionBuilding: Boolean = true
+
     override var requiresConstruction: MutableList<Resource> = mutableListOf(Wood, Wood)
     override var requiresProduction: MutableList<Resource> = mutableListOf(Wood)
     override var offers: MutableList<Resource> = mutableListOf()
 
     override fun produce(coordinates: Coordinates): Collection<GameState> {
         if (!isConstructed()) return emptyList()
-        //TODO only do, if wood is available
         val result = mutableListOf<GameState>()
         for (x in 0..9) {
             productionCount = productionCount!! + 1

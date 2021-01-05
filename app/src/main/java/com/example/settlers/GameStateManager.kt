@@ -33,7 +33,6 @@ open class GameStateManager(
             applyStates(transportManager.refreshProductionRequirements(cell))
         }
 
-        //TODO applyStates(transportManager.runProduction())
         mapManager.getCellsWhichRequireStuff().forEach { (_, cell) ->
             applyStates(mapManager.convertStorageToProduction(cell))
         }

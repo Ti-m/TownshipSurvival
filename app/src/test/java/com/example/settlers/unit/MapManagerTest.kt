@@ -292,6 +292,22 @@ class MapManagerTest {
     }
 
     @Test
+    fun `getCellsWhichNeedToUpdateProductionRequirements() - Tower - is not a production building, but requests arrows`() {
+        //init
+        gameStateManager.applyStates(listOf(
+            GameStateCreator.createTower(coords),
+            //Finished manually, so clear required.
+            GameState(coords, Operator.Remove, Type.Required, Wood),
+            GameState(coords, Operator.Remove, Type.Required, Stone),
+            GameState(coords, Operator.Remove, Type.Required, Stone),
+        ))
+        sut.queryBuilding(coords)!!.setConstructionFinished()
+
+        //check - will request arrows
+        assertEquals(1, sut.getCellsWhichNeedToUpdateProductionRequirements().size)
+    }
+
+    @Test
     fun `getCellsWhichShallRunAProduction() - production, because all materials are available`() {
         //Init
         gameStateManager.applyStates(listOf(

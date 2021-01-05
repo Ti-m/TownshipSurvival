@@ -21,16 +21,10 @@ open class TransportManager(
     fun runProduction(cell: Cell): Collection<GameState> {
         return if (!cell.building!!.isProductionInProgress()) {
             val states = cell.building!!.produce(cell.coordinates).toMutableList()
-            states.addAll(removeItemsFromProduction(cell))
+            states.addAll(cell.building!!.removeProductionRequirementsFromProduction(cell.coordinates))
             states
         } else {
             cell.building!!.produce(cell.coordinates)
-        }
-    }
-
-    private fun removeItemsFromProduction(cell: Cell) : Collection<GameState> {
-        return cell.building!!.requiresProduction.map {
-            GameState(coordinates = cell.coordinates, operator = Operator.Remove, type = Type.Production, data = it)
         }
     }
 

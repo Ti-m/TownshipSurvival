@@ -321,6 +321,7 @@ open class FlagTile(
             val letter = when (resource) {
                 is Wood -> "w"
                 is Stone -> "s"
+                is Arrow -> "a"
                 else -> throw NotImplementedError()
             }
             if (index == 0) {
