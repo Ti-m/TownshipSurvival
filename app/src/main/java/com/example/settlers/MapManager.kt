@@ -246,7 +246,7 @@ open class MapManager(
     }
 
     private fun Map<Coordinates, Cell>.filterForProductionBuildings(): Map<Coordinates, Cell> {
-        return filterValues { it.building != null && it.building!!.isProductionBuilding }
+        return filterValues { it.building != null && it.building!!.isProductionBuilding() }
     }
 
     private fun Map<Coordinates, Cell>.filterForRequiredIsEmpty(): Map<Coordinates, Cell> {
