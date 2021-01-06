@@ -89,7 +89,7 @@ class Lumberjack : Building() {
         if (!isConstructed()) return emptyList()
         val result = mutableListOf<GameState>()
         for (x in 0..9) {
-            productionCount = productionCount + 1
+            productionCount += 1
             if (productionCount == 100) {
                 result.add(GameState(coordinates, Operator.Set, Type.Storage, Wood))
                 productionCount = 0
@@ -168,7 +168,7 @@ class Fletcher : Building() {
         if (!isConstructed()) return emptyList()
         val result = mutableListOf<GameState>()
         for (x in 0..9) {
-            productionCount = productionCount!! + 1
+            productionCount += 1
             if (productionCount == 100) {
                 result.add(GameState(coordinates, Operator.Set, Type.Storage, Arrow))
                 productionCount = 0

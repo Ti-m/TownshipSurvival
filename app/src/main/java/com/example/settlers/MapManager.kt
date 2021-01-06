@@ -121,7 +121,10 @@ open class MapManager(
         val buildings = getCellsWithBuildings()
             .filterForFinishedConstruction()
             .filterForProductionBuildings()
-        val ret = buildings.filterForAllProductionMaterialsAvailable().toMutableMap()
+        val ret = buildings
+            .filterForAllProductionMaterialsAvailable()
+            .filterForStorageNotFull()
+            .toMutableMap()
         ret.putAll(buildings.filterForProductionStarted())
         return ret
     }
@@ -197,6 +200,10 @@ open class MapManager(
                 allRequiredResourcesAvailable
             }
         }
+    }
+
+    private fun Map<Coordinates, Cell>.filterForStorageNotFull(): Map<Coordinates, Cell> {
+        return filterValues { it.storage.count() < 3 }
     }
 
     private fun Map<Coordinates, Cell>.filterForProductionStarted(): Map<Coordinates, Cell> {

@@ -332,4 +332,20 @@ class MapManagerTest {
         //Check
         assertEquals(1, sut.getCellsWhichShallRunAProduction().size)
     }
+
+    @Test
+    fun `getCellsWhichShallRunAProduction() - don't run production if already 3 items are in storage`() {
+        //Init
+        gameStateManager.applyStates(listOf(
+            GameStateCreator.createFletcher(coords),
+            GameStateCreator.addWoodToProduction(coords),//Material is available
+            GameStateCreator.addArrowToStorage(coords),//Already 3 are produced
+            GameStateCreator.addArrowToStorage(coords),//Already 3 are produced
+            GameStateCreator.addArrowToStorage(coords),//Already 3 are produced
+        ))
+        sut.queryBuilding(coords)!!.setConstructionFinished()
+
+        //Check
+        assertEquals(0, sut.getCellsWhichShallRunAProduction().size)
+    }
 }

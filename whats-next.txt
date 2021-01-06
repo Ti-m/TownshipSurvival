@@ -57,6 +57,7 @@ Building
 Dialog
 
 Production
+* Stop production, if 3 produced items are in storage
 * DONE Produce does not check if items are requirements are fulfilled
 ** DONE Requests items for production
 *** DONE Add a new step in tick which scans production buildings and sets a request if production storage is empty and no request is pending

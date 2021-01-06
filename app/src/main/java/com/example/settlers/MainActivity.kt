@@ -67,9 +67,10 @@ class MainActivity : AppCompatActivity() {
         val transportManager = TransportManager(mapManager, BreadthFirstSearchRouting(mapManager, neighbourCalculator), logger)
         val gameStateManager = GameStateManager(transportManager, mapManager, logger)
 
-        MainActivityHelper.createInitialState(gameStateManager, mapManager)
-        MainActivityHelper.setAZombie(gameStateManager)
-        MainActivityHelper.setExplosion(gameStateManager)
+        //MainActivityHelper.createInitialState(gameStateManager, mapManager)
+        MainActivityHelper.setInitialSpawner(gameStateManager, mapManager)
+        //MainActivityHelper.setAZombie(gameStateManager)
+        //MainActivityHelper.setExplosion(gameStateManager)
 
         val modeController = ModeController()
         val tileManager = TileManager(tiles = mapGen.createTiles(cells, modeController, neighbourCalculator, this))
@@ -118,8 +119,10 @@ class MainActivity : AppCompatActivity() {
 
 object MainActivityHelper {
     fun createInitialState(gameStateManager: GameStateManager, mapManager: MapManager) {
-        gameStateManager.applyStates(GameStateCreator.G1_L2_T3_unfinishedRoad())//TODO for debugging
-        //Set initial spawner
+        gameStateManager.applyStates(GameStateCreator.G1_L2_T3_unfinishedRoad())
+    }
+
+    fun setInitialSpawner(gameStateManager: GameStateManager, mapManager: MapManager) {
         gameStateManager.applyState(GameStateCreator.createSpawner(mapManager.getSouthEastEdge()))
     }
 

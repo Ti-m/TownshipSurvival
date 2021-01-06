@@ -66,4 +66,8 @@ object GameStateCreator {
         return GameState(coords, Operator.Set, Type.Production, Wood)
     }
 
+    fun addArrowToStorage(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Set, Type.Storage, Arrow)
+    }
+
 }

@@ -19,7 +19,7 @@ class MainActivityHelperTest {
 
     @Test
     fun `Set initial spawner`() {
-        MainActivityHelper.createInitialState(gameStateManager, mapManager)
+        MainActivityHelper.setInitialSpawner(gameStateManager, mapManager)
         val southEastEdge = mapManager.getSouthEastEdge()
         Assert.assertTrue(mapManager.queryBuilding(southEastEdge) is Spawner)
     }
