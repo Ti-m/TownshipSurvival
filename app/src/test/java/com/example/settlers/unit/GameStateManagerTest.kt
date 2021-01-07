@@ -237,4 +237,34 @@ class GameStateManagerTest {
         assertFalse(mapManager.isMovingObject(Coordinates(2,2)))
         assertFalse(mapManager.isMovingObject(Coordinates(4,2)))
     }
+
+    @Test
+    fun convertStorageToProduction() {
+        sut.applyStates(
+            listOf(
+                GameState(coords, Operator.Set, Type.Required, Wood),
+                GameState(coords, Operator.Set, Type.Required, Wood),
+                GameState(coords, Operator.Set, Type.Storage, Wood),
+            )
+        )
+
+        sut.tick()
+
+        assertEquals(listOf(Wood), mapManager.queryInProduction(coords))
+    }
+
+    @Test
+    fun convertTransportToStorage() {
+        sut.applyStates(
+            listOf(
+                GameState(coords, Operator.Set, Type.Required, Wood),
+                GameState(coords, Operator.Set, Type.Required, Wood),
+                GameState(coords, Operator.Set, Type.Transport, Wood),
+            )
+        )
+
+        sut.tick()
+
+        assertEquals(listOf(Wood), mapManager.queryInStorage(coords))
+    }
 }

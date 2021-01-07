@@ -34,10 +34,10 @@ open class GameStateManager(
         }
 
         mapManager.getCellsWhichRequireStuff().forEach { (_, cell) ->
-            applyStates(mapManager.convertStorageToProduction(cell))
+            applyStates(convertStorageToProduction(cell))
         }
         mapManager.getCellsWhichRequireStuff().forEach { (_, cell) ->
-            applyStates(mapManager.convertTransportToStorage(cell))
+            applyStates(convertTransportToStorage(cell))
         }
         mapManager.getCellsWhichRequireStuffWhichIsNotInStorage().forEach { (_, cell) ->
             applyStates(transportManager.moveResources(cell))
@@ -103,6 +103,36 @@ open class GameStateManager(
             )
         }
         return emptyList()
+    }
+
+    //This only does a single step each tick
+    private fun convertStorageToProduction(cell: Cell): List<GameState> {
+        val matched = mutableListOf<GameState>()
+        cell.requires.forEach { required ->
+            if (cell.storage.contains(required)) {
+                matched.add(GameState(cell.coordinates, Operator.Set, Type.Production, required))
+                matched.add(GameState(cell.coordinates, Operator.Remove, Type.Storage, required))
+                matched.add(GameState(cell.coordinates, Operator.Remove, Type.Required, required))
+                return matched //Only do a single loop
+            }
+        }
+        return matched
+    }
+
+    //This only does a single step each tick
+    //It looks better for animations and otherwise I need ti allocate a lot of memory to create
+    // copys of the requires and transport lists
+    private fun convertTransportToStorage(cell: Cell): List<GameState> {
+        val matched = mutableListOf<GameState>()
+        cell.requires.forEach { required ->
+            if (cell.transport.contains(required)) {
+                matched.add(GameState(cell.coordinates, Operator.Set, Type.Storage, required))
+                matched.add(GameState(cell.coordinates, Operator.Remove, Type.Transport, required))
+                //matched.add(GameState(cell.key, Operator.Remove, Type.Required, required))
+                return matched //Only do a single loop
+            }
+        }
+        return matched
     }
 
     fun applyStates(newStates: Collection<GameState>) {

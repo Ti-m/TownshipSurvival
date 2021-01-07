@@ -64,22 +64,6 @@ open class MapManager(
         }
     }
 
-    //This only does a single step each tick
-    //It looks better for animations and otherwise I need ti allocate a lot of memory to create
-    // copys of the requires and transport lists
-    fun convertTransportToStorage(cell: Cell): List<GameState> {
-        val matched = mutableListOf<GameState>()
-        cell.requires.forEach { required ->
-            if (cell.transport.contains(required)) {
-                matched.add(GameState(cell.coordinates, Operator.Set, Type.Storage, required))
-                matched.add(GameState(cell.coordinates, Operator.Remove, Type.Transport, required))
-                //matched.add(GameState(cell.key, Operator.Remove, Type.Required, required))
-                return matched //Only do a single loop
-            }
-        }
-        return matched
-    }
-
     fun getCellsWhichRequireStuff(): Map<Coordinates, Cell> {
         return cells.filterValues { it.requires.count() > 0 }
     }
@@ -95,20 +79,6 @@ open class MapManager(
             }
             tmp
         }
-    }
-
-    //This only does a single step each tick
-    fun convertStorageToProduction(cell: Cell): List<GameState> {
-        val matched = mutableListOf<GameState>()
-        cell.requires.forEach { required ->
-            if (cell.storage.contains(required)) {
-                matched.add(GameState(cell.coordinates, Operator.Set, Type.Production, required))
-                matched.add(GameState(cell.coordinates, Operator.Remove, Type.Storage, required))
-                matched.add(GameState(cell.coordinates, Operator.Remove, Type.Required, required))
-                return matched //Only do a single loop
-            }
-        }
-        return matched
     }
 
     fun resetTouched() {

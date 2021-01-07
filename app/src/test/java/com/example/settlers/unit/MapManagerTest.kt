@@ -42,50 +42,6 @@ class MapManagerTest {
     }
 
     @Test
-    fun matchTransportToStorage() {
-        gameStateManager.applyStates(
-            listOf(
-                GameState(coords, Operator.Set, Type.Required, Wood),
-                GameState(coords, Operator.Set, Type.Required, Wood),
-                GameState(coords, Operator.Set, Type.Transport, Wood),
-            )
-        )
-        //The specific coordinates are irrelevant here
-        val result = sut.convertTransportToStorage(sut.findSpecificCell(coords)!!)
-
-        assertEquals(listOf(
-            GameState(coords, Operator.Set, Type.Storage, Wood),
-            GameState(coords, Operator.Remove, Type.Transport, Wood)
-        ), result)
-
-        gameStateManager.applyStates(result)
-        assertEquals(listOf(Wood), sut.queryInStorage(coords))
-    }
-
-    @Test
-    fun convertStorageToProduction() {
-        gameStateManager.applyStates(
-            listOf(
-                GameState(coords, Operator.Set, Type.Required, Wood),
-                GameState(coords, Operator.Set, Type.Required, Wood),
-                GameState(coords, Operator.Set, Type.Storage, Wood),
-            )
-        )
-        //The specific coordinates are irrelevant here
-        val result = sut.convertStorageToProduction(sut.findSpecificCell(coords)!!)
-
-        assertEquals(listOf(
-            GameState(coords, Operator.Set, Type.Production, Wood),
-            GameState(coords, Operator.Remove, Type.Storage, Wood),
-            GameState(coords, Operator.Remove, Type.Required, Wood),
-        ), result)
-
-        gameStateManager.applyStates(result)
-
-        assertEquals(listOf(Wood), sut.queryInProduction(coords))
-    }
-
-    @Test
     fun getCellsWithBuildings() {
         val c2 = Coordinates(1,1)
         val c3 = Coordinates(0,2)
