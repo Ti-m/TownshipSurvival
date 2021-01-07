@@ -267,4 +267,26 @@ class GameStateManagerTest {
 
         assertEquals(listOf(Wood), mapManager.queryInStorage(coords))
     }
+
+    @Test
+    fun refreshProductionRequirements() {
+        //init
+        sut.applyStates(listOf(
+            GameStateCreator.createFletcher(coords),
+            //Finished manually, so clear required.
+            GameState(coords, Operator.Remove, Type.Required, Wood),
+            GameState(coords, Operator.Remove, Type.Required, Wood)
+        ))
+        mapManager.queryBuilding(coords)!!.setConstructionFinished()
+
+        assertEquals(listOf<Resource>(), mapManager.queryRequires(coords))
+        //exercise
+        sut.tick()
+
+        //check
+        assertEquals(listOf(Wood), mapManager.queryRequires(coords))
+    }
+
+
+
 }

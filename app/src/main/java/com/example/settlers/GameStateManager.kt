@@ -30,7 +30,7 @@ open class GameStateManager(
         }
 
         mapManager.getCellsWhichNeedToUpdateProductionRequirements().forEach { (_, cell) ->
-            applyStates(transportManager.refreshProductionRequirements(cell))
+            applyStates(refreshProductionRequirements(cell))
         }
 
         mapManager.getCellsWhichRequireStuff().forEach { (_, cell) ->
@@ -133,6 +133,12 @@ open class GameStateManager(
             }
         }
         return matched
+    }
+
+    private fun refreshProductionRequirements(cell: Cell): Collection<GameState> {
+        return cell.building!!.requiresProduction.map {
+            GameState(cell.coordinates, Operator.Set, Type.Required, it)
+        }
     }
 
     fun applyStates(newStates: Collection<GameState>) {

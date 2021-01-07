@@ -202,6 +202,7 @@ class MapManagerTest {
         assertEquals(emptyList<Resource>(), sut.queryInProduction(coords))
     }
 
+    //This is redundant? See GameStateManagerTest.refreshProductionRequirements
     @Test
     fun `getCellsWhichNeedToUpdateProductionRequirements() - trivial `() {
         //init
