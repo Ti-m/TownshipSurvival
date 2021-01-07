@@ -42,7 +42,7 @@ Combat
 Map
 
 Building
-* requiresProduction/requiresConstruction: MutableList<Resource> - Use an immutable list?
+* DONE requiresProduction/requiresConstruction: MutableList<Resource> - Use an immutable list?
 * DONE Construction shall consume the items for construction, at the beginning of construction
 ** Add a fletcher which produces 1 arrow from 1 wood
 ** Bug: Buildings are not constructing, if the are additional ressources in production. <- Should be fixed
@@ -57,7 +57,7 @@ Building
 Dialog
 
 Production
-* Stop production, if 3 produced items are in storage
+* DONE Stop production, if 3 produced items are in storage
 * DONE Produce does not check if items are requirements are fulfilled
 ** DONE Requests items for production
 *** DONE Add a new step in tick which scans production buildings and sets a request if production storage is empty and no request is pending
