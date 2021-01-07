@@ -185,23 +185,6 @@ class MapManagerTest {
         assertEquals(Coordinates(7,3), coords)
     }
 
-    @Test
-    fun `runConstruction - remove items from production as start of construction`() {
-        //init
-        gameStateManager.applyStates(listOf(
-            GameStateCreator.createLumberjack(coords),
-            GameStateCreator.addWoodToProduction(coords),
-            GameStateCreator.addWoodToProduction(coords)
-        ))
-
-        //construct
-        assertEquals(0, sut.queryBuilding(coords)!!.constructionCount)
-        gameStateManager.applyStates(sut.runConstruction(sut.findSpecificCell(coords)!!))
-
-        //check
-        assertEquals(emptyList<Resource>(), sut.queryInProduction(coords))
-    }
-
     //This is redundant? See GameStateManagerTest.refreshProductionRequirements
     @Test
     fun `getCellsWhichNeedToUpdateProductionRequirements() - trivial `() {

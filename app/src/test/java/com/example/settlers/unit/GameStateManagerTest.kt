@@ -305,5 +305,24 @@ class GameStateManagerTest {
         assertEquals(listOf(Wood), mapManager.queryInStorage(coords))
     }
 
+    @Test
+    fun `runConstruction - remove items from production at start of construction`() {
+        //init
+        sut.applyStates(listOf(
+            GameStateCreator.createLumberjack(coords),
+            GameStateCreator.addWoodToProduction(coords),
+            GameStateCreator.addWoodToProduction(coords)
+        ))
+
+        //construction not started
+        assertEquals(0, mapManager.queryBuilding(coords)!!.constructionCount)
+
+        //runConstruction via tick()
+        sut.tick()
+
+        //check
+        assertEquals(emptyList<Resource>(), mapManager.queryInProduction(coords))
+    }
+
 
 }

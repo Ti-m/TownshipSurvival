@@ -144,16 +144,6 @@ open class MapManager(
         }
     }
 
-    fun runConstruction(cell: Cell) : Collection<GameState> {
-        if (!cell.building!!.isConstructionInProgress()) {
-            cell.building!!.construct()
-            return cell.building!!.removeConstructionRequirementsFromProduction(cell.coordinates)
-        } else {
-            cell.building!!.construct()
-            return emptyList()
-        }
-    }
-
     private fun Map<Coordinates, Cell>.filterForAllProductionMaterialsAvailable(): Map<Coordinates, Cell> {
         return filterValues {
             val requires = it.building!!.requiresProduction.toMutableList()

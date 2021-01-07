@@ -48,7 +48,7 @@ open class GameStateManager(
         }
 
         mapManager.getCellsWhichShallRunAConstruction().forEach { (_, cell) ->
-            applyStates(mapManager.runConstruction(cell))
+            applyStates(runConstruction(cell))
         }
         //applyStates(transportManager.convertStorageToProduction())
         //applyStates(transportManager.convertTransportToStorage())
@@ -148,6 +148,16 @@ open class GameStateManager(
             states
         } else {
             cell.building!!.produce(cell.coordinates)
+        }
+    }
+
+    private fun runConstruction(cell: Cell) : Collection<GameState> {
+        return if (!cell.building!!.isConstructionInProgress()) {
+            cell.building!!.construct()
+            cell.building!!.removeConstructionRequirementsFromProduction(cell.coordinates)
+        } else {
+            cell.building!!.construct()
+            emptyList()
         }
     }
 
