@@ -287,6 +287,23 @@ class GameStateManagerTest {
         assertEquals(listOf(Wood), mapManager.queryRequires(coords))
     }
 
+    @Test
+    fun `runProduction until an item is put into storage`() {
+        sut.applyState(GameStateCreator.createLumberjack(coords))
+        val cell = mapManager.findSpecificCell(coords)!!
+        cell.building!!.setConstructionFinished()
+        for (x in 0 .. 8) {
+            //sut.runProduction(cell)
+            sut.tick()
+        }
+        //Still empty
+        assertEquals(listOf<Resource>(), mapManager.queryInStorage(coords))
+
+        sut.tick()
+
+        //Now there should be an produced item
+        assertEquals(listOf(Wood), mapManager.queryInStorage(coords))
+    }
 
 
 }

@@ -44,7 +44,7 @@ open class GameStateManager(
         }
 
         mapManager.getCellsWhichShallRunAProduction().forEach { (_, cell) ->
-            applyStates(transportManager.runProduction(cell))
+            applyStates(runProduction(cell))
         }
 
         mapManager.getCellsWhichShallRunAConstruction().forEach { (_, cell) ->
@@ -138,6 +138,16 @@ open class GameStateManager(
     private fun refreshProductionRequirements(cell: Cell): Collection<GameState> {
         return cell.building!!.requiresProduction.map {
             GameState(cell.coordinates, Operator.Set, Type.Required, it)
+        }
+    }
+
+    private fun runProduction(cell: Cell): Collection<GameState> {
+        return if (!cell.building!!.isProductionInProgress()) {
+            val states = cell.building!!.produce(cell.coordinates).toMutableList()
+            states.addAll(cell.building!!.removeProductionRequirementsFromProduction(cell.coordinates))
+            states
+        } else {
+            cell.building!!.produce(cell.coordinates)
         }
     }
 

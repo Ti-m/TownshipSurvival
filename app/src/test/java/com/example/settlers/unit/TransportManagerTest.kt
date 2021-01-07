@@ -159,22 +159,6 @@ class TransportManagerTest {
     }
 
     @Test
-    fun `run production`() {
-        gameStateManager.applyState(
-            GameState(coords, Operator.Set, Type.Building, Lumberjack())
-        )
-        val cell = mapManager.findSpecificCell(coords)!!
-        cell.building!!.setConstructionFinished()
-        for (x in 0 .. 8) {
-            sut.runProduction(cell)
-
-        }
-        val states = sut.runProduction(cell)
-        assertEquals(listOf(GameState(coords, Operator.Set, Type.Storage, Wood)), states)
-
-    }
-
-    @Test
     fun `shootWithTowerCalculatePath all Conditions green`() {
         val tower = Tower()
         val towerCoordinates = Coordinates(0,0)

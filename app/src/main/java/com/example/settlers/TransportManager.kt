@@ -12,16 +12,6 @@ open class TransportManager(
     private val log: Logger
 ) {
 
-    fun runProduction(cell: Cell): Collection<GameState> {
-        return if (!cell.building!!.isProductionInProgress()) {
-            val states = cell.building!!.produce(cell.coordinates).toMutableList()
-            states.addAll(cell.building!!.removeProductionRequirementsFromProduction(cell.coordinates))
-            states
-        } else {
-            cell.building!!.produce(cell.coordinates)
-        }
-    }
-
     fun moveResources(cell: Cell): Collection<GameState> {
         return handleRequests(TransportRequest(cell.coordinates, cell.requires.first()))
     }
