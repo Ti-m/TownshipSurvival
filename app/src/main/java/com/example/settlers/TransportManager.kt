@@ -60,14 +60,17 @@ open class TransportManager(
         return step
     }
 
+    // only calls into routing
     private fun calcRouteFirstStep(from: Coordinates, to: Coordinates, ignoreObstacles: Boolean = false): Coordinates? {
         return routing.calcRouteFirstStep(from, to, ignoreObstacles)
     }
 
+    // only calls into routing
     fun whereIsNextResourceInStorageWithAccess(request: TransportRequest): Coordinates? {
         return routing.findNextItemWithAccessInStorage(request.destination, request.what)
     }
 
+    // only calls into routing
     fun whereIsNextResourceInTransportWithAccess(request: TransportRequest): Coordinates? {
         return routing.findNextItemWithAccessInTransport(request.destination, request.what)
     }
@@ -76,6 +79,7 @@ open class TransportManager(
 //        return TransportRoute(destination = to, what = what, route = route)
 //    }
 
+    // only calls into routing
     private fun findTargetForZombie(start: Coordinates): Coordinates? {
         return routing.findTargetForZombie(start)
     }

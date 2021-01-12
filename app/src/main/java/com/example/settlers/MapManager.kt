@@ -57,15 +57,15 @@ open class MapManager(
     }
 
     fun findSpecificCell(coordinates: Coordinates): Cell? {
-        try {
-            return cells.getValue(coordinates)
+        return try {
+            cells.getValue(coordinates)
         } catch (e: NoSuchElementException) {
-            return null
+            null
         }
     }
 
     fun getCellsWhichRequireStuff(): Map<Coordinates, Cell> {
-        return cells.filterValues { it.requires.count() > 0 }
+        return cells.filterValues { it.requires.count() > 0 }.toSortedMap(comparator = compareBy<Coordinates> { it.x }.thenBy { it.y })
     }
 
     fun getCellsWhichRequireStuffWhichIsNotInStorage(): Map<Coordinates, Cell> {

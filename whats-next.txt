@@ -1,7 +1,10 @@
 Tasks - Open
 
 Refactor
-* Map Manager does to much stuff
+* MapManager/ TransportManager does to much stuff
+** Try to move some stuff down
+*** DONE MapManager
+*** TransportManager
 * GameState Redesign Ideas:
 ** Currently it handles sideeffects of other actions.
 *** I.E. If a destruction of a building is requested, it deletes all items associated
@@ -44,10 +47,9 @@ Map
 Building
 * DONE requiresProduction/requiresConstruction: MutableList<Resource> - Use an immutable list?
 * DONE Construction shall consume the items for construction, at the beginning of construction
-** Add a fletcher which produces 1 arrow from 1 wood
+** DONE Add a fletcher which produces 1 arrow from 1 wood
 ** Bug: Buildings are not constructing, if the are additional ressources in production. <- Should be fixed
 *** Example is the tower if an arrow is in front of the list
-** Limit Building storage to 5 items
 ** Add an option to delete a building
 * Add Building StoneMason, needs 2 Wood
 ** Produces stone every 10 Ticks

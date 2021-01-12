@@ -1,9 +1,10 @@
 package com.example.settlers
 
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.widget.CompoundButton
+import com.example.settlers.util.Logger
+import kotlin.math.log
 
 class GameRunLoop(
     private val gameStateManager: GameStateManager,
@@ -14,7 +15,7 @@ class GameRunLoop(
     }
 
     fun tick() {
-        Log.i(TAG, "tick")
+
         //First calculate a new gamestate
         gameStateManager.tick()
         //Then redraw everything
@@ -24,7 +25,8 @@ class GameRunLoop(
 
 class GameRunLoopControlHandler(
     private val gameRunLoop: GameRunLoop,
-    private val handler: Handler
+    private val handler: Handler,
+    private val log: Logger
 ) : CompoundButton.OnCheckedChangeListener,
     View.OnClickListener {
 
@@ -37,8 +39,7 @@ class GameRunLoopControlHandler(
 
     val loop = object : Runnable {
         override fun run() {
-//            todo()
-                Log.i(TAG, "every second")
+                log.logi(TAG, "every second")
                 gameRunLoop.tick()
             if (keepRunning) {
                 handler.postDelayed(this, delay)

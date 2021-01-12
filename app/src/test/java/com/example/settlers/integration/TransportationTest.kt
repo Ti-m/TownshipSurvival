@@ -161,8 +161,8 @@ class TransportationTest {
         assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(3,1)))
         assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(5,1)))
         assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(6,0)))
-        assertEquals(listOf(Wood), mapManager.queryInTransport(at = Coordinates(7,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(6,2)))
+        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(7,1)))
+        assertEquals(listOf(Wood), mapManager.queryInTransport(at = Coordinates(6,2)))
 
         assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = Coordinates(6,0)))
         assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = Coordinates(7,1)))
@@ -179,20 +179,47 @@ class TransportationTest {
     }
 
     @Test
-    fun completeTransport() {
+    fun `transportation - checks the sortingorder in which the requesting buildings get deliveries`() {
+        //init
+        val cTown = Coordinates(0,0)
+        val cRoad1 = Coordinates(2,0)
+        val cRoad2 = Coordinates(4,0)
+        val cLumber = Coordinates(1,1)
+        val cFletcher1 = Coordinates(6,0)
+        val cFletcher2 = Coordinates(5,1)
 
-        //Convert an item from the resource list to the storage list
-        //TODO convertResourceToStorage()
+        gameStateManager.applyStates(listOf(
+            GameStateCreator.createTownhall(cTown),
+            GameStateCreator.createRoad(cRoad1),
+            GameStateCreator.createRoad(cRoad2),
+            GameStateCreator.createLumberjack(cLumber),
+            GameStateCreator.createFletcher(cFletcher1),
+            GameStateCreator.createFletcher(cFletcher2),
+        ))
 
-        //Convert an item from the storage list to the production list
-        //This makes the item unavailable for further transports
-        //This removes the item from the request list
-        //TODO convertStorageToProduction()
+        val town = mapManager.queryBuilding(cTown)!!
+        val road1 = mapManager.queryBuilding(cRoad1)!!
+        val road2 = mapManager.queryBuilding(cRoad2)!!
+        val lumber = mapManager.queryBuilding(cLumber)!!
+        val fletcher1 = mapManager.queryBuilding(cFletcher1)!!
+        val fletcher2 = mapManager.queryBuilding(cFletcher2)!!
 
-        //An item from the production list gets converted to a new item (Production in a building)
-        //The new item goes into storage list
-        // Later: This can take some steps. This Ongoing production needs to be stored
-        //TODO runProduction()
+        //runConstruction via tick()
+        for (x in 1 .. 16) {
+            //sut.runProduction(cell)
+            gameStateManager.tick()
+        }
+        assertTrue(lumber.isConstructed())
+        assertEquals(listOf(Wood), mapManager.queryInProduction(cFletcher2))
+        assertEquals(listOf(Wood), mapManager.queryRequires(cFletcher2))
 
+        for (x in 1 .. 14) {
+            //sut.runProduction(cell)
+            gameStateManager.tick()
+        }
+
+        assertEquals(listOf(Wood), mapManager.queryInStorage(cFletcher2))
+        assertEquals(listOf(Wood), mapManager.queryInProduction(cFletcher2))
+        assertEquals(listOf(Wood), mapManager.queryRequires(cFletcher2))
     }
 }

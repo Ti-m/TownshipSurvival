@@ -42,6 +42,14 @@ object GameStateCreator {
         return GameState(coords, Operator.Set, Type.Building, Spawner())
     }
 
+    fun createTownhall(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Set, Type.Building, Townhall())
+    }
+
+    fun createRoad(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Set, Type.Building, Road())
+    }
+
     fun createLumberjack(coords: Coordinates): GameState {
         return GameState(coords, Operator.Set, Type.Building, Lumberjack())
     }

@@ -72,6 +72,22 @@ class MainActivity : AppCompatActivity() {
         //MainActivityHelper.setAZombie(gameStateManager)
         //MainActivityHelper.setExplosion(gameStateManager)
 
+//        val cTown = Coordinates(0,0)
+//        val cRoad1 = Coordinates(2,0)
+//        val cRoad2 = Coordinates(4,0)
+//        val cLumber = Coordinates(1,1)
+//        val cFletcher1 = Coordinates(6,0)
+//        val cFletcher2 = Coordinates(5,1)
+//
+//        gameStateManager.applyStates(listOf(
+//            GameStateCreator.createTownhall(cTown),
+//            GameStateCreator.createRoad(cRoad1),
+//            GameStateCreator.createRoad(cRoad2),
+//            GameStateCreator.createLumberjack(cLumber),
+//            GameStateCreator.createFletcher(cFletcher1),
+//            GameStateCreator.createFletcher(cFletcher2),
+//        ))
+
         val modeController = ModeController()
         val tileManager = TileManager(tiles = mapGen.createTiles(cells, modeController, neighbourCalculator, this))
         val gw2 = GameWorld(tileManager = tileManager, context = this)
@@ -94,7 +110,7 @@ class MainActivity : AppCompatActivity() {
             gameStateManager = gameStateManager
         )
 
-        val switchHandler = GameRunLoopControlHandler(gameRunLoop = gameRunLoop, handler = handler)
+        val switchHandler = GameRunLoopControlHandler(gameRunLoop = gameRunLoop, handler = handler, log = logger)
         bindingViewTopBar.switchAutoPause.setOnCheckedChangeListener(switchHandler)
         bindingViewTopBar.stepButton.setOnClickListener(switchHandler)
         bindingViewTopBar.switchBuildMode.setOnCheckedChangeListener(modeController)

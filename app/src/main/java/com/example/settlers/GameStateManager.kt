@@ -1,14 +1,35 @@
 package com.example.settlers
 
+import android.util.Log
 import com.example.settlers.util.DisabledLogger
 import com.example.settlers.util.Logger
+
+class Audit {
+    private var log = ""
+    private var turnCount = 0
+
+    fun newTurn() {
+        turnCount += 1
+    }
+
+    fun doAudit(state: GameState) {
+        log = "$log\n $turnCount: $state"
+    }
+}
 
 open class GameStateManager(
     private val transportManager: TransportManager,
     private val mapManager: MapManager,
-    private val log: Logger
+    private val log: Logger,
+    private val audit: Audit? = null
 ) {
+    companion object {
+        private val TAG = "GameRunLoop"
+    }
+
     fun tick() {
+        log.logi(TAG, "tick")
+        audit?.newTurn()
         //Is this to expensive to do the iteration here?
         mapManager.resetTouched()
 //            Make GameStateManger the only thing which is allowed to change state?
@@ -170,6 +191,8 @@ open class GameStateManager(
     //A GameState is a request to change the game state, this method handles them
     fun applyState(state: GameState) {
         log.logi("GameStateManager", "apply State: $state")
+        audit?.doAudit(state)
+
         val selected = mapManager.findSpecificCell(state.coordinates)!!
         when (state.operator) {
             Operator.Set -> {
@@ -283,7 +306,7 @@ class GameStateManagerPreparedForTest(
     transportManager: TransportManager,
     mapManager: MapManager,
     log: Logger,
-) : GameStateManager(transportManager, mapManager, log) {
+) : GameStateManager(transportManager, mapManager, log, Audit()) {
     constructor(transportManager: TransportManager, mapManager: MapManager) : this(transportManager, mapManager, DisabledLogger())
     constructor(mapManager: MapManager) : this(TransportManagerPreparedForTest(mapManager), mapManager)
     constructor() : this(MapManagerPreparedForTest())
