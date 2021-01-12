@@ -324,7 +324,4 @@ class GameStateManagerTest {
         assertEquals(emptyList<Resource>(), mapManager.queryInProduction(coords))
     }
 
-    @Test
-    fun `runConstruction - check for error by multiple Fletcher buildings inteferring with their construction`() {}
-
 }
