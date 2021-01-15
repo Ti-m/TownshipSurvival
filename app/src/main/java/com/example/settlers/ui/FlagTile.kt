@@ -218,11 +218,11 @@ open class FlagTile(
             canvas.drawPath(path, groundPaint)
         }
 
-        if (cell.hasResources) {
-            if (cell.type == GroundType.Grass) {
+        if (cell.worldResource is Tree) {
+            if (cell.type == GroundType.Desert) {
+                drawCactus(canvas)//TODO palm Tree
+            } else {
                 drawTree(canvas)
-            } else if (cell.type == GroundType.Desert) {
-                drawCactus(canvas)
             }
         }
 

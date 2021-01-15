@@ -42,7 +42,13 @@ abstract class Building : GameObject() {
     //How many percents of a produce are handled within one tick while producing
     abstract val productionTimeMultiplier: Int
 
-    fun isProductionBuilding(): Boolean = producesItem != null
+    fun isProductionBuilding(): Boolean = producesItem != null && !isWorldResourceProductionBuilding()
+
+    //When producing, the building consumes this WorldResource
+    abstract val produceConsumesWorldResource: WorldResource?
+    //Consumes a WorldResource when producing
+    fun isWorldResourceProductionBuilding(): Boolean = produceConsumesWorldResource != null
+
     //Which GameObject is produced
     abstract val producesItem: GameObject?
     //How should the produced item be Stored
@@ -82,6 +88,7 @@ class Townhall : Building() {
     //no production
     override var productionCount: Int = 0
     override val productionTimeMultiplier: Int = 10
+    override val produceConsumesWorldResource: WorldResource? = null
     override val producesItem: GameObject? = null
     override val producesItemOutputType: Type? = null
 
@@ -97,6 +104,7 @@ class Lumberjack : Building() {
 
     override var productionCount: Int = 0
     override val productionTimeMultiplier: Int = 10
+    override val produceConsumesWorldResource: WorldResource = Tree
     override val producesItem: GameObject = Wood
     override val producesItemOutputType: Type = Type.Storage
 
@@ -113,6 +121,7 @@ class Road : Building() {
     //no production
     override var productionCount: Int = 0
     override val productionTimeMultiplier: Int = 10
+    override val produceConsumesWorldResource: WorldResource? = null
     override val producesItem: GameObject? = null
     override val producesItemOutputType: Type? = null
 
@@ -127,6 +136,7 @@ class Tower : Building() {
     //no production
     override var productionCount: Int = 0
     override val productionTimeMultiplier: Int = 10
+    override val produceConsumesWorldResource: WorldResource? = null
     override val producesItem: GameObject? = null
     override val producesItemOutputType: Type? = null
 
@@ -142,6 +152,7 @@ class Spawner : Building() {
 
     override var productionCount: Int = 0
     override val productionTimeMultiplier: Int = 1
+    override val produceConsumesWorldResource: WorldResource? = null
     override val producesItem: GameObject = Zombie
     override val producesItemOutputType: Type = Type.MovingObject
 
@@ -156,6 +167,7 @@ class Fletcher : Building() {
 
     override var productionCount: Int = 0
     override val productionTimeMultiplier: Int = 10
+    override val produceConsumesWorldResource: WorldResource? = null
     override val producesItem: GameObject = Arrow
     override val producesItemOutputType: Type = Type.Storage
 

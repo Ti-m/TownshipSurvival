@@ -68,6 +68,10 @@ open class GameStateManager(
             applyStates(runProduction(cell))
         }
 
+        mapManager.getCellsWhichShallRunAProductionWithConsumingOutsideResources().forEach { (_, cell) ->
+            applyStates(runProductionWithOutsideResource(cell))
+        }
+
         mapManager.getCellsWhichShallRunAConstruction().forEach { (_, cell) ->
             applyStates(runConstruction(cell))
         }
@@ -172,6 +176,19 @@ open class GameStateManager(
         }
     }
 
+    private fun runProductionWithOutsideResource(cell: Cell): Collection<GameState> {
+        return if (!cell.building!!.isProductionInProgress()) {
+            if (transportManager.isTreeInRange(cell)) {
+                val states = transportManager.removeTreeInRange(cell).toMutableList()
+                states.addAll(cell.building!!.produce(cell.coordinates))
+                return states
+            }
+            emptyList()
+        } else {
+            cell.building!!.produce(cell.coordinates)
+        }
+    }
+
     private fun runConstruction(cell: Cell) : Collection<GameState> {
         return if (!cell.building!!.isConstructionInProgress()) {
             cell.building!!.construct()
@@ -267,6 +284,7 @@ open class GameStateManager(
                             )
                         }
                     }
+                    Type.WorldResource -> selected.worldResource = state.data as WorldResource
                 }
             }
             Operator.Remove -> {
@@ -296,6 +314,7 @@ open class GameStateManager(
                         selected.animation = null
                     }
                     Type.Damage -> throw IllegalStateException()
+                    Type.WorldResource -> selected.worldResource = null
                 }
             }
         }

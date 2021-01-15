@@ -187,6 +187,12 @@ class TransportationTest {
         val cLumber = Coordinates(1,1)
         val cFletcher1 = Coordinates(6,0)
         val cFletcher2 = Coordinates(5,1)
+        val tree1 = Coordinates(3,1)
+        val tree2 = Coordinates(7,1)
+        val tree3 = Coordinates(0,2)
+        val tree4 = Coordinates(2,2)
+        val tree5 = Coordinates(4,2)
+        val tree6 = Coordinates(6,2)
 
         gameStateManager.applyStates(listOf(
             GameStateCreator.createTownhall(cTown),
@@ -195,6 +201,12 @@ class TransportationTest {
             GameStateCreator.createLumberjack(cLumber),
             GameStateCreator.createFletcher(cFletcher1),
             GameStateCreator.createFletcher(cFletcher2),
+            GameStateCreator.createTree(tree1),
+            GameStateCreator.createTree(tree2),
+            GameStateCreator.createTree(tree3),
+            GameStateCreator.createTree(tree4),
+            GameStateCreator.createTree(tree5),
+            GameStateCreator.createTree(tree6),
         ))
 
         val town = mapManager.queryBuilding(cTown)!!

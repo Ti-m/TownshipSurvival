@@ -13,7 +13,8 @@ enum class Type {
     Building,
     MovingObject, //Enemeys i.e.
     Animation,
-    Damage //To Moving Objects, Buildings
+    Damage, //To Moving Objects, Buildings
+    WorldResource //Tree, Stone, Ore...
 }
 
 abstract class GameObject
@@ -21,6 +22,9 @@ abstract class GameObject
 abstract class Resource : GameObject()
 object Wood : Resource()
 object Stone : Resource()
+
+abstract class WorldResource : GameObject()
+object Tree : WorldResource()
 
 abstract class Ammunition : Resource() {
     abstract val damage: Int

@@ -157,4 +157,29 @@ class BreadthFirstSearchRouting(
         }
         return null
     }
+
+    fun findTreeNearby(start: Coordinates, range: Int): Coordinates? {
+        val frontier = mutableListOf(start)
+        val cameFrom = mutableMapOf<Coordinates, Coordinates>()
+
+        while (frontier.isNotEmpty()) {
+            val current = frontier.removeFirst()
+            if (DoubleCoordsDistance.distance(start, current) > range) return null
+            if (mapManager.isTree(current)) {
+                return current
+            }
+
+            neighbourCalculator.getNeighboursOfCellDoubleCoords(
+                coords = current,
+                ignoreObstacles = true,
+                allowAnyBuilding = true
+            ).forEach { next ->
+                if (!cameFrom.containsKey(next)) {
+                    frontier.add(next)
+                    cameFrom[next] = current
+                }
+            }
+        }
+        return null
+    }
 }

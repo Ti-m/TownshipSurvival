@@ -37,6 +37,10 @@ open class MapManager(
         return findSpecificCell(at)?.animation
     }
 
+    fun queryWorldResource(at: Coordinates): WorldResource? {
+        return findSpecificCell(at)?.worldResource
+    }
+
     fun isRoad(at: Coordinates): Boolean {
         //This is queried sometimes of the map, in case its calculating the neighbours of cells
         return queryBuilding(at) is Road
@@ -49,6 +53,10 @@ open class MapManager(
 
     fun isMovingObject(at: Coordinates): Boolean {
         return findSpecificCell(at)?.movingObject != null
+    }
+
+    fun isTree(at: Coordinates): Boolean {
+        return queryWorldResource(at) == Tree
     }
 
     fun isTouched(at: Coordinates): Boolean {
@@ -97,6 +105,12 @@ open class MapManager(
             .toMutableMap()
         ret.putAll(buildings.filterForProductionStarted())
         return ret
+    }
+
+    fun getCellsWhichShallRunAProductionWithConsumingOutsideResources(): Map<Coordinates, Cell> {
+        return getCellsWithBuildings()
+            .filterForFinishedConstruction()
+            .filterForOutsideResourcesProductionBuildings()
     }
 
     fun getCellsWithMovingObjects(): Map<Coordinates, Cell> {
@@ -216,6 +230,11 @@ open class MapManager(
     private fun Map<Coordinates, Cell>.filterForProductionStorageIsEmpty(): Map<Coordinates, Cell> {
         return filterValues { it.production.isEmpty() }
     }
+
+    private fun Map<Coordinates, Cell>.filterForOutsideResourcesProductionBuildings(): Map<Coordinates, Cell> {
+        return filterValues { it.building!!.isWorldResourceProductionBuilding() }
+    }
+
 }
 
 class MapManagerPreparedForTest(

@@ -69,12 +69,15 @@ class MapManagerTest {
     fun getCellsWhichShallRunAProduction() {
         val c1 = Coordinates(1,1)
         val c2 = Coordinates(0,2)
-        gameStateManager.applyStates(
-            listOf(
-                GameState(c1, Operator.Set, Type.Building, Lumberjack()),
-                GameState(c2, Operator.Set, Type.Building, Lumberjack()),
-            )
-        )
+        gameStateManager.applyStates(listOf(
+            GameStateCreator.createFletcher(c1),
+            GameStateCreator.createFletcher(c2),
+            GameStateCreator.removeWoodFromRequired(c1),
+            GameStateCreator.removeWoodFromRequired(c1),
+            GameStateCreator.removeWoodFromRequired(c2),
+            GameStateCreator.removeWoodFromRequired(c2),
+            GameStateCreator.addWoodToProduction(c1),
+        ))
         val cell1 = sut.findSpecificCell(c1)!!
         cell1.building!!.setConstructionFinished()
 

@@ -53,8 +53,14 @@ class MapGenerator(private val interpolator: TerrainInterpolator, private val ra
             }
 
             val hasResource = randomGenerator.nextInt(0, 100)
+            val supportsTrees = type == GroundType.Grass || type == GroundType.Desert
+            val tree = if (hasResource < 25 && supportsTrees) {
+                Tree
+            } else {
+                null
+            }
 
-            Cell(coordinates = it.value.coordinates, type = type, hasResources = hasResource < 25)
+            Cell(coordinates = it.value.coordinates, type = type, worldResource = tree)
         }
         return cellresult
     }

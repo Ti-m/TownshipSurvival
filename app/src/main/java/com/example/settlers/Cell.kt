@@ -20,8 +20,8 @@ A building can request resources
 data class Cell(
     var coordinates: Coordinates,
     var type: GroundType,
-    //Has trees, cacteen, stones etc.
-    var hasResources: Boolean = false,
+    //Has trees, stones, ore etc.
+    var worldResource: WorldResource? = null, //TODO make this a list to allow multiple?
     var building: Building? = null,
     //var carrier: Boolean = false,
     var worker: Worker? = null,
