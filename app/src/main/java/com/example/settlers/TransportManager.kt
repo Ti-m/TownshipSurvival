@@ -96,6 +96,7 @@ open class TransportManager(
     fun shootWithTowerCalculatePath(start: Coordinates, range: Int): TargetCoordinates? {
         val destination = routing.findTargetForTower(start, range) ?: return null
         val path = routing.calcRoute(start, destination, ignoreObstacles = true)!!.steps //If there is a target, there should be a path in all cases.
+        if (path.count() == 0) return null //Mob is inside Tower, to late for shooting
         path.removeLast()
         return TargetCoordinates(start, path, destination)
     }

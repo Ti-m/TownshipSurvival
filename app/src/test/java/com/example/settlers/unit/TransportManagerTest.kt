@@ -190,4 +190,18 @@ class TransportManagerTest {
         assertNull(targetCoordinates)
     }
 
+    @Test
+    fun `shootWithTowerCalculatePath - target is inside tower - to late for shooting`() {
+        val tower = Tower()
+        val towerCoordinates = Coordinates(0,0)
+        gameStateManager.applyStates(listOf(
+            GameState(towerCoordinates, Operator.Set, Type.Building, tower),
+            GameState(towerCoordinates, Operator.Set, Type.MovingObject, Zombie)
+        ))
+        mapManager.resetTouched()
+        val targetCoordinates = sut.shootWithTowerCalculatePath(towerCoordinates, tower.range)
+
+        assertNull(targetCoordinates)
+    }
+
 }
