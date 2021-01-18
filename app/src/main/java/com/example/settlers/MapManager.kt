@@ -110,6 +110,7 @@ open class MapManager(
     fun getCellsWhichShallRunAProductionWithConsumingOutsideResources(): Map<Coordinates, Cell> {
         return getCellsWithBuildings()
             .filterForFinishedConstruction()
+            .filterForStorageNotFull()
             .filterForOutsideResourcesProductionBuildings()
     }
 

@@ -74,6 +74,10 @@ object GameStateCreator {
         return GameState(coords, Operator.Set, Type.Production, Wood)
     }
 
+    fun addWoodToStorage(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Set, Type.Storage, Wood)
+    }
+
     fun removeWoodFromRequired(coords: Coordinates): GameState {
         return GameState(coords, Operator.Remove, Type.Required, Wood)
     }

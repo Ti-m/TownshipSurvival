@@ -62,7 +62,7 @@ Production
 * Lumberjack
 ** DONE Only Produces if tree (resource) is in range
 ** DONE Production will consume a tree
-** The production limit is not used, lumberjack produces until full
+** DONE The production limit is not used, lumberjack produces until full
 *** guy moves to the tree and then the production starts? (later)
 
 * DONE Stop production, if 3 produced items are in storage
