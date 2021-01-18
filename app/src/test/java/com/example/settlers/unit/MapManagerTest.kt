@@ -264,7 +264,7 @@ class MapManagerTest {
     }
 
     @Test
-    fun `getCellsWhichShallRunAProduction() - production, because production is already running`() {
+    fun `getCellsWhichShallContinueAProduction() - production, because production is already running`() {
         //Init
         gameStateManager.applyStates(listOf(
             GameStateCreator.createFletcher(coords)
@@ -273,7 +273,7 @@ class MapManagerTest {
         sut.queryBuilding(coords)!!.productionCount = 50 //set by hand
 
         //Check
-        assertEquals(1, sut.getCellsWhichShallRunAProduction().size)
+        assertEquals(1, sut.getCellsWhichShallContinueAProduction().size)
     }
 
     @Test

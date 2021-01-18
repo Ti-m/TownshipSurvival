@@ -95,16 +95,19 @@ open class MapManager(
         }
     }
 
-    fun getCellsWhichShallRunAProduction(): Map<Coordinates, Cell> {
-        val buildings = getCellsWithBuildings()
+    fun getCellsWhichShallContinueAProduction(): Map<Coordinates, Cell> {
+        return getCellsWithBuildings()
             .filterForFinishedConstruction()
             .filterForProductionBuildings()
-        val ret = buildings
+            .filterForProductionStarted()
+    }
+
+    fun getCellsWhichShallRunAProduction(): Map<Coordinates, Cell> {
+        return getCellsWithBuildings()
+            .filterForFinishedConstruction()
+            .filterForProductionBuildings()
             .filterForAllProductionMaterialsAvailable()
             .filterForStorageNotFull()
-            .toMutableMap()
-        ret.putAll(buildings.filterForProductionStarted())
-        return ret
     }
 
     fun getCellsWhichShallRunAProductionWithConsumingOutsideResources(): Map<Coordinates, Cell> {

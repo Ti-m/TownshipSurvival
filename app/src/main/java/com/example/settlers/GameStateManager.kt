@@ -64,6 +64,10 @@ open class GameStateManager(
             applyStates(transportManager.moveResources(cell))
         }
 
+        mapManager.getCellsWhichShallContinueAProduction().forEach { (_, cell) ->
+            applyStates(runProduction(cell))
+        }
+
         mapManager.getCellsWhichShallRunAProduction().forEach { (_, cell) ->
             applyStates(runProduction(cell))
         }
