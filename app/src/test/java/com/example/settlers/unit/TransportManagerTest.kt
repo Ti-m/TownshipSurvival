@@ -204,4 +204,30 @@ class TransportManagerTest {
         assertNull(targetCoordinates)
     }
 
+    @Test
+    fun `handleRequestsInStorage - checks if in transport are already 2 items and nothing more is allowed to be added`() {
+        gameStateManager.applyStates(listOf(
+            GameStateCreator.createTownhall(coords),
+            GameStateCreator.addWoodToStorage(coords),
+            GameStateCreator.addWoodToStorage(coords),
+            GameStateCreator.addWoodToStorage(coords),
+            GameStateCreator.addWoodToStorage(coords),
+            GameStateCreator.addWoodToStorage(coords),
+            GameStateCreator.createFletcher(Coordinates(2,0))
+        ))
+        val cell = mapManager.findSpecificCell(coords)!!
+        cell.building!!.setConstructionFinished()
+        mapManager.resetTouched()
+        val dest = mapManager.findSpecificCell(Coordinates(2,0))!!
+
+        gameStateManager.applyStates(sut.moveResources(dest))
+        mapManager.resetTouched()
+        gameStateManager.applyStates(sut.moveResources(dest))
+        mapManager.resetTouched()
+        gameStateManager.applyStates(sut.moveResources(dest))
+        mapManager.resetTouched()
+        gameStateManager.applyStates(sut.moveResources(dest))
+        mapManager.resetTouched()
+        gameStateManager.applyStates(sut.moveResources(dest))
+    }
 }

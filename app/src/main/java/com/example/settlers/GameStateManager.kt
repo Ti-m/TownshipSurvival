@@ -220,7 +220,7 @@ open class GameStateManager(
                 when (state.type) {
                     Type.Transport -> {
                         val res = state.data as Resource
-                        if (selected.transport.count() <= 2) {
+                        if (selected.transport.count() < 2) {
                             selected.transport.add(res)
                         } else {
                             throw IllegalStateException("$state :: ${selected.transport}")

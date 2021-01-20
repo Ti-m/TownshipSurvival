@@ -41,7 +41,9 @@ open class TransportManager(
     private fun handleRequestsInStorage(request: TransportRequest): Collection<GameState> {
         val states: MutableList<GameState> = mutableListOf()
         whereIsNextResourceInStorageWithAccess(request)?.let { closest ->
-            //val to = validRouteNextStep(closest, request.destination)?: return states
+
+            val destinationCell = mapManager.findSpecificCell(closest)!!
+            if (destinationCell.transport.count() == 2) { return emptyList() }
 
             states.add(GameState(closest, Operator.Remove, Type.Storage, request.what))
             states.add(GameState(closest, Operator.Set, Type.Transport, request.what))
