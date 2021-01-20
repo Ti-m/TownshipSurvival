@@ -54,6 +54,10 @@ object GameStateCreator {
         return GameState(coords, Operator.Set, Type.Building, Lumberjack())
     }
 
+    fun createStonemason(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Set, Type.Building, Stonemason())
+    }
+
     fun createFletcher(coords: Coordinates): GameState {
         return GameState(coords, Operator.Set, Type.Building, Fletcher())
     }
@@ -88,6 +92,10 @@ object GameStateCreator {
 
     fun createTree(coords: Coordinates): GameState {
         return GameState(coords, Operator.Set, Type.WorldResource, Tree)
+    }
+
+    fun createRock(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Set, Type.WorldResource, Rock)
     }
 
 }

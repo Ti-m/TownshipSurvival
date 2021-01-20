@@ -11,6 +11,7 @@ class BuildDialogHandler (
             // used the reference from the object in the BuildDialog building list.
             is Townhall -> Townhall()
             is Lumberjack -> Lumberjack()
+            is Stonemason -> Stonemason()
             is Fletcher -> Fletcher()
             is Tower -> Tower()
             is Road -> Road()

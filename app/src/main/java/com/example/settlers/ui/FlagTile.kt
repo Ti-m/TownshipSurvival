@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Path
-import android.graphics.Rect
 import android.graphics.drawable.Drawable
-import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -224,6 +222,8 @@ open class FlagTile(
             } else {
                 drawTree(canvas)
             }
+        } else if (cell.worldResource is Rock) {
+            drawRock(canvas)
         }
 
         if (cell.movingObject != null) {
@@ -256,6 +256,11 @@ open class FlagTile(
         canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
     }
 
+    open fun drawStoneMason(canvas: Canvas) {
+        val letter = "S"
+        canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
+    }
+
     open fun drawTower(canvas: Canvas) {
         val letter = "T"
         canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
@@ -278,6 +283,12 @@ open class FlagTile(
         //overwrite
     }
 
+    open fun drawRock(canvas: Canvas) {
+        val letter = "r"
+        //+5 to move the letter out of the pole
+        canvas.drawText(letter, coords.center.first + 5, coords.center.second + textPaint.textSize * 0.3f, textPaint)
+    }
+
     open fun drawAnimation(canvas: Canvas) {
         //overwrite
     }
@@ -292,6 +303,7 @@ open class FlagTile(
             when (it) {
                 is Townhall -> drawTownhall(canvas)
                 is Lumberjack -> drawLumberjack(canvas)
+                is Stonemason -> drawStoneMason(canvas)
                 is Road -> drawRoad(canvas)
                 is Pyramid -> drawPyramid(canvas)
                 is Tower -> drawTower(canvas)

@@ -107,17 +107,17 @@ open class TransportManager(
         return cell.production.contains(Arrow)
     }
 
-    private fun getCoordinatesForTreeInRange(it: Cell): Coordinates? {
-        return routing.findTreeNearby(it.coordinates, 3)
+    private fun getCoordinatesForWorldResourceInRange(it: Cell, worldResource: WorldResource): Coordinates? {
+        return routing.findWorldResourceNearby(it.coordinates, 3, worldResource)
     }
 
-    fun isTreeInRange(it: Cell): Boolean {
-        return getCoordinatesForTreeInRange(it) != null
+    fun isWorldResourceInRange(it: Cell, worldResource: WorldResource): Boolean {
+        return getCoordinatesForWorldResourceInRange(it, worldResource) != null
     }
 
-    fun removeTreeInRange(cell: Cell): Collection<GameState> {
-        getCoordinatesForTreeInRange(cell)?.let {
-            return listOf(GameState(it, Operator.Remove, Type.WorldResource, Tree))
+    fun removeWorldResourceInRange(cell: Cell, worldResource: WorldResource): Collection<GameState> {
+        getCoordinatesForWorldResourceInRange(cell, worldResource)?.let {
+            return listOf(GameState(it, Operator.Remove, Type.WorldResource, worldResource))
         }
         return emptyList()
     }

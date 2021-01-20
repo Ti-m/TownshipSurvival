@@ -328,7 +328,7 @@ class GameStateManagerTest {
     }
 
     @Test
-    fun `runProduction using WorldResources ie Lumberjack`() {
+    fun `runProduction using WorldResources - Lumberjack`() {
         sut.applyStates(listOf(
             GameStateCreator.createLumberjack(coords),
             GameStateCreator.removeWoodFromRequired(coords),
@@ -349,5 +349,29 @@ class GameStateManagerTest {
 
         //Now there should be an produced item
         assertEquals(listOf(Wood), mapManager.queryInStorage(coords))
+    }
+
+    @Test
+    fun `runProduction using WorldResources - Stonemason`() {
+        sut.applyStates(listOf(
+            GameStateCreator.createStonemason(coords),
+            GameStateCreator.removeWoodFromRequired(coords),
+            GameStateCreator.removeWoodFromRequired(coords),
+            GameStateCreator.createRock(Coordinates(2,0))
+        ))
+        val cell = mapManager.findSpecificCell(coords)!!
+
+        cell.building!!.setConstructionFinished()
+        for (x in 0 .. 8) {
+            //sut.runProduction(cell)
+            sut.tick()
+        }
+        //Still empty
+        assertEquals(listOf<Resource>(), mapManager.queryInStorage(coords))
+
+        sut.tick()
+
+        //Now there should be an produced item
+        assertEquals(listOf(Stone), mapManager.queryInStorage(coords))
     }
 }

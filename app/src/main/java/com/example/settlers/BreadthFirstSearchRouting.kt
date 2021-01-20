@@ -158,14 +158,14 @@ class BreadthFirstSearchRouting(
         return null
     }
 
-    fun findTreeNearby(start: Coordinates, range: Int): Coordinates? {
+    fun findWorldResourceNearby(start: Coordinates, range: Int, worldResource: WorldResource): Coordinates? {
         val frontier = mutableListOf(start)
         val cameFrom = mutableMapOf<Coordinates, Coordinates>()
 
         while (frontier.isNotEmpty()) {
             val current = frontier.removeFirst()
             if (DoubleCoordsDistance.distance(start, current) > range) return null
-            if (mapManager.isTree(current)) {
+            if (mapManager.isWorldResource(current, worldResource)) {
                 return current
             }
 

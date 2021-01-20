@@ -25,6 +25,7 @@ object Stone : Resource()
 
 abstract class WorldResource : GameObject()
 object Tree : WorldResource()
+object Rock : WorldResource()
 
 abstract class Ammunition : Resource() {
     abstract val damage: Int

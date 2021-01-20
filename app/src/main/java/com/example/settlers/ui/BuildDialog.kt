@@ -33,7 +33,7 @@ class BuildDialog : BaseDialog() {
         }
 
         private val ITEMS = "items"
-        private val availableBuildings = arrayOf(Townhall(), Lumberjack(), Tower(), Fletcher(), Road(), Pyramid())
+        private val availableBuildings = arrayOf(Townhall(), Lumberjack(), Stonemason(), Tower(), Fletcher(), Road(), Pyramid())
     }
 
     override fun onAttach(context: Context) {

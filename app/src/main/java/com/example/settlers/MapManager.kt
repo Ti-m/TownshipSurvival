@@ -55,8 +55,8 @@ open class MapManager(
         return findSpecificCell(at)?.movingObject != null
     }
 
-    fun isTree(at: Coordinates): Boolean {
-        return queryWorldResource(at) == Tree
+    fun isWorldResource(at: Coordinates, resource: WorldResource): Boolean {
+        return queryWorldResource(at) == resource
     }
 
     fun isTouched(at: Coordinates): Boolean {

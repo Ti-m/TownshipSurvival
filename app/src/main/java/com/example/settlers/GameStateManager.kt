@@ -182,8 +182,8 @@ open class GameStateManager(
 
     private fun runProductionWithOutsideResource(cell: Cell): Collection<GameState> {
         return if (!cell.building!!.isProductionInProgress()) {
-            if (transportManager.isTreeInRange(cell)) {
-                val states = transportManager.removeTreeInRange(cell).toMutableList()
+            if (transportManager.isWorldResourceInRange(cell, cell.building!!.produceConsumesWorldResource!!)) {
+                val states = transportManager.removeWorldResourceInRange(cell, cell.building!!.produceConsumesWorldResource!!).toMutableList()
                 states.addAll(cell.building!!.produce(cell.coordinates))
                 return states
             }

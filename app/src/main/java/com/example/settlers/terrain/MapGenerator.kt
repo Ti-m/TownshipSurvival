@@ -54,8 +54,11 @@ class MapGenerator(private val interpolator: TerrainInterpolator, private val ra
 
             val hasResource = randomGenerator.nextInt(0, 100)
             val supportsTrees = type == GroundType.Grass || type == GroundType.Desert
+            val supportsRocks = type == GroundType.Grass || type == GroundType.Desert || type == GroundType.Mountain
             val tree = if (hasResource < 25 && supportsTrees) {
                 Tree
+            } else if (hasResource > 85 && supportsRocks) {
+                Rock
             } else {
                 null
             }

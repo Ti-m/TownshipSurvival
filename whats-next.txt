@@ -51,8 +51,9 @@ Building
 ** Bug: Buildings are not constructing, if the are additional ressources in production. <- Should be fixed
 *** Example is the tower if an arrow is in front of the list
 ** Add an option to delete a building
-* Add Building StoneMason, needs 2 Wood
-** Produces stone every 10 Ticks
+* DONE Add Building StoneMason, needs 2 Wood
+** DONE Produces stone every 10 Ticks
+** DONE Consumes WorldResource Rock
 * Monument
 ** DONE Add Build Pyramids for 100 Wood
 

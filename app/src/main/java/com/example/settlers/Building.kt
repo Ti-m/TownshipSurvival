@@ -115,6 +115,23 @@ class Lumberjack : Building() {
 
 }
 
+class Stonemason : Building() {
+
+    override var constructionCount: Int = 0
+
+    override var productionCount: Int = 0
+    override val productionTimeMultiplier: Int = 10
+    override val produceConsumesWorldResource: WorldResource = Rock
+    override val producesItem: GameObject = Stone
+    override val producesItemOutputType: Type = Type.Storage
+
+    override val requiresConstruction: MutableList<Resource> = mutableListOf(Wood, Wood)
+    override val requiresProduction: MutableList<Resource> = mutableListOf()
+
+    override val offers: MutableList<Resource> = mutableListOf()
+
+}
+
 class Road : Building() {
     //no build time
     override var constructionCount: Int = 100
