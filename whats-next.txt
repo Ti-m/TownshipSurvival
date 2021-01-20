@@ -54,7 +54,7 @@ Building
 * Add Building StoneMason, needs 2 Wood
 ** Produces stone every 10 Ticks
 * Monument
-** Add Build Pyramids for 100 Wood
+** DONE Add Build Pyramids for 100 Wood
 
 Dialog
 
@@ -79,8 +79,12 @@ TestSetup
 
 Transport
 ** What happens if the route of an active transport is interrrupted
+* Transport priorities are needed
+* Ammu < Wood
 
 Routing
+* Sometimes buildings request items from a previos transport, then it flickers between two buildings
+** Maybe ignore otuched here better? Or is it because it gets to a boundary where multiple paths have the same distance?
 
 UI
 

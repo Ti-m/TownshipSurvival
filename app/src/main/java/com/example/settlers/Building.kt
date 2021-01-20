@@ -175,3 +175,18 @@ class Fletcher : Building() {
     override val requiresProduction: MutableList<Resource> = mutableListOf(Wood)
     override val offers: MutableList<Resource> = mutableListOf()
 }
+
+class Pyramid : Building() {
+    override var constructionCount: Int = 0
+    //no production
+    override var productionCount: Int = 0
+    override val productionTimeMultiplier: Int = 1
+    override val produceConsumesWorldResource: WorldResource? = null
+    override val producesItem: GameObject? = null
+    override val producesItemOutputType: Type? = null
+
+    override val requiresConstruction: MutableList<Resource> = MutableList(100) { Wood }
+    override val requiresProduction: MutableList<Resource> = mutableListOf()
+
+    override val offers: MutableList<Resource> = mutableListOf()
+}

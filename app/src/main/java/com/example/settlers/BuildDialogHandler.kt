@@ -14,6 +14,7 @@ class BuildDialogHandler (
             is Fletcher -> Fletcher()
             is Tower -> Tower()
             is Road -> Road()
+            is Pyramid -> Pyramid()
             else -> throw NotImplementedError()
         }
         gameStateManager.applyStates(listOf(GameState(coordinates, Operator.Set, Type.Building, b)))

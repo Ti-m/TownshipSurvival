@@ -241,6 +241,11 @@ open class FlagTile(
         canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
     }
 
+    open fun drawPyramid(canvas: Canvas) {
+        val letter = "P"
+        canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
+    }
+
     open fun drawTownhall(canvas: Canvas) {
         val letter = "T"
         canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
@@ -288,6 +293,7 @@ open class FlagTile(
                 is Townhall -> drawTownhall(canvas)
                 is Lumberjack -> drawLumberjack(canvas)
                 is Road -> drawRoad(canvas)
+                is Pyramid -> drawPyramid(canvas)
                 is Tower -> drawTower(canvas)
                 is Fletcher -> drawFletcher(canvas)
                 is Spawner -> drawSpawner(canvas)
