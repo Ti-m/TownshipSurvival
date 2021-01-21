@@ -256,6 +256,11 @@ open class FlagTile(
         canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
     }
 
+    open fun drawForester(canvas: Canvas) {
+        val letter = "B"
+        canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
+    }
+
     open fun drawStoneMason(canvas: Canvas) {
         val letter = "S"
         canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
@@ -303,6 +308,7 @@ open class FlagTile(
             when (it) {
                 is Townhall -> drawTownhall(canvas)
                 is Lumberjack -> drawLumberjack(canvas)
+                is Forester -> drawForester(canvas)
                 is Stonemason -> drawStoneMason(canvas)
                 is Road -> drawRoad(canvas)
                 is Pyramid -> drawPyramid(canvas)

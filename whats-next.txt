@@ -41,6 +41,7 @@ Combat
 *** DONE 1 At the beginning
 *** DONE Zombies explode when they reach a building dealing 1 dmg. So the Building is destroyed
 **** DONE Add explosion animation
+* Mobs dont attack buildings without resources delivered or in construction or finished
 
 Map
 
@@ -56,6 +57,8 @@ Building
 ** DONE Consumes WorldResource Rock
 * Monument
 ** DONE Add Build Pyramids for 100 Wood
+* Add Forester
+* Production, plants a tree every 10 ticks
 
 Dialog
 

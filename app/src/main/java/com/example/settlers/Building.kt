@@ -49,6 +49,9 @@ abstract class Building : GameObject() {
     //Consumes a WorldResource when producing
     fun isWorldResourceProductionBuilding(): Boolean = produceConsumesWorldResource != null
 
+    //When producing, the building creates this WorldResource
+    abstract val produceCreatesWorldResource: WorldResource?
+
     //Which GameObject is produced
     abstract val producesItem: GameObject?
     //How should the produced item be Stored
@@ -89,6 +92,7 @@ class Townhall : Building() {
     override var productionCount: Int = 0
     override val productionTimeMultiplier: Int = 10
     override val produceConsumesWorldResource: WorldResource? = null
+    override val produceCreatesWorldResource: WorldResource? = null
     override val producesItem: GameObject? = null
     override val producesItemOutputType: Type? = null
 
@@ -105,6 +109,7 @@ class Lumberjack : Building() {
     override var productionCount: Int = 0
     override val productionTimeMultiplier: Int = 10
     override val produceConsumesWorldResource: WorldResource = Tree
+    override val produceCreatesWorldResource: WorldResource? = null
     override val producesItem: GameObject = Wood
     override val producesItemOutputType: Type = Type.Storage
 
@@ -122,8 +127,27 @@ class Stonemason : Building() {
     override var productionCount: Int = 0
     override val productionTimeMultiplier: Int = 10
     override val produceConsumesWorldResource: WorldResource = Rock
+    override val produceCreatesWorldResource: WorldResource? = null
     override val producesItem: GameObject = Stone
     override val producesItemOutputType: Type = Type.Storage
+
+    override val requiresConstruction: MutableList<Resource> = mutableListOf(Wood, Wood)
+    override val requiresProduction: MutableList<Resource> = mutableListOf()
+
+    override val offers: MutableList<Resource> = mutableListOf()
+
+}
+
+class Forester : Building() {
+
+    override var constructionCount: Int = 0
+
+    override var productionCount: Int = 0
+    override val productionTimeMultiplier: Int = 5
+    override val produceConsumesWorldResource: WorldResource? = null
+    override val produceCreatesWorldResource: WorldResource = Tree
+    override val producesItem: GameObject? = null
+    override val producesItemOutputType: Type? = null
 
     override val requiresConstruction: MutableList<Resource> = mutableListOf(Wood, Wood)
     override val requiresProduction: MutableList<Resource> = mutableListOf()
@@ -139,6 +163,7 @@ class Road : Building() {
     override var productionCount: Int = 0
     override val productionTimeMultiplier: Int = 10
     override val produceConsumesWorldResource: WorldResource? = null
+    override val produceCreatesWorldResource: WorldResource? = null
     override val producesItem: GameObject? = null
     override val producesItemOutputType: Type? = null
 
@@ -154,6 +179,7 @@ class Tower : Building() {
     override var productionCount: Int = 0
     override val productionTimeMultiplier: Int = 10
     override val produceConsumesWorldResource: WorldResource? = null
+    override val produceCreatesWorldResource: WorldResource? = null
     override val producesItem: GameObject? = null
     override val producesItemOutputType: Type? = null
 
@@ -170,6 +196,7 @@ class Spawner : Building() {
     override var productionCount: Int = 0
     override val productionTimeMultiplier: Int = 1
     override val produceConsumesWorldResource: WorldResource? = null
+    override val produceCreatesWorldResource: WorldResource? = null
     override val producesItem: GameObject = Zombie
     override val producesItemOutputType: Type = Type.MovingObject
 
@@ -185,6 +212,7 @@ class Fletcher : Building() {
     override var productionCount: Int = 0
     override val productionTimeMultiplier: Int = 10
     override val produceConsumesWorldResource: WorldResource? = null
+    override val produceCreatesWorldResource: WorldResource? = null
     override val producesItem: GameObject = Arrow
     override val producesItemOutputType: Type = Type.Storage
 
@@ -199,6 +227,7 @@ class Pyramid : Building() {
     override var productionCount: Int = 0
     override val productionTimeMultiplier: Int = 1
     override val produceConsumesWorldResource: WorldResource? = null
+    override val produceCreatesWorldResource: WorldResource? = null
     override val producesItem: GameObject? = null
     override val producesItemOutputType: Type? = null
 
