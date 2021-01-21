@@ -42,15 +42,17 @@ abstract class Building : GameObject() {
     //How many percents of a produce are handled within one tick while producing
     abstract val productionTimeMultiplier: Int
 
-    fun isProductionBuilding(): Boolean = producesItem != null && !isWorldResourceProductionBuilding()
+    fun isProductionBuilding(): Boolean = producesItem != null && !isWorldResourceConsumingProductionBuilding()
 
     //When producing, the building consumes this WorldResource
     abstract val produceConsumesWorldResource: WorldResource?
     //Consumes a WorldResource when producing
-    fun isWorldResourceProductionBuilding(): Boolean = produceConsumesWorldResource != null
+    fun isWorldResourceConsumingProductionBuilding(): Boolean = produceConsumesWorldResource != null
 
     //When producing, the building creates this WorldResource
     abstract val produceCreatesWorldResource: WorldResource?
+    //Creates a WorldResource when producing
+    fun isWorldResourceCreatingProductionBuilding(): Boolean = produceCreatesWorldResource != null
 
     //Which GameObject is produced
     abstract val producesItem: GameObject?

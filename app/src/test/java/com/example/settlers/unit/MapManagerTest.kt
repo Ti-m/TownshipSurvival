@@ -307,4 +307,24 @@ class MapManagerTest {
         assertEquals(0, sut.getCellsWhichShallRunAProductionWithConsumingOutsideResources().size)
     }
 
+    @Test
+    fun `getCellsWhichShallRunAProductionWithProducingOutsideResources() - find a forester`() {
+        //Init
+        gameStateManager.applyState(GameStateCreator.createForester(coords))
+        sut.queryBuilding(coords)!!.setConstructionFinished()
+
+        //Check
+        assertEquals(1, sut.getCellsWhichShallRunAProductionWithProducingOutsideResources().size)
+    }
+
+    @Test
+    fun `getCellsWhichShallRunAProductionWithProducingOutsideResources() - find a lumberjack - so no building found`() {
+        //Init
+        gameStateManager.applyState(GameStateCreator.createLumberjack(coords))
+        sut.queryBuilding(coords)!!.setConstructionFinished()
+
+        //Check
+        assertEquals(0, sut.getCellsWhichShallRunAProductionWithProducingOutsideResources().size)
+    }
+
 }

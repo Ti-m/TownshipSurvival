@@ -114,7 +114,15 @@ open class MapManager(
         return getCellsWithBuildings()
             .filterForFinishedConstruction()
             .filterForStorageNotFull()
-            .filterForOutsideResourcesProductionBuildings()
+            .filterForOutsideResourcesConsumingProductionBuildings()
+        //isWorldResourceInRange is not checked here, because the routing algirithm is not available to the MapManager
+    }
+
+    fun getCellsWhichShallRunAProductionWithProducingOutsideResources(): Map<Coordinates, Cell> {
+        return getCellsWithBuildings()
+            .filterForFinishedConstruction()
+            .filterForOutsideResourcesCreatingProductionBuildings()
+            //isSpaceAvailableForWorldResource is not checked here, because the routing algirithm is not available to the MapManager
     }
 
     fun getCellsWithMovingObjects(): Map<Coordinates, Cell> {
@@ -235,10 +243,13 @@ open class MapManager(
         return filterValues { it.production.isEmpty() }
     }
 
-    private fun Map<Coordinates, Cell>.filterForOutsideResourcesProductionBuildings(): Map<Coordinates, Cell> {
-        return filterValues { it.building!!.isWorldResourceProductionBuilding() }
+    private fun Map<Coordinates, Cell>.filterForOutsideResourcesConsumingProductionBuildings(): Map<Coordinates, Cell> {
+        return filterValues { it.building!!.isWorldResourceConsumingProductionBuilding() }
     }
 
+    private fun Map<Coordinates, Cell>.filterForOutsideResourcesCreatingProductionBuildings(): Map<Coordinates, Cell> {
+        return filterValues { it.building!!.isWorldResourceCreatingProductionBuilding() }
+    }
 }
 
 class MapManagerPreparedForTest(

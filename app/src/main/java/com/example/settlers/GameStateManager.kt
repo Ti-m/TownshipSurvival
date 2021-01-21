@@ -76,6 +76,10 @@ open class GameStateManager(
             applyStates(runProductionWithOutsideResource(cell))
         }
 
+        mapManager.getCellsWhichShallRunAProductionWithProducingOutsideResources().forEach { (_, cell) ->
+            //applyStates(runProductionWithOutsideResource(cell))
+        }
+
         mapManager.getCellsWhichShallRunAConstruction().forEach { (_, cell) ->
             applyStates(runConstruction(cell))
         }

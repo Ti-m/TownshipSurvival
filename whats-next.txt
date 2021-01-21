@@ -57,8 +57,8 @@ Building
 ** DONE Consumes WorldResource Rock
 * Monument
 ** DONE Add Build Pyramids for 100 Wood
-* Add Forester
-* Production, plants a tree every 10 ticks
+* DONE Add Forester
+** D Production, plants a tree every 10 ticks
 
 Dialog
 
