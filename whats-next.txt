@@ -58,7 +58,9 @@ Building
 * Monument
 ** DONE Add Build Pyramids for 100 Wood
 * DONE Add Forester
-** D Production, plants a tree every 10 ticks
+** DONE Production, plants a tree every 10 ticks
+*** Add some random where is planted?
+*** Trees are planted in the water currently
 
 Dialog
 

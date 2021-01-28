@@ -1,6 +1,5 @@
 package com.example.settlers
 
-import android.util.Log
 import com.example.settlers.util.DisabledLogger
 import com.example.settlers.util.Logger
 
@@ -73,11 +72,11 @@ open class GameStateManager(
         }
 
         mapManager.getCellsWhichShallRunAProductionWithConsumingOutsideResources().forEach { (_, cell) ->
-            applyStates(runProductionWithOutsideResource(cell))
+            applyStates(runProductionWithConsumingOutsideResource(cell))
         }
 
         mapManager.getCellsWhichShallRunAProductionWithProducingOutsideResources().forEach { (_, cell) ->
-            //applyStates(runProductionWithOutsideResource(cell))
+            applyStates(runProductionWithProducingOutsideResource(cell))
         }
 
         mapManager.getCellsWhichShallRunAConstruction().forEach { (_, cell) ->
@@ -184,7 +183,7 @@ open class GameStateManager(
         }
     }
 
-    private fun runProductionWithOutsideResource(cell: Cell): Collection<GameState> {
+    private fun runProductionWithConsumingOutsideResource(cell: Cell): Collection<GameState> {
         return if (!cell.building!!.isProductionInProgress()) {
             if (transportManager.isWorldResourceInRange(cell, cell.building!!.produceConsumesWorldResource!!)) {
                 val states = transportManager.removeWorldResourceInRange(cell, cell.building!!.produceConsumesWorldResource!!).toMutableList()
@@ -196,6 +195,21 @@ open class GameStateManager(
             cell.building!!.produce(cell.coordinates)
         }
     }
+
+    //In this case, produce is only a timer to know when the next WorldResource is created
+    private fun runProductionWithProducingOutsideResource(cell: Cell): Collection<GameState> {
+        return if (!cell.building!!.isProductionInProgress()) {
+            if (transportManager.isSpaceAvailableForWorldResource(cell.coordinates)) {
+                val states = transportManager.addWorldResourceInRange(cell.coordinates, cell.building!!.produceCreatesWorldResource!!).toMutableList()
+                states.addAll(cell.building!!.produce(cell.coordinates))
+                return states
+            }
+            emptyList()
+        } else {
+            cell.building!!.produce(cell.coordinates)
+        }
+    }
+
 
     private fun runConstruction(cell: Cell) : Collection<GameState> {
         return if (!cell.building!!.isConstructionInProgress()) {

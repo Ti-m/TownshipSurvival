@@ -328,7 +328,7 @@ class GameStateManagerTest {
     }
 
     @Test
-    fun `runProduction using WorldResources - Lumberjack`() {
+    fun `runProductionWithConsumingOutsideResource - Lumberjack`() {
         sut.applyStates(listOf(
             GameStateCreator.createLumberjack(coords),
             GameStateCreator.removeWoodFromRequired(coords),
@@ -352,7 +352,7 @@ class GameStateManagerTest {
     }
 
     @Test
-    fun `runProduction using WorldResources - Stonemason`() {
+    fun `runProductionWithConsumingOutsideResource - Stonemason`() {
         sut.applyStates(listOf(
             GameStateCreator.createStonemason(coords),
             GameStateCreator.removeWoodFromRequired(coords),
@@ -373,5 +373,40 @@ class GameStateManagerTest {
 
         //Now there should be an produced item
         assertEquals(listOf(Stone), mapManager.queryInStorage(coords))
+    }
+
+    @Test
+    fun `runProductionWithProducingOutsideResource - Forester`() {
+        sut.applyStates(listOf(
+            GameStateCreator.createForester(coords),
+            GameStateCreator.removeWoodFromRequired(coords),
+            GameStateCreator.removeWoodFromRequired(coords)
+        ))
+        val cell = mapManager.findSpecificCell(coords)!!
+
+        cell.building!!.setConstructionFinished()
+
+        sut.tick()
+
+        assertEquals(null, mapManager.queryWorldResource(coords))
+        assertEquals(Tree, mapManager.queryWorldResource(Coordinates(1,1)))
+
+        for (x in 0 .. 20) {
+            sut.tick()
+        }
+
+        assertEquals(Tree, mapManager.queryWorldResource(Coordinates(1,1)))
+        assertEquals(Tree, mapManager.queryWorldResource(Coordinates(2,0)))
+//        for (x in 0 .. 8) {
+//            //sut.runProduction(cell)
+//            sut.tick()
+//        }
+//        //Still empty
+//        assertEquals(listOf<Resource>(), mapManager.queryInStorage(coords))
+//
+//        sut.tick()
+//
+//        //Now there should be an produced item
+//        assertEquals(listOf(Stone), mapManager.queryInStorage(coords))
     }
 }

@@ -230,4 +230,32 @@ class TransportManagerTest {
         mapManager.resetTouched()
         gameStateManager.applyStates(sut.moveResources(dest))
     }
+
+    @Test
+    fun `isSpaceAvailableForWorldResource - available`() {
+        gameStateManager.applyStates(listOf(
+            GameStateCreator.createFletcher(coords)
+        ))
+        assertEquals(true, sut.isSpaceAvailableForWorldResource(coords))
+    }
+
+    @Test
+    fun `isSpaceAvailableForWorldResource - not available wit range 3`() {
+        gameStateManager.applyStates(listOf(
+            GameStateCreator.createFletcher(coords),
+            //Block all possible cells in range 3
+            GameStateCreator.createFletcher(Coordinates(2,0)),
+            GameStateCreator.createFletcher(Coordinates(4,0)),
+            GameStateCreator.createFletcher(Coordinates(6,0)),
+            GameStateCreator.createFletcher(Coordinates(1,1)),
+            GameStateCreator.createFletcher(Coordinates(3,1)),
+            GameStateCreator.createFletcher(Coordinates(5,1)),
+            GameStateCreator.createFletcher(Coordinates(0,2)),
+            GameStateCreator.createFletcher(Coordinates(2,2)),
+            GameStateCreator.createFletcher(Coordinates(4,2)),
+            GameStateCreator.createFletcher(Coordinates(1,3)),
+            GameStateCreator.createFletcher(Coordinates(3,3)),
+        ))
+        assertEquals(false, sut.isSpaceAvailableForWorldResource(coords))
+    }
 }

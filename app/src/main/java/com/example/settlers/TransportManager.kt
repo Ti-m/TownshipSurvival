@@ -121,6 +121,20 @@ open class TransportManager(
         }
         return emptyList()
     }
+
+    fun isSpaceAvailableForWorldResource(start: Coordinates): Boolean {
+        return findEmptyCellInRange(start) != null
+    }
+
+    private val produceWorldResourceRange = 3
+
+    private fun findEmptyCellInRange(start: Coordinates): Coordinates? {
+        return routing.findEmptyCellInRange(start, produceWorldResourceRange)
+    }
+
+    fun addWorldResourceInRange(start: Coordinates, produceCreatesWorldResource: WorldResource): Collection<GameState> {
+        return listOf(GameState(routing.findEmptyCellInRange(start, produceWorldResourceRange)!!, Operator.Set, Type.WorldResource, produceCreatesWorldResource))
+    }
 }
 
 class TransportManagerPreparedForTest(

@@ -60,13 +60,16 @@ abstract class Building : GameObject() {
     abstract val producesItemOutputType: Type?
 
     fun produce(coordinates: Coordinates): Collection<GameState> {
-        if (producesItem == null) return emptyList()
+        if (producesItem == null && produceCreatesWorldResource == null) return emptyList()
         if (!isConstructed()) return emptyList()
         val result = mutableListOf<GameState>()
         for (x in 0 until productionTimeMultiplier) {
             productionCount += 1
             if (productionCount == 100) {
-                result.add(GameState(coordinates, Operator.Set, producesItemOutputType!!, producesItem))
+                if (producesItem != null) {
+                    //if producesItem == null, produce is only a timer to know when the next WorldResource is created
+                    result.add(GameState(coordinates, Operator.Set, producesItemOutputType!!, producesItem))
+                }
                 productionCount = 0
             }
         }

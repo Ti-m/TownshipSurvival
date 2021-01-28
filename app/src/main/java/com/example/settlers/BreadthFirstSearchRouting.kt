@@ -182,4 +182,29 @@ class BreadthFirstSearchRouting(
         }
         return null
     }
+
+    fun findEmptyCellInRange(start: Coordinates, range: Int): Coordinates? {
+        val frontier = mutableListOf(start)
+        val cameFrom = mutableMapOf<Coordinates, Coordinates>()
+
+        while (frontier.isNotEmpty()) {
+            val current = frontier.removeFirst()
+            if (DoubleCoordsDistance.distance(start, current) > range) return null
+            if (mapManager.queryWorldResource(current) == null && !mapManager.isBuilding(current)) {
+                return current
+            }
+
+            neighbourCalculator.getNeighboursOfCellDoubleCoords(
+                coords = current,
+                ignoreObstacles = true,
+                allowAnyBuilding = false
+            ).forEach { next ->
+                if (!cameFrom.containsKey(next)) {
+                    frontier.add(next)
+                    cameFrom[next] = current
+                }
+            }
+        }
+        return null
+    }
 }
