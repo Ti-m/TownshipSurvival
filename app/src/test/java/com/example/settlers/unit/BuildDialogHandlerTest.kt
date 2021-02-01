@@ -25,8 +25,16 @@ class BuildDialogHandlerTest {
             ),
             mapSize = 1
         )
-        transportManager = TransportManagerPreparedForTest(mapManager)
-        gameStateManager = GameStateManagerPreparedForTest(transportManager, mapManager)
+        val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
+        val emptyCellFinder = EmptyCellFinder(mapManager, neighbourCalculator)
+        val nearbyWorldResourceFinder = NearbyWorldResourceFinder(mapManager, neighbourCalculator)
+        transportManager = TransportManager(
+            mapManager,
+            BreadthFirstSearchRouting(mapManager, neighbourCalculator),
+            emptyCellFinder,
+            nearbyWorldResourceFinder
+        )
+        gameStateManager = GameStateManager(transportManager, mapManager)
 
         sut = BuildDialogHandler(gameStateManager)
     }

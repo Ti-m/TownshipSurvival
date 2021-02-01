@@ -19,7 +19,7 @@ class Audit {
 open class GameStateManager(
     private val transportManager: TransportManager,
     private val mapManager: MapManager,
-    private val log: Logger,
+    private val log: Logger = DisabledLogger(),
     private val audit: Audit? = null
 ) {
     companion object {
@@ -341,14 +341,4 @@ open class GameStateManager(
             }
         }
     }
-}
-
-class GameStateManagerPreparedForTest(
-    transportManager: TransportManager,
-    mapManager: MapManager,
-    log: Logger,
-) : GameStateManager(transportManager, mapManager, log, Audit()) {
-    constructor(transportManager: TransportManager, mapManager: MapManager) : this(transportManager, mapManager, DisabledLogger())
-    constructor(mapManager: MapManager) : this(TransportManagerPreparedForTest(mapManager), mapManager)
-    constructor() : this(MapManagerPreparedForTest())
 }

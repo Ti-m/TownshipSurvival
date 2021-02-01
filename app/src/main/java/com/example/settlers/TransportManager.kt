@@ -9,7 +9,9 @@ data class TransportRoute(val destination: Coordinates, val what: Resource, val 
 open class TransportManager(
     private val mapManager: MapManager,
     private val routing: BreadthFirstSearchRouting,
-    private val log: Logger
+    private val emptyCellFinder: EmptyCellFinder,
+    private val nearbyWorldResourceFinder: NearbyWorldResourceFinder,
+    private val log: Logger = DisabledLogger()
 ) {
 
     fun moveResources(cell: Cell): Collection<GameState> {
@@ -108,7 +110,7 @@ open class TransportManager(
     }
 
     private fun getCoordinatesForWorldResourceInRange(it: Cell, worldResource: WorldResource): Coordinates? {
-        return routing.findWorldResourceNearby(it.coordinates, 3, worldResource)
+        return nearbyWorldResourceFinder.find(it.coordinates, 3, worldResource)
     }
 
     fun isWorldResourceInRange(it: Cell, worldResource: WorldResource): Boolean {
@@ -129,29 +131,10 @@ open class TransportManager(
     private val produceWorldResourceRange = 3
 
     private fun findEmptyCellInRange(start: Coordinates): Coordinates? {
-        return routing.findEmptyCellInRange(start, produceWorldResourceRange)
+        return emptyCellFinder.find(start, produceWorldResourceRange)
     }
 
     fun addWorldResourceInRange(start: Coordinates, produceCreatesWorldResource: WorldResource): Collection<GameState> {
-        return listOf(GameState(routing.findEmptyCellInRange(start, produceWorldResourceRange)!!, Operator.Set, Type.WorldResource, produceCreatesWorldResource))
+        return listOf(GameState(emptyCellFinder.find(start, produceWorldResourceRange)!!, Operator.Set, Type.WorldResource, produceCreatesWorldResource))
     }
-}
-
-class TransportManagerPreparedForTest(
-    mapManager: MapManager,
-    routing: BreadthFirstSearchRouting,
-    log: DisabledLogger,
-) : TransportManager(mapManager, routing, log) {
-    constructor(mapManager: MapManager, routing: BreadthFirstSearchRouting) : this(
-        mapManager,
-        routing,
-        DisabledLogger()
-    )
-    constructor(mapManager: MapManager) : this(
-        mapManager,
-        BreadthFirstSearchRouting(mapManager, HexagonNeighbourCalculator((mapManager))),
-        DisabledLogger()
-    )
-    constructor() : this(MapManagerPreparedForTest())
-
 }

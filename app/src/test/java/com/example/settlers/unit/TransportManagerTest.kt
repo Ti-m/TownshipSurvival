@@ -15,8 +15,16 @@ class TransportManagerTest {
     @Before
     fun prepare() {
         mapManager = MapManagerPreparedForTest()
-        sut = TransportManagerPreparedForTest(mapManager)
-        gameStateManager = GameStateManagerPreparedForTest(sut, mapManager)
+        val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
+        val emptyCellFinder = EmptyCellFinder(mapManager, neighbourCalculator)
+        val nearbyWorldResourceFinder = NearbyWorldResourceFinder(mapManager, neighbourCalculator)
+        sut = TransportManager(
+            mapManager,
+            BreadthFirstSearchRouting(mapManager, neighbourCalculator),
+            emptyCellFinder,
+            nearbyWorldResourceFinder
+        )
+        gameStateManager = GameStateManager(sut, mapManager)
         coords = Coordinates(0,0)
     }
 

@@ -17,9 +17,17 @@ class BreadthFirstSearchRoutingTest {
     @Before
     fun setup() {
         mapManager = MapManagerPreparedForTest()
-        sut = BreadthFirstSearchRouting(mapManager, HexagonNeighbourCalculator(mapManager))
-        transportManager = TransportManagerPreparedForTest(mapManager, sut)
-        gameStateManager = GameStateManagerPreparedForTest(transportManager, mapManager)
+        val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
+        sut = BreadthFirstSearchRouting(mapManager, neighbourCalculator)
+        val emptyCellFinder = EmptyCellFinder(mapManager, neighbourCalculator)
+        val nearbyWorldResourceFinder = NearbyWorldResourceFinder(mapManager, neighbourCalculator)
+        transportManager = TransportManager(
+            mapManager,
+            BreadthFirstSearchRouting(mapManager, neighbourCalculator),
+            emptyCellFinder,
+            nearbyWorldResourceFinder
+        )
+        gameStateManager = GameStateManager(transportManager, mapManager)
     }
 
     @Test

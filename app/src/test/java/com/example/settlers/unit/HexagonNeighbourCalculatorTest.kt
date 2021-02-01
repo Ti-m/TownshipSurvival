@@ -17,8 +17,15 @@ class HexagonNeighbourCalculatorTest {
     fun prepare() {
         mapManager = MapManagerPreparedForTest()
         sut = HexagonNeighbourCalculator(mapManager)
-        transportManager = TransportManagerPreparedForTest(mapManager, BreadthFirstSearchRouting(mapManager, sut))
-        gameStateManager = GameStateManagerPreparedForTest(transportManager, mapManager)
+        val emptyCellFinder = EmptyCellFinder(mapManager, sut)
+        val nearbyWorldResourceFinder = NearbyWorldResourceFinder(mapManager, sut)
+        transportManager = TransportManager(
+            mapManager,
+            BreadthFirstSearchRouting(mapManager, sut),
+            emptyCellFinder,
+            nearbyWorldResourceFinder
+        )
+        gameStateManager = GameStateManager(transportManager, mapManager)
         coords = Coordinates(0,0)
     }
 
