@@ -103,94 +103,21 @@ class BreadthFirstSearchRouting(
         }
         return null
     }
-
-    fun findTargetForZombie(start: Coordinates): Coordinates? {
-        val frontier = mutableListOf(start)
-        val cameFrom = mutableMapOf<Coordinates, Coordinates>()
-
-        while (!frontier.isEmpty()) {
-            val current = frontier.removeFirst()
-            if (mapManager.isBuilding(current)) {
-                val building = mapManager.findSpecificCell(current)!!.building
-                if (building !is Spawner && building !is Road) {
-                    if (!mapManager.isTouched(current)) {//TODO ignore touched?
-                        return current
-                    }
-                }
-            }
-
-            neighbourCalculator.getNeighboursOfCellDoubleCoords(
-                coords = current,
-                ignoreObstacles = true,
-                allowAnyBuilding = true
-            ).forEach { next ->
-                if (!cameFrom.containsKey(next)) {
-                    frontier.add(next)
-                    cameFrom[next] = current
-                }
-            }
-        }
-        return null
-    }
-
-    fun findTargetForTower(start: Coordinates, range: Int): Coordinates? {
-        val frontier = mutableListOf(start)
-        val cameFrom = mutableMapOf<Coordinates, Coordinates>()
-
-        while (frontier.isNotEmpty()) {
-            val current = frontier.removeFirst()
-            if (DoubleCoordsDistance.distance(start, current) > range) return null
-            if (mapManager.isMovingObject(current)) {
-                return current
-            }
-
-            neighbourCalculator.getNeighboursOfCellDoubleCoords(
-                coords = current,
-                ignoreObstacles = true,
-                allowAnyBuilding = true
-            ).forEach { next ->
-                if (!cameFrom.containsKey(next)) {
-                    frontier.add(next)
-                    cameFrom[next] = current
-                }
-            }
-        }
-        return null
-    }
-}
-
-class NearbyWorldResourceFinder(
-    private val mapManager: MapManager,
-    neighbourCalculator: HexagonNeighbourCalculator
-) : BaseFinder(neighbourCalculator) {
-
-    override fun selector(current: Coordinates, worldResource: WorldResource?): Boolean {
-        return mapManager.isWorldResource(current, worldResource!!)
-    }
-
-}
-
-class EmptyCellFinder(
-    private val mapManager: MapManager,
-    neighbourCalculator: HexagonNeighbourCalculator
-) : BaseFinder(neighbourCalculator) {
-
-    override fun selector(current: Coordinates, worldResource: WorldResource?): Boolean {
-        return mapManager.queryWorldResource(current) == null && !mapManager.isBuilding(current)
-    }
-
 }
 
 abstract class BaseFinder(
     private val neighbourCalculator: HexagonNeighbourCalculator
 ) {
-    fun find(start: Coordinates, range: Int, worldResource: WorldResource? = null): Coordinates? {
+    fun find(start: Coordinates, range: Int = -1, worldResource: WorldResource? = null): Coordinates? {
         val frontier = mutableListOf(start)
         val cameFrom = mutableMapOf<Coordinates, Coordinates>()
 
         while (frontier.isNotEmpty()) {
             val current = frontier.removeFirst()
-            if (DoubleCoordsDistance.distance(start, current) > range) return null
+            if (doRangeCheck) {
+                if (DoubleCoordsDistance.distance(start, current) > range) return null
+            }
+
             if (selector(current, worldResource)) {
                 return current
             }
@@ -213,4 +140,57 @@ abstract class BaseFinder(
     * @param worldResource: Conditional parameter for interacting with WorldResource
     * */
     abstract fun selector(current: Coordinates, worldResource: WorldResource?): Boolean
+
+    // override to deactivate range check
+    open val doRangeCheck: Boolean = true
+}
+
+class ZombieTargetFinder(
+    private val mapManager: MapManager,
+    neighbourCalculator: HexagonNeighbourCalculator
+) : BaseFinder(neighbourCalculator) {
+
+    override val doRangeCheck: Boolean = false
+
+    override fun selector(current: Coordinates, worldResource: WorldResource?): Boolean {
+        if (mapManager.isBuilding(current)) {
+            val building = mapManager.findSpecificCell(current)!!.building
+            if (building !is Spawner && building !is Road) {
+                if (!mapManager.isTouched(current)) {//TODO ignore touched?
+                    return true
+                }
+            }
+        }
+        return false
+    }
+}
+
+class TowerTargetFinder(
+    private val mapManager: MapManager,
+    neighbourCalculator: HexagonNeighbourCalculator
+) : BaseFinder(neighbourCalculator) {
+
+    override fun selector(current: Coordinates, worldResource: WorldResource?): Boolean {
+        return mapManager.isMovingObject(current)
+    }
+}
+
+class NearbyWorldResourceFinder(
+    private val mapManager: MapManager,
+    neighbourCalculator: HexagonNeighbourCalculator
+) : BaseFinder(neighbourCalculator) {
+
+    override fun selector(current: Coordinates, worldResource: WorldResource?): Boolean {
+        return mapManager.isWorldResource(current, worldResource!!)
+    }
+}
+
+class EmptyCellFinder(
+    private val mapManager: MapManager,
+    neighbourCalculator: HexagonNeighbourCalculator
+) : BaseFinder(neighbourCalculator) {
+
+    override fun selector(current: Coordinates, worldResource: WorldResource?): Boolean {
+        return mapManager.queryWorldResource(current) == null && !mapManager.isBuilding(current)
+    }
 }

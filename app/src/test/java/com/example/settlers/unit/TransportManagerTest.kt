@@ -7,95 +7,81 @@ import org.junit.Assert.*
 
 class TransportManagerTest {
 
-    private lateinit var mapManager: MapManagerPreparedForTest
-    private lateinit var sut: TransportManager
-    private lateinit var gameStateManager: GameStateManager
-    private lateinit var coords: Coordinates
+    private lateinit var d: BasicTestDependencies
 
     @Before
     fun prepare() {
-        mapManager = MapManagerPreparedForTest()
-        val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
-        val emptyCellFinder = EmptyCellFinder(mapManager, neighbourCalculator)
-        val nearbyWorldResourceFinder = NearbyWorldResourceFinder(mapManager, neighbourCalculator)
-        sut = TransportManager(
-            mapManager,
-            BreadthFirstSearchRouting(mapManager, neighbourCalculator),
-            emptyCellFinder,
-            nearbyWorldResourceFinder
-        )
-        gameStateManager = GameStateManager(sut, mapManager)
-        coords = Coordinates(0,0)
+        d = BasicTestDependencies()
     }
 
     @Test
     fun `whereIsNextResourceInTransportWithAccess from same tile`() {
-        gameStateManager.applyStates(listOf(
-            GameState(coords, Operator.Set, Type.Transport, Wood),
-            GameState(coords, Operator.Set, Type.Building, Road())
+        d.gameStateManager.applyStates(listOf(
+            GameState(d.coords, Operator.Set, Type.Transport, Wood),
+            GameState(d.coords, Operator.Set, Type.Building, Road())
         ))
-        mapManager.resetTouched()
+        d.mapManager.resetTouched()
 
         //The coordinates are irrelevant here
-        val result = sut.whereIsNextResourceInTransportWithAccess(TransportRequest(coords, Wood))
+        val result = d.transportManager.whereIsNextResourceInTransportWithAccess(TransportRequest(d.coords, Wood))
 
-        assertEquals(coords, result)
+        assertEquals(d.coords, result)
     }
 
     @Test
     fun `whereIsNextResourceInTransportWithAccess from one tile over`() {
         val dest = Coordinates(2,0)
-        gameStateManager.applyStates(listOf(
-            GameState(coords, Operator.Set, Type.Transport, Wood),
-            GameState(coords, Operator.Set, Type.Building, Road()),
+        d.gameStateManager.applyStates(listOf(
+            GameState(d.coords, Operator.Set, Type.Transport, Wood),
+            GameState(d.coords, Operator.Set, Type.Building, Road()),
             GameState(dest, Operator.Set, Type.Building, Road())
         ))
-        mapManager.resetTouched()
+        d.mapManager.resetTouched()
 
         //The coordinates are irrelevant here
-        val result = sut.whereIsNextResourceInTransportWithAccess(TransportRequest(dest, Wood))
+        val result = d.transportManager.whereIsNextResourceInTransportWithAccess(TransportRequest(dest, Wood))
 
-        assertEquals(coords, result)
+        assertEquals(d.coords, result)
     }
 
     @Test
     fun `whereIsNextResourceInStorageWithAccess from same tile`() {
-        gameStateManager.applyStates(listOf(
-            GameState(coords, Operator.Set, Type.Storage, Wood),
-            GameState(coords, Operator.Set, Type.Building, Road())
+        d.gameStateManager.applyStates(listOf(
+            GameState(d.coords, Operator.Set, Type.Storage, Wood),
+            GameState(d.coords, Operator.Set, Type.Building, Road())
         ))
-        mapManager.resetTouched()
+        d.mapManager.resetTouched()
         //The coordinates are irrelevant here
-        val result = sut.whereIsNextResourceInStorageWithAccess(TransportRequest(coords, Wood))
+        val result = d.transportManager.whereIsNextResourceInStorageWithAccess(TransportRequest(d.coords, Wood))
 
-        assertEquals(coords, result)
+        assertEquals(d.coords, result)
     }
 
     @Test
     fun `whereIsNextResourceInStorageWithAccess from one tile over`() {
         val dest = Coordinates(2,0)
-        gameStateManager.applyStates(listOf(
-            GameState(coords, Operator.Set, Type.Storage, Wood),
-            GameState(coords, Operator.Set, Type.Building, Road()),
+        d.gameStateManager.applyStates(listOf(
+            GameState(d.coords, Operator.Set, Type.Storage, Wood),
+            GameState(d.coords, Operator.Set, Type.Building, Road()),
             GameState(dest, Operator.Set, Type.Building, Road())
         ))
-        mapManager.resetTouched()
+        d.mapManager.resetTouched()
         //The coordinates are irrelevant here
-        val result = sut.whereIsNextResourceInStorageWithAccess(TransportRequest(dest, Wood))
+        val result = d.transportManager.whereIsNextResourceInStorageWithAccess(TransportRequest(dest, Wood))
 
-        assertEquals(coords, result)
+        assertEquals(d.coords, result)
     }
 
     @Test
     fun `moveResources step #1`() {
         val dest = Coordinates(2,2)
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(Coordinates(0,0), Operator.Set, Type.Building, Townhall()),
             GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
             GameState(dest, Operator.Set, Type.Building, Lumberjack())
         ))
-        mapManager.resetTouched()
-        val result = sut.moveResources(mapManager.findSpecificCell(dest)!!)
+        d.mapManager.resetTouched()
+        val result = d.transportManager.moveResources(d.mapManager.findSpecificCell(dest)!!)
 
         assertEquals(listOf(
             GameState(Coordinates(x=0, y=0), Operator.Remove, Type.Storage, Wood),
@@ -106,14 +92,14 @@ class TransportManagerTest {
     @Test
     fun `moveResources step #2`() {
         val dest = Coordinates(2,2)
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(Coordinates(0,0), Operator.Set, Type.Transport, Wood),
             GameState(Coordinates(0,0), Operator.Set, Type.Building, Road()),
             GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
             GameState(dest, Operator.Set, Type.Building, Lumberjack())
         ))
-        mapManager.resetTouched()
-        val result = sut.moveResources(mapManager.findSpecificCell(dest)!!)
+        d.mapManager.resetTouched()
+        val result = d.transportManager.moveResources(d.mapManager.findSpecificCell(dest)!!)
 
         assertEquals(listOf(
             GameState(Coordinates(x=0, y=0), Operator.Remove, Type.Transport, Wood),
@@ -124,14 +110,14 @@ class TransportManagerTest {
     @Test
     fun `moveResources step #3`() {
         val dest = Coordinates(2,2)
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(Coordinates(1,1), Operator.Set, Type.Transport, Wood),
             GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
             GameState(dest, Operator.Set, Type.Building, Lumberjack())
         ))
-        mapManager.resetTouched()
+        d.mapManager.resetTouched()
 
-        val result = sut.moveResources(mapManager.findSpecificCell(dest)!!)
+        val result = d.transportManager.moveResources(d.mapManager.findSpecificCell(dest)!!)
 
         assertEquals(listOf(
             GameState(Coordinates(x=1, y=1), Operator.Remove, Type.Transport, Wood),
@@ -142,11 +128,11 @@ class TransportManagerTest {
     @Test
     fun `moveResources step #4`() {
         val dest = Coordinates(2,2)
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(dest, Operator.Set, Type.Transport, Wood),
             GameState(dest, Operator.Set, Type.Building, Lumberjack())
         ))
-        val result = sut.moveResources(mapManager.findSpecificCell(dest)!!)
+        val result = d.transportManager.moveResources(d.mapManager.findSpecificCell(dest)!!)
 
         assertEquals(listOf<GameState>(), result)
     }
@@ -154,13 +140,13 @@ class TransportManagerTest {
     @Test
     fun `moveResources already touched`() {
         val dest = Coordinates(2,2)
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(Coordinates(0,0), Operator.Set, Type.Building, Townhall()),
             GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
             GameState(dest, Operator.Set, Type.Building, Lumberjack())
         ))
-        mapManager.findSpecificCell(Coordinates(0,0))!!.touched = true
-        val result = sut.moveResources(mapManager.findSpecificCell(dest)!!)
+        d.mapManager.findSpecificCell(Coordinates(0,0))!!.touched = true
+        val result = d.transportManager.moveResources(d.mapManager.findSpecificCell(dest)!!)
 
         assertEquals(listOf<GameState>(
         ), result)
@@ -171,12 +157,12 @@ class TransportManagerTest {
         val tower = Tower()
         val towerCoordinates = Coordinates(0,0)
         val zombie = Coordinates(4,0)// 2 away
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(towerCoordinates, Operator.Set, Type.Building, tower),
             GameState(zombie, Operator.Set, Type.MovingObject, Zombie)
         ))
-        mapManager.resetTouched()
-        val targetCoordinates = sut.shootWithTowerCalculatePath(towerCoordinates, tower.range)
+        d.mapManager.resetTouched()
+        val targetCoordinates = d.transportManager.shootWithTowerCalculatePath(towerCoordinates, tower.range)
 
         assertEquals(TargetCoordinates(
             start = towerCoordinates,
@@ -189,11 +175,11 @@ class TransportManagerTest {
     fun `shootWithTowerCalculatePath no target`() {
         val tower = Tower()
         val towerCoordinates = Coordinates(0,0)
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(towerCoordinates, Operator.Set, Type.Building, tower)
         ))
-        mapManager.resetTouched()
-        val targetCoordinates = sut.shootWithTowerCalculatePath(towerCoordinates, tower.range)
+        d.mapManager.resetTouched()
+        val targetCoordinates = d.transportManager.shootWithTowerCalculatePath(towerCoordinates, tower.range)
 
         assertNull(targetCoordinates)
     }
@@ -202,55 +188,55 @@ class TransportManagerTest {
     fun `shootWithTowerCalculatePath - target is inside tower - to late for shooting`() {
         val tower = Tower()
         val towerCoordinates = Coordinates(0,0)
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(towerCoordinates, Operator.Set, Type.Building, tower),
             GameState(towerCoordinates, Operator.Set, Type.MovingObject, Zombie)
         ))
-        mapManager.resetTouched()
-        val targetCoordinates = sut.shootWithTowerCalculatePath(towerCoordinates, tower.range)
+        d.mapManager.resetTouched()
+        val targetCoordinates = d.transportManager.shootWithTowerCalculatePath(towerCoordinates, tower.range)
 
         assertNull(targetCoordinates)
     }
 
     @Test
     fun `handleRequestsInStorage - checks if in transport are already 2 items and nothing more is allowed to be added`() {
-        gameStateManager.applyStates(listOf(
-            GameStateCreator.createTownhall(coords),
-            GameStateCreator.addWoodToStorage(coords),
-            GameStateCreator.addWoodToStorage(coords),
-            GameStateCreator.addWoodToStorage(coords),
-            GameStateCreator.addWoodToStorage(coords),
-            GameStateCreator.addWoodToStorage(coords),
+        d.gameStateManager.applyStates(listOf(
+            GameStateCreator.createTownhall(d.coords),
+            GameStateCreator.addWoodToStorage(d.coords),
+            GameStateCreator.addWoodToStorage(d.coords),
+            GameStateCreator.addWoodToStorage(d.coords),
+            GameStateCreator.addWoodToStorage(d.coords),
+            GameStateCreator.addWoodToStorage(d.coords),
             GameStateCreator.createFletcher(Coordinates(2,0))
         ))
-        val cell = mapManager.findSpecificCell(coords)!!
+        val cell = d.mapManager.findSpecificCell(d.coords)!!
         cell.building!!.setConstructionFinished()
-        mapManager.resetTouched()
-        val dest = mapManager.findSpecificCell(Coordinates(2,0))!!
+        d.mapManager.resetTouched()
+        val dest = d.mapManager.findSpecificCell(Coordinates(2,0))!!
 
-        gameStateManager.applyStates(sut.moveResources(dest))
-        mapManager.resetTouched()
-        gameStateManager.applyStates(sut.moveResources(dest))
-        mapManager.resetTouched()
-        gameStateManager.applyStates(sut.moveResources(dest))
-        mapManager.resetTouched()
-        gameStateManager.applyStates(sut.moveResources(dest))
-        mapManager.resetTouched()
-        gameStateManager.applyStates(sut.moveResources(dest))
+        d.gameStateManager.applyStates(d.transportManager.moveResources(dest))
+        d.mapManager.resetTouched()
+        d.gameStateManager.applyStates(d.transportManager.moveResources(dest))
+        d.mapManager.resetTouched()
+        d.gameStateManager.applyStates(d.transportManager.moveResources(dest))
+        d.mapManager.resetTouched()
+        d.gameStateManager.applyStates(d.transportManager.moveResources(dest))
+        d.mapManager.resetTouched()
+        d.gameStateManager.applyStates(d.transportManager.moveResources(dest))
     }
 
     @Test
     fun `isSpaceAvailableForWorldResource - available`() {
-        gameStateManager.applyStates(listOf(
-            GameStateCreator.createFletcher(coords)
+        d.gameStateManager.applyStates(listOf(
+            GameStateCreator.createFletcher(d.coords)
         ))
-        assertEquals(true, sut.isSpaceAvailableForWorldResource(coords))
+        assertEquals(true, d.transportManager.isSpaceAvailableForWorldResource(d.coords))
     }
 
     @Test
     fun `isSpaceAvailableForWorldResource - not available wit range 3`() {
-        gameStateManager.applyStates(listOf(
-            GameStateCreator.createFletcher(coords),
+        d.gameStateManager.applyStates(listOf(
+            GameStateCreator.createFletcher(d.coords),
             //Block all possible cells in range 3
             GameStateCreator.createFletcher(Coordinates(2,0)),
             GameStateCreator.createFletcher(Coordinates(4,0)),
@@ -264,6 +250,6 @@ class TransportManagerTest {
             GameStateCreator.createFletcher(Coordinates(1,3)),
             GameStateCreator.createFletcher(Coordinates(3,3)),
         ))
-        assertEquals(false, sut.isSpaceAvailableForWorldResource(coords))
+        assertEquals(false, d.transportManager.isSpaceAvailableForWorldResource(d.coords))
     }
 }

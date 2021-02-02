@@ -6,29 +6,18 @@ import org.junit.Before
 import org.junit.Test
 
 class MainActivityHelperTest {
-    private lateinit var mapManager: MapManagerPreparedForTest
-    private lateinit var transportManager: TransportManager
-    private lateinit var gameStateManager: GameStateManager
+
+    private lateinit var d: BasicTestDependencies
 
     @Before
     fun prepare() {
-        mapManager = MapManagerPreparedForTest()
-        val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
-        val emptyCellFinder = EmptyCellFinder(mapManager, neighbourCalculator)
-        val nearbyWorldResourceFinder = NearbyWorldResourceFinder(mapManager, neighbourCalculator)
-        transportManager = TransportManager(
-            mapManager,
-            BreadthFirstSearchRouting(mapManager, neighbourCalculator),
-            emptyCellFinder,
-            nearbyWorldResourceFinder
-        )
-        gameStateManager = GameStateManager(transportManager, mapManager)
+        d = BasicTestDependencies()
     }
 
     @Test
     fun `Set initial spawner`() {
-        MainActivityHelper.setInitialSpawner(gameStateManager, mapManager)
-        val southEastEdge = mapManager.getSouthEastEdge()
-        Assert.assertTrue(mapManager.queryBuilding(southEastEdge) is Spawner)
+        MainActivityHelper.setInitialSpawner(d.gameStateManager, d.mapManager)
+        val southEastEdge = d.mapManager.getSouthEastEdge()
+        Assert.assertTrue(d.mapManager.queryBuilding(southEastEdge) is Spawner)
     }
 }

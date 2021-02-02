@@ -8,31 +8,18 @@ import org.junit.Test
 
 class GameStateCreatorTest {
 
-    private lateinit var sut: GameStateCreator
-    private lateinit var mapManager: MapManagerPreparedForTest
-    private lateinit var gameStateManager: GameStateManager
+    private lateinit var d: BasicTestDependencies
 
     @Before
     fun setUp() {
-        mapManager = MapManagerPreparedForTest()
-        val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
-        val emptyCellFinder = EmptyCellFinder(mapManager, neighbourCalculator)
-        val nearbyWorldResourceFinder = NearbyWorldResourceFinder(mapManager, neighbourCalculator)
-        val transportManager = TransportManager(
-            mapManager,
-            BreadthFirstSearchRouting(mapManager, neighbourCalculator),
-            emptyCellFinder,
-            nearbyWorldResourceFinder
-        )
-        gameStateManager = GameStateManager(transportManager, mapManager)
-
+        d = BasicTestDependencies()
     }
 
     @Test
     fun testCreateSapwnerAtFarEdge() {
-        val coords: Coordinates = mapManager.getSouthEastEdge()
-        gameStateManager.applyState(GameStateCreator.createSpawner(coords))
-        val building = mapManager.queryBuilding(coords)
+        val coords: Coordinates = d.mapManager.getSouthEastEdge()
+        d.gameStateManager.applyState(GameStateCreator.createSpawner(coords))
+        val building = d.mapManager.queryBuilding(coords)
         assertTrue(building is Spawner)
     }
 }

@@ -8,23 +8,11 @@ import org.junit.Before
 
 class TransportationTest {
 
-    private lateinit var mapManager: MapManagerPreparedForTest
-    private lateinit var transportManager: TransportManager
-    private lateinit var gameStateManager: GameStateManager
+    private lateinit var d: BasicTestDependencies
 
     @Before
     fun prepare() {
-        mapManager = MapManagerPreparedForTest()
-        val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
-        val emptyCellFinder = EmptyCellFinder(mapManager, neighbourCalculator)
-        val nearbyWorldResourceFinder = NearbyWorldResourceFinder(mapManager, neighbourCalculator)
-        transportManager = TransportManager(
-            mapManager,
-            BreadthFirstSearchRouting(mapManager, neighbourCalculator),
-            emptyCellFinder,
-            nearbyWorldResourceFinder
-        )
-        gameStateManager = GameStateManager(transportManager, mapManager)
+        d = BasicTestDependencies()
     }
 
     @Test
@@ -34,155 +22,155 @@ class TransportationTest {
         val provider = Coordinates(0,0)
         val destiantion = Coordinates(1,1)//This test only works for a single tile, because the it ticks only once
 
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(provider, Operator.Set, Type.Building, Townhall()),
             GameState(destiantion, Operator.Set, Type.Building, Lumberjack()),
         ))
-        assertEquals(listOf(Wood, Wood, Wood, Stone, Stone, Stone), mapManager.queryInStorage(at = provider))
+        assertEquals(listOf(Wood, Wood, Wood, Stone, Stone, Stone), d.mapManager.queryInStorage(at = provider))
 
-        gameStateManager.tick()
-        assertEquals(listOf(Wood), mapManager.queryInTransport(at = provider))
-        assertEquals(listOf(Wood, Wood, Stone, Stone, Stone), mapManager.queryInStorage(at = provider))
-        assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = provider))
+        d.gameStateManager.tick()
+        assertEquals(listOf(Wood), d.mapManager.queryInTransport(at = provider))
+        assertEquals(listOf(Wood, Wood, Stone, Stone, Stone), d.mapManager.queryInStorage(at = provider))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInProduction(at = provider))
 
-        gameStateManager.tick()
-        assertEquals(listOf(Wood), mapManager.queryInTransport(at = destiantion))
-        assertEquals(listOf(Wood, Wood, Stone, Stone, Stone), mapManager.queryInStorage(at = provider))
-        assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = provider))
+        d.gameStateManager.tick()
+        assertEquals(listOf(Wood), d.mapManager.queryInTransport(at = destiantion))
+        assertEquals(listOf(Wood, Wood, Stone, Stone, Stone), d.mapManager.queryInStorage(at = provider))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInProduction(at = provider))
 
         //TODO Another tick to convert. Do I really want to do this here? This test gets really messy. Block Cells?
-        gameStateManager.tick()
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = provider))
-        assertEquals(listOf(Wood), mapManager.queryInStorage(at = destiantion))
-        assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = provider))
+        d.gameStateManager.tick()
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = provider))
+        assertEquals(listOf(Wood), d.mapManager.queryInStorage(at = destiantion))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInProduction(at = provider))
 
-        gameStateManager.tick()
-        assertEquals(listOf(Wood), mapManager.queryInTransport(at = provider))
-        assertEquals(listOf(Wood, Stone, Stone, Stone), mapManager.queryInStorage(at = provider))
-        assertEquals(listOf(Wood), mapManager.queryInProduction(at = destiantion))
+        d.gameStateManager.tick()
+        assertEquals(listOf(Wood), d.mapManager.queryInTransport(at = provider))
+        assertEquals(listOf(Wood, Stone, Stone, Stone), d.mapManager.queryInStorage(at = provider))
+        assertEquals(listOf(Wood), d.mapManager.queryInProduction(at = destiantion))
     }
 
     @Test
     fun `transport of 3 items - full disclosure`() {
-        gameStateManager.applyStates(GameStateCreator.L3_T3_unfinishedRoad())
-        gameStateManager.applyState(GameState(Coordinates(3,1), Operator.Set, Type.Building, Road()))//Finish road
+        d.gameStateManager.applyStates(GameStateCreator.L3_T3_unfinishedRoad())
+        d.gameStateManager.applyState(GameState(Coordinates(3,1), Operator.Set, Type.Building, Road()))//Finish road
 
 
-        assertEquals(listOf(Wood, Wood, Wood, Stone, Stone, Stone), mapManager.queryInStorage(at = Coordinates(2,0)))
-        assertEquals(listOf(Wood, Wood, Wood, Stone, Stone, Stone), mapManager.queryInStorage(at = Coordinates(1,1)))
-        assertEquals(listOf(Wood, Wood, Wood, Stone, Stone, Stone), mapManager.queryInStorage(at = Coordinates(2,2)))
+        assertEquals(listOf(Wood, Wood, Wood, Stone, Stone, Stone), d.mapManager.queryInStorage(at = Coordinates(2,0)))
+        assertEquals(listOf(Wood, Wood, Wood, Stone, Stone, Stone), d.mapManager.queryInStorage(at = Coordinates(1,1)))
+        assertEquals(listOf(Wood, Wood, Wood, Stone, Stone, Stone), d.mapManager.queryInStorage(at = Coordinates(2,2)))
 
-        gameStateManager.tick()
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(3,1)))
+        d.gameStateManager.tick()
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(3,1)))
 
-        assertEquals(listOf(Wood), mapManager.queryInTransport(at = Coordinates(2,0)))
-        assertEquals(listOf(Wood), mapManager.queryInTransport(at = Coordinates(1,1)))
-        assertEquals(listOf(Wood), mapManager.queryInTransport(at = Coordinates(2,2)))
+        assertEquals(listOf(Wood), d.mapManager.queryInTransport(at = Coordinates(2,0)))
+        assertEquals(listOf(Wood), d.mapManager.queryInTransport(at = Coordinates(1,1)))
+        assertEquals(listOf(Wood), d.mapManager.queryInTransport(at = Coordinates(2,2)))
 
         //Don't show these each round, until actually something goes to production
-        assertEquals(listOf(Wood, Wood), mapManager.queryRequires(at = Coordinates(6,0)))
-        assertEquals(listOf(Wood, Wood), mapManager.queryRequires(at = Coordinates(7,1)))
-        assertEquals(listOf(Wood, Wood), mapManager.queryRequires(at = Coordinates(6,2)))
+        assertEquals(listOf(Wood, Wood), d.mapManager.queryRequires(at = Coordinates(6,0)))
+        assertEquals(listOf(Wood, Wood), d.mapManager.queryRequires(at = Coordinates(7,1)))
+        assertEquals(listOf(Wood, Wood), d.mapManager.queryRequires(at = Coordinates(6,2)))
 
-        gameStateManager.tick()
-        assertEquals(listOf(Wood), mapManager.queryInTransport(at = Coordinates(2,0)))
-        assertEquals(listOf(Wood), mapManager.queryInTransport(at = Coordinates(1,1)))
-        assertEquals(listOf(Wood), mapManager.queryInTransport(at = Coordinates(3,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(5,1)))
+        d.gameStateManager.tick()
+        assertEquals(listOf(Wood), d.mapManager.queryInTransport(at = Coordinates(2,0)))
+        assertEquals(listOf(Wood), d.mapManager.queryInTransport(at = Coordinates(1,1)))
+        assertEquals(listOf(Wood), d.mapManager.queryInTransport(at = Coordinates(3,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(5,1)))
 
-        gameStateManager.tick()
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(3,1)))
-        assertEquals(listOf(Wood), mapManager.queryInTransport(at = Coordinates(5,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(6,0)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(7,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(6,2)))
+        d.gameStateManager.tick()
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(3,1)))
+        assertEquals(listOf(Wood), d.mapManager.queryInTransport(at = Coordinates(5,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(6,0)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(7,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(6,2)))
 
-        assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = Coordinates(6,0)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = Coordinates(7,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = Coordinates(6,2)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInStorage(at = Coordinates(6,0)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInStorage(at = Coordinates(7,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInStorage(at = Coordinates(6,2)))
 
-        gameStateManager.tick()
-        assertEquals(listOf(Wood), mapManager.queryInTransport(at = Coordinates(3,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(5,1)))
-        assertEquals(listOf(Wood), mapManager.queryInTransport(at = Coordinates(6,0)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(7,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(6,2)))
+        d.gameStateManager.tick()
+        assertEquals(listOf(Wood), d.mapManager.queryInTransport(at = Coordinates(3,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(5,1)))
+        assertEquals(listOf(Wood), d.mapManager.queryInTransport(at = Coordinates(6,0)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(7,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(6,2)))
 
-        assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = Coordinates(6,0)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = Coordinates(7,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = Coordinates(6,2)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInStorage(at = Coordinates(6,0)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInStorage(at = Coordinates(7,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInStorage(at = Coordinates(6,2)))
 
-        gameStateManager.tick()
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(3,1)))
-        assertEquals(listOf(Wood), mapManager.queryInTransport(at = Coordinates(5,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(6,0)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(7,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(6,2)))
+        d.gameStateManager.tick()
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(3,1)))
+        assertEquals(listOf(Wood), d.mapManager.queryInTransport(at = Coordinates(5,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(6,0)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(7,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(6,2)))
 
-        assertEquals(listOf(Wood), mapManager.queryInStorage(at = Coordinates(6,0)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = Coordinates(7,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = Coordinates(6,2)))
+        assertEquals(listOf(Wood), d.mapManager.queryInStorage(at = Coordinates(6,0)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInStorage(at = Coordinates(7,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInStorage(at = Coordinates(6,2)))
 
-        assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = Coordinates(6,0)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = Coordinates(7,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = Coordinates(6,2)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInProduction(at = Coordinates(6,0)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInProduction(at = Coordinates(7,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInProduction(at = Coordinates(6,2)))
 
-        gameStateManager.tick()
-        assertEquals(listOf(Wood), mapManager.queryInTransport(at = Coordinates(3,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(5,1)))
-        assertEquals(listOf(Wood), mapManager.queryInTransport(at = Coordinates(6,0)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(7,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(6,2)))
+        d.gameStateManager.tick()
+        assertEquals(listOf(Wood), d.mapManager.queryInTransport(at = Coordinates(3,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(5,1)))
+        assertEquals(listOf(Wood), d.mapManager.queryInTransport(at = Coordinates(6,0)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(7,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(6,2)))
 
-        assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = Coordinates(6,0)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = Coordinates(7,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = Coordinates(6,2)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInStorage(at = Coordinates(6,0)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInStorage(at = Coordinates(7,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInStorage(at = Coordinates(6,2)))
 
-        assertEquals(listOf(Wood), mapManager.queryInProduction(at = Coordinates(6,0)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = Coordinates(7,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = Coordinates(6,2)))
+        assertEquals(listOf(Wood), d.mapManager.queryInProduction(at = Coordinates(6,0)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInProduction(at = Coordinates(7,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInProduction(at = Coordinates(6,2)))
 
-        assertEquals(listOf(Wood), mapManager.queryRequires(at = Coordinates(6,0)))
-        assertEquals(listOf(Wood, Wood), mapManager.queryRequires(at = Coordinates(7,1)))
-        assertEquals(listOf(Wood, Wood), mapManager.queryRequires(at = Coordinates(6,2)))
+        assertEquals(listOf(Wood), d.mapManager.queryRequires(at = Coordinates(6,0)))
+        assertEquals(listOf(Wood, Wood), d.mapManager.queryRequires(at = Coordinates(7,1)))
+        assertEquals(listOf(Wood, Wood), d.mapManager.queryRequires(at = Coordinates(6,2)))
 
-        gameStateManager.tick()
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(3,1)))
-        assertEquals(listOf(Wood), mapManager.queryInTransport(at = Coordinates(5,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(6,0)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(7,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(6,2)))
+        d.gameStateManager.tick()
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(3,1)))
+        assertEquals(listOf(Wood), d.mapManager.queryInTransport(at = Coordinates(5,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(6,0)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(7,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(6,2)))
 
-        assertEquals(listOf(Wood), mapManager.queryInStorage(at = Coordinates(6,0)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = Coordinates(7,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = Coordinates(6,2)))
+        assertEquals(listOf(Wood), d.mapManager.queryInStorage(at = Coordinates(6,0)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInStorage(at = Coordinates(7,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInStorage(at = Coordinates(6,2)))
 
-        assertEquals(listOf(Wood), mapManager.queryInProduction(at = Coordinates(6,0)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = Coordinates(7,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = Coordinates(6,2)))
+        assertEquals(listOf(Wood), d.mapManager.queryInProduction(at = Coordinates(6,0)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInProduction(at = Coordinates(7,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInProduction(at = Coordinates(6,2)))
 
-        assertEquals(listOf(Wood), mapManager.queryRequires(at = Coordinates(6,0)))
-        assertEquals(listOf(Wood, Wood), mapManager.queryRequires(at = Coordinates(7,1)))
-        assertEquals(listOf(Wood, Wood), mapManager.queryRequires(at = Coordinates(6,2)))
+        assertEquals(listOf(Wood), d.mapManager.queryRequires(at = Coordinates(6,0)))
+        assertEquals(listOf(Wood, Wood), d.mapManager.queryRequires(at = Coordinates(7,1)))
+        assertEquals(listOf(Wood, Wood), d.mapManager.queryRequires(at = Coordinates(6,2)))
 
-        gameStateManager.tick()
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(3,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(5,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(6,0)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInTransport(at = Coordinates(7,1)))
-        assertEquals(listOf(Wood), mapManager.queryInTransport(at = Coordinates(6,2)))
+        d.gameStateManager.tick()
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(3,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(5,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(6,0)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(7,1)))
+        assertEquals(listOf(Wood), d.mapManager.queryInTransport(at = Coordinates(6,2)))
 
-        assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = Coordinates(6,0)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = Coordinates(7,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInStorage(at = Coordinates(6,2)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInStorage(at = Coordinates(6,0)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInStorage(at = Coordinates(7,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInStorage(at = Coordinates(6,2)))
 
-        assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = Coordinates(6,0)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = Coordinates(7,1)))
-        assertEquals(emptyList<Resource>(), mapManager.queryInProduction(at = Coordinates(6,2)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInProduction(at = Coordinates(6,0)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInProduction(at = Coordinates(7,1)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInProduction(at = Coordinates(6,2)))
 
-        assertEquals(emptyList<Resource>(), mapManager.queryRequires(at = Coordinates(6,0)))
-        assertEquals(listOf(Wood, Wood), mapManager.queryRequires(at = Coordinates(7,1)))
-        assertEquals(listOf(Wood, Wood), mapManager.queryRequires(at = Coordinates(6,2)))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryRequires(at = Coordinates(6,0)))
+        assertEquals(listOf(Wood, Wood), d.mapManager.queryRequires(at = Coordinates(7,1)))
+        assertEquals(listOf(Wood, Wood), d.mapManager.queryRequires(at = Coordinates(6,2)))
         //Some steps are skipped for brevity
     }
 
@@ -202,7 +190,7 @@ class TransportationTest {
         val tree5 = Coordinates(4,2)
         val tree6 = Coordinates(6,2)
 
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameStateCreator.createTownhall(cTown),
             GameStateCreator.createRoad(cRoad1),
             GameStateCreator.createRoad(cRoad2),
@@ -217,29 +205,29 @@ class TransportationTest {
             GameStateCreator.createTree(tree6),
         ))
 
-        val town = mapManager.queryBuilding(cTown)!!
-        val road1 = mapManager.queryBuilding(cRoad1)!!
-        val road2 = mapManager.queryBuilding(cRoad2)!!
-        val lumber = mapManager.queryBuilding(cLumber)!!
-        val fletcher1 = mapManager.queryBuilding(cFletcher1)!!
-        val fletcher2 = mapManager.queryBuilding(cFletcher2)!!
+        val town = d.mapManager.queryBuilding(cTown)!!
+        val road1 = d.mapManager.queryBuilding(cRoad1)!!
+        val road2 = d.mapManager.queryBuilding(cRoad2)!!
+        val lumber = d.mapManager.queryBuilding(cLumber)!!
+        val fletcher1 = d.mapManager.queryBuilding(cFletcher1)!!
+        val fletcher2 = d.mapManager.queryBuilding(cFletcher2)!!
 
         //runConstruction via tick()
         for (x in 1 .. 16) {
             //sut.runProduction(cell)
-            gameStateManager.tick()
+            d.gameStateManager.tick()
         }
         assertTrue(lumber.isConstructed())
-        assertEquals(listOf(Wood), mapManager.queryInProduction(cFletcher2))
-        assertEquals(listOf(Wood), mapManager.queryRequires(cFletcher2))
+        assertEquals(listOf(Wood), d.mapManager.queryInProduction(cFletcher2))
+        assertEquals(listOf(Wood), d.mapManager.queryRequires(cFletcher2))
 
         for (x in 1 .. 14) {
             //sut.runProduction(cell)
-            gameStateManager.tick()
+            d.gameStateManager.tick()
         }
 
-        assertEquals(listOf(Wood), mapManager.queryInStorage(cFletcher2))
-        assertEquals(listOf(Wood), mapManager.queryInProduction(cFletcher2))
-        assertEquals(listOf(Wood), mapManager.queryRequires(cFletcher2))
+        assertEquals(listOf(Wood), d.mapManager.queryInStorage(cFletcher2))
+        assertEquals(listOf(Wood), d.mapManager.queryInProduction(cFletcher2))
+        assertEquals(listOf(Wood), d.mapManager.queryRequires(cFletcher2))
     }
 }

@@ -9,37 +9,23 @@ import org.junit.Test
 
 class BreadthFirstSearchRoutingTest {
 
-    private lateinit var mapManager: MapManagerPreparedForTest
-    private lateinit var transportManager: TransportManager
-    private lateinit var gameStateManager: GameStateManager
-    private lateinit var sut: BreadthFirstSearchRouting
+    private lateinit var d: BasicTestDependencies
 
     @Before
     fun setup() {
-        mapManager = MapManagerPreparedForTest()
-        val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
-        sut = BreadthFirstSearchRouting(mapManager, neighbourCalculator)
-        val emptyCellFinder = EmptyCellFinder(mapManager, neighbourCalculator)
-        val nearbyWorldResourceFinder = NearbyWorldResourceFinder(mapManager, neighbourCalculator)
-        transportManager = TransportManager(
-            mapManager,
-            BreadthFirstSearchRouting(mapManager, neighbourCalculator),
-            emptyCellFinder,
-            nearbyWorldResourceFinder
-        )
-        gameStateManager = GameStateManager(transportManager, mapManager)
+        d = BasicTestDependencies()
     }
 
     @Test
     fun `calcRoute to neighbour`() {
         val from = Coordinates(1,1)
         val to = Coordinates(2,2)
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(from, Operator.Set, Type.Building, Townhall()),
             GameState(to, Operator.Set, Type.Building, Lumberjack())
         ))
 
-        val route = sut.calcRoute(from, to)
+        val route = d.routing.calcRoute(from, to)
 
         assertEquals(
             Route(
@@ -56,13 +42,13 @@ class BreadthFirstSearchRoutingTest {
     fun `calcRoute two steps`() {
         val from = Coordinates(1,1)
         val to = Coordinates(4,2)
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(from, Operator.Set, Type.Building, Townhall()),
             GameState(Coordinates(2,2), Operator.Set, Type.Building, Road()),
             GameState(to, Operator.Set, Type.Building, Lumberjack())
         ))
 
-        val route = sut.calcRoute(from, to)
+        val route = d.routing.calcRoute(from, to)
 
         assertEquals(
             Route(
@@ -80,7 +66,7 @@ class BreadthFirstSearchRoutingTest {
     fun `calcRoute 3 steps`() {
         val from = Coordinates(0,0)
         val to = Coordinates(4,2)
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(from, Operator.Set, Type.Building, Townhall()),
             GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
             GameState(Coordinates(2,2), Operator.Set, Type.Building, Road()),
@@ -88,7 +74,7 @@ class BreadthFirstSearchRoutingTest {
         ))
 
 
-        val route = sut.calcRoute(from, to)
+        val route = d.routing.calcRoute(from, to)
 
         assertEquals(
             Route(
@@ -107,7 +93,7 @@ class BreadthFirstSearchRoutingTest {
     fun `calcRoute road missing, so no route`() {
         val from = Coordinates(0,0)
         val to = Coordinates(4,2)
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(from, Operator.Set, Type.Building, Townhall()),
             //Here is a Road missing GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
             GameState(Coordinates(2,2), Operator.Set, Type.Building, Road()),
@@ -115,7 +101,7 @@ class BreadthFirstSearchRoutingTest {
         ))
 
 
-        val route = sut.calcRoute(from, to)
+        val route = d.routing.calcRoute(from, to)
 
         assertNull(route)
     }
@@ -124,13 +110,13 @@ class BreadthFirstSearchRoutingTest {
     fun `Don't allow routes through buildings`() {
         val from = Coordinates(1,1)
         val to = Coordinates(4,2)
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(from, Operator.Set, Type.Building, Townhall()),
             GameState(Coordinates(2,2), Operator.Set, Type.Building, Lumberjack()),
             GameState(to, Operator.Set, Type.Building, Lumberjack())
         ))
 
-        val route = sut.calcRoute(from, to)
+        val route = d.routing.calcRoute(from, to)
 
         assertNull(route)
     }
@@ -139,7 +125,7 @@ class BreadthFirstSearchRoutingTest {
     fun `Route around buildings`() {
         val from = Coordinates(0,0)
         val to = Coordinates(2,2)
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(from, Operator.Set, Type.Building, Townhall()),
             GameState(Coordinates(1,1), Operator.Set, Type.Building, Lumberjack()),
             GameState(Coordinates(2,0), Operator.Set, Type.Building, Road()),
@@ -147,7 +133,7 @@ class BreadthFirstSearchRoutingTest {
             GameState(to, Operator.Set, Type.Building, Lumberjack())
         ))
 
-        val route = sut.calcRoute(from, to)
+        val route = d.routing.calcRoute(from, to)
 
         assertEquals(
             Route(
@@ -166,13 +152,13 @@ class BreadthFirstSearchRoutingTest {
     fun `calcRouteFirstStep 2 steps`() {
         val from = Coordinates(1,1)
         val to = Coordinates(4,2)
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(from, Operator.Set, Type.Building, Townhall()),
             GameState(Coordinates(2,2), Operator.Set, Type.Building, Road()),
             GameState(to, Operator.Set, Type.Building, Lumberjack())
         ))
 
-        val next = sut.calcRouteFirstStep(from, to)
+        val next = d.routing.calcRouteFirstStep(from, to)
 
         assertEquals(Coordinates(2,2), next)
     }
@@ -181,15 +167,15 @@ class BreadthFirstSearchRoutingTest {
     fun `findNextItemWithAccessInStorage 1 available 2 away`() {
         val available = Coordinates(0,0)
         val requester = Coordinates(2,2)
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(available, Operator.Set, Type.Building, Road()),
             GameState(available, Operator.Set, Type.Storage, Wood),
             GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
             GameState(requester, Operator.Set, Type.Building, Lumberjack())
         ))
-        mapManager.resetTouched()
+        d.mapManager.resetTouched()
 
-        val foundAt = sut.findNextItemWithAccessInStorage(requester, Wood)
+        val foundAt = d.routing.findNextItemWithAccessInStorage(requester, Wood)
 
         assertEquals(available, foundAt)
     }
@@ -198,16 +184,16 @@ class BreadthFirstSearchRoutingTest {
     fun `findNextItemWithAccessInStorage 2 available at 2 different tiles`() {
         val available = Coordinates(0,0)
         val requester = Coordinates(2,2)
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(available, Operator.Set, Type.Building, Road()),
             GameState(available, Operator.Set, Type.Storage, Wood),
             GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
             GameState(Coordinates(1,1), Operator.Set, Type.Storage, Wood),
             GameState(requester, Operator.Set, Type.Building, Lumberjack())
         ))
-        mapManager.resetTouched()
+        d.mapManager.resetTouched()
 
-        val foundAt = sut.findNextItemWithAccessInStorage(requester, Wood)
+        val foundAt = d.routing.findNextItemWithAccessInStorage(requester, Wood)
 
         assertEquals(Coordinates(1,1), foundAt)
     }
@@ -216,13 +202,13 @@ class BreadthFirstSearchRoutingTest {
     fun `findNextItemWithAccessInTransport nothing available`() {
         val available = Coordinates(0,0)
         val requester = Coordinates(2,2)
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(available, Operator.Set, Type.Building, Road()),
             GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
             GameState(requester, Operator.Set, Type.Building, Lumberjack())
         ))
 
-        val foundAt = sut.findNextItemWithAccessInTransport(requester, Wood)
+        val foundAt = d.routing.findNextItemWithAccessInTransport(requester, Wood)
 
         assertNull(foundAt)
     }
@@ -231,16 +217,16 @@ class BreadthFirstSearchRoutingTest {
     fun `findNextItemWithAccessInTransport 2 available at 2 different tiles`() {
         val available = Coordinates(0,0)
         val requester = Coordinates(2,2)
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(available, Operator.Set, Type.Building, Road()),
             GameState(available, Operator.Set, Type.Transport, Wood),
             GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
             GameState(Coordinates(1,1), Operator.Set, Type.Transport, Wood),
             GameState(requester, Operator.Set, Type.Building, Lumberjack())
         ))
-        mapManager.resetTouched()
+        d.mapManager.resetTouched()
 
-        val foundAt = sut.findNextItemWithAccessInTransport(requester, Wood)
+        val foundAt = d.routing.findNextItemWithAccessInTransport(requester, Wood)
 
         assertEquals(Coordinates(1,1), foundAt)
     }
@@ -250,14 +236,14 @@ class BreadthFirstSearchRoutingTest {
         val zombie = Coordinates(0,0)
         val townhall = Coordinates(4,0)// 2 away
         val road = Coordinates(1,1) //1 away
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(road, Operator.Set, Type.Building, Road()),
             GameState(townhall, Operator.Set, Type.Building, Townhall()),
             GameState(zombie, Operator.Set, Type.MovingObject, Zombie)
         ))
-        mapManager.resetTouched()
+        d.mapManager.resetTouched()
 
-        val foundAt = sut.findTargetForZombie(zombie)
+        val foundAt = d.zombieTargetFinder.find(zombie)
 
         assertEquals(townhall, foundAt)
     }
@@ -265,14 +251,15 @@ class BreadthFirstSearchRoutingTest {
 
     @Test
     fun `findTargetForTower, no target`() {
+
         val coordinates = Coordinates(0,0)
         val tower = Tower()
 
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(coordinates, Operator.Set, Type.Building, tower)
         ))
-        mapManager.resetTouched()
-        val foundAt = sut.findTargetForTower(coordinates, tower.range)
+        d.mapManager.resetTouched()
+        val foundAt = d.towerTagetFinder.find(coordinates, tower.range)
 
         assertEquals(null, foundAt)
     }
@@ -282,13 +269,13 @@ class BreadthFirstSearchRoutingTest {
         val tower = Tower()
         val towerCoordinates = Coordinates(0,0)
         val zombie = Coordinates(4,0)// 2 away
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(towerCoordinates, Operator.Set, Type.Building, tower),
             GameState(zombie, Operator.Set, Type.MovingObject, Zombie)
         ))
-        mapManager.resetTouched()
+        d.mapManager.resetTouched()
 
-        val foundAt = sut.findTargetForTower(towerCoordinates, tower.range)
+        val foundAt = d.towerTagetFinder.find(towerCoordinates, tower.range)
 
         assertEquals(zombie, foundAt)
     }
@@ -299,13 +286,13 @@ class BreadthFirstSearchRoutingTest {
         val towerCoordinates = Coordinates(0,0)
         val zombie = Coordinates(4,0)// 2 away
         val zombie2 = Coordinates(1,1) //1 away
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(towerCoordinates, Operator.Set, Type.Building, tower),
             GameState(zombie, Operator.Set, Type.MovingObject, Zombie),
             GameState(zombie2, Operator.Set, Type.MovingObject, Zombie)
         ))
-        mapManager.resetTouched()
-        val foundAt = sut.findTargetForTower(towerCoordinates, tower.range)
+        d.mapManager.resetTouched()
+        val foundAt = d.towerTagetFinder.find(towerCoordinates, tower.range)
 
         assertEquals(zombie2, foundAt)
     }
@@ -315,13 +302,13 @@ class BreadthFirstSearchRoutingTest {
         val tower = Tower()
         val towerCoordinates = Coordinates(0,0)
         val zombie = Coordinates(6,2)// 4 away
-        gameStateManager.applyStates(listOf(
+        d.gameStateManager.applyStates(listOf(
             GameState(towerCoordinates, Operator.Set, Type.Building, tower),
             GameState(zombie, Operator.Set, Type.MovingObject, Zombie)
         ))
-        mapManager.resetTouched()
+        d.mapManager.resetTouched()
 
-        val foundAt = sut.findTargetForTower(towerCoordinates, tower.range)
+        val foundAt = d.towerTagetFinder.find(towerCoordinates, tower.range)
 
         assertNull(foundAt)
     }

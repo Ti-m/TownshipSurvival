@@ -66,12 +66,15 @@ class MainActivity : AppCompatActivity() {
         val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
         val emptyCellFinder = EmptyCellFinder(mapManager, neighbourCalculator)
         val nearbyWorldResourceFinder = NearbyWorldResourceFinder(mapManager, neighbourCalculator)
+        val towerTargetFinder = TowerTargetFinder(mapManager, neighbourCalculator)
+        val zombieTargetFinder = ZombieTargetFinder(mapManager, neighbourCalculator)
         val transportManager = TransportManager(
             mapManager,
             BreadthFirstSearchRouting(mapManager, neighbourCalculator),
             emptyCellFinder,
             nearbyWorldResourceFinder,
-            logger
+            towerTargetFinder,
+            zombieTargetFinder
         )
         val gameStateManager = GameStateManager(transportManager, mapManager, logger)
 

@@ -1,8 +1,5 @@
 package com.example.settlers
 
-import com.example.settlers.util.DisabledLogger
-import com.example.settlers.util.Logger
-
 data class TransportRequest(val destination: Coordinates, val what: Resource)
 data class TransportRoute(val destination: Coordinates, val what: Resource, val route: Route)
 
@@ -11,9 +8,9 @@ open class TransportManager(
     private val routing: BreadthFirstSearchRouting,
     private val emptyCellFinder: EmptyCellFinder,
     private val nearbyWorldResourceFinder: NearbyWorldResourceFinder,
-    private val log: Logger = DisabledLogger()
+    private val towerTargetFinder: TowerTargetFinder,
+    private val zombieTargetFinder: ZombieTargetFinder
 ) {
-
     fun moveResources(cell: Cell): Collection<GameState> {
         return handleRequests(TransportRequest(cell.coordinates, cell.requires.first()))
     }
@@ -85,7 +82,7 @@ open class TransportManager(
 
     // only calls into routing
     private fun findTargetForZombie(start: Coordinates): Coordinates? {
-        return routing.findTargetForZombie(start)
+        return zombieTargetFinder.find(start)
     }
 
     fun move(start: Coordinates): List<GameState> {
@@ -98,7 +95,7 @@ open class TransportManager(
     }
 
     fun shootWithTowerCalculatePath(start: Coordinates, range: Int): TargetCoordinates? {
-        val destination = routing.findTargetForTower(start, range) ?: return null
+        val destination = towerTargetFinder.find(start, range) ?: return null
         val path = routing.calcRoute(start, destination, ignoreObstacles = true)!!.steps //If there is a target, there should be a path in all cases.
         if (path.count() == 0) return null //Mob is inside Tower, to late for shooting
         path.removeLast()

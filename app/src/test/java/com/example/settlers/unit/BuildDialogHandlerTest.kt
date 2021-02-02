@@ -7,71 +7,61 @@ import org.junit.Before
 import org.junit.Test
 
 class BuildDialogHandlerTest {
+
+    private lateinit var d: BasicTestDependencies
+
     private lateinit var cell: Cell
-    private lateinit var coordinates: Coordinates
-    private lateinit var transportManager: TransportManager
-    private lateinit var mapManager: MapManager
-    private lateinit var gameStateManager: GameStateManager
 
     private lateinit var sut: BuildDialogHandler
 
     @Before
     fun prepare() {
-        coordinates = Coordinates(0,0)
-        cell = Cell(coordinates = coordinates,type = GroundType.Desert)
-        mapManager = MapManagerPreparedForTest(
-            cells = mapOf(//override defaults
-                Pair(Coordinates(0,0), cell)
-            ),
-            mapSize = 1
+        cell = Cell(coordinates = Coordinates(0,0),type = GroundType.Desert)
+        d = BasicTestDependencies(
+            mapManager = MapManagerPreparedForTest(
+                cells = mapOf(//override defaults
+                    Pair(Coordinates(0,0), cell)
+                ),
+                mapSize = 1
+            )
         )
-        val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
-        val emptyCellFinder = EmptyCellFinder(mapManager, neighbourCalculator)
-        val nearbyWorldResourceFinder = NearbyWorldResourceFinder(mapManager, neighbourCalculator)
-        transportManager = TransportManager(
-            mapManager,
-            BreadthFirstSearchRouting(mapManager, neighbourCalculator),
-            emptyCellFinder,
-            nearbyWorldResourceFinder
-        )
-        gameStateManager = GameStateManager(transportManager, mapManager)
 
-        sut = BuildDialogHandler(gameStateManager)
+        sut = BuildDialogHandler(d.gameStateManager)
     }
 
     @Test
     fun onClick_buildingType() {
-        sut.selectedCallback(Townhall(), coordinates)
+        sut.selectedCallback(Townhall(), d.coords)
         assertTrue(cell.building is Townhall)
-        sut.selectedCallback(Lumberjack(), coordinates)
+        sut.selectedCallback(Lumberjack(), d.coords)
         assertTrue(cell.building is Lumberjack)
-        sut.selectedCallback(Road(), coordinates)
+        sut.selectedCallback(Road(), d.coords)
         assertTrue(cell.building is Road)
-        sut.selectedCallback(Tower(), coordinates)
+        sut.selectedCallback(Tower(), d.coords)
         assertTrue(cell.building is Tower)
     }
 
     @Test
     fun onClick_requires() {
-        sut.selectedCallback(Townhall(), coordinates)
+        sut.selectedCallback(Townhall(), d.coords)
         assertEquals(emptyList<Resource>(), cell.building!!.requiresConstruction)
-        sut.selectedCallback(Lumberjack(), coordinates)
+        sut.selectedCallback(Lumberjack(), d.coords)
         assertEquals(listOf(Wood, Wood), cell.building!!.requiresConstruction)
-        sut.selectedCallback(Road(), coordinates)
+        sut.selectedCallback(Road(), d.coords)
         assertEquals(emptyList<Resource>(), cell.building!!.requiresConstruction)
-        sut.selectedCallback(Tower(), coordinates)
+        sut.selectedCallback(Tower(), d.coords)
         assertEquals(listOf(Wood, Stone, Stone), cell.building!!.requiresConstruction)
     }
 
     @Test
     fun onClick_offers() {
-        sut.selectedCallback(Townhall(), coordinates)
+        sut.selectedCallback(Townhall(), d.coords)
         assertEquals(listOf(Wood, Wood, Wood, Stone, Stone, Stone), cell.building!!.offers)
-        sut.selectedCallback(Lumberjack(), coordinates)
+        sut.selectedCallback(Lumberjack(), d.coords)
         assertEquals(emptyList<Resource>(), cell.building!!.offers)
-        sut.selectedCallback(Road(), coordinates)
+        sut.selectedCallback(Road(), d.coords)
         assertEquals(emptyList<Resource>(), cell.building!!.offers)
-        sut.selectedCallback(Tower(), coordinates)
+        sut.selectedCallback(Tower(), d.coords)
         assertEquals(emptyList<Resource>(), cell.building!!.offers)
     }
 }
