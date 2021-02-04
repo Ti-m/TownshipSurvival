@@ -15,64 +15,6 @@ class TransportManagerTest {
     }
 
     @Test
-    fun `whereIsNextResourceInTransportWithAccess from same tile`() {
-        d.gameStateManager.applyStates(listOf(
-            GameState(d.coords, Operator.Set, Type.Transport, Wood),
-            GameState(d.coords, Operator.Set, Type.Building, Road())
-        ))
-        d.mapManager.resetTouched()
-
-        //The coordinates are irrelevant here
-        val result = d.transportManager.whereIsNextResourceInTransportWithAccess(TransportRequest(d.coords, Wood))
-
-        assertEquals(d.coords, result)
-    }
-
-    @Test
-    fun `whereIsNextResourceInTransportWithAccess from one tile over`() {
-        val dest = Coordinates(2,0)
-        d.gameStateManager.applyStates(listOf(
-            GameState(d.coords, Operator.Set, Type.Transport, Wood),
-            GameState(d.coords, Operator.Set, Type.Building, Road()),
-            GameState(dest, Operator.Set, Type.Building, Road())
-        ))
-        d.mapManager.resetTouched()
-
-        //The coordinates are irrelevant here
-        val result = d.transportManager.whereIsNextResourceInTransportWithAccess(TransportRequest(dest, Wood))
-
-        assertEquals(d.coords, result)
-    }
-
-    @Test
-    fun `whereIsNextResourceInStorageWithAccess from same tile`() {
-        d.gameStateManager.applyStates(listOf(
-            GameState(d.coords, Operator.Set, Type.Storage, Wood),
-            GameState(d.coords, Operator.Set, Type.Building, Road())
-        ))
-        d.mapManager.resetTouched()
-        //The coordinates are irrelevant here
-        val result = d.transportManager.whereIsNextResourceInStorageWithAccess(TransportRequest(d.coords, Wood))
-
-        assertEquals(d.coords, result)
-    }
-
-    @Test
-    fun `whereIsNextResourceInStorageWithAccess from one tile over`() {
-        val dest = Coordinates(2,0)
-        d.gameStateManager.applyStates(listOf(
-            GameState(d.coords, Operator.Set, Type.Storage, Wood),
-            GameState(d.coords, Operator.Set, Type.Building, Road()),
-            GameState(dest, Operator.Set, Type.Building, Road())
-        ))
-        d.mapManager.resetTouched()
-        //The coordinates are irrelevant here
-        val result = d.transportManager.whereIsNextResourceInStorageWithAccess(TransportRequest(dest, Wood))
-
-        assertEquals(d.coords, result)
-    }
-
-    @Test
     fun `moveResources step #1`() {
         val dest = Coordinates(2,2)
         d.gameStateManager.applyStates(listOf(

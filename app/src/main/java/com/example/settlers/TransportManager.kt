@@ -1,7 +1,6 @@
 package com.example.settlers
 
 data class TransportRequest(val destination: Coordinates, val what: Resource)
-data class TransportRoute(val destination: Coordinates, val what: Resource, val route: Route)
 
 open class TransportManager(
     private val mapManager: MapManager,
@@ -27,7 +26,7 @@ open class TransportManager(
 
     private fun handleRequestsInTransport(request: TransportRequest): Collection<GameState> {
         val states: MutableList<GameState> = mutableListOf()
-        whereIsNextResourceInTransportWithAccess(request)?.let { closest ->
+        nextItemWithAccessFinder.findInTransport(request)?.let { closest ->
             val to = validRouteNextStep(closest, request.destination)?: return states
 
             states.add(GameState(closest, Operator.Remove, Type.Transport, request.what))
@@ -40,7 +39,7 @@ open class TransportManager(
     //Move from storage to transport
     private fun handleRequestsInStorage(request: TransportRequest): Collection<GameState> {
         val states: MutableList<GameState> = mutableListOf()
-        whereIsNextResourceInStorageWithAccess(request)?.let { closest ->
+        nextItemWithAccessFinder.findInStorage(request)?.let { closest ->
 
             val destinationCell = mapManager.findSpecificCell(closest)!!
             if (destinationCell.transport.count() == 2) { return emptyList() }
@@ -67,27 +66,8 @@ open class TransportManager(
         return routing.calcRouteFirstStep(from, to, ignoreObstacles)
     }
 
-    // only calls into routing
-    fun whereIsNextResourceInStorageWithAccess(request: TransportRequest): Coordinates? {
-        return nextItemWithAccessFinder.findInStorage(request.destination, request.what)
-    }
-
-    // only calls into routing
-    fun whereIsNextResourceInTransportWithAccess(request: TransportRequest): Coordinates? {
-        return nextItemWithAccessFinder.findInTransport(request.destination, request.what)
-    }
-//    private fun calcRoute(from: Coordinates, to: Coordinates, what: Resource) : TransportRoute {
-//        val route = routing.calcRoute(from, to)
-//        return TransportRoute(destination = to, what = what, route = route)
-//    }
-
-    // only calls into routing
-    private fun findTargetForZombie(start: Coordinates): Coordinates? {
-        return zombieTargetFinder.find(start)
-    }
-
     fun move(start: Coordinates): List<GameState> {
-        val target = findTargetForZombie(start) ?: return emptyList()
+        val target = zombieTargetFinder.find(start) ?: return emptyList()
         val step = calcRouteFirstStep(from = start, to = target, ignoreObstacles = true) ?: return emptyList()
         return listOf(
             GameState(start, Operator.Remove, Type.MovingObject, Zombie),

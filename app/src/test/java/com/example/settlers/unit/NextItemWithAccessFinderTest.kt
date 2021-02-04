@@ -16,7 +16,35 @@ class NextItemWithAccessFinderTest {
     }
 
     @Test
-    fun `findNextItemWithAccessInStorage 1 available 2 away`() {
+    fun `findInStorage from same tile`() {
+        d.gameStateManager.applyStates(listOf(
+            GameState(d.coords, Operator.Set, Type.Storage, Wood),
+            GameState(d.coords, Operator.Set, Type.Building, Road())
+        ))
+        d.mapManager.resetTouched()
+        //The coordinates are irrelevant here
+        val result = d.nextItemWithAccessFinder.findInStorage(TransportRequest(d.coords, Wood))
+
+        assertEquals(d.coords, result)
+    }
+
+    @Test
+    fun `findInStorage 1 available 1 away`() {
+        val dest = Coordinates(2,0)
+        d.gameStateManager.applyStates(listOf(
+            GameState(d.coords, Operator.Set, Type.Storage, Wood),
+            GameState(d.coords, Operator.Set, Type.Building, Road()),
+            GameState(dest, Operator.Set, Type.Building, Road())
+        ))
+        d.mapManager.resetTouched()
+        //The coordinates are irrelevant here
+        val result = d.nextItemWithAccessFinder.findInStorage(TransportRequest(dest, Wood))
+
+        assertEquals(d.coords, result)
+    }
+
+    @Test
+    fun `findInStorage 1 available 2 away`() {
         val available = Coordinates(0,0)
         val requester = Coordinates(2,2)
         d.gameStateManager.applyStates(listOf(
@@ -27,13 +55,13 @@ class NextItemWithAccessFinderTest {
         ))
         d.mapManager.resetTouched()
 
-        val foundAt = d.nextItemWithAccessFinder.findInStorage(requester, Wood)
+        val foundAt = d.nextItemWithAccessFinder.findInStorage(TransportRequest(requester, Wood))
 
         assertEquals(available, foundAt)
     }
 
     @Test
-    fun `findNextItemWithAccessInStorage 2 available at 2 different tiles`() {
+    fun `findInStorage 2 available at 2 different tiles`() {
         val available = Coordinates(0,0)
         val requester = Coordinates(2,2)
         d.gameStateManager.applyStates(listOf(
@@ -45,13 +73,13 @@ class NextItemWithAccessFinderTest {
         ))
         d.mapManager.resetTouched()
 
-        val foundAt = d.nextItemWithAccessFinder.findInStorage(requester, Wood)
+        val foundAt = d.nextItemWithAccessFinder.findInStorage(TransportRequest(requester, Wood))
 
         assertEquals(Coordinates(1, 1), foundAt)
     }
 
     @Test
-    fun `findNextItemWithAccessInTransport nothing available`() {
+    fun `findInTransport nothing available`() {
         val available = Coordinates(0,0)
         val requester = Coordinates(2,2)
         d.gameStateManager.applyStates(listOf(
@@ -60,13 +88,43 @@ class NextItemWithAccessFinderTest {
             GameState(requester, Operator.Set, Type.Building, Lumberjack())
         ))
 
-        val foundAt = d.nextItemWithAccessFinder.findInTransport(requester, Wood)
+        val foundAt = d.nextItemWithAccessFinder.findInTransport(TransportRequest(requester, Wood))
 
         assertNull(foundAt)
     }
 
     @Test
-    fun `findNextItemWithAccessInTransport 2 available at 2 different tiles`() {
+    fun `findInTransport from same tile`() {
+        d.gameStateManager.applyStates(listOf(
+            GameState(d.coords, Operator.Set, Type.Transport, Wood),
+            GameState(d.coords, Operator.Set, Type.Building, Road())
+        ))
+        d.mapManager.resetTouched()
+
+        //The coordinates are irrelevant here
+        val result = d.nextItemWithAccessFinder.findInTransport(TransportRequest(d.coords, Wood))
+
+        assertEquals(d.coords, result)
+    }
+
+    @Test
+    fun `findInTransport 1 available 1 away`() {
+        val dest = Coordinates(2,0)
+        d.gameStateManager.applyStates(listOf(
+            GameState(d.coords, Operator.Set, Type.Transport, Wood),
+            GameState(d.coords, Operator.Set, Type.Building, Road()),
+            GameState(dest, Operator.Set, Type.Building, Road())
+        ))
+        d.mapManager.resetTouched()
+
+        //The coordinates are irrelevant here
+        val result = d.nextItemWithAccessFinder.findInTransport(TransportRequest(dest, Wood))
+
+        assertEquals(d.coords, result)
+    }
+
+    @Test
+    fun `findInTransport 2 available at 2 different tiles`() {
         val available = Coordinates(0,0)
         val requester = Coordinates(2,2)
         d.gameStateManager.applyStates(listOf(
@@ -78,7 +136,7 @@ class NextItemWithAccessFinderTest {
         ))
         d.mapManager.resetTouched()
 
-        val foundAt = d.nextItemWithAccessFinder.findInTransport(requester, Wood)
+        val foundAt = d.nextItemWithAccessFinder.findInTransport(TransportRequest(requester, Wood))
 
         assertEquals(Coordinates(1, 1), foundAt)
     }

@@ -69,12 +69,12 @@ class NextItemWithAccessFinder(
 
     override val doRangeCheck: Boolean = false
 
-    fun findInTransport(from: Coordinates, what: Resource): Coordinates? {
-        return find(start = from, what = what, type = Type.Transport)
+    fun findInTransport(request: TransportRequest): Coordinates? {
+        return find(start = request.destination, what = request.what, type = Type.Transport)
     }
 
-    fun findInStorage(from: Coordinates, what: Resource): Coordinates? {
-        return find(start = from, what = what, type = Type.Storage)
+    fun findInStorage(request: TransportRequest): Coordinates? {
+        return find(start = request.destination, what = request.what, type = Type.Storage)
     }
 
     override fun selector(
