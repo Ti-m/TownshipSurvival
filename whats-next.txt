@@ -46,6 +46,9 @@ Combat
 Map
 
 Building
+* Disable a building
+** This will stop any resources being delivered.
+** Works for construction and production
 * DONE requiresProduction/requiresConstruction: MutableList<Resource> - Use an immutable list?
 * DONE Construction shall consume the items for construction, at the beginning of construction
 ** DONE Add a fletcher which produces 1 arrow from 1 wood

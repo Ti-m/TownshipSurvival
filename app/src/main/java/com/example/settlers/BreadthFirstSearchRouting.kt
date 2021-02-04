@@ -60,55 +60,62 @@ class BreadthFirstSearchRouting(
             null
         }
     }
+}
 
-    fun findNextItemWithAccessInTransport(from: Coordinates, what: Resource): Coordinates? {
-        return findNextItemWithAccessInner(from, what, Type.Transport)
+class NextItemWithAccessFinder(
+    private val mapManager: MapManager,
+    neighbourCalculator: HexagonNeighbourCalculator
+) : BaseFinder(neighbourCalculator) {
+
+    override val doRangeCheck: Boolean = false
+
+    fun findInTransport(from: Coordinates, what: Resource): Coordinates? {
+        return find(start = from, what = what, type = Type.Transport)
     }
 
-    fun findNextItemWithAccessInStorage(from: Coordinates, what: Resource): Coordinates? {
-        return findNextItemWithAccessInner(from, what, Type.Storage)
+    fun findInStorage(from: Coordinates, what: Resource): Coordinates? {
+        return find(start = from, what = what, type = Type.Storage)
     }
 
-    //TODO is it really a good idea to use the Type enum here as parameter
-    private fun findNextItemWithAccessInner(from: Coordinates, what: Resource, type: Type): Coordinates? {
-        val frontier = mutableListOf(from)
-        val cameFrom = mutableMapOf<Coordinates, Coordinates>()
-
-        while (!frontier.isEmpty()) {
-            val current = frontier.removeFirst()
-            if (type == Type.Transport) {
-                if (mapManager.queryInTransport(current).contains(what)) {
-                    if (!mapManager.isTouched(current)) {
-                        return current
-                    }
-                }
-            } else if (type == Type.Storage) {
-                if (mapManager.queryInStorage(current).contains(what)) {
-                    if (!mapManager.isTouched(current)) {
-                        return current
-                    }
+    override fun selector(
+        current: Coordinates,
+        worldResource: WorldResource?,
+        type: Type?,
+        what: Resource?
+    ): Boolean {
+        if (type == Type.Transport) {
+            if (mapManager.queryInTransport(current).contains(what)) {
+                if (!mapManager.isTouched(current)) {
+                    return true
                 }
             }
-
-            neighbourCalculator.getNeighboursOfCellDoubleCoords(
-                coords = current,
-                ignoreObstacles = false,
-                allowAnyBuilding = true
-            ).forEach { next ->
-                if (!cameFrom.containsKey(next)) {
-                    frontier.add(next)
-                    cameFrom[next] = current
+        } else if (type == Type.Storage) {
+            if (mapManager.queryInStorage(current).contains(what)) {
+                if (!mapManager.isTouched(current)) {
+                    return true
                 }
             }
         }
-        return null
+        return false
     }
 }
 
 abstract class BaseFinder(
     private val neighbourCalculator: HexagonNeighbourCalculator
 ) {
-    fun find(start: Coordinates, range: Int = -1, worldResource: WorldResource? = null): Coordinates? {
+    /**
+     * @param range: Search only in this range. Only used in some cases.
+     * @param worldResource: Search for a WorldResource. Only used in some cases.
+     * @param type: Search for which transport type. Only used in some cases.
+     * @param what: Search for which Resource. Only used in some cases.
+     */
+    fun find(
+        start: Coordinates,
+        range: Int = -1,
+        worldResource: WorldResource? = null,
+        type: Type? = null,
+        what: Resource? = null
+    ): Coordinates? {
         val frontier = mutableListOf(start)
         val cameFrom = mutableMapOf<Coordinates, Coordinates>()
 
@@ -118,7 +125,7 @@ abstract class BaseFinder(
                 if (DoubleCoordsDistance.distance(start, current) > range) return null
             }
 
-            if (selector(current, worldResource)) {
+            if (selector(current, worldResource, type, what)) {
                 return current
             }
 
@@ -137,9 +144,17 @@ abstract class BaseFinder(
     }
 
     /*
-    * @param worldResource: Conditional parameter for interacting with WorldResource
+    * @param current: Search from these coordinates
+    * @param worldResource: Search for a WorldResource. Only used in some cases.
+    * @param type: Search for which transport type. Only used in some cases.
+    * @param what: Search for which Resource. Only used in some cases.
     * */
-    abstract fun selector(current: Coordinates, worldResource: WorldResource?): Boolean
+    abstract fun selector(
+        current: Coordinates,
+        worldResource: WorldResource?,
+        type: Type?,
+        what: Resource?
+    ): Boolean
 
     // override to deactivate range check
     open val doRangeCheck: Boolean = true
@@ -152,7 +167,12 @@ class ZombieTargetFinder(
 
     override val doRangeCheck: Boolean = false
 
-    override fun selector(current: Coordinates, worldResource: WorldResource?): Boolean {
+    override fun selector(
+        current: Coordinates,
+        worldResource: WorldResource?,
+        type: Type?,
+        what: Resource?
+    ): Boolean {
         if (mapManager.isBuilding(current)) {
             val building = mapManager.findSpecificCell(current)!!.building
             if (building !is Spawner && building !is Road) {
@@ -170,7 +190,12 @@ class TowerTargetFinder(
     neighbourCalculator: HexagonNeighbourCalculator
 ) : BaseFinder(neighbourCalculator) {
 
-    override fun selector(current: Coordinates, worldResource: WorldResource?): Boolean {
+    override fun selector(
+        current: Coordinates,
+        worldResource: WorldResource?,
+        type: Type?,
+        what: Resource?
+    ): Boolean {
         return mapManager.isMovingObject(current)
     }
 }
@@ -180,7 +205,12 @@ class NearbyWorldResourceFinder(
     neighbourCalculator: HexagonNeighbourCalculator
 ) : BaseFinder(neighbourCalculator) {
 
-    override fun selector(current: Coordinates, worldResource: WorldResource?): Boolean {
+    override fun selector(
+        current: Coordinates,
+        worldResource: WorldResource?,
+        type: Type?,
+        what: Resource?
+    ): Boolean {
         return mapManager.isWorldResource(current, worldResource!!)
     }
 }
@@ -190,7 +220,12 @@ class EmptyCellFinder(
     neighbourCalculator: HexagonNeighbourCalculator
 ) : BaseFinder(neighbourCalculator) {
 
-    override fun selector(current: Coordinates, worldResource: WorldResource?): Boolean {
+    override fun selector(
+        current: Coordinates,
+        worldResource: WorldResource?,
+        type: Type?,
+        what: Resource?
+    ): Boolean {
         return mapManager.queryWorldResource(current) == null && !mapManager.isBuilding(current)
     }
 }

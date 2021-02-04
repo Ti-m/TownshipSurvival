@@ -114,14 +114,17 @@ class BasicTestDependencies(
     val nearbyWorldResourceFinder = NearbyWorldResourceFinder(mapManager, neighbourCalculator)
     val towerTagetFinder = TowerTargetFinder(mapManager, neighbourCalculator)
     val zombieTargetFinder = ZombieTargetFinder(mapManager, neighbourCalculator)
+    val nextItemWithAccessFinder = NextItemWithAccessFinder(mapManager, neighbourCalculator)
     val transportManager = TransportManager(
         mapManager,
         routing,
         emptyCellFinder,
         nearbyWorldResourceFinder,
         towerTagetFinder,
-        zombieTargetFinder
+        zombieTargetFinder,
+        nextItemWithAccessFinder
     )
-    val gameStateManager = GameStateManager(transportManager, mapManager)
+    val audit = Audit()
+    val gameStateManager = GameStateManager(transportManager, mapManager, audit = audit)
     val coords = Coordinates(0,0)
 }

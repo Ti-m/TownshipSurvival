@@ -9,7 +9,8 @@ open class TransportManager(
     private val emptyCellFinder: EmptyCellFinder,
     private val nearbyWorldResourceFinder: NearbyWorldResourceFinder,
     private val towerTargetFinder: TowerTargetFinder,
-    private val zombieTargetFinder: ZombieTargetFinder
+    private val zombieTargetFinder: ZombieTargetFinder,
+    private val nextItemWithAccessFinder: NextItemWithAccessFinder
 ) {
     fun moveResources(cell: Cell): Collection<GameState> {
         return handleRequests(TransportRequest(cell.coordinates, cell.requires.first()))
@@ -68,12 +69,12 @@ open class TransportManager(
 
     // only calls into routing
     fun whereIsNextResourceInStorageWithAccess(request: TransportRequest): Coordinates? {
-        return routing.findNextItemWithAccessInStorage(request.destination, request.what)
+        return nextItemWithAccessFinder.findInStorage(request.destination, request.what)
     }
 
     // only calls into routing
     fun whereIsNextResourceInTransportWithAccess(request: TransportRequest): Coordinates? {
-        return routing.findNextItemWithAccessInTransport(request.destination, request.what)
+        return nextItemWithAccessFinder.findInTransport(request.destination, request.what)
     }
 //    private fun calcRoute(from: Coordinates, to: Coordinates, what: Resource) : TransportRoute {
 //        val route = routing.calcRoute(from, to)
