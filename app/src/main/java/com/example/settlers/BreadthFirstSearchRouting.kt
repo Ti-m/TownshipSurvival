@@ -1,13 +1,11 @@
 package com.example.settlers
 
-
 data class Route(
-    var current: Coordinates,//TDO this is really needed?
+    val current: Coordinates,//TDO this is really needed?
     val steps: MutableList<Coordinates>
 )
 
 class BreadthFirstSearchRouting(
-    private val mapManager: MapManager,
     private val neighbourCalculator: HexagonNeighbourCalculator
 ) {
 
@@ -59,44 +57,6 @@ class BreadthFirstSearchRouting(
         } catch (e: NoSuchElementException) {
             null
         }
-    }
-}
-
-class NextItemWithAccessFinder(
-    private val mapManager: MapManager,
-    neighbourCalculator: HexagonNeighbourCalculator
-) : BaseFinder(neighbourCalculator) {
-
-    override val doRangeCheck: Boolean = false
-
-    fun findInTransport(request: TransportRequest): Coordinates? {
-        return find(start = request.destination, what = request.what, type = Type.Transport)
-    }
-
-    fun findInStorage(request: TransportRequest): Coordinates? {
-        return find(start = request.destination, what = request.what, type = Type.Storage)
-    }
-
-    override fun selector(
-        current: Coordinates,
-        worldResource: WorldResource?,
-        type: Type?,
-        what: Resource?
-    ): Boolean {
-        if (type == Type.Transport) {
-            if (mapManager.queryInTransport(current).contains(what)) {
-                if (!mapManager.isTouched(current)) {
-                    return true
-                }
-            }
-        } else if (type == Type.Storage) {
-            if (mapManager.queryInStorage(current).contains(what)) {
-                if (!mapManager.isTouched(current)) {
-                    return true
-                }
-            }
-        }
-        return false
     }
 }
 
@@ -158,6 +118,44 @@ abstract class BaseFinder(
 
     // override to deactivate range check
     open val doRangeCheck: Boolean = true
+}
+
+class NextItemWithAccessFinder(
+    private val mapManager: MapManager,
+    neighbourCalculator: HexagonNeighbourCalculator
+) : BaseFinder(neighbourCalculator) {
+
+    override val doRangeCheck: Boolean = false
+
+    fun findInTransport(request: TransportRequest): Coordinates? {
+        return find(start = request.destination, what = request.what, type = Type.Transport)
+    }
+
+    fun findInStorage(request: TransportRequest): Coordinates? {
+        return find(start = request.destination, what = request.what, type = Type.Storage)
+    }
+
+    override fun selector(
+        current: Coordinates,
+        worldResource: WorldResource?,
+        type: Type?,
+        what: Resource?
+    ): Boolean {
+        if (type == Type.Transport) {
+            if (mapManager.queryInTransport(current).contains(what)) {
+                if (!mapManager.isTouched(current)) {
+                    return true
+                }
+            }
+        } else if (type == Type.Storage) {
+            if (mapManager.queryInStorage(current).contains(what)) {
+                if (!mapManager.isTouched(current)) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
 }
 
 class ZombieTargetFinder(

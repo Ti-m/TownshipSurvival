@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         val nextItemWithAccessFinder = NextItemWithAccessFinder(mapManager, neighbourCalculator)
         val transportManager = TransportManager(
             mapManager,
-            BreadthFirstSearchRouting(mapManager, neighbourCalculator),
+            BreadthFirstSearchRouting(neighbourCalculator),
             emptyCellFinder,
             nearbyWorldResourceFinder,
             towerTargetFinder,
@@ -131,7 +131,7 @@ class MainActivity : AppCompatActivity() {
 }
 
 object MainActivityHelper {
-    fun createInitialState(gameStateManager: GameStateManager, mapManager: MapManager) {
+    fun createInitialState(gameStateManager: GameStateManager) {
         gameStateManager.applyStates(GameStateCreator.G1_L2_T3_unfinishedRoad())
     }
 

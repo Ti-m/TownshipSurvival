@@ -109,7 +109,7 @@ class BasicTestDependencies(
     val mapManager: MapManager = MapManagerPreparedForTest()
 ) {
     val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
-    val routing = BreadthFirstSearchRouting(mapManager, neighbourCalculator)
+    val routing = BreadthFirstSearchRouting(neighbourCalculator)
     val emptyCellFinder = EmptyCellFinder(mapManager, neighbourCalculator)
     val nearbyWorldResourceFinder = NearbyWorldResourceFinder(mapManager, neighbourCalculator)
     val towerTagetFinder = TowerTargetFinder(mapManager, neighbourCalculator)
