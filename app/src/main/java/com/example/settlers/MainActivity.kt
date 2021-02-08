@@ -59,12 +59,14 @@ class MainActivity : AppCompatActivity() {
 
         val logger = DefaultLogger()
 
-        val mapGen = MapGenerator(TerrainInterpolator(), Random)
+        val randomGenerator = Random
+        val mapGen = MapGenerator(TerrainInterpolator(randomGenerator), randomGenerator)
         val cells = mapGen.createMap(tileGridSize)
 
         val mapManager = MapManager(cells, logger, tileGridSize)
         val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
-        val emptyCellFinder = EmptyCellFinder(mapManager, neighbourCalculator)
+        val shuffledNeighbourCalculator = ShuffledNeighbourCalculator(randomGenerator, mapManager)
+        val emptyCellFinder = EmptyCellFinder(mapManager, shuffledNeighbourCalculator)
         val nearbyWorldResourceFinder = NearbyWorldResourceFinder(mapManager, neighbourCalculator)
         val towerTargetFinder = TowerTargetFinder(mapManager, neighbourCalculator)
         val zombieTargetFinder = ZombieTargetFinder(mapManager, neighbourCalculator)

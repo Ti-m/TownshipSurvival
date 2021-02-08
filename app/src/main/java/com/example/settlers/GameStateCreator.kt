@@ -106,9 +106,11 @@ object GameStateCreator {
 
 //Basic Dependencies for test classes
 class BasicTestDependencies(
-    val mapManager: MapManager = MapManagerPreparedForTest()
+    //Can be replaced with a different initialized map
+    val mapManager: MapManager = MapManagerPreparedForTest(),
+    //can be replaced with RandomNeighbourCalculator
+    val neighbourCalculator: HexagonNeighbourCalculator = HexagonNeighbourCalculator(mapManager)
 ) {
-    val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
     val routing = BreadthFirstSearchRouting(neighbourCalculator)
     val emptyCellFinder = EmptyCellFinder(mapManager, neighbourCalculator)
     val nearbyWorldResourceFinder = NearbyWorldResourceFinder(mapManager, neighbourCalculator)

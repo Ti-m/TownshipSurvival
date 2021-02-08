@@ -16,7 +16,7 @@ class TransportationTest {
     }
 
     @Test
-    fun `tansport of a single item`() {
+    fun `transport of a single item`() {
         //TODO this seems to be some higherlvl class, which handles the different managers. Like GameManager??
 
         val provider = Coordinates(0,0)

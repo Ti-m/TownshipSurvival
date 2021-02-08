@@ -1,10 +1,31 @@
 package com.example.settlers
 
+import kotlin.random.Random
+
 enum class RoadConnections {
     NorthWest, North, NorthEast, SouthEast, South, SouthWest
 }
 
-class HexagonNeighbourCalculator(
+class ShuffledNeighbourCalculator(
+    private val randomGenerator: Random,
+    mapManager: MapManager,
+) : HexagonNeighbourCalculator(mapManager) {
+    override fun getNeighboursOfCellDoubleCoords(
+        coords: Coordinates,
+        destination: Coordinates?,
+        ignoreObstacles: Boolean,
+        allowAnyBuilding: Boolean
+    ): List<Coordinates> {
+        return super.getNeighboursOfCellDoubleCoords(
+            coords,
+            destination,
+            ignoreObstacles,
+            allowAnyBuilding
+        ).shuffled(random = randomGenerator)
+    }
+}
+
+open class HexagonNeighbourCalculator(
     private val mapManager: MapManager
 ) {
     companion object {
@@ -18,7 +39,7 @@ class HexagonNeighbourCalculator(
         )
     }
 
-    fun getNeighboursOfCellDoubleCoords(coords: Coordinates, destination: Coordinates? = null, ignoreObstacles: Boolean = true, allowAnyBuilding: Boolean = false): List<Coordinates> {
+    open fun getNeighboursOfCellDoubleCoords(coords: Coordinates, destination: Coordinates? = null, ignoreObstacles: Boolean = true, allowAnyBuilding: Boolean = false): List<Coordinates> {
         return listOfNotNull(
             getNeighboursOfCellDoubleCoords(coords, destination,0, ignoreObstacles, allowAnyBuilding),
             getNeighboursOfCellDoubleCoords(coords, destination,1, ignoreObstacles, allowAnyBuilding),

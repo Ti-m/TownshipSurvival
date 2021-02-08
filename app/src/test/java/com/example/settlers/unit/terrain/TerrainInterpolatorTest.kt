@@ -1,6 +1,8 @@
 package com.example.settlers.unit.terrain
 
+import com.example.settlers.terrain.MapGenerator
 import com.example.settlers.terrain.TerrainInterpolator
+import com.example.settlers.util.TestDoubleRandom
 import de.bechte.junit.runners.context.HierarchicalContextRunner
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
@@ -8,6 +10,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.random.Random
 
 @RunWith(HierarchicalContextRunner::class)
 class TerrainInterpolatorTest {
@@ -15,10 +18,12 @@ class TerrainInterpolatorTest {
     private lateinit var actions: String
     private lateinit var dummy: Array<Array<Double?>>
     private lateinit var interpolator: TerrainInterpolator
+    private lateinit var randomGenerator: TestDoubleRandom
 
     inner class SimpleValidations {
         @Before
         fun setUp() {
+            randomGenerator = TestDoubleRandom()
             actions = ""
             dummy =  Array(3) {
                 Array<Double?>(3) {
@@ -29,7 +34,7 @@ class TerrainInterpolatorTest {
             dummy[0][2] = dummy[2][2]
             dummy[2][0] = dummy[0][2]
             dummy[0][0] = dummy[2][0]
-            interpolator = TerrainInterpolatorSpy()
+            interpolator = TerrainInterpolatorSpy(randomGenerator)
         }
 
         @Test
@@ -59,6 +64,7 @@ class TerrainInterpolatorTest {
     inner class SquareDiamondCoordinateCalculations {
         @Before
         fun setUp() {
+            randomGenerator = TestDoubleRandom()
             actions = ""
             dummy = Array(3) {
                 Array<Double?>(3) {
@@ -69,7 +75,7 @@ class TerrainInterpolatorTest {
             dummy[0][2] = dummy[2][2]
             dummy[2][0] = dummy[0][2]
             dummy[0][0] = dummy[2][0]
-            interpolator = TerrainInterpolatorSpy()
+            interpolator = TerrainInterpolatorSpy(randomGenerator)
         }
 
         @Test
@@ -149,6 +155,7 @@ class TerrainInterpolatorTest {
 
         @Before
         fun setUp() {
+            randomGenerator = TestDoubleRandom()
             actions = ""
             dummy = Array(5) {
                 Array<Double?>(5) {
@@ -159,7 +166,7 @@ class TerrainInterpolatorTest {
             dummy[0][4] = dummy[4][4]
             dummy[4][0] = dummy[0][4]
             dummy[0][0] = dummy[4][0]
-            interpolator = TerrainInterpolatorDiamondSquareSpy()
+            interpolator = TerrainInterpolatorDiamondSquareSpy(randomGenerator)
         }
 
 
@@ -180,6 +187,7 @@ class TerrainInterpolatorTest {
     inner class Averages {
         @Before
         fun setup() {
+            randomGenerator = TestDoubleRandom()
             dummy = Array(3) {
                 Array<Double?>(3) {
                     null
@@ -189,7 +197,7 @@ class TerrainInterpolatorTest {
             dummy[0][2] = dummy[2][2]
             dummy[2][0] = dummy[0][2]
             dummy[0][0] = dummy[2][0]
-            interpolator = TerrainInterpolatorWithFixedRandom();
+            interpolator = TerrainInterpolatorWithFixedRandom(randomGenerator)
         }
 
         @Test
@@ -277,6 +285,7 @@ class TerrainInterpolatorTest {
 
         @Before
         fun setup() {
+            randomGenerator = TestDoubleRandom()
             dummy = Array(5) {
                 Array<Double?>(5) {
                     null
@@ -286,7 +295,7 @@ class TerrainInterpolatorTest {
             dummy[0][4] = dummy[4][4]
             dummy[4][0] = dummy[0][4]
             dummy[0][0] = dummy[4][0]
-            interpolator = TerrainInterpolatorWithFixedRandom()
+            interpolator = TerrainInterpolatorWithFixedRandom(randomGenerator)
         }
 
         @Test
@@ -352,7 +361,7 @@ class TerrainInterpolatorTest {
 
     }
 
-    private inner class TerrainInterpolatorSpy : TerrainInterpolator() {
+    private inner class TerrainInterpolatorSpy(randomGenerator: Random) : TerrainInterpolator(randomGenerator) {
         override fun doSquare(x: Int, y: Int, size: Int) {
             actions += String.format("Square(%d,%d,%d): ", x, y, size)
             super.doSquare(x, y, size)
@@ -388,7 +397,7 @@ class TerrainInterpolatorTest {
         }
     }
 
-    private inner class TerrainInterpolatorDiamondSquareSpy : TerrainInterpolator() {
+    private inner class TerrainInterpolatorDiamondSquareSpy(randomGenerator: Random) : TerrainInterpolator(randomGenerator) {
         override fun doSquare(x: Int, y: Int, size: Int) {
             actions += String.format("Square(%d,%d,%d) ", x, y, size)
             super.doSquare(x, y, size)
@@ -404,7 +413,7 @@ class TerrainInterpolatorTest {
         }
     }
 
-    private inner class TerrainInterpolatorWithFixedRandom : TerrainInterpolator() {
+    private inner class TerrainInterpolatorWithFixedRandom(randomGenerator: Random) : TerrainInterpolator(randomGenerator) {
         override fun random(): Double {
             return randomAmplitude
         }

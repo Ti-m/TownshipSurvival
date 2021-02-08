@@ -77,11 +77,3 @@ class MapGenerator(private val interpolator: TerrainInterpolator, private val ra
         return input.mapValues { GraphicalFlagTile(it.value, modeController, context, neighbourCalculator) }
     }
 }
-
-class TestDoubleRandom : Random() {
-    override fun nextBits(bitCount: Int): Int {
-        TODO("Not yet implemented")
-    }
-
-    override fun nextInt(): Int = 50
-}

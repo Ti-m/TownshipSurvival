@@ -5,7 +5,7 @@ import com.example.settlers.Coordinates
 import com.example.settlers.GroundType
 import com.example.settlers.terrain.MapGenerator
 import com.example.settlers.terrain.TerrainInterpolator
-import com.example.settlers.terrain.TestDoubleRandom
+import com.example.settlers.util.TestDoubleRandom
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -17,7 +17,7 @@ class MapGeneratorTest {
 
     lateinit var sut: MapGenerator
 
-    class TestInterpolator : TerrainInterpolator() {
+    class TestInterpolator(randomGenerator: Random) : TerrainInterpolator(randomGenerator) {
         override fun interpolate(
             terrain: Array<Array<Double?>>,
             size: Int,
@@ -30,8 +30,8 @@ class MapGeneratorTest {
 
     @Before
     fun prepare() {
-        terrainInterpolator = TestInterpolator()
         randomGenerator = TestDoubleRandom()
+        terrainInterpolator = TestInterpolator(randomGenerator)
         sut = MapGenerator(terrainInterpolator, randomGenerator)
     }
 

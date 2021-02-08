@@ -3,7 +3,7 @@ package com.example.settlers.terrain
 import kotlin.math.*
 import kotlin.random.Random
 
-open class TerrainInterpolator {
+open class TerrainInterpolator(private val randomGenerator: Random) {
     protected var randomAmplitude: Double = 1.0
     protected var randomAmplitudeDecrease: Double = 0.0
     protected var totalNumber = 0
@@ -95,7 +95,7 @@ open class TerrainInterpolator {
     }
 
     open fun random(): Double {
-        val rnd = sin(Random.nextDouble(6.28))//TODO set seed?
+        val rnd = sin(randomGenerator.nextDouble(6.28))//TODO set seed?
         randomAmplitudeDecrease-= 1/totalNumber
         return 1.0 + (randomAmplitude - randomAmplitudeDecrease) * rnd
         //val value = randomAmplitude * rnd
