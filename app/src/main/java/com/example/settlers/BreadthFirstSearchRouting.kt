@@ -74,7 +74,8 @@ abstract class BaseFinder(
         range: Int = -1,
         worldResource: WorldResource? = null,
         type: Type? = null,
-        what: Resource? = null
+        what: Resource? = null,
+        ignoreObstacles: Boolean = true,
     ): Coordinates? {
         val frontier = mutableListOf(start)
         val cameFrom = mutableMapOf<Coordinates, Coordinates>()
@@ -91,7 +92,7 @@ abstract class BaseFinder(
 
             neighbourCalculator.getNeighboursOfCellDoubleCoords(
                 coords = current,
-                ignoreObstacles = true,
+                ignoreObstacles = ignoreObstacles,
                 allowAnyBuilding = true
             ).forEach { next ->
                 if (!cameFrom.containsKey(next)) {
@@ -128,11 +129,11 @@ class NextItemWithAccessFinder(
     override val doRangeCheck: Boolean = false
 
     fun findInTransport(request: TransportRequest): Coordinates? {
-        return find(start = request.destination, what = request.what, type = Type.Transport)
+        return find(start = request.destination, what = request.what, type = Type.Transport, ignoreObstacles = false)
     }
 
     fun findInStorage(request: TransportRequest): Coordinates? {
-        return find(start = request.destination, what = request.what, type = Type.Storage)
+        return find(start = request.destination, what = request.what, type = Type.Storage, ignoreObstacles = false)
     }
 
     override fun selector(
@@ -143,15 +144,11 @@ class NextItemWithAccessFinder(
     ): Boolean {
         if (type == Type.Transport) {
             if (mapManager.queryInTransport(current).contains(what)) {
-                if (!mapManager.isTouched(current)) {
-                    return true
-                }
+                return !mapManager.isTouched(current)
             }
         } else if (type == Type.Storage) {
             if (mapManager.queryInStorage(current).contains(what)) {
-                if (!mapManager.isTouched(current)) {
-                    return true
-                }
+                return !mapManager.isTouched(current)
             }
         }
         return false
@@ -174,9 +171,7 @@ class ZombieTargetFinder(
         if (mapManager.isBuilding(current)) {
             val building = mapManager.findSpecificCell(current)!!.building
             if (building !is Spawner && building !is Road) {
-                if (!mapManager.isTouched(current)) {//TODO ignore touched?
-                    return true
-                }
+                return !mapManager.isTouched(current) //TODO ignore touched?
             }
         }
         return false
