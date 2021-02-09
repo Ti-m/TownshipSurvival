@@ -63,6 +63,6 @@ class EmptyCellFinderTest {
 
         val foundAt = d.emptyCellFinder.find(start = forester, range = 3)
 
-        assertEquals(Coordinates(3,1), foundAt)
+        assertEquals(Coordinates(0,0), foundAt)
     }
 }

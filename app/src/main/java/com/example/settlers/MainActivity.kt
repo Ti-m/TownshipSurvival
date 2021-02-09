@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
         val shuffledNeighbourCalculator = ShuffledNeighbourCalculator(randomGenerator, mapManager)
         val emptyCellFinder = EmptyCellFinder(mapManager, shuffledNeighbourCalculator)
-        val nearbyWorldResourceFinder = NearbyWorldResourceFinder(mapManager, neighbourCalculator)
+        val nearbyWorldResourceFinder = NearbyWorldResourceFinder(mapManager, shuffledNeighbourCalculator)
         val towerTargetFinder = TowerTargetFinder(mapManager, neighbourCalculator)
         val zombieTargetFinder = ZombieTargetFinder(mapManager, neighbourCalculator)
         val nextItemWithAccessFinder = NextItemWithAccessFinder(mapManager, neighbourCalculator)

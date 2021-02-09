@@ -83,6 +83,7 @@ abstract class BaseFinder(
         while (frontier.isNotEmpty()) {
             val current = frontier.removeFirst()
             if (doRangeCheck) {
+                if (range == -1) throw Error("Implementationerror: Class with doRangeCheck is called without a range.")
                 if (DoubleCoordsDistance.distance(start, current) > range) return null
             }
 

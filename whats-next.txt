@@ -64,7 +64,7 @@ Building
 ** DONE Production, plants a tree every 10 ticks
 *** DONE Add some random where is planted?
 *** Trees are planted in the water currently
-* Add ShuffledRandomNeighbour to FindWorldResource
+* D Add ShuffledRandomNeighbour to FindWorldResource
 
 Dialog
 
