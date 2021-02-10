@@ -1,6 +1,8 @@
 package com.example.settlers
 
 import com.example.settlers.ui.BuildDialogCallback
+import com.example.settlers.ui.InspectDialogCallback
+import com.example.settlers.ui.StopDeliveryState
 
 class BuildDialogHandler (
     private val gameStateManager: GameStateManager
@@ -20,5 +22,19 @@ class BuildDialogHandler (
             else -> throw NotImplementedError()
         }
         gameStateManager.applyStates(listOf(GameState(coordinates, Operator.Set, Type.Building, b)))
+    }
+}
+
+class InspectDialogHandler (
+    private val mapManager: MapManager
+) : InspectDialogCallback {
+
+    override fun inspectCallback(coordinates: Coordinates, stopDelivery: StopDeliveryState) {
+        val building = mapManager.queryBuilding(coordinates)
+        when (stopDelivery) {
+            StopDeliveryState.Normal -> building!!.stopDelivery = true
+            StopDeliveryState.Stopped -> building!!.stopDelivery = false
+            StopDeliveryState.NoBuilding -> throw Error("Invalid case - programming error")
+        }
     }
 }

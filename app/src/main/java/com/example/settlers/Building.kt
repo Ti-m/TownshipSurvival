@@ -87,6 +87,9 @@ abstract class Building : GameObject() {
             GameState(coordinates = coordinates, operator = Operator.Remove, type = Type.Production, data = it)
         }
     }
+
+    //Stop delivery of items
+    var stopDelivery: Boolean = false
 }
 
 class Townhall : Building() {

@@ -46,7 +46,8 @@ Combat
 Map
 
 Building
-* Disable a building
+* DONE Disable a building
+** D Check StopDelivery before consider a cell for request
 ** This will stop any resources being delivered.
 ** Works for construction and production
 * DONE requiresProduction/requiresConstruction: MutableList<Resource> - Use an immutable list?
@@ -58,13 +59,13 @@ Building
 * DONE Add Building StoneMason, needs 2 Wood
 ** DONE Produces stone every 10 Ticks
 ** DONE Consumes WorldResource Rock
-* Monument
+* DONE Monument
 ** DONE Add Build Pyramids for 100 Wood
 * DONE Add Forester
 ** DONE Production, plants a tree every 10 ticks
 *** DONE Add some random where is planted?
 *** Trees are planted in the water currently
-* D Add ShuffledRandomNeighbour to FindWorldResource
+* DONE Add ShuffledRandomNeighbour to FindWorldResource
 
 Dialog
 

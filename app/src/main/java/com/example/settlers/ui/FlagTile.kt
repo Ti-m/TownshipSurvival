@@ -422,9 +422,15 @@ open class FlagTile(
                 null
             }
 
+            val deliveryState = when (cell.building?.stopDelivery) {
+                null -> StopDeliveryState.NoBuilding
+                true -> StopDeliveryState.Stopped
+                false -> StopDeliveryState.Normal
+            }
             val dialog = InspectDialog.newInstance(
                 coordinates = cell.coordinates,
-                message = "$content\n$buildingContent"
+                message = "$content\n$buildingContent",
+                stopDelivery = deliveryState
             )
             dialog.show((context as MainActivity).supportFragmentManager, TAG)
         }

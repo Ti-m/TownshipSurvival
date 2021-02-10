@@ -56,26 +56,56 @@ class BuildDialog : BaseDialog() {
     }
 }
 
+interface InspectDialogCallback {
+    fun inspectCallback(coordinates: Coordinates, stopDelivery: StopDeliveryState)
+}
+
+enum class StopDeliveryState {Stopped, Normal, NoBuilding}
+
 class InspectDialog : BaseDialog() {
 
+    private lateinit var callback: InspectDialogCallback
+
     companion object {
-        fun newInstance(coordinates: Coordinates, message: String): InspectDialog {
+        fun newInstance(coordinates: Coordinates, message: String, stopDelivery: StopDeliveryState): InspectDialog {
             val dialog = InspectDialog()
             val bundle = Bundle()
             bundle.putSerializable(COORDINATES, coordinates)
             bundle.putString(MESSAGE, message)
+            bundle.putSerializable(STOP_DELIVERY, stopDelivery)
             dialog.arguments = bundle
             return dialog
         }
 
         private val MESSAGE = "message"
+        private val STOP_DELIVERY = "stop_delivery"
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = (context as MainActivity).inspectDialogHandler
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = AlertDialog.Builder(context)
         val coordinates = (arguments!!.getSerializable(COORDINATES) as Coordinates)
+        val deliveryState = arguments!!.getSerializable(STOP_DELIVERY) as StopDeliveryState
+        val deliveryText = when (deliveryState) {
+            StopDeliveryState.Stopped -> "Resume Delivery"
+            StopDeliveryState.Normal -> "Stop Delivery"
+            StopDeliveryState.NoBuilding -> null
+        }
+
         dialog.setTitle( "Inspect :: (x=${coordinates.x}, y=${coordinates.y})")
-        dialog.setMessage(arguments!!.getString(MESSAGE))
+        //dialog.setMessage(arguments!!.getString(MESSAGE))
+        dialog.setItems(arrayOf(
+            arguments!!.getString(MESSAGE), //The data, click is ignored
+            deliveryText
+        ).filterNotNull().toTypedArray(), object : DialogInterface.OnClickListener {
+            override fun onClick(dialog: DialogInterface?, which: Int) {
+                callback.inspectCallback(coordinates, deliveryState)
+            }
+        })
         return dialog.create()
     }
 }
