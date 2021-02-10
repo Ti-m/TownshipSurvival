@@ -36,6 +36,41 @@ class MapManagerTest {
     }
 
     @Test
+    fun `getCellsWhichRequireStuffWhichIsNotInStorage - regular case`() {
+        val dest = Coordinates(2,2)
+        val identicalLumberjack = Lumberjack()
+        d.gameStateManager.applyStates(listOf(
+            GameState(Coordinates(0,0), Operator.Set, Type.Building, Townhall()),
+            GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
+            GameState(dest, Operator.Set, Type.Building, identicalLumberjack)
+        ))
+
+        val actual = d.mapManager.getCellsWhichRequireStuffWhichIsNotInStorage()
+        assertEquals(
+            mapOf(Pair(dest, Cell(dest, GroundType.Desert, building = identicalLumberjack, requires = mutableListOf(Wood, Wood)))),
+            actual
+        )
+    }
+
+    @Test
+    fun `getCellsWhichRequireStuffWhichIsNotInStorage - delivery is stopped`() {
+        val dest = Coordinates(2,2)
+        val identicalLumberjack = Lumberjack()
+        d.gameStateManager.applyStates(listOf(
+            GameState(Coordinates(0,0), Operator.Set, Type.Building, Townhall()),
+            GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
+            GameState(dest, Operator.Set, Type.Building, identicalLumberjack)
+        ))
+        d.mapManager.queryBuilding(dest)!!.stopDelivery = true
+
+        val actual = d.mapManager.getCellsWhichRequireStuffWhichIsNotInStorage()
+        assertEquals(
+            mapOf<Coordinates, Cell>(),//mapOf(Pair(dest, Cell(dest, GroundType.Desert, building = identicalLumberjack, requires = mutableListOf(Wood, Wood)))),
+            actual
+        )
+    }
+
+    @Test
     fun getCellsWithBuildings() {
         val c2 = Coordinates(1,1)
         val c3 = Coordinates(0,2)

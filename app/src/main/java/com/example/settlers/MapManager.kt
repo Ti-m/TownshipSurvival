@@ -77,7 +77,9 @@ open class MapManager(
     }
 
     fun getCellsWhichRequireStuffWhichIsNotInStorage(): Map<Coordinates, Cell> {
-        return getCellsWhichRequireStuff().filterValues { cell ->
+        return getCellsWhichRequireStuff()
+            .filterValues { it.building?.stopDelivery == false }
+            .filterValues { cell ->
             var tmp = true
             cell.requires.forEach  { item ->
                 //If the item is already in storage, it will be moved to production in next round
