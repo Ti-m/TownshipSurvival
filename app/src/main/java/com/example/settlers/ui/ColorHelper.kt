@@ -60,4 +60,13 @@ object ColorHelper {
             this.strokeWidth = 1.0f
         }
     }
+
+    fun getStoppedPaint() : Paint {
+        return Paint().apply {
+            this.color = Color.MAGENTA
+            this.alpha = 150 //Make this less bright
+            this.style = Paint.Style.FILL_AND_STROKE
+            this.strokeWidth = 1.0f
+        }
+    }
 }

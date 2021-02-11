@@ -83,7 +83,7 @@ class InspectDialog : BaseDialog() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        callback = (context as MainActivity).inspectDialogHandler
+        callback = (context as MainActivity).inspectDialogClickHandler
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

@@ -184,6 +184,7 @@ open class FlagTile(
     private val groundPaint = ColorHelper.getGroundPaint(cell.type)
     private val textPaint = ColorHelper.getTextPaint()
     private val buildingPaint = ColorHelper.getBuildingPaint()
+    private val stoppedPaint = ColorHelper.getStoppedPaint()
     private val path = Path()
 
     override fun onDraw(canvas: Canvas?) {
@@ -211,7 +212,11 @@ open class FlagTile(
 //            canvas.drawPath(path, groundPaint)
 //        }
         if (cell.building != null) {
-            canvas.drawPath(path, buildingPaint)
+            if (cell.building!!.stopDelivery) {
+                canvas.drawPath(path, stoppedPaint)
+            } else {
+                canvas.drawPath(path, buildingPaint)
+            }
         } else {
             canvas.drawPath(path, groundPaint)
         }

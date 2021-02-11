@@ -17,6 +17,7 @@ import com.example.settlers.terrain.TerrainInterpolator
 import com.example.settlers.ui.BuildDialogCallback
 import com.example.settlers.ui.GameWorld
 import com.example.settlers.ui.InspectDialogCallback
+import com.example.settlers.ui.StopDeliveryState
 import com.example.settlers.util.DefaultLogger
 import com.otaliastudios.zoom.ZoomApi.Companion.MAX_ZOOM_DEFAULT_TYPE
 import com.otaliastudios.zoom.ZoomApi.Companion.MIN_ZOOM_DEFAULT_TYPE
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
     private val handler = Handler(Looper.getMainLooper())
     lateinit var buildDialogClickHandler: BuildDialogCallback
-    lateinit var inspectDialogHandler: InspectDialogCallback
+    lateinit var inspectDialogClickHandler: InspectDialogCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,7 +127,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        inspectDialogHandler = InspectDialogHandler(mapManager)
+        val inspectDialogHandler = InspectDialogHandler(mapManager)
+
+        inspectDialogClickHandler = object : InspectDialogCallback {
+            override fun inspectCallback(coordinates: Coordinates, stopDelivery: StopDeliveryState) {
+                inspectDialogHandler.inspectCallback(coordinates, stopDelivery)
+                tileManager.redrawAllTiles()
+            }
+        }
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

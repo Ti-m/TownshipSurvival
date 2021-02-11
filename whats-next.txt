@@ -47,9 +47,9 @@ Map
 
 Building
 * DONE Disable a building
-** D Check StopDelivery before consider a cell for request
-** This will stop any resources being delivered.
-** Works for construction and production
+** DONE This will stop any resources being delivered.
+** DONE Works for construction and production
+** Color cell Red if delivery is stopped
 * DONE requiresProduction/requiresConstruction: MutableList<Resource> - Use an immutable list?
 * DONE Construction shall consume the items for construction, at the beginning of construction
 ** DONE Add a fletcher which produces 1 arrow from 1 wood
