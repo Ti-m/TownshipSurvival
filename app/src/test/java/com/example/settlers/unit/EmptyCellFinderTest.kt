@@ -65,4 +65,31 @@ class EmptyCellFinderTest {
 
         assertEquals(Coordinates(0,0), foundAt)
     }
+
+    @Test
+    fun `find empty cell for WorldResource, ignore water`() {
+        val forester = Coordinates(0,0)
+        val target = Coordinates(3,1)
+        d = BasicTestDependencies(
+            mapManager = MapManagerPreparedForTest(
+                cells = mapOf(
+                    Pair(forester, Cell(coordinates = forester,type = GroundType.Desert)),
+                    Pair(Coordinates(2,0), Cell(coordinates = Coordinates(2,0),type = GroundType.Water)),
+                    Pair(Coordinates(1,1), Cell(coordinates = Coordinates(1,1),type = GroundType.Water)),
+                    Pair(target, Cell(coordinates = target,type = GroundType.Desert)),
+                ),
+                mapSize = 2
+            )
+        )
+        d.gameStateManager.applyStates(listOf(
+            //This is simply for blocking the spot in which the  forester would be.
+            //Otherwise the algorithm will find the starting point.
+            //Any obstacle will do here
+            GameState(forester, Operator.Set, Type.Building, Forester()),
+        ))
+
+        val foundAt = d.emptyCellFinder.find(start = forester, range = 3)
+        //Find the only empty cell without water
+        assertEquals(target, foundAt)
+    }
 }

@@ -59,6 +59,10 @@ open class MapManager(
         return queryWorldResource(at) == resource
     }
 
+    fun isWater(coords: Coordinates): Boolean {
+        return findSpecificCell(coords)!!.type == GroundType.Water
+    }
+
     fun isTouched(at: Coordinates): Boolean {
         //Default is true to ignore unavailable cells
         return findSpecificCell(at)?.touched ?: true

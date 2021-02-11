@@ -220,6 +220,6 @@ class EmptyCellFinder(
         type: Type?,
         what: Resource?
     ): Boolean {
-        return mapManager.queryWorldResource(current) == null && !mapManager.isBuilding(current)
+        return !mapManager.isWater(current) && mapManager.queryWorldResource(current) == null && !mapManager.isBuilding(current)
     }
 }

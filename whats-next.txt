@@ -49,7 +49,7 @@ Building
 * DONE Disable a building
 ** DONE This will stop any resources being delivered.
 ** DONE Works for construction and production
-** Color cell Red if delivery is stopped
+** DONE Color cell Magenta if delivery is stopped
 * DONE requiresProduction/requiresConstruction: MutableList<Resource> - Use an immutable list?
 * DONE Construction shall consume the items for construction, at the beginning of construction
 ** DONE Add a fletcher which produces 1 arrow from 1 wood
@@ -64,7 +64,7 @@ Building
 * DONE Add Forester
 ** DONE Production, plants a tree every 10 ticks
 *** DONE Add some random where is planted?
-*** Trees are planted in the water currently
+*** DONE Trees are planted in the water currently
 * DONE Add ShuffledRandomNeighbour to FindWorldResource
 
 Dialog
