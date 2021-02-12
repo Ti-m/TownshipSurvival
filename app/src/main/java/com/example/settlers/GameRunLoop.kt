@@ -14,8 +14,13 @@ class GameRunLoop(
         private val TAG = "GameRunLoop"
     }
 
-    fun tick() {
+    private var tickCount: Long = 0L
 
+    fun tick() {
+        tickCount +=1
+        if (tickCount % 200 == 0L) {
+            gameStateManager.setNextSpawner()
+        }
         //First calculate a new gamestate
         gameStateManager.tick()
         //Then redraw everything

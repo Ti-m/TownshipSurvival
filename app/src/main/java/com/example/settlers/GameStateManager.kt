@@ -341,4 +341,16 @@ open class GameStateManager(
             }
         }
     }
+
+    fun setNextSpawner() {
+        nextSpawnerLocation()?.let {
+            applyState(GameStateCreator.createSpawner(it))
+        }
+    }
+
+    private fun nextSpawnerLocation(): Coordinates? {
+        val southEastEdge = mapManager.getSouthEastEdge()
+
+        return transportManager.nextSpawnerLocation(southEastEdge)
+    }
 }

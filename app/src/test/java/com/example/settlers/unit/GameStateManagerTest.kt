@@ -403,4 +403,15 @@ class GameStateManagerTest {
 //        //Now there should be an produced item
 //        assertEquals(listOf(Stone), mapManager.queryInStorage(coords))
     }
+
+    @Test
+    fun setNextSpawner() {
+        assertFalse(d.mapManager.queryBuilding(Coordinates(7,3)) is Spawner)
+        d.gameStateManager.setNextSpawner()
+        assertTrue(d.mapManager.queryBuilding(Coordinates(7,3)) is Spawner)
+
+        assertFalse(d.mapManager.queryBuilding(Coordinates(5,3)) is Spawner)
+        d.gameStateManager.setNextSpawner()
+        assertTrue(d.mapManager.queryBuilding(Coordinates(5,3)) is Spawner)
+    }
 }

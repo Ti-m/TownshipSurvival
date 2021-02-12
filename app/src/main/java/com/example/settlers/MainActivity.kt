@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
         val gameStateManager = GameStateManager(transportManager, mapManager, logger)
 
         //MainActivityHelper.createInitialState(gameStateManager, mapManager)
-        MainActivityHelper.setInitialSpawner(gameStateManager, mapManager)
+        //MainActivityHelper.setInitialSpawner(gameStateManager, mapManager)
         //MainActivityHelper.setAZombie(gameStateManager)
         //MainActivityHelper.setExplosion(gameStateManager)
 

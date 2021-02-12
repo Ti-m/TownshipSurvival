@@ -115,4 +115,11 @@ open class TransportManager(
     fun addWorldResourceInRange(start: Coordinates, produceCreatesWorldResource: WorldResource): Collection<GameState> {
         return listOf(GameState(emptyCellFinder.find(start, produceWorldResourceRange)!!, Operator.Set, Type.WorldResource, produceCreatesWorldResource))
     }
+
+    fun nextSpawnerLocation(southEastEdge: Coordinates): Coordinates? {
+        if (mapManager.isBuilding(southEastEdge)) {
+            return emptyCellFinder.find(start = southEastEdge, range = 10)
+        }
+        return southEastEdge
+    }
 }

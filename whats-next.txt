@@ -17,6 +17,8 @@ Graphics
 * Bug: View.generateViewId() creates error message "Invalid ID" in logcat, but seems to work anyway?
 
 Combat
+* Set a spawner every 200 ticks
+** Remove initial spawner
 ** Tower shoots arrows <--
 *** DONE Request arrows for 'production'
 **** DONE Bug: Arrow disappears, after dilivery into tower
