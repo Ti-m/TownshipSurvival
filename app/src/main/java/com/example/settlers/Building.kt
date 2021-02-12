@@ -192,7 +192,7 @@ class Tower : Building() {
     override val producesItemOutputType: Type? = null
 
     override val requiresConstruction: MutableList<Resource> = mutableListOf(Wood, Stone, Stone)
-    override val requiresProduction: MutableList<Resource> = mutableListOf(Arrow)
+    override val requiresProduction: MutableList<Resource> = mutableListOf(Arrow, Arrow, Arrow)
 
     override val offers: MutableList<Resource> = mutableListOf()
     val range = 3
