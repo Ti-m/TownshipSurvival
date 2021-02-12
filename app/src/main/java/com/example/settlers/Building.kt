@@ -239,7 +239,10 @@ class Pyramid : Building() {
     override val producesItem: GameObject? = null
     override val producesItemOutputType: Type? = null
 
-    override val requiresConstruction: MutableList<Resource> = MutableList(100) { Wood }
+    override val requiresConstruction: MutableList<Resource> = mutableListOf<Resource>().apply {
+        this.addAll(MutableList(50) { Wood })
+        this.addAll(MutableList(50) { Stone })
+    }
     override val requiresProduction: MutableList<Resource> = mutableListOf()
 
     override val offers: MutableList<Resource> = mutableListOf()
