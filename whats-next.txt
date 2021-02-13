@@ -1,6 +1,7 @@
 Tasks - Open
 
 Refactor
+* Save gamestate in a viewmodel to protect from configuration change
 * MapManager/ TransportManager does to much stuff
 ** Try to move some stuff down
 *** DONE MapManager

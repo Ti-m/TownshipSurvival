@@ -212,22 +212,39 @@ class TransportationTest {
         val fletcher1 = d.mapManager.queryBuilding(cFletcher1)!!
         val fletcher2 = d.mapManager.queryBuilding(cFletcher2)!!
 
+        //This tick represents the initial state setting in the real app on run, before the first
+        // time is clicked on step
+        d.gameStateManager.tick()
+
         //runConstruction via tick()
-        for (x in 1 .. 16) {
+        for (x in 1 .. 8) {
+            //sut.runProduction(cell)
+            d.gameStateManager.tick()
+        }
+        assertEquals(listOf(Lumber), d.mapManager.queryInProduction(cFletcher2))
+        assertEquals(listOf(Lumber, Stone), d.mapManager.queryRequires(cFletcher2))
+
+        for (x in 1 .. 7) {
             //sut.runProduction(cell)
             d.gameStateManager.tick()
         }
         assertTrue(lumber.isConstructed())
-        assertEquals(listOf(Lumber), d.mapManager.queryInProduction(cFletcher2))
-        assertEquals(listOf(Lumber), d.mapManager.queryRequires(cFletcher2))
 
-        for (x in 1 .. 14) {
+        for (x in 1 .. 11) {
             //sut.runProduction(cell)
             d.gameStateManager.tick()
         }
+        assertTrue(fletcher2.isConstructed())
 
+        for (x in 1 .. 4) {
+            //sut.runProduction(cell)
+            d.gameStateManager.tick()
+        }
+        assertEquals(listOf(Wood), d.mapManager.queryRequires(cFletcher2))
         assertEquals(listOf(Wood), d.mapManager.queryInStorage(cFletcher2))
-        assertEquals(listOf(Wood), d.mapManager.queryInProduction(cFletcher2))
+
+        d.gameStateManager.tick()
+        d.gameStateManager.tick()
         assertEquals(listOf(Wood), d.mapManager.queryRequires(cFletcher2))
     }
 }
