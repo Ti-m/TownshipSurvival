@@ -90,6 +90,30 @@ object GameStateCreator {
         return GameState(coords, Operator.Remove, Type.Required, Wood)
     }
 
+    fun addLumberToProduction(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Set, Type.Production, Lumber)
+    }
+
+    fun addLumberToTransport(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Set, Type.Transport, Lumber)
+    }
+
+    fun removeLumberFromRequired(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Remove, Type.Required, Lumber)
+    }
+
+    fun removeLumberFromStorage(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Remove, Type.Storage, Lumber)
+    }
+
+    fun removeLumberFromTransport(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Remove, Type.Transport, Lumber)
+    }
+
+    fun removeStoneFromRequired(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Remove, Type.Required, Stone)
+    }
+
     fun addArrowToStorage(coords: Coordinates): GameState {
         return GameState(coords, Operator.Set, Type.Storage, Arrow)
     }

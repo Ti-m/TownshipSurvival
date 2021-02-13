@@ -50,7 +50,7 @@ class GameStateManagerTest {
         assertTrue(d.mapManager.queryBuilding(d.coords) is Townhall)
 
         assertEquals(
-            listOf(Wood, Wood, Wood, Stone, Stone, Stone),
+            listOf(Lumber, Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone),
             d.mapManager.queryInStorage(d.coords)
         )
     }
@@ -114,17 +114,17 @@ class GameStateManagerTest {
         assertEquals(0, d.mapManager.findSpecificCell(Coordinates(0, 0))!!.storage.count())
         d.gameStateManager.applyState(GameState(Coordinates(0,0), Operator.Set, Type.Building, Townhall()))
         assertEquals(0, d.mapManager.findSpecificCell(Coordinates(0, 0))!!.requires.count())
-        assertEquals(6, d.mapManager.findSpecificCell(Coordinates(0, 0))!!.storage.count())
+        assertEquals(9, d.mapManager.findSpecificCell(Coordinates(0, 0))!!.storage.count())
     }
 
     @Test
     fun `Replacing a building does not delete the storage`() {
         d.gameStateManager.applyState(GameState(Coordinates(0,0), Operator.Set, Type.Building, Townhall()))
         assertEquals(0, d.mapManager.findSpecificCell(Coordinates(0, 0))!!.requires.count())
-        assertEquals(6, d.mapManager.findSpecificCell(Coordinates(0, 0))!!.storage.count())
+        assertEquals(9, d.mapManager.findSpecificCell(Coordinates(0, 0))!!.storage.count())
         d.gameStateManager.applyState(GameState(Coordinates(0,0), Operator.Set, Type.Building, Lumberjack()))
         assertEquals(2, d.mapManager.findSpecificCell(Coordinates(0, 0))!!.requires.count())
-        assertEquals(6, d.mapManager.findSpecificCell(Coordinates(0, 0))!!.storage.count())
+        assertEquals(9, d.mapManager.findSpecificCell(Coordinates(0, 0))!!.storage.count())
     }
 
     @Test
@@ -268,8 +268,9 @@ class GameStateManagerTest {
         d.gameStateManager.applyStates(listOf(
             GameStateCreator.createFletcher(d.coords),
             //Finished manually, so clear required.
-            GameState(d.coords, Operator.Remove, Type.Required, Wood),
-            GameState(d.coords, Operator.Remove, Type.Required, Wood)
+            GameStateCreator.removeLumberFromRequired(d.coords),
+            GameStateCreator.removeLumberFromRequired(d.coords),
+            GameStateCreator.removeStoneFromRequired(d.coords),
         ))
         d.mapManager.queryBuilding(d.coords)!!.setConstructionFinished()
 
@@ -307,8 +308,8 @@ class GameStateManagerTest {
         //init
         d.gameStateManager.applyStates(listOf(
             GameStateCreator.createLumberjack(d.coords),
-            GameStateCreator.addWoodToProduction(d.coords),
-            GameStateCreator.addWoodToProduction(d.coords)
+            GameStateCreator.addLumberToProduction(d.coords),
+            GameStateCreator.addLumberToProduction(d.coords)
         ))
 
         //construction not started
@@ -325,8 +326,8 @@ class GameStateManagerTest {
     fun `runProductionWithConsumingOutsideResource - Lumberjack`() {
         d.gameStateManager.applyStates(listOf(
             GameStateCreator.createLumberjack(d.coords),
-            GameStateCreator.removeWoodFromRequired(d.coords),
-            GameStateCreator.removeWoodFromRequired(d.coords),
+            GameStateCreator.removeLumberFromRequired(d.coords),
+            GameStateCreator.removeLumberFromRequired(d.coords),
             GameStateCreator.createTree(Coordinates(2,0))
         ))
         val cell = d.mapManager.findSpecificCell(d.coords)!!

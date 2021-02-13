@@ -21,6 +21,7 @@ abstract class GameObject
 
 abstract class Resource : GameObject()
 object Wood : Resource()
+object Lumber : Resource()
 object Stone : Resource()
 
 abstract class WorldResource : GameObject()

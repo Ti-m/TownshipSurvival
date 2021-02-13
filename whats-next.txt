@@ -19,7 +19,7 @@ Graphics
 Combat
 * DONE Set a spawner every 200 ticks
 ** DONE Remove initial spawner
-** Tower shoots arrows <--
+** DONE Tower shoots arrows <--
 ***DONE Tower should have up to 3 Arrows
 *** DONE Request arrows for 'production'
 **** DONE Bug: Arrow disappears, after dilivery into tower
@@ -49,6 +49,9 @@ Combat
 Map
 
 Building
+* DONE Add Lumbermill building
+** DONE Takes Wood and Produces Lumber
+** Jumps production? sometoimes when wood is delivered it produces for two ticks
 * DONE Disable a building
 ** DONE This will stop any resources being delivered.
 ** DONE Works for construction and production

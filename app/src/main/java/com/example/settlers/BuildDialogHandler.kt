@@ -16,6 +16,7 @@ class BuildDialogHandler (
             is Forester -> Forester()
             is Stonemason -> Stonemason()
             is Fletcher -> Fletcher()
+            is Lumbermill -> Lumbermill()
             is Tower -> Tower()
             is Road -> Road()
             is Pyramid -> Pyramid()

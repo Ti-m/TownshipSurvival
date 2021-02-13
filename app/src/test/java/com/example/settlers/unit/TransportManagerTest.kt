@@ -16,54 +16,59 @@ class TransportManagerTest {
 
     @Test
     fun `moveResources step #1`() {
+        val c1 = Coordinates(0,0)
+        val c2 = Coordinates(1,1)
         val dest = Coordinates(2,2)
         d.gameStateManager.applyStates(listOf(
-            GameState(Coordinates(0,0), Operator.Set, Type.Building, Townhall()),
-            GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
-            GameState(dest, Operator.Set, Type.Building, Lumberjack())
+            GameStateCreator.createTownhall(c1),
+            GameStateCreator.createRoad(c2),
+            GameStateCreator.createLumberjack(dest),
         ))
         d.mapManager.resetTouched()
         val result = d.transportManager.moveResources(d.mapManager.findSpecificCell(dest)!!)
 
         assertEquals(listOf(
-            GameState(Coordinates(x=0, y=0), Operator.Remove, Type.Storage, Wood),
-            GameState(Coordinates(x=0, y=0), Operator.Set, Type.Transport, Wood)
+            GameStateCreator.removeLumberFromStorage(c1),
+            GameStateCreator.addLumberToTransport(c1),
         ), result)
     }
 
     @Test
     fun `moveResources step #2`() {
+        val c1 = Coordinates(0,0)
+        val c2 = Coordinates(1,1)
         val dest = Coordinates(2,2)
         d.gameStateManager.applyStates(listOf(
-            GameState(Coordinates(0,0), Operator.Set, Type.Transport, Wood),
-            GameState(Coordinates(0,0), Operator.Set, Type.Building, Road()),
-            GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
-            GameState(dest, Operator.Set, Type.Building, Lumberjack())
+            GameStateCreator.addLumberToTransport(c1),
+            GameStateCreator.createRoad(c1),
+            GameStateCreator.createRoad(c2),
+            GameStateCreator.createLumberjack(dest),
         ))
         d.mapManager.resetTouched()
         val result = d.transportManager.moveResources(d.mapManager.findSpecificCell(dest)!!)
 
         assertEquals(listOf(
-            GameState(Coordinates(x=0, y=0), Operator.Remove, Type.Transport, Wood),
-            GameState(Coordinates(x=1, y=1), Operator.Set, Type.Transport, Wood)
+            GameStateCreator.removeLumberFromTransport(c1),
+            GameStateCreator.addLumberToTransport(c2),
         ), result)
     }
 
     @Test
     fun `moveResources step #3`() {
+        val c2 = Coordinates(1,1)
         val dest = Coordinates(2,2)
         d.gameStateManager.applyStates(listOf(
-            GameState(Coordinates(1,1), Operator.Set, Type.Transport, Wood),
-            GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
-            GameState(dest, Operator.Set, Type.Building, Lumberjack())
+            GameStateCreator.addLumberToTransport(c2),
+            GameStateCreator.createRoad(c2),
+            GameStateCreator.createLumberjack(dest),
         ))
         d.mapManager.resetTouched()
 
         val result = d.transportManager.moveResources(d.mapManager.findSpecificCell(dest)!!)
 
         assertEquals(listOf(
-            GameState(Coordinates(x=1, y=1), Operator.Remove, Type.Transport, Wood),
-            GameState(Coordinates(x=2, y=2), Operator.Set, Type.Transport, Wood)
+            GameStateCreator.removeLumberFromTransport(c2),
+            GameStateCreator.addLumberToTransport(dest),
         ), result)
     }
 
@@ -71,8 +76,8 @@ class TransportManagerTest {
     fun `moveResources step #4`() {
         val dest = Coordinates(2,2)
         d.gameStateManager.applyStates(listOf(
-            GameState(dest, Operator.Set, Type.Transport, Wood),
-            GameState(dest, Operator.Set, Type.Building, Lumberjack())
+            GameStateCreator.addLumberToTransport(dest),
+            GameStateCreator.createLumberjack(dest),
         ))
         val result = d.transportManager.moveResources(d.mapManager.findSpecificCell(dest)!!)
 
@@ -81,11 +86,13 @@ class TransportManagerTest {
 
     @Test
     fun `moveResources already touched`() {
+        val c1 = Coordinates(0,0)
+        val c2 = Coordinates(1,1)
         val dest = Coordinates(2,2)
         d.gameStateManager.applyStates(listOf(
-            GameState(Coordinates(0,0), Operator.Set, Type.Building, Townhall()),
-            GameState(Coordinates(1,1), Operator.Set, Type.Building, Road()),
-            GameState(dest, Operator.Set, Type.Building, Lumberjack())
+            GameStateCreator.createTownhall(c1),
+            GameStateCreator.createRoad(c2),
+            GameStateCreator.createLumberjack(dest),
         ))
         d.mapManager.findSpecificCell(Coordinates(0,0))!!.touched = true
         val result = d.transportManager.moveResources(d.mapManager.findSpecificCell(dest)!!)
@@ -100,8 +107,8 @@ class TransportManagerTest {
         val towerCoordinates = Coordinates(0,0)
         val zombie = Coordinates(4,0)// 2 away
         d.gameStateManager.applyStates(listOf(
-            GameState(towerCoordinates, Operator.Set, Type.Building, tower),
-            GameState(zombie, Operator.Set, Type.MovingObject, Zombie)
+            GameStateCreator.createTower(towerCoordinates),
+            GameStateCreator.createZombie(zombie)
         ))
         d.mapManager.resetTouched()
         val targetCoordinates = d.transportManager.shootWithTowerCalculatePath(towerCoordinates, tower.range)
@@ -118,7 +125,7 @@ class TransportManagerTest {
         val tower = Tower()
         val towerCoordinates = Coordinates(0,0)
         d.gameStateManager.applyStates(listOf(
-            GameState(towerCoordinates, Operator.Set, Type.Building, tower)
+            GameStateCreator.createTower(towerCoordinates),
         ))
         d.mapManager.resetTouched()
         val targetCoordinates = d.transportManager.shootWithTowerCalculatePath(towerCoordinates, tower.range)
@@ -131,8 +138,8 @@ class TransportManagerTest {
         val tower = Tower()
         val towerCoordinates = Coordinates(0,0)
         d.gameStateManager.applyStates(listOf(
-            GameState(towerCoordinates, Operator.Set, Type.Building, tower),
-            GameState(towerCoordinates, Operator.Set, Type.MovingObject, Zombie)
+            GameStateCreator.createTower(towerCoordinates),
+            GameStateCreator.createZombie(towerCoordinates),
         ))
         d.mapManager.resetTouched()
         val targetCoordinates = d.transportManager.shootWithTowerCalculatePath(towerCoordinates, tower.range)

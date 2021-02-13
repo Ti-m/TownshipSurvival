@@ -47,7 +47,7 @@ class MapManagerTest {
 
         val actual = d.mapManager.getCellsWhichRequireStuffWhichIsNotInStorage()
         assertEquals(
-            mapOf(Pair(dest, Cell(dest, GroundType.Desert, building = identicalLumberjack, requires = mutableListOf(Wood, Wood)))),
+            mapOf(Pair(dest, Cell(dest, GroundType.Desert, building = identicalLumberjack, requires = mutableListOf(Lumber, Lumber)))),
             actual
         )
     }
@@ -123,12 +123,12 @@ class MapManagerTest {
         val c2 = Coordinates(0,2)
         d.gameStateManager.applyStates(
             listOf(
-                GameState(c1, Operator.Set, Type.Building, Lumberjack()),
-                GameState(c1, Operator.Set, Type.Production, Wood),
-                GameState(c1, Operator.Set, Type.Production, Wood),
-                GameState(c2, Operator.Set, Type.Building, Lumberjack()),
-                GameState(c2, Operator.Set, Type.Production, Wood),
-                GameState(c2, Operator.Set, Type.Production, Wood)
+                GameStateCreator.createLumberjack(c1),
+                GameStateCreator.addLumberToProduction(c1),
+                GameStateCreator.addLumberToProduction(c1),
+                GameStateCreator.createLumberjack(c2),
+                GameStateCreator.addLumberToProduction(c2),
+                GameStateCreator.addLumberToProduction(c2),
             )
         )
         val cell1 = d.mapManager.findSpecificCell(c1)!!
@@ -148,11 +148,11 @@ class MapManagerTest {
         val c2 = Coordinates(0,2)
         d.gameStateManager.applyStates(
             listOf(
-                GameState(c1, Operator.Set, Type.Building, Lumberjack()),
-                GameState(c1, Operator.Set, Type.Production, Wood),
-                GameState(c1, Operator.Set, Type.Production, Wood),
-                GameState(c2, Operator.Set, Type.Building, Lumberjack()),
-                GameState(c2, Operator.Set, Type.Production, Wood)//One is missing
+                GameStateCreator.createLumberjack(c1),
+                GameStateCreator.addLumberToProduction(c1),
+                GameStateCreator.addLumberToProduction(c1),
+                GameStateCreator.createLumberjack(c2),
+                GameStateCreator.addLumberToProduction(c2),//One is missing
             )
         )
         val cell1 = d.mapManager.findSpecificCell(c1)!!
@@ -170,10 +170,10 @@ class MapManagerTest {
         val c2 = Coordinates(0,2)
         d.gameStateManager.applyStates(
             listOf(
-                GameState(c1, Operator.Set, Type.Building, Lumberjack()),
-                GameState(c1, Operator.Set, Type.Production, Wood),
-                GameState(c1, Operator.Set, Type.Production, Wood),
-                GameState(c2, Operator.Set, Type.Building, Lumberjack()),
+                GameStateCreator.createLumberjack(c1),
+                GameStateCreator.addLumberToProduction(c1),
+                GameStateCreator.addLumberToProduction(c1),
+                GameStateCreator.createLumberjack(c2),
             )
         )
         val cell1 = d.mapManager.findSpecificCell(c1)!!
@@ -224,8 +224,9 @@ class MapManagerTest {
         d.gameStateManager.applyStates(listOf(
             GameStateCreator.createFletcher(d.coords),
             //Finished manually, so clear required.
-            GameState(d.coords, Operator.Remove, Type.Required, Wood),
-            GameState(d.coords, Operator.Remove, Type.Required, Wood)
+            GameState(d.coords, Operator.Remove, Type.Required, Lumber),
+            GameState(d.coords, Operator.Remove, Type.Required, Lumber),
+            GameState(d.coords, Operator.Remove, Type.Required, Stone),
         ))
         d.mapManager.queryBuilding(d.coords)!!.setConstructionFinished()
 
@@ -269,7 +270,7 @@ class MapManagerTest {
         d.gameStateManager.applyStates(listOf(
             GameStateCreator.createTower(d.coords),
             //Finished manually, so clear required.
-            GameState(d.coords, Operator.Remove, Type.Required, Wood),
+            GameState(d.coords, Operator.Remove, Type.Required, Lumber),
             GameState(d.coords, Operator.Remove, Type.Required, Stone),
             GameState(d.coords, Operator.Remove, Type.Required, Stone),
         ))
