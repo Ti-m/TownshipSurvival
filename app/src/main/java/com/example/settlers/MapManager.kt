@@ -185,7 +185,6 @@ open class MapManager(
         }
     }
 
-
     private fun Map<Coordinates, Cell>.filterForStorageNotFull(): Map<Coordinates, Cell> {
         return filterValues { it.storage.count() < 3 }
     }
@@ -241,18 +240,7 @@ open class MapManager(
             available.addAll(it.transport)
             available.addAll(it.storage)
 
-            val requires = it.building!!.requiresProduction.toMutableList()
-            if (requires.count() > available.count()) {
-                true
-            } else {
-                var notAllRequiredResourcesAvailable = false
-                requires.forEach { resource ->
-                    if (!available.remove(resource)) {// returns false, if not in the list
-                        notAllRequiredResourcesAvailable = true
-                    }
-                }
-                notAllRequiredResourcesAvailable
-            }
+            isRequiredListInAvailableList(it.building!!.requiresProduction, available).not()
         }
     }
 
