@@ -168,9 +168,22 @@ open class GameStateManager(
     }
 
     private fun refreshProductionRequirements(cell: Cell): Collection<GameState> {
-        return cell.building!!.requiresProduction.map {
+        return getResourcesNotAlreadyRequested(cell).map {
             GameState(cell.coordinates, Operator.Set, Type.Required, it)
         }
+    }
+
+    private fun getResourcesNotAlreadyRequested(cell: Cell): List<Resource> {
+        val list = mutableListOf<Resource>()
+        list.addAll(cell.production)
+        list.addAll(cell.transport)
+        list.addAll(cell.storage)
+
+        val res = cell.building!!.requiresProduction.toMutableList()
+        list.forEach {
+            res.remove(it)
+        }
+        return res
     }
 
     private fun runProduction(cell: Cell): Collection<GameState> {

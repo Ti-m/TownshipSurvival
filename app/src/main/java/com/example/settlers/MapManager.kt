@@ -161,13 +161,13 @@ open class MapManager(
     private fun Map<Coordinates, Cell>.filterForAllConstructionMaterialsAvailable(): Map<Coordinates, Cell> {
         return filterValues {
             val requires = it.building!!.requiresConstruction.toMutableList()
-            val production = it.production.toMutableList()
-            if (requires.count() < production.count()) {
+            val available = it.production.toMutableList()
+            if (requires.count() > available.count()) {
                 false
             } else {
                 var allRequiredResourcesAvailable = true
                 requires.forEach { resource ->
-                    if (!production.remove(resource)) {// returns false, if not in the list
+                    if (!available.remove(resource)) {// returns false, if not in the list
                         allRequiredResourcesAvailable = false
                     }
                 }
@@ -179,13 +179,13 @@ open class MapManager(
     private fun Map<Coordinates, Cell>.filterForAllProductionMaterialsAvailable(): Map<Coordinates, Cell> {
         return filterValues {
             val requires = it.building!!.requiresProduction.toMutableList()
-            val production = it.production.toMutableList()
-            if (requires.count() < production.count()) {
+            val available = it.production.toMutableList()
+            if (requires.count() > available.count()) {
                 false
             } else {
                 var allRequiredResourcesAvailable = true
                 requires.forEach { resource ->
-                    if (!production.remove(resource)) {// returns false, if not in the list
+                    if (!available.remove(resource)) {// returns false, if not in the list
                         allRequiredResourcesAvailable = false
                     }
                 }
@@ -234,19 +234,38 @@ open class MapManager(
         return getCellsWithBuildings()
             .filterForFinishedConstruction()
             .filterForRequiredIsEmpty()
-            .filterForProductionStorageIsEmpty()
+            .filterForNotEverythingRequiredIsInProductionTransportOrStorage()
+            //.filterForProductionStorageIsEmpty()
     }
 
     private fun Map<Coordinates, Cell>.filterForProductionBuildings(): Map<Coordinates, Cell> {
         return filterValues { it.building != null && it.building!!.isProductionBuilding() }
     }
 
-    private fun Map<Coordinates, Cell>.filterForRequiredIsEmpty(): Map<Coordinates, Cell> {
-        return filterValues { it.requires.isEmpty() }
+    private fun Map<Coordinates, Cell>.filterForNotEverythingRequiredIsInProductionTransportOrStorage(): Map<Coordinates, Cell> {
+        return filterValues {
+            val available = mutableListOf<Resource>()
+            available.addAll(it.production)
+            available.addAll(it.transport)
+            available.addAll(it.storage)
+
+            val requires = it.building!!.requiresProduction.toMutableList()
+            if (requires.count() > available.count()) {
+                true
+            } else {
+                var notAllRequiredResourcesAvailable = false
+                requires.forEach { resource ->
+                    if (!available.remove(resource)) {// returns false, if not in the list
+                        notAllRequiredResourcesAvailable = true
+                    }
+                }
+                notAllRequiredResourcesAvailable
+            }
+        }
     }
 
-    private fun Map<Coordinates, Cell>.filterForProductionStorageIsEmpty(): Map<Coordinates, Cell> {
-        return filterValues { it.production.isEmpty() }
+    private fun Map<Coordinates, Cell>.filterForRequiredIsEmpty(): Map<Coordinates, Cell> {
+        return filterValues { it.requires.isEmpty() }
     }
 
     private fun Map<Coordinates, Cell>.filterForOutsideResourcesConsumingProductionBuildings(): Map<Coordinates, Cell> {

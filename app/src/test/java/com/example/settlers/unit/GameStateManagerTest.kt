@@ -263,13 +263,13 @@ class GameStateManagerTest {
     }
 
     @Test
-    fun refreshProductionRequirements() {
+    fun `refreshProductionRequirements - nothing in production already`() {
         //init
         d.gameStateManager.applyStates(listOf(
-            GameStateCreator.createFletcher(d.coords),
+            GameStateCreator.createTower(d.coords),
             //Finished manually, so clear required.
             GameStateCreator.removeLumberFromRequired(d.coords),
-            GameStateCreator.removeLumberFromRequired(d.coords),
+            GameStateCreator.removeStoneFromRequired(d.coords),
             GameStateCreator.removeStoneFromRequired(d.coords),
         ))
         d.mapManager.queryBuilding(d.coords)!!.setConstructionFinished()
@@ -279,14 +279,40 @@ class GameStateManagerTest {
         d.gameStateManager.tick()
 
         //check
-        assertEquals(listOf(Wood), d.mapManager.queryRequires(d.coords))
+        assertEquals(listOf(Arrow, Arrow, Arrow), d.mapManager.queryRequires(d.coords))
+    }
+
+    @Test
+    fun `refreshProductionRequirements - one item is already in production - two to go`() {
+        //init
+        d.gameStateManager.applyStates(listOf(
+            GameStateCreator.createTower(d.coords),
+            //Finished manually, so clear required.
+            GameStateCreator.removeLumberFromRequired(d.coords),
+            GameStateCreator.removeStoneFromRequired(d.coords),
+            GameStateCreator.removeStoneFromRequired(d.coords),
+            //One arrow is already there
+            GameStateCreator.addArrowToProduction(d.coords),
+        ))
+        d.mapManager.queryBuilding(d.coords)!!.setConstructionFinished()
+
+        assertEquals(listOf<Resource>(), d.mapManager.queryRequires(d.coords))
+        assertEquals(listOf(Arrow), d.mapManager.queryInProduction(d.coords))
+        //exercise
+        d.gameStateManager.tick()
+
+        //check
+        assertEquals(listOf(Arrow, Arrow), d.mapManager.queryRequires(d.coords))
     }
 
     @Test
     fun `runProduction until an item is put into storage`() {
         d.gameStateManager.applyStates(listOf(
             GameStateCreator.createFletcher(d.coords),
-            GameStateCreator.addWoodToProduction(d.coords)
+            GameStateCreator.removeLumberFromRequired(d.coords),
+            GameStateCreator.removeLumberFromRequired(d.coords),
+            GameStateCreator.removeStoneFromRequired(d.coords),
+            GameStateCreator.addWoodToProduction(d.coords),
         ))
         val cell = d.mapManager.findSpecificCell(d.coords)!!
         cell.building!!.setConstructionFinished()

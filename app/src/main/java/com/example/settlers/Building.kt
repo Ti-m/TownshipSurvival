@@ -20,11 +20,11 @@ abstract class Building : GameObject() {
     fun setConstructionFinished() { constructionCount = 100 }
 
     //This is a blueprint for the items needed to produce an item
-    abstract val requiresProduction: MutableList<Resource>
+    abstract val requiresProduction: List<Resource>
     //This is a blueprint for the items needed to construct a building
-    abstract val requiresConstruction: MutableList<Resource>
+    abstract val requiresConstruction: List<Resource>
     //This is a blueprint for the items produced in the moment construction of the building happens and be put into storage
-    abstract val offers: MutableList<Resource>
+    abstract val offers: List<Resource>
 //    abstract var requested: MutableList<Resource>
 
     fun isConstructed() : Boolean {
@@ -121,10 +121,10 @@ class Lumberjack : Building() {
     override val producesItem: GameObject = Wood
     override val producesItemOutputType: Type = Type.Storage
 
-    override val requiresConstruction: MutableList<Resource> = mutableListOf(Lumber, Lumber)
-    override val requiresProduction: MutableList<Resource> = mutableListOf()
+    override val requiresConstruction: List<Resource> = listOf(Lumber, Lumber)
+    override val requiresProduction: List<Resource> = listOf()
 
-    override val offers: MutableList<Resource> = mutableListOf()
+    override val offers: List<Resource> = listOf()
 
 }
 
@@ -139,10 +139,10 @@ class Stonemason : Building() {
     override val producesItem: GameObject = Stone
     override val producesItemOutputType: Type = Type.Storage
 
-    override val requiresConstruction: MutableList<Resource> = mutableListOf(Lumber, Lumber)
-    override val requiresProduction: MutableList<Resource> = mutableListOf()
+    override val requiresConstruction: List<Resource> = listOf(Lumber, Lumber)
+    override val requiresProduction: List<Resource> = listOf()
 
-    override val offers: MutableList<Resource> = mutableListOf()
+    override val offers: List<Resource> = listOf()
 
 }
 
@@ -157,8 +157,8 @@ class Forester : Building() {
     override val producesItem: GameObject? = null
     override val producesItemOutputType: Type? = null
 
-    override val requiresConstruction: MutableList<Resource> = mutableListOf(Lumber, Lumber)
-    override val requiresProduction: MutableList<Resource> = mutableListOf()
+    override val requiresConstruction: List<Resource> = listOf(Lumber, Lumber)
+    override val requiresProduction: List<Resource> = listOf()
 
     override val offers: MutableList<Resource> = mutableListOf()
 
@@ -175,8 +175,8 @@ class Road : Building() {
     override val producesItem: GameObject? = null
     override val producesItemOutputType: Type? = null
 
-    override val requiresConstruction: MutableList<Resource> = mutableListOf()
-    override val requiresProduction: MutableList<Resource> = mutableListOf()
+    override val requiresConstruction: List<Resource> = listOf()
+    override val requiresProduction: List<Resource> = listOf()
 
     override val offers: MutableList<Resource> = mutableListOf()
 }
@@ -191,8 +191,8 @@ class Tower : Building() {
     override val producesItem: GameObject? = null
     override val producesItemOutputType: Type? = null
 
-    override val requiresConstruction: MutableList<Resource> = mutableListOf(Lumber, Stone, Stone)
-    override val requiresProduction: MutableList<Resource> = mutableListOf(Arrow, Arrow, Arrow)
+    override val requiresConstruction: List<Resource> = listOf(Lumber, Stone, Stone)
+    override val requiresProduction: List<Resource> = listOf(Arrow, Arrow, Arrow)
 
     override val offers: MutableList<Resource> = mutableListOf()
     val range = 3
@@ -208,9 +208,9 @@ class Spawner : Building() {
     override val producesItem: GameObject = Zombie
     override val producesItemOutputType: Type = Type.MovingObject
 
-    override val requiresConstruction: MutableList<Resource> = mutableListOf()
-    override val requiresProduction: MutableList<Resource> = mutableListOf()
-    override val offers: MutableList<Resource> = mutableListOf()
+    override val requiresConstruction: List<Resource> = listOf()
+    override val requiresProduction: List<Resource> = listOf()
+    override val offers: List<Resource> = listOf()
 
 }
 
@@ -224,9 +224,9 @@ class Fletcher : Building() {
     override val producesItem: GameObject = Arrow
     override val producesItemOutputType: Type = Type.Storage
 
-    override val requiresConstruction: MutableList<Resource> = mutableListOf(Lumber, Lumber, Stone)
-    override val requiresProduction: MutableList<Resource> = mutableListOf(Wood)
-    override val offers: MutableList<Resource> = mutableListOf()
+    override val requiresConstruction: List<Resource> = listOf(Lumber, Lumber, Stone)
+    override val requiresProduction: List<Resource> = listOf(Wood)
+    override val offers: List<Resource> = listOf()
 }
 
 class Lumbermill : Building() {
@@ -239,9 +239,9 @@ class Lumbermill : Building() {
     override val producesItem: GameObject = Lumber
     override val producesItemOutputType: Type = Type.Storage
 
-    override val requiresConstruction: MutableList<Resource> = mutableListOf(Lumber, Lumber, Stone)
-    override val requiresProduction: MutableList<Resource> = mutableListOf(Wood)
-    override val offers: MutableList<Resource> = mutableListOf()
+    override val requiresConstruction: List<Resource> = listOf(Lumber, Lumber, Stone)
+    override val requiresProduction: List<Resource> = listOf(Wood)
+    override val offers: List<Resource> = listOf()
 }
 
 class Pyramid : Building() {
@@ -254,11 +254,11 @@ class Pyramid : Building() {
     override val producesItem: GameObject? = null
     override val producesItemOutputType: Type? = null
 
-    override val requiresConstruction: MutableList<Resource> = mutableListOf<Resource>().apply {
+    override val requiresConstruction: List<Resource> = mutableListOf<Resource>().apply {
         this.addAll(MutableList(50) { Lumber })
         this.addAll(MutableList(50) { Stone })
     }
-    override val requiresProduction: MutableList<Resource> = mutableListOf()
+    override val requiresProduction: List<Resource> = listOf()
 
-    override val offers: MutableList<Resource> = mutableListOf()
+    override val offers: List<Resource> = listOf()
 }

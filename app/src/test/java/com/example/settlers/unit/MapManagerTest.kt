@@ -217,51 +217,20 @@ class MapManagerTest {
         assertEquals(Coordinates(7,3), coords)
     }
 
-    //This is redundant? See GameStateManagerTest.refreshProductionRequirements
     @Test
     fun `getCellsWhichNeedToUpdateProductionRequirements() - trivial `() {
         //init
         d.gameStateManager.applyStates(listOf(
             GameStateCreator.createFletcher(d.coords),
             //Finished manually, so clear required.
-            GameState(d.coords, Operator.Remove, Type.Required, Lumber),
-            GameState(d.coords, Operator.Remove, Type.Required, Lumber),
-            GameState(d.coords, Operator.Remove, Type.Required, Stone),
+            GameStateCreator.removeLumberFromRequired(d.coords),
+            GameStateCreator.removeLumberFromRequired(d.coords),
+            GameStateCreator.removeStoneFromRequired(d.coords),
         ))
         d.mapManager.queryBuilding(d.coords)!!.setConstructionFinished()
 
         //check
         assertEquals(1, d.mapManager.getCellsWhichNeedToUpdateProductionRequirements().size)
-    }
-
-    @Test
-    fun `getCellsWhichNeedToUpdateProductionRequirements() - There is stuff in required, therefore, dont request `() {
-        //init
-        d.gameStateManager.applyStates(listOf(
-            GameStateCreator.createFletcher(d.coords)
-            //The initial requirements are not removed manually
-        ))
-        d.mapManager.queryBuilding(d.coords)!!.setConstructionFinished()
-
-        //check
-        assertEquals(0, d.mapManager.getCellsWhichNeedToUpdateProductionRequirements().size)
-    }
-
-    @Test
-    fun `getCellsWhichNeedToUpdateProductionRequirements() - There is stuff in production, therefore, dont request `() {
-        //init
-        d.gameStateManager.applyStates(listOf(
-            GameStateCreator.createFletcher(d.coords),
-            //Finished manually, so clear required.
-            GameState(d.coords, Operator.Remove, Type.Required, Wood),
-            GameState(d.coords, Operator.Remove, Type.Required, Wood),
-            //Add to production manually
-            GameStateCreator.addWoodToProduction(d.coords)
-        ))
-        d.mapManager.queryBuilding(d.coords)!!.setConstructionFinished()
-
-        //check
-        assertEquals(0, d.mapManager.getCellsWhichNeedToUpdateProductionRequirements().size)
     }
 
     @Test
@@ -270,14 +239,52 @@ class MapManagerTest {
         d.gameStateManager.applyStates(listOf(
             GameStateCreator.createTower(d.coords),
             //Finished manually, so clear required.
-            GameState(d.coords, Operator.Remove, Type.Required, Lumber),
-            GameState(d.coords, Operator.Remove, Type.Required, Stone),
-            GameState(d.coords, Operator.Remove, Type.Required, Stone),
+            GameStateCreator.removeLumberFromRequired(d.coords),
+            GameStateCreator.removeStoneFromRequired(d.coords),
+            GameStateCreator.removeStoneFromRequired(d.coords),
         ))
         d.mapManager.queryBuilding(d.coords)!!.setConstructionFinished()
 
         //check - will request arrows
         assertEquals(1, d.mapManager.getCellsWhichNeedToUpdateProductionRequirements().size)
+    }
+
+    @Test
+    fun `getCellsWhichNeedToUpdateProductionRequirements() - Tower - requests arrows as soon as one is missing`() {
+        //init
+        d.gameStateManager.applyStates(listOf(
+            GameStateCreator.createTower(d.coords),
+            //Finished manually, so clear required.
+            GameStateCreator.removeLumberFromRequired(d.coords),
+            GameStateCreator.removeStoneFromRequired(d.coords),
+            GameStateCreator.removeStoneFromRequired(d.coords),
+            //One arrow is already inside
+            GameStateCreator.addArrowToProduction(d.coords),
+        ))
+        d.mapManager.queryBuilding(d.coords)!!.setConstructionFinished()
+
+        //check - will request arrows
+        assertEquals(1, d.mapManager.getCellsWhichNeedToUpdateProductionRequirements().size)
+    }
+
+    @Test
+    fun `getCellsWhichNeedToUpdateProductionRequirements() - Tower - don't requests more arrows - it's full`() {
+        //init
+        d.gameStateManager.applyStates(listOf(
+            GameStateCreator.createTower(d.coords),
+            //Finished manually, so clear required.
+            GameStateCreator.removeLumberFromRequired(d.coords),
+            GameStateCreator.removeStoneFromRequired(d.coords),
+            GameStateCreator.removeStoneFromRequired(d.coords),
+            //One arrow is already inside
+            GameStateCreator.addArrowToProduction(d.coords),
+            GameStateCreator.addArrowToProduction(d.coords),
+            GameStateCreator.addArrowToProduction(d.coords),
+        ))
+        d.mapManager.queryBuilding(d.coords)!!.setConstructionFinished()
+
+        //check - will request arrows
+        assertEquals(0, d.mapManager.getCellsWhichNeedToUpdateProductionRequirements().size)
     }
 
     @Test

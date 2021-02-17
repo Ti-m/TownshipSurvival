@@ -1,5 +1,9 @@
 Tasks - Open
 
+Bug
+* Click on inspect triggers: java.lang.Error: Invalid case - programming error
+** at com.example.settlers.InspectDialogHandler.inspectCallback(BuildDialogHandler.kt:38)
+
 Refactor
 * Save gamestate in a viewmodel to protect from configuration change
 * MapManager/ TransportManager does to much stuff
@@ -18,6 +22,7 @@ Graphics
 * Bug: View.generateViewId() creates error message "Invalid ID" in logcat, but seems to work anyway?
 
 Combat
+* DONE Tower only requests arrows, if its empty. The requesting can be updated after each shot
 * DONE Set a spawner every 200 ticks
 ** DONE Remove initial spawner
 ** DONE Tower shoots arrows <--
@@ -96,6 +101,8 @@ TestSetup
 ** Maybe use of Hilt is better?
 
 Transport
+* Currently only the stuff in front of the requiered queue is requested. but if there are
+ lumber+stone requested, stone is only requested if all lumber is already there. see pyramid
 ** What happens if the route of an active transport is interrrupted
 * Transport priorities are needed
 * Ammu < Wood

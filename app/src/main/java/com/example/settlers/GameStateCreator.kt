@@ -118,6 +118,10 @@ object GameStateCreator {
         return GameState(coords, Operator.Set, Type.Storage, Arrow)
     }
 
+    fun addArrowToProduction(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Set, Type.Production, Arrow)
+    }
+
     fun createTree(coords: Coordinates): GameState {
         return GameState(coords, Operator.Set, Type.WorldResource, Tree)
     }
