@@ -160,39 +160,31 @@ open class MapManager(
 
     private fun Map<Coordinates, Cell>.filterForAllConstructionMaterialsAvailable(): Map<Coordinates, Cell> {
         return filterValues {
-            val requires = it.building!!.requiresConstruction.toMutableList()
-            val available = it.production.toMutableList()
-            if (requires.count() > available.count()) {
-                false
-            } else {
-                var allRequiredResourcesAvailable = true
-                requires.forEach { resource ->
-                    if (!available.remove(resource)) {// returns false, if not in the list
-                        allRequiredResourcesAvailable = false
-                    }
-                }
-                allRequiredResourcesAvailable
-            }
+            isRequiredListInAvailableList(it.building!!.requiresConstruction, it.production)
         }
     }
 
     private fun Map<Coordinates, Cell>.filterForAllProductionMaterialsAvailable(): Map<Coordinates, Cell> {
         return filterValues {
-            val requires = it.building!!.requiresProduction.toMutableList()
-            val available = it.production.toMutableList()
-            if (requires.count() > available.count()) {
-                false
-            } else {
-                var allRequiredResourcesAvailable = true
-                requires.forEach { resource ->
-                    if (!available.remove(resource)) {// returns false, if not in the list
-                        allRequiredResourcesAvailable = false
-                    }
-                }
-                allRequiredResourcesAvailable
-            }
+            isRequiredListInAvailableList(it.building!!.requiresProduction, it.production)
         }
     }
+
+    private fun isRequiredListInAvailableList(requires: List<Resource>, hasAvailable: List<Resource>) : Boolean {
+        val available = hasAvailable.toMutableList()
+        return if (requires.count() > available.count()) {
+            false
+        } else {
+            var allRequiredResourcesAvailable = true
+            requires.forEach { resource ->
+                if (!available.remove(resource)) {// returns false, if not in the list
+                    allRequiredResourcesAvailable = false
+                }
+            }
+            allRequiredResourcesAvailable
+        }
+    }
+
 
     private fun Map<Coordinates, Cell>.filterForStorageNotFull(): Map<Coordinates, Cell> {
         return filterValues { it.storage.count() < 3 }
