@@ -103,6 +103,7 @@ TestSetup
 Transport
 * Currently only the stuff in front of the requiered queue is requested. but if there are
  lumber+stone requested, stone is only requested if all lumber is already there. see pyramid
+* Transport is blocked if any field in the path is blocked. It should transport right before the next field
 ** What happens if the route of an active transport is interrrupted
 * Transport priorities are needed
 * Ammu < Wood

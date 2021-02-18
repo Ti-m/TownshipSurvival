@@ -84,14 +84,7 @@ open class MapManager(
         return getCellsWhichRequireStuff()
             .filterValues { it.building?.stopDelivery == false }
             .filterValues { cell ->
-            var tmp = true
-            cell.requires.forEach  { item ->
-                //If the item is already in storage, it will be moved to production in next round
-                if (cell.storage.contains(item)) {
-                    tmp = false
-                }
-            }
-            tmp
+                isRequiredListInAvailableList(cell.requires, cell.storage).not()
         }
     }
 

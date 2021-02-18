@@ -6,6 +6,7 @@ import org.junit.Test
 import org.junit.Assert.*
 import org.junit.Before
 
+//High Level Tests
 class TransportationTest {
 
     private lateinit var d: BasicTestDependencies
@@ -17,10 +18,9 @@ class TransportationTest {
 
     @Test
     fun `transport of a single item`() {
-        //TODO this seems to be some higherlvl class, which handles the different managers. Like GameManager??
 
         val provider = Coordinates(0,0)
-        val destination = Coordinates(1,1)//This test only works for a single tile, because the it ticks only once
+        val destination = Coordinates(1,1)
 
         d.gameStateManager.applyStates(listOf(
             GameStateCreator.createTownhall(provider),
@@ -38,16 +38,16 @@ class TransportationTest {
         assertEquals(listOf(Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone), d.mapManager.queryInStorage(at = provider))
         assertEquals(emptyList<Resource>(), d.mapManager.queryInProduction(at = provider))
 
-        //TODO Another tick to convert. Do I really want to do this here? This test gets really messy. Block Cells?
         d.gameStateManager.tick()
-        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = provider))
+        assertEquals(listOf(Lumber), d.mapManager.queryInTransport(at = provider))
         assertEquals(listOf(Lumber), d.mapManager.queryInStorage(at = destination))
         assertEquals(emptyList<Resource>(), d.mapManager.queryInProduction(at = provider))
 
         d.gameStateManager.tick()
-        assertEquals(listOf(Lumber), d.mapManager.queryInTransport(at = provider))
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = provider))
         assertEquals(listOf(Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone), d.mapManager.queryInStorage(at = provider))
         assertEquals(listOf(Lumber), d.mapManager.queryInProduction(at = destination))
+        assertEquals(listOf(Lumber), d.mapManager.queryInTransport(at = destination))
     }
 
     @Test
@@ -154,7 +154,7 @@ class TransportationTest {
         assertEquals(listOf(Lumber, Lumber), d.mapManager.queryRequires(at = Coordinates(6,2)))
 
         d.gameStateManager.tick()
-        assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(3,1)))
+        assertEquals(listOf(Lumber), d.mapManager.queryInTransport(at = Coordinates(3,1)))
         assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(5,1)))
         assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(6,0)))
         assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(7,1)))
