@@ -105,6 +105,8 @@ open class MapManager(
         return getCellsWithBuildings()
             .filterForFinishedConstruction()
             .filterForProductionBuildings()
+            .filterForProductionNOTStarted()
+            .filterForProductionNOTBlocked()
             .filterForAllProductionMaterialsAvailable()
             .filterForStorageNotFull()
     }
@@ -184,6 +186,14 @@ open class MapManager(
 
     private fun Map<Coordinates, Cell>.filterForProductionStarted(): Map<Coordinates, Cell> {
         return filterValues { it.building != null && it.building!!.isProductionInProgress() }
+    }
+
+    private fun Map<Coordinates, Cell>.filterForProductionNOTStarted(): Map<Coordinates, Cell> {
+        return filterValues { it.building != null && it.building!!.isProductionInProgress().not() }
+    }
+
+    private fun Map<Coordinates, Cell>.filterForProductionNOTBlocked(): Map<Coordinates, Cell> {
+        return filterValues { it.building != null && it.building!!.isProductionBlocked.not() }
     }
 
     //https://www.redblobgames.com/grids/hexagons/#coordinates-doubled

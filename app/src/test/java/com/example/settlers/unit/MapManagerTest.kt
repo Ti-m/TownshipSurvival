@@ -101,10 +101,6 @@ class MapManagerTest {
         d.gameStateManager.applyStates(listOf(
             GameStateCreator.createFletcher(c1),
             GameStateCreator.createFletcher(c2),
-            GameStateCreator.removeWoodFromRequired(c1),
-            GameStateCreator.removeWoodFromRequired(c1),
-            GameStateCreator.removeWoodFromRequired(c2),
-            GameStateCreator.removeWoodFromRequired(c2),
             GameStateCreator.addWoodToProduction(c1),
         ))
         val cell1 = d.mapManager.findSpecificCell(c1)!!
@@ -115,6 +111,22 @@ class MapManagerTest {
         assertEquals(mapOf(
             Pair(c1, cell1)
         ), result)
+    }
+
+    @Test
+    fun `getCellsWhichShallRunAProduction - production is blocked`() {
+        val c1 = Coordinates(1,1)
+        d.gameStateManager.applyStates(listOf(
+            GameStateCreator.createFletcher(c1),
+            GameStateCreator.addWoodToProduction(c1),
+        ))
+        val cell1 = d.mapManager.findSpecificCell(c1)!!
+        cell1.building!!.setConstructionFinished()
+        cell1.building!!.isProductionBlocked = true
+
+        val result = d.mapManager.getCellsWhichShallRunAProduction()
+
+        assertEquals(emptyMap<Coordinates, Cell>(), result)
     }
 
     @Test

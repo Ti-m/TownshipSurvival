@@ -59,6 +59,13 @@ abstract class Building : GameObject() {
     //How should the produced item be Stored
     abstract val producesItemOutputType: Type?
 
+    var isProductionBlocked = false
+
+    //Do setup stuff at the beginnging of each tick
+    fun initForThisTick() {
+        isProductionBlocked = false
+    }
+
     fun produce(coordinates: Coordinates): Collection<GameState> {
         if (producesItem == null && produceCreatesWorldResource == null) return emptyList()
         if (!isConstructed()) return emptyList()
@@ -69,6 +76,7 @@ abstract class Building : GameObject() {
                 if (producesItem != null) {
                     //if producesItem == null, produce is only a timer to know when the next WorldResource is created
                     result.add(GameState(coordinates, Operator.Set, producesItemOutputType!!, producesItem))
+                    isProductionBlocked = true
                 }
                 productionCount = 0
             }

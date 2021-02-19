@@ -57,7 +57,7 @@ Map
 Building
 * DONE Add Lumbermill building
 ** DONE Takes Wood and Produces Lumber
-** Jumps production? sometoimes when wood is delivered it produces for two ticks
+** DONE Jumps production? sometimes when wood is delivered it produces for two ticks
 * DONE Disable a building
 ** DONE This will stop any resources being delivered.
 ** DONE Works for construction and production
@@ -101,7 +101,7 @@ TestSetup
 ** Maybe use of Hilt is better?
 
 Transport
-* Currently only the stuff in front of the requiered queue is requested. but if there are
+* Currently only the stuff in front of the required queue is requested. but if there are
  lumber+stone requested, stone is only requested if all lumber is already there. see pyramid
 * Transport is blocked if any field in the path is blocked. It should transport right before the next field
 ** What happens if the route of an active transport is interrrupted
@@ -109,8 +109,8 @@ Transport
 * Ammu < Wood
 
 Routing
-* Sometimes buildings request items from a previos transport, then it flickers between two buildings
-** Maybe ignore otuched here better? Or is it because it gets to a boundary where multiple paths have the same distance?
+* Sometimes buildings request items from a previous transport, then it flickers between two buildings
+** Maybe ignore touched here better? Or is it because it gets to a boundary where multiple paths have the same distance?
 
 UI
 

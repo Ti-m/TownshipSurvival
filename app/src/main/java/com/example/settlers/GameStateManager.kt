@@ -31,6 +31,9 @@ open class GameStateManager(
         audit?.newTurn()
         //Is this to expensive to do the iteration here?
         mapManager.resetTouched()
+        mapManager.getCellsWithBuildings().forEach{ (_, cell) ->
+            cell.building!!.initForThisTick()
+        }
 //            Make GameStateManger the only thing which is allowed to change state?
 //            Make everything immutable and only changeable by GamestateManager?
 //            So even handle the production progress by GameStateManger?
