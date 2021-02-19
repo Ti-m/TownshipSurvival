@@ -349,6 +349,27 @@ class GameStateManagerTest {
     }
 
     @Test
+    fun `runConstruction - items are properly removed, even if there are additional in construction`() {
+        //init
+        d.gameStateManager.applyStates(listOf(
+            GameStateCreator.createLumberjack(d.coords),
+            GameStateCreator.addLumberToProduction(d.coords),
+            GameStateCreator.addLumberToProduction(d.coords),
+            GameStateCreator.addLumberToProduction(d.coords),
+            GameStateCreator.addStoneToProduction(d.coords),
+        ))
+
+        //construction not started
+        assertEquals(0, d.mapManager.queryBuilding(d.coords)!!.constructionCount)
+
+        //runConstruction via tick()
+        d.gameStateManager.tick()
+
+        //check
+        assertEquals(listOf(Lumber, Stone), d.mapManager.queryInProduction(d.coords))
+    }
+
+    @Test
     fun `runProductionWithConsumingOutsideResource - Lumberjack`() {
         d.gameStateManager.applyStates(listOf(
             GameStateCreator.createLumberjack(d.coords),

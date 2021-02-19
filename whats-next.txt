@@ -65,7 +65,7 @@ Building
 * DONE requiresProduction/requiresConstruction: MutableList<Resource> - Use an immutable list?
 * DONE Construction shall consume the items for construction, at the beginning of construction
 ** DONE Add a fletcher which produces 1 arrow from 1 wood
-** Bug: Buildings are not constructing, if the are additional ressources in production. <- Should be fixed
+** DONE Bug: Buildings are not constructing, if the are additional ressources in production.
 *** Example is the tower if an arrow is in front of the list
 ** Add an option to delete a building
 * DONE Add Building StoneMason, needs 2 Wood

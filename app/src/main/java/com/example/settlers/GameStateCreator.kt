@@ -110,6 +110,10 @@ object GameStateCreator {
         return GameState(coords, Operator.Remove, Type.Transport, Lumber)
     }
 
+    fun addStoneToProduction(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Set, Type.Production, Stone)
+    }
+
     fun removeStoneFromRequired(coords: Coordinates): GameState {
         return GameState(coords, Operator.Remove, Type.Required, Stone)
     }
