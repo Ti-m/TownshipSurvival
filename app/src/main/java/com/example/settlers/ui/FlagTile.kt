@@ -40,6 +40,7 @@ class GraphicalFlagTile(
     private val cactus: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.cactus_1_32, null)
     private val explosion_1: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.explosion_1_32, null)
     private val explosion_2: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.explosion_2_32, null)
+    private val lumber: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumber_1_32, null)
 
 
 //    override fun drawGround(canvas: Canvas) {
@@ -193,7 +194,7 @@ open class FlagTile(
         drawGround(canvas)
         drawFlag(canvas)
         drawBuilding(canvas)
-        drawText(canvas)
+        drawResource(canvas)
     }
 
     protected open fun drawGround(canvas: Canvas) {
@@ -350,30 +351,15 @@ open class FlagTile(
         }
     }
 
-    private fun drawText(canvas: Canvas) {
+    private fun drawResource(canvas: Canvas) {
 
         cell.transport.forEachIndexed { index, resource ->
-            val letter = when (resource) {
-                is Wood -> "w"
-                is Lumber -> "l"
-                is Stone -> "s"
-                is Arrow -> "a"
+            when (resource) {
+                is Wood -> drawWood(canvas, index)
+                is Lumber -> drawLumber(canvas, index)
+                is Stone -> drawStone(canvas, index)
+                is Arrow -> drawArrow(canvas, index)
                 else -> throw NotImplementedError()
-            }
-            if (index == 0) {
-                canvas.drawText(
-                    letter,
-                    coords.center.first - textPaint.textSize / 2,
-                    coords.center.second - textPaint.textSize * 0.75f,
-                    textPaint
-                )
-            } else {
-                canvas.drawText(
-                    letter,
-                    coords.center.first + textPaint.textSize / 2,
-                    coords.center.second - textPaint.textSize * 0.75f,
-                    textPaint
-                )
             }
         }
 
@@ -381,11 +367,49 @@ open class FlagTile(
 //            canvas.drawText("c", coords.center.first - textPaint.textSize / 2, coords.center.second + textPaint.textSize * 1.2f, textPaint)
 //        }
 
-        cell.worker?.let {
-            val letter = when (it) {
-                Worker.Construction -> "C"
-            }
-            canvas.drawText(letter, coords.center.first + textPaint.textSize / 2, coords.center.second + textPaint.textSize * 1.2f, textPaint)
+//        cell.worker?.let {
+//            val letter = when (it) {
+//                Worker.Construction -> "C"
+//            }
+//            canvas.drawText(letter, coords.center.first + textPaint.textSize / 2, coords.center.second + textPaint.textSize * 1.2f, textPaint)
+//        }
+    }
+
+    open fun drawWood(canvas: Canvas, index: Int) {
+        val letter = "w"
+        drawText(canvas, index, letter)
+    }
+
+    open fun drawLumber(canvas: Canvas, index: Int) {
+        val letter = "l"
+        drawText(canvas, index, letter)
+    }
+
+    open fun drawStone(canvas: Canvas, index: Int) {
+        val letter = "s"
+        drawText(canvas, index, letter)
+    }
+
+    open fun drawArrow(canvas: Canvas, index: Int) {
+        val letter = "a"
+        drawText(canvas, index, letter)
+    }
+
+    private fun drawText(canvas: Canvas, index: Int, letter: String) {
+        if (index == 0) {
+            canvas.drawText(
+                letter,
+                coords.center.first - textPaint.textSize / 2,
+                coords.center.second - textPaint.textSize * 0.75f,
+                textPaint
+            )
+        } else {
+            canvas.drawText(
+                letter,
+                coords.center.first + textPaint.textSize / 2,
+                coords.center.second - textPaint.textSize * 0.75f,
+                textPaint
+            )
         }
     }
 
