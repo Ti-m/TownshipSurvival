@@ -15,6 +15,18 @@ Refactor
 *** I.E. If a destruction of a building is requested, it deletes all items associated
 
 Graphics
+* Add graphics - for in transport items
+** Wood
+** Lumber
+** Stone
+** Arrow
+* Allow animated graphics.
+** If automatic RunLoop is activated, there should be an inbetween step between all steps. In this step, only inbetween graphics are drawn
+1 - 0ms
+i - 500ms
+2 - 1000ms does it look weird, if the animation is changed here?
+i - 1500ms
+3 - 2000ms
 * DONE Add Animation infrastucture
 ** DONE Add 3 tick Explosion animation
 ** Make a nice flame/explosion icon
@@ -101,8 +113,7 @@ TestSetup
 ** Maybe use of Hilt is better?
 
 Transport
-* Currently only the stuff in front of the required queue is requested. but if there are
- lumber+stone requested, stone is only requested if all lumber is already there. see pyramid
+* WONTFIX Currently only the stuff in front of the required queue is requested. I.e. pyramid: lumber+stone are requested. stone is only requested if all lumber is already there. This is hard to do, because touched is only set, after the GameState is applied. This is after the moveResource step.
 * Transport is blocked if any field in the path is blocked. It should transport right before the next field
 ** What happens if the route of an active transport is interrrupted
 * Transport priorities are needed

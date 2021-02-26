@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Path
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.MotionEvent
@@ -40,7 +41,8 @@ class GraphicalFlagTile(
     private val cactus: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.cactus_1_32, null)
     private val explosion_1: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.explosion_1_32, null)
     private val explosion_2: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.explosion_2_32, null)
-    private val lumber: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumber_1_32, null)
+    private val lumber: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumber_1_8, null)
+    private val stone: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.stone_1_8, null)
 
 
 //    override fun drawGround(canvas: Canvas) {
@@ -131,6 +133,27 @@ class GraphicalFlagTile(
     override fun drawZombie(canvas: Canvas) {
         zombie!!.bounds = canvas.clipBounds
         zombie.draw(canvas)
+    }
+
+    override fun drawLumber(canvas: Canvas, index: Int) {
+        drawItem(canvas, lumber!!, index)
+    }
+
+    override fun drawStone(canvas: Canvas, index: Int) {
+        drawItem(canvas, stone!!, index)
+    }
+
+    private fun drawItem(canvas: Canvas, drawable: Drawable, index: Int) {
+        val size = 8
+        val offsetRight = 16
+        val offsetLeft = 6
+        if (index == 0) {
+            drawable.bounds = Rect(offsetLeft + 0,0,offsetLeft + size, size)
+            drawable.draw(canvas)
+        } else {
+            drawable.bounds = Rect(offsetRight + 0,0,offsetRight + size, size)
+            drawable.draw(canvas)
+        }
     }
 
     override fun drawAnimation(canvas: Canvas) {
