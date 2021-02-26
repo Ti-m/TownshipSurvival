@@ -43,6 +43,8 @@ class GraphicalFlagTile(
     private val explosion_2: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.explosion_2_32, null)
     private val lumber: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumber_1_8, null)
     private val stone: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.stone_1_8, null)
+    private val wood: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.wood_1_8, null)
+    private val arrow: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.arrow_1_8, null)
 
 
 //    override fun drawGround(canvas: Canvas) {
@@ -135,15 +137,23 @@ class GraphicalFlagTile(
         zombie.draw(canvas)
     }
 
+    override fun drawWood(canvas: Canvas, index: Int) {
+        drawTransport(canvas, wood!!, index)
+    }
+
     override fun drawLumber(canvas: Canvas, index: Int) {
-        drawItem(canvas, lumber!!, index)
+        drawTransport(canvas, lumber!!, index)
     }
 
     override fun drawStone(canvas: Canvas, index: Int) {
-        drawItem(canvas, stone!!, index)
+        drawTransport(canvas, stone!!, index)
     }
 
-    private fun drawItem(canvas: Canvas, drawable: Drawable, index: Int) {
+    override fun drawArrow(canvas: Canvas, index: Int) {
+        drawTransport(canvas, arrow!!, index)
+    }
+
+    private fun drawTransport(canvas: Canvas, drawable: Drawable, index: Int) {
         val size = 8
         val offsetRight = 16
         val offsetLeft = 6
