@@ -38,7 +38,7 @@ class GraphicalFlagTile(
     private val spawner: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.spawner_1_32, null)
     private val zombie: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.zombie_1_32, null)
     private val tree: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tree_1_32, null)
-    private val cactus: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.cactus_1_32, null)
+    private val palm: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.palm_1_32, null)
     private val explosion_1: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.explosion_1_32, null)
     private val explosion_2: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.explosion_2_32, null)
     private val lumber: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumber_1_8, null)
@@ -127,9 +127,8 @@ class GraphicalFlagTile(
         draw8(canvas, tree!!, 0)
     }
 
-    override fun drawCactus(canvas: Canvas) {
-        cactus!!.bounds = canvas.clipBounds
-        cactus.draw(canvas)
+    override fun drawPalm(canvas: Canvas) {
+        draw8(canvas, palm!!, 0)
     }
 
     override fun drawRock(canvas: Canvas) {
@@ -261,7 +260,7 @@ open class FlagTile(
 
         if (cell.worldResource is Tree) {
             if (cell.type == GroundType.Desert) {
-                drawCactus(canvas)//TODO palm Tree
+                drawPalm(canvas)
             } else {
                 drawTree(canvas)
             }
@@ -332,7 +331,7 @@ open class FlagTile(
         //overwrite
     }
 
-    open fun drawCactus(canvas: Canvas) {
+    open fun drawPalm(canvas: Canvas) {
         //overwrite
     }
 
