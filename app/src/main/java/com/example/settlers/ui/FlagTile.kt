@@ -124,8 +124,7 @@ class GraphicalFlagTile(
     }
 
     override fun drawTree(canvas: Canvas) {
-        tree!!.bounds = canvas.clipBounds
-        tree.draw(canvas)
+        draw8(canvas, tree!!, 0)
     }
 
     override fun drawCactus(canvas: Canvas) {
@@ -134,7 +133,6 @@ class GraphicalFlagTile(
     }
 
     override fun drawRock(canvas: Canvas) {
-        //drawTransport(canvas, rock!!, 0)
         draw8(canvas, rock!!, 0)
     }
 
