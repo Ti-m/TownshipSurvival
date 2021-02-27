@@ -55,8 +55,8 @@ class MainActivity : AppCompatActivity() {
         zoomingLayout.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         zoomingLayout.isHorizontalScrollBarEnabled = true
         zoomingLayout.isVerticalScrollBarEnabled = true
-        zoomingLayout.setMinZoom(4.0f, MIN_ZOOM_DEFAULT_TYPE)
-        zoomingLayout.setMaxZoom(8.0f, MAX_ZOOM_DEFAULT_TYPE)
+        zoomingLayout.setMinZoom(2.0f, MIN_ZOOM_DEFAULT_TYPE)
+        zoomingLayout.setMaxZoom(16.0f, MAX_ZOOM_DEFAULT_TYPE)
         zoomingLayout.setHasClickableChildren(true)
         zoomingLayout.id = View.generateViewId()//creates error message "Invalid ID" in logcat, but seems to work anyway?
 
