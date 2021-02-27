@@ -12,15 +12,17 @@ import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import com.example.settlers.*
 import com.example.settlers.MainActivity.Companion.flagDistance
+import kotlin.random.Random
 
 //Only used from code
 @SuppressLint("ViewConstructor")
 class GraphicalFlagTile(
+    context: Context,
     cell: Cell,
     modeController: ModeController,
-    context: Context?,
-    private val neighbourCalculator: HexagonNeighbourCalculator
-) : FlagTile(cell, modeController, context) {
+    private val neighbourCalculator: HexagonNeighbourCalculator,
+    private val randomGenerator: Random,
+) : FlagTile(context, cell, modeController) {
 
     //TODO can these stay here? or init only once?
     //private val image: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.hexagon_outline_32, null)
@@ -37,7 +39,8 @@ class GraphicalFlagTile(
     private val lumberjackConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_construction_1_32, null)
     private val spawner: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.spawner_1_32, null)
     private val zombie: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.zombie_1_32, null)
-    private val tree: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tree_1_32, null)
+    private val tree1: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tree_1_32, null)
+    private val tree2: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tree_2_32, null)
     private val palm: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.palm_1_32, null)
     private val explosion_1: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.explosion_1_32, null)
     private val explosion_2: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.explosion_2_32, null)
@@ -124,7 +127,11 @@ class GraphicalFlagTile(
     }
 
     override fun drawTree(canvas: Canvas) {
-        draw8(canvas, tree!!, 0)
+        if (randomGenerator.nextInt(0,2) == 0) {
+            draw8(canvas, tree1!!, 0)
+        } else {
+            draw8(canvas, tree2!!, 0)
+        }
     }
 
     override fun drawPalm(canvas: Canvas) {
@@ -206,9 +213,9 @@ class GraphicalFlagTile(
 //Only used from code
 @SuppressLint("ViewConstructor")
 open class FlagTile(
+    context: Context,
     val cell: Cell,
-    private val modeController: ModeController,
-    context: Context?
+    private val modeController: ModeController
 ) : View(context) {
 
     companion object {
