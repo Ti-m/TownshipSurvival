@@ -63,7 +63,9 @@ class MapGenerator(private val interpolator: TerrainInterpolator, private val ra
                 null
             }
 
-            Cell(coordinates = it.value.coordinates, type = type, worldResource = tree)
+            Cell(coordinates = it.value.coordinates, type = type, worldResource = tree).apply {
+                this.textureVariant = randomGenerator.nextInt(0,2)
+            }
         }
         return cellresult
     }
@@ -73,8 +75,7 @@ class MapGenerator(private val interpolator: TerrainInterpolator, private val ra
         input: Map<Coordinates, Cell>,
         modeController: ModeController,
         neighbourCalculator: HexagonNeighbourCalculator,
-        randomGenerator: Random,
     ): Map<Coordinates, FlagTile> {
-        return input.mapValues { GraphicalFlagTile(context, it.value, modeController, neighbourCalculator, randomGenerator) }
+        return input.mapValues { GraphicalFlagTile(context, it.value, modeController, neighbourCalculator) }
     }
 }

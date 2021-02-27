@@ -5,7 +5,9 @@ import java.io.Serializable
 //CellBase handles the utility functions for proper drawing from the Cell.
 open class CellBase(
     //Touched in Round x ignore this round for transports
-    var touched: Boolean = false
+    var touched: Boolean = false,
+    // Stores a random number which defines the texture variant, if multiple are available
+    var textureVariant: Int = 0,
 )
 
 /*

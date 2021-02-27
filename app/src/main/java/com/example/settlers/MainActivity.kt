@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         //MainActivityHelper.setExplosion(gameStateManager)
 
         val modeController = ModeController()
-        val tileManager = TileManager(tiles = mapGen.createTiles(this, cells, modeController, neighbourCalculator, randomGenerator))
+        val tileManager = TileManager(tiles = mapGen.createTiles(this, cells, modeController, neighbourCalculator))
         val gw2 = GameWorld(tileManager = tileManager, context = this)
         //gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         gw2.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())

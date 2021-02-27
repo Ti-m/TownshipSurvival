@@ -21,7 +21,6 @@ class GraphicalFlagTile(
     cell: Cell,
     modeController: ModeController,
     private val neighbourCalculator: HexagonNeighbourCalculator,
-    private val randomGenerator: Random,
 ) : FlagTile(context, cell, modeController) {
 
     //TODO can these stay here? or init only once?
@@ -134,7 +133,7 @@ class GraphicalFlagTile(
     }
 
     override fun drawTree(canvas: Canvas) {
-        if (randomGenerator.nextInt(0,2) == 0) {
+        if (cell.textureVariant == 0) {
             draw8(canvas, tree1!!, 0)
         } else {
             draw8(canvas, tree2!!, 0)
