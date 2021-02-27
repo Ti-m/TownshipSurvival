@@ -50,17 +50,7 @@ class GraphicalFlagTile(
     private val arrow: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.arrow_1_8, null)
     private val rock: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.rock_1_32, null)
 
-
-//    override fun drawGround(canvas: Canvas) {
-//        super.drawGround(canvas)
-//        val bounds = canvas.clipBounds
-//        image!!.bounds = bounds
-//        //image!!.bounds = Rect(bounds.left+7, bounds.top+5, bounds.right-7, bounds.bottom-5)
-//        image.draw(canvas)
-//    }
-
     override fun drawRoad(canvas: Canvas) {
-        //val neighbours = neighbourCalculator.getNeighboursOfCellDoubleCoords(cell.coordinates, allowAnyBuilding = true)//search for road Neighbours
 
         val neighbours = neighbourCalculator.getRoadConnections(cell.coordinates)
         neighbours.forEach {
@@ -91,9 +81,6 @@ class GraphicalFlagTile(
                 }
             }
         }
-
-//        road!!.bounds = canvas.clipBounds
-//        road.draw(canvas)
     }
 
     override fun drawTownhall(canvas: Canvas) {
@@ -235,6 +222,15 @@ open class FlagTile(
         //Log.i(TAG, "onDraw chords ${cell.coordinates} res1 ${cell.transport}")
         super.onDraw(canvas!!)
         drawGround(canvas)
+        if (cell.worldResource != null) {
+            drawWorldResource(canvas)
+        }
+        if (cell.movingObject != null) {
+            drawZombie(canvas)
+        }
+        if (cell.animation != null) {
+            drawAnimation(canvas)
+        }
         drawFlag(canvas)
         drawBuilding(canvas)
         drawResource(canvas)
@@ -265,6 +261,10 @@ open class FlagTile(
             canvas.drawPath(path, groundPaint)
         }
 
+
+    }
+
+    private fun drawWorldResource(canvas: Canvas) {
         if (cell.worldResource is Tree) {
             if (cell.type == GroundType.Desert) {
                 drawPalm(canvas)
@@ -274,16 +274,11 @@ open class FlagTile(
         } else if (cell.worldResource is Rock) {
             drawRock(canvas)
         }
-
-        if (cell.movingObject != null) {
-            drawZombie(canvas)
-        }
-
-        if (cell.animation != null) {
-            drawAnimation(canvas)
-        }
-
     }
+
+//    fun drawGround(canvas: Canvas) {
+//
+//    }
 
     open fun drawRoad(canvas: Canvas) {
         val letter = "R"

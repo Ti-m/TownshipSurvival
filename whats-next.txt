@@ -20,6 +20,7 @@ Graphics
 ** Lumber
 ** Stone
 ** Arrow
+* Add ground graphics
 * Allow animated graphics.
 ** If automatic RunLoop is activated, there should be an inbetween step between all steps. In this step, only inbetween graphics are drawn
 1 - 0ms
