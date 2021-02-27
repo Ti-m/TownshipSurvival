@@ -50,6 +50,7 @@ class GraphicalFlagTile(
     private val arrow: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.arrow_1_8, null)
     private val rock: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.rock_1_32, null)
     private val grass: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.grass_1_64, null)
+    private val desert: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.desert_1_64, null)
 
     override fun drawRoad(canvas: Canvas) {
 
@@ -86,6 +87,10 @@ class GraphicalFlagTile(
 
     override fun drawGrassTexture(canvas: Canvas) {
         drawGroundTexture(canvas, grass!!)
+    }
+
+    override fun drawDesertTexture(canvas: Canvas) {
+        drawGroundTexture(canvas, desert!!)
     }
 
     override fun drawTownhall(canvas: Canvas) {
@@ -293,12 +298,16 @@ open class FlagTile(
         when (cell.type) {
             GroundType.Water -> {}//nothing
             GroundType.Grass -> drawGrassTexture(canvas)
-            GroundType.Desert -> {}//nothing
+            GroundType.Desert -> drawDesertTexture(canvas)
             GroundType.Mountain -> {}//nothing
         }
     }
 
     open fun drawGrassTexture(canvas: Canvas) {
+        //overwrite
+    }
+
+    open fun drawDesertTexture(canvas: Canvas) {
         //overwrite
     }
 
