@@ -12,7 +12,6 @@ import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import com.example.settlers.*
 import com.example.settlers.MainActivity.Companion.flagDistance
-import kotlin.random.Random
 
 //Only used from code
 @SuppressLint("ViewConstructor")
@@ -36,6 +35,10 @@ class GraphicalFlagTile(
     private val towerConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_construction_1_32, null)
     private val lumberjack: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_1_32, null)
     private val lumberjackConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_construction_1_32, null)
+    private val lumbermill: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumbermill_1_64, null)
+    private val lumbermillConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumbermill_construction_1_64, null)
+    private val stonemason: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.stonemason_1_64, null)
+    private val stonemasonConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.stonemason_construction_1_64, null)
     private val spawner: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.spawner_1_32, null)
     private val zombie: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.zombie_1_32, null)
     private val tree1: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tree_1_32, null)
@@ -87,19 +90,19 @@ class GraphicalFlagTile(
     }
 
     override fun drawGrassTexture(canvas: Canvas) {
-        drawGroundTexture(canvas, grass!!)
+        draw32(canvas, grass!!)
     }
 
     override fun drawDesertTexture(canvas: Canvas) {
-        drawGroundTexture(canvas, desert!!)
+        draw32(canvas, desert!!)
     }
 
     override fun drawWaterTexture(canvas: Canvas) {
-        drawGroundTexture(canvas, water!!)
+        draw32(canvas, water!!)
     }
 
     override fun drawMountainTexture(canvas: Canvas) {
-        drawGroundTexture(canvas, mountain!!)
+        draw32(canvas, mountain!!)
     }
 
     override fun drawTownhall(canvas: Canvas) {
@@ -124,6 +127,22 @@ class GraphicalFlagTile(
         } else {
             lumberjackConstruction!!.bounds = canvas.clipBounds
             lumberjackConstruction.draw(canvas)
+        }
+    }
+
+    override fun drawLumbermill(canvas: Canvas) {
+        if (cell.building!!.isConstructed()) {
+            draw32(canvas, lumbermill!!)
+        } else {
+            draw32(canvas, lumbermillConstruction!!)
+        }
+    }
+
+    override fun drawStoneMason(canvas: Canvas) {
+        if (cell.building!!.isConstructed()) {
+            draw32(canvas, stonemason!!)
+        } else {
+            draw32(canvas, stonemasonConstruction!!)
         }
     }
 
@@ -182,7 +201,7 @@ class GraphicalFlagTile(
         }
     }
 
-    private fun drawGroundTexture(canvas: Canvas, drawable: Drawable) {
+    private fun draw32(canvas: Canvas, drawable: Drawable) {
         val size = 32
 //        val offsetLeft = 6
         drawable.bounds = Rect(0,0, size, size)

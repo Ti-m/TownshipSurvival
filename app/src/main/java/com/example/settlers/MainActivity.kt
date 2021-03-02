@@ -90,6 +90,34 @@ class MainActivity : AppCompatActivity() {
         //MainActivityHelper.setAZombie(gameStateManager)
         //MainActivityHelper.setExplosion(gameStateManager)
 
+        val cTown = Coordinates(0,0)
+        val cRoad1 = Coordinates(2,0)
+        val cRoad2 = Coordinates(4,0)
+        val cRoad3 = Coordinates(5,1)
+//        val cLumber = Coordinates(1,1)
+//        val cFletcher1 = Coordinates(4,2)
+        val cLumberMill1 = Coordinates(6,0)
+        val tree1 = Coordinates(3,1)
+        val tree2 = Coordinates(7,1)
+        val cLumberMill2 = Coordinates(7,1)
+        val cLumberMill3 = Coordinates(6,2)
+        val tree3 = Coordinates(0,2)
+
+        gameStateManager.applyStates(listOf(
+            GameStateCreator.createTownhall(cTown),
+            GameStateCreator.createRoad(cRoad1),
+            GameStateCreator.createRoad(cRoad2),
+            GameStateCreator.createRoad(cRoad3),
+            GameStateCreator.createLumbermill(cLumberMill1),
+            GameStateCreator.createLumbermill(cLumberMill2),
+            GameStateCreator.createLumbermill(cLumberMill3),
+//            GameStateCreator.createLumberjack(cLumber),
+//            GameStateCreator.createFletcher(cFletcher1),
+            GameStateCreator.createTree(tree1),
+            GameStateCreator.createTree(tree2),
+            GameStateCreator.createTree(tree3),
+        ))
+
         val modeController = ModeController()
         val tileManager = TileManager(tiles = mapGen.createTiles(this, cells, modeController, neighbourCalculator))
         val gw2 = GameWorld(tileManager = tileManager, context = this)
