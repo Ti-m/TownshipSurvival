@@ -11,7 +11,6 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import com.example.settlers.*
-import com.example.settlers.MainActivity.Companion.flagDistance
 
 //Only used from code
 @SuppressLint("ViewConstructor")
@@ -20,7 +19,8 @@ class GraphicalFlagTile(
     cell: Cell,
     modeController: ModeController,
     private val neighbourCalculator: HexagonNeighbourCalculator,
-) : FlagTile(context, cell, modeController) {
+    private val isLowDpi: Boolean
+) : FlagTile(context, cell, modeController, isLowDpi) {
 
     //TODO can these stay here? or init only once?
     //private val image: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.hexagon_outline_32, null)
@@ -90,19 +90,19 @@ class GraphicalFlagTile(
     }
 
     override fun drawGrassTexture(canvas: Canvas) {
-        draw32(canvas, grass!!)
+        draw64(canvas, grass!!)
     }
 
     override fun drawDesertTexture(canvas: Canvas) {
-        draw32(canvas, desert!!)
+        draw64(canvas, desert!!)
     }
 
     override fun drawWaterTexture(canvas: Canvas) {
-        draw32(canvas, water!!)
+        draw64(canvas, water!!)
     }
 
     override fun drawMountainTexture(canvas: Canvas) {
-        draw32(canvas, mountain!!)
+        draw64(canvas, mountain!!)
     }
 
     override fun drawTownhall(canvas: Canvas) {
@@ -132,17 +132,17 @@ class GraphicalFlagTile(
 
     override fun drawLumbermill(canvas: Canvas) {
         if (cell.building!!.isConstructed()) {
-            draw32(canvas, lumbermill!!)
+            draw64(canvas, lumbermill!!)
         } else {
-            draw32(canvas, lumbermillConstruction!!)
+            draw64(canvas, lumbermillConstruction!!)
         }
     }
 
     override fun drawStoneMason(canvas: Canvas) {
         if (cell.building!!.isConstructed()) {
-            draw32(canvas, stonemason!!)
+            draw64(canvas, stonemason!!)
         } else {
-            draw32(canvas, stonemasonConstruction!!)
+            draw64(canvas, stonemasonConstruction!!)
         }
     }
 
@@ -153,18 +153,18 @@ class GraphicalFlagTile(
 
     override fun drawTree(canvas: Canvas) {
         if (cell.textureVariant == 0) {
-            draw8(canvas, tree1!!, 0)
+            draw16(canvas, tree1!!, 0)
         } else {
-            draw8(canvas, tree2!!, 0)
+            draw16(canvas, tree2!!, 0)
         }
     }
 
     override fun drawPalm(canvas: Canvas) {
-        draw8(canvas, palm!!, 0)
+        draw16(canvas, palm!!, 0)
     }
 
     override fun drawRock(canvas: Canvas) {
-        draw8(canvas, rock!!, 0)
+        draw16(canvas, rock!!, 0)
     }
 
     override fun drawZombie(canvas: Canvas) {
@@ -173,25 +173,25 @@ class GraphicalFlagTile(
     }
 
     override fun drawWood(canvas: Canvas, index: Int) {
-        draw8(canvas, wood!!, index)
+        draw16(canvas, wood!!, index)
     }
 
     override fun drawLumber(canvas: Canvas, index: Int) {
-        draw8(canvas, lumber!!, index)
+        draw16(canvas, lumber!!, index)
     }
 
     override fun drawStone(canvas: Canvas, index: Int) {
-        draw8(canvas, stone!!, index)
+        draw16(canvas, stone!!, index)
     }
 
     override fun drawArrow(canvas: Canvas, index: Int) {
-        draw8(canvas, arrow!!, index)
+        draw16(canvas, arrow!!, index)
     }
 
-    private fun draw8(canvas: Canvas, drawable: Drawable, index: Int) {
-        val size = 8
-        val offsetRight = 16
-        val offsetLeft = 6
+    private fun draw16(canvas: Canvas, drawable: Drawable, index: Int) {
+        val size = 16
+        val offsetRight = size * 2
+        val offsetLeft = 6 * 2
         if (index == 0) {
             drawable.bounds = Rect(offsetLeft + 0,0,offsetLeft + size, size)
             drawable.draw(canvas)
@@ -201,8 +201,8 @@ class GraphicalFlagTile(
         }
     }
 
-    private fun draw32(canvas: Canvas, drawable: Drawable) {
-        val size = 32
+    private fun draw64(canvas: Canvas, drawable: Drawable) {
+        val size = 64
 //        val offsetLeft = 6
         drawable.bounds = Rect(0,0, size, size)
         drawable.draw(canvas)
@@ -247,14 +247,15 @@ class GraphicalFlagTile(
 open class FlagTile(
     context: Context,
     val cell: Cell,
-    private val modeController: ModeController
+    private val modeController: ModeController,
+    isLowDpi: Boolean
 ) : View(context) {
 
     companion object {
         private const val TAG = "FlagTile"
     }
 
-    val coords: Hexagon = Hexagon(w = flagDistance / 2)
+    val coords: Hexagon = Hexagon(isLowDpi = isLowDpi)
     private val flagPaint = ColorHelper.getFlagPaint()
     private val selectedPaint = ColorHelper.getBuildingProgressPaint()
     private val groundPaint = ColorHelper.getGroundPaint(cell.type)

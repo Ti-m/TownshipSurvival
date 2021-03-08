@@ -24,13 +24,12 @@ import com.otaliastudios.zoom.ZoomApi.Companion.MIN_ZOOM_DEFAULT_TYPE
 import com.otaliastudios.zoom.ZoomLayout
 import kotlin.random.Random
 
-
 class MainActivity : AppCompatActivity() {
 
     companion object {
         private val TAG = "MainActivity"
-        val flagDistance = 33.0f //33.0f
-        val flagDiameter = flagDistance / 20
+        val flagDistance = 64.0f
+        val flagDiameter = flagDistance / 40
         val tileGridSize = 33
         val gameBoardBorder = (4 * flagDistance).toInt()
     }
@@ -51,7 +50,6 @@ class MainActivity : AppCompatActivity() {
 
         val zoomingLayout = ZoomLayout( context = this)
         zoomingLayout.setBackgroundColor(Color.parseColor("#333333"))
-        //zoomingLayout.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
         zoomingLayout.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         zoomingLayout.isHorizontalScrollBarEnabled = true
         zoomingLayout.isVerticalScrollBarEnabled = true
@@ -119,7 +117,8 @@ class MainActivity : AppCompatActivity() {
         ))
 
         val modeController = ModeController()
-        val tileManager = TileManager(tiles = mapGen.createTiles(this, cells, modeController, neighbourCalculator))
+        val isLowDpi = resources.displayMetrics.density < 2
+        val tileManager = TileManager(tiles = mapGen.createTiles(this, cells, modeController, neighbourCalculator, isLowDpi))
         val gw2 = GameWorld(tileManager = tileManager, context = this)
         //gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         gw2.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
