@@ -6,7 +6,10 @@ Bug
 
 Refactor
 * DONE Rename to Township Survival
-* . Save gamestate in a viewmodel to protect from configuration change
+* DONE Save gamestate in a viewmodel to protect from configuration change
+* DONE Use onSaveInstanceState() as backup to handle system-initiated process death https://developer.android.com/topic/libraries/architecture/saving-states#onsaveinstancestate
+** DONE This does not work for the whole gamestate, because its to much data.
+* Save GameState in Room
 * MapManager/ TransportManager does to much stuff
 ** Try to move some stuff down
 *** DONE MapManager

@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         val mapGen = MapGenerator(TerrainInterpolator(randomGenerator), randomGenerator)
         model.initCells(mapGen)
 
-        val mapManager = MapManager(model.cells!!, logger, tileGridSize)
+        val mapManager = MapManager(model.getCells(), logger, tileGridSize)
         val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
         val shuffledNeighbourCalculator = ShuffledNeighbourCalculator(randomGenerator, mapManager)
         val emptyCellFinder = EmptyCellFinder(mapManager, shuffledNeighbourCalculator)
@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity() {
 
         val modeController = ModeController()
         val isLowDpi = resources.displayMetrics.density < 2
-        val tileManager = TileManager(tiles = mapGen.createTiles(this, model.cells!!, modeController, neighbourCalculator, isLowDpi))
+        val tileManager = TileManager(tiles = mapGen.createTiles(this, model.getCells(), modeController, neighbourCalculator, isLowDpi))
         val gw2 = GameWorld(tileManager = tileManager, context = this)
         //gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         gw2.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
