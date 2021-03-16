@@ -24,6 +24,13 @@ import com.otaliastudios.zoom.ZoomApi.Companion.MAX_ZOOM_DEFAULT_TYPE
 import com.otaliastudios.zoom.ZoomApi.Companion.MIN_ZOOM_DEFAULT_TYPE
 import com.otaliastudios.zoom.ZoomLayout
 import kotlin.random.Random
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+
+@Serializable
+data class Project(val name: String, val language: String)
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,6 +53,12 @@ class MainActivity : AppCompatActivity() {
 
         val model: MainViewModel by viewModels()
 
+        val data = Project("kotlinx.serialization", "Kotlin")
+        val string = Json.encodeToString(data)
+        println(string) // {"name":"kotlinx.serialization","language":"Kotlin"}
+        // Deserializing back into objects
+        val obj = Json.decodeFromString<Project>(string)
+        println(obj) // Project(name=kotlinx.serialization, language=Kotlin)
         //val baseLayout = layoutInflater.inflate(R.layout.activity_main, null)
         val constraintLayout = ConstraintLayout(this)
         bindingViewTopBar = ViewTopBarBinding.inflate(layoutInflater, constraintLayout, false)
@@ -66,7 +79,6 @@ class MainActivity : AppCompatActivity() {
         val randomGenerator = Random
         val mapGen = MapGenerator(TerrainInterpolator(randomGenerator), randomGenerator)
         model.initCells(mapGen)
-
         val mapManager = MapManager(model.getCells(), logger, tileGridSize)
         val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
         val shuffledNeighbourCalculator = ShuffledNeighbourCalculator(randomGenerator, mapManager)
@@ -165,6 +177,7 @@ class MainActivity : AppCompatActivity() {
                 tileManager.redrawAllTiles()
             }
         }
+        val serializedCells = model.serializeCells()
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -172,6 +185,18 @@ class MainActivity : AppCompatActivity() {
         return super.onTouchEvent(event)
     }
 }
+
+//class MapSaver(Map<Coordinates, Cell>) {
+//
+//
+//    fun save() {
+//
+//    }
+//
+//    fun load() {
+//
+//    }
+//}
 
 object MainActivityHelper {
     fun createInitialState(gameStateManager: GameStateManager) {

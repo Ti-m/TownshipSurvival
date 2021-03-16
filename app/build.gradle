@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlinx-serialization'
 
 android {
     compileSdkVersion 30
@@ -45,8 +46,17 @@ dependencies {
     // Saved state module for ViewModel
     //implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.0"
     implementation 'com.otaliastudios:zoomlayout:1.7.1'
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0"
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'de.bechte.junit:junit-hierarchicalcontextrunner:4.12.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+}
+
+buildscript {
+    repositories { mavenCentral() }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
+    }
 }

@@ -1,8 +1,9 @@
 package com.example.settlers
 
-import java.io.Serializable
+import kotlinx.serialization.Serializable
 
 //CellBase handles the utility functions for proper drawing from the Cell.
+@Serializable
 open class CellBase(
     //Touched in Round x ignore this round for transports
     var touched: Boolean = false,
@@ -19,6 +20,7 @@ A building can request resources
 
 //This class is only manipulated by GameStateManger with GameState Objects.
 //Cell contains the game logic related data
+@Serializable
 data class Cell(
     var coordinates: Coordinates,
     var type: GroundType,
@@ -41,7 +43,9 @@ data class Cell(
     var animation: Animation? = null,
 ) : CellBase()
 
-data class Coordinates(val x: Int, val y: Int) : Serializable
+@Serializable
+data class Coordinates(val x: Int, val y: Int) : java.io.Serializable
+
 data class TargetCoordinates(val start: Coordinates, val path: List<Coordinates>, val destination: Coordinates)
 enum class GroundType { Water, Grass, Desert, Mountain }
 enum class Worker { Construction }

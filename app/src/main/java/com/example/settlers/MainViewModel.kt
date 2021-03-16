@@ -4,6 +4,10 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.settlers.terrain.MapGenerator
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
 
 /*
 * SavedStateHandle:
@@ -35,5 +39,27 @@ class MainViewModel : ViewModel() {
     fun getCells(): Map<Coordinates, Cell> {
         return cells!!
     //return savedStateHandle["cells"]!!
+    }
+
+    fun serializeCells(): String {
+        return CellSerializer.serializeCells(cells!!)
+    }
+
+}
+
+object CellSerializer {
+    fun serializeCells(cells: Map<Coordinates, Cell>): String {
+//        val module = SerializersModule {
+//            polymorphic(GameObject::class) {
+//                polymorphic(Resource::class) {
+//                    subclass(Wood::class)
+//                }
+//            }
+//        }
+
+        return Json {
+            allowStructuredMapKeys = true
+            //serializersModule = module
+        }.encodeToString(cells)
     }
 }
