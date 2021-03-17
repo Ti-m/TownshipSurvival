@@ -38,8 +38,9 @@ class MapSaverTest {
         val randomGenerator = TestDoubleRandom()
         val terrainInterpolator = MapGeneratorTest.TestInterpolator(randomGenerator)
         val mapGen = MapGenerator(terrainInterpolator, randomGenerator)
+        val keyValueStorage = TestDoubleKeyValueStorage()
 
-        sut = MapSaver(map, mapGen)
+        sut = MapSaver(map, mapGen, keyValueStorage)
     }
 
     @Test

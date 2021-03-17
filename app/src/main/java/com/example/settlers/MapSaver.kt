@@ -7,11 +7,12 @@ import kotlinx.serialization.json.Json
 
 class MapSaver(
     private val cells: MutableMap<Coordinates, Cell>,
-    private val mapGenerator: MapGenerator
-    ) {
-
-    //TODO Replace with SharedPreferences
-    private var storage = ""
+    private val mapGenerator: MapGenerator,
+    private val storage: KeyValueStorage
+) {
+    companion object {
+        private const val CONTINUE_GAME_STATE = "CONTINUE_GAME_STATE"
+    }
 
     fun newGame() {
         cells.clear()
@@ -19,12 +20,12 @@ class MapSaver(
     }
 
     fun save() {
-        storage = serializeCells(cells)
+        storage.setString(CONTINUE_GAME_STATE, serializeCells(cells))
     }
 
     fun load() {
         cells.clear()
-        cells.putAll(deserializeCells(storage))
+        cells.putAll(deserializeCells(storage.getString(CONTINUE_GAME_STATE)))
     }
 
     private val json = Json {

@@ -1,5 +1,6 @@
 package com.example.settlers
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -77,12 +78,13 @@ class MainActivity : AppCompatActivity() {
         val logger = DefaultLogger()
 
         val randomGenerator = Random
+        val keyValueStorage = DefaultKeyValueStorage(getPreferences(Context.MODE_PRIVATE))
         val mapGen = MapGenerator(TerrainInterpolator(randomGenerator), randomGenerator)
-        val mapSaver = MapSaver(model.cells, mapGen)
+        val mapSaver = MapSaver(model.cells, mapGen, keyValueStorage)
         if (model.cells.containsKey(Coordinates(0,0)).not()) {
             mapSaver.newGame()//TODO replace with splash screen
         }
-        //mapSaver.load()//TODO replace with splash screen
+//      mapSaver.load()//TODO replace with splash screen
         val mapManager = MapManager(model.cells, logger, tileGridSize)
         val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
         val shuffledNeighbourCalculator = ShuffledNeighbourCalculator(randomGenerator, mapManager)
