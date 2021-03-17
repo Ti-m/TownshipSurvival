@@ -14,7 +14,7 @@ data class MapGeneratorCell(
 )
 
 class MapGenerator(private val interpolator: TerrainInterpolator, private val randomGenerator: Random) {
-    fun createMap(size: Int): Map<Coordinates, Cell> {
+    fun createMap(size: Int): MutableMap<Coordinates, Cell> {
         val mapArray = Array(size) {
             Array<Double?>(size) {
                 0.0
@@ -27,8 +27,8 @@ class MapGenerator(private val interpolator: TerrainInterpolator, private val ra
 
         interpolator.interpolate(mapArray, size, 0.03, 0.0)
 
-        if (mapArray[(size/2-1)][size/2-1] == null) return mapOf()
-        var result = mutableMapOf<Coordinates, MapGeneratorCell>()
+        if (mapArray[(size/2-1)][size/2-1] == null) return mutableMapOf()
+        val result = mutableMapOf<Coordinates, MapGeneratorCell>()
         mapArray.forEachIndexed { indexX, array ->
             array.forEachIndexed { indexY, item ->
                 val coords = CoordinateTransformer.offsetToDouble(Coordinates(x= indexX, y = indexY))
@@ -67,7 +67,7 @@ class MapGenerator(private val interpolator: TerrainInterpolator, private val ra
                 this.textureVariant = randomGenerator.nextInt(0,2)
             }
         }
-        return cellresult
+        return cellresult.toMutableMap()
     }
 
     fun createTiles(

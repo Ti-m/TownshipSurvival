@@ -24,6 +24,9 @@ Infrasturucture
 * Save State on app Quit
 ** SaveStateHandle?
 ** Database?
+* Add Splashscreen
+** NewGame
+** ContinueGame
 
 Graphics
 * Add graphics - for in transport items

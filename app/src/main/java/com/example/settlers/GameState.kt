@@ -22,6 +22,8 @@ enum class Type {
 
 @Serializable
 sealed class GameObject
+// sealed makes it much easier to generate the serializer modules automatically. Unfortunately
+// this requires all subclasses in this file
 //https://kotlinlang.org/docs/sealed-classes.html
 //https://github.com/Kotlin/kotlinx.serialization/blob/0ba55a619343f58daeed8acae20361f0bdcb8b04/docs/polymorphism.md
 

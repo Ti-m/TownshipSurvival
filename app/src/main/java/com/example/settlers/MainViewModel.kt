@@ -21,45 +21,29 @@ import kotlinx.serialization.modules.polymorphic
 class MainViewModel : ViewModel() {
 
     //Contains the game state
-    private var cells: Map<Coordinates, Cell>? = null
-
-    //TODO replace MapGenerator injection with Hilt field injection?
-    fun initCells(mapGenerator: MapGenerator) {
-        if (cells == null) {
-            cells = mapGenerator.createMap(MainActivity.tileGridSize)
-        }
-//        val cells: Map<Coordinates, Cell>? = savedStateHandle["cells"]
+    val cells: MutableMap<Coordinates, Cell> = mutableMapOf()
+//
+//    //TODO replace MapGenerator injection with Hilt field injection?
+//    //This will be  handled in the SplashScreen Activity soon.
+//    fun initCells(mapGenerator: MapGenerator) {
 //        if (cells == null) {
-//            Log.i("MainViewModel", "Cells not in SavedStateHandle. Creating new ...")
-//            val fetched = mapGenerator.createMap(MainActivity.tileGridSize)
-//            savedStateHandle["cells"] = fetched
+//            cells = mapGenerator.createMap(MainActivity.tileGridSize)
 //        }
-    }
+////        val cells: Map<Coordinates, Cell>? = savedStateHandle["cells"]
+////        if (cells == null) {
+////            Log.i("MainViewModel", "Cells not in SavedStateHandle. Creating new ...")
+////            val fetched = mapGenerator.createMap(MainActivity.tileGridSize)
+////            savedStateHandle["cells"] = fetched
+////        }
+//    }
+//
+//    fun getCells(): MutableMap<Coordinates, Cell> {
+//        return cells!!
+//    //return savedStateHandle["cells"]!!
+//    }
+//
+//    fun serializeCells(): String {
+//        return CellSerializer.serializeCells(cells!!)
+//    }
 
-    fun getCells(): Map<Coordinates, Cell> {
-        return cells!!
-    //return savedStateHandle["cells"]!!
-    }
-
-    fun serializeCells(): String {
-        return CellSerializer.serializeCells(cells!!)
-    }
-
-}
-
-object CellSerializer {
-    fun serializeCells(cells: Map<Coordinates, Cell>): String {
-//        val module = SerializersModule {
-//            polymorphic(GameObject::class) {
-//                polymorphic(Resource::class) {
-//                    subclass(Wood::class)
-//                }
-//            }
-//        }
-
-        return Json {
-            allowStructuredMapKeys = true
-            //serializersModule = module
-        }.encodeToString(cells)
-    }
 }

@@ -8,7 +8,8 @@ import kotlin.math.log
 
 class GameRunLoop(
     private val gameStateManager: GameStateManager,
-    private val tileManager: TileManager
+    private val tileManager: TileManager,
+    private val mapSaver: MapSaver
 ) {
     companion object {
         private val TAG = "GameRunLoop"
@@ -25,6 +26,8 @@ class GameRunLoop(
         gameStateManager.tick()
         //Then redraw everything
         tileManager.redrawAllTiles()
+        //save after each round
+        mapSaver.save()
     }
 }
 

@@ -78,8 +78,12 @@ class MainActivity : AppCompatActivity() {
 
         val randomGenerator = Random
         val mapGen = MapGenerator(TerrainInterpolator(randomGenerator), randomGenerator)
-        model.initCells(mapGen)
-        val mapManager = MapManager(model.getCells(), logger, tileGridSize)
+        val mapSaver = MapSaver(model.cells, mapGen)
+        if (model.cells.containsKey(Coordinates(0,0)).not()) {
+            mapSaver.newGame()//TODO replace with splash screen
+        }
+        //mapSaver.load()//TODO replace with splash screen
+        val mapManager = MapManager(model.cells, logger, tileGridSize)
         val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
         val shuffledNeighbourCalculator = ShuffledNeighbourCalculator(randomGenerator, mapManager)
         val emptyCellFinder = EmptyCellFinder(mapManager, shuffledNeighbourCalculator)
@@ -103,37 +107,37 @@ class MainActivity : AppCompatActivity() {
         //MainActivityHelper.setAZombie(gameStateManager)
         //MainActivityHelper.setExplosion(gameStateManager)
 
-        val cTown = Coordinates(0,0)
-        val cRoad1 = Coordinates(2,0)
-        val cRoad2 = Coordinates(4,0)
-        val cRoad3 = Coordinates(5,1)
-//        val cLumber = Coordinates(1,1)
-//        val cFletcher1 = Coordinates(4,2)
-        val cLumberMill1 = Coordinates(6,0)
-        val tree1 = Coordinates(3,1)
-        val tree2 = Coordinates(7,1)
-        val cLumberMill2 = Coordinates(7,1)
-        val cLumberMill3 = Coordinates(6,2)
-        val tree3 = Coordinates(0,2)
-
-        gameStateManager.applyStates(listOf(
-            GameStateCreator.createTownhall(cTown),
-            GameStateCreator.createRoad(cRoad1),
-            GameStateCreator.createRoad(cRoad2),
-            GameStateCreator.createRoad(cRoad3),
-            GameStateCreator.createLumbermill(cLumberMill1),
-            GameStateCreator.createLumbermill(cLumberMill2),
-            GameStateCreator.createLumbermill(cLumberMill3),
-//            GameStateCreator.createLumberjack(cLumber),
-//            GameStateCreator.createFletcher(cFletcher1),
-            GameStateCreator.createTree(tree1),
-            GameStateCreator.createTree(tree2),
-            GameStateCreator.createTree(tree3),
-        ))
+//        val cTown = Coordinates(0,0)
+//        val cRoad1 = Coordinates(2,0)
+//        val cRoad2 = Coordinates(4,0)
+//        val cRoad3 = Coordinates(5,1)
+////        val cLumber = Coordinates(1,1)
+////        val cFletcher1 = Coordinates(4,2)
+//        val cLumberMill1 = Coordinates(6,0)
+//        val tree1 = Coordinates(3,1)
+//        val tree2 = Coordinates(7,1)
+//        val cLumberMill2 = Coordinates(7,1)
+//        val cLumberMill3 = Coordinates(6,2)
+//        val tree3 = Coordinates(0,2)
+//
+//        gameStateManager.applyStates(listOf(
+//            GameStateCreator.createTownhall(cTown),
+//            GameStateCreator.createRoad(cRoad1),
+//            GameStateCreator.createRoad(cRoad2),
+//            GameStateCreator.createRoad(cRoad3),
+//            GameStateCreator.createLumbermill(cLumberMill1),
+//            GameStateCreator.createLumbermill(cLumberMill2),
+//            GameStateCreator.createLumbermill(cLumberMill3),
+////            GameStateCreator.createLumberjack(cLumber),
+////            GameStateCreator.createFletcher(cFletcher1),
+//            GameStateCreator.createTree(tree1),
+//            GameStateCreator.createTree(tree2),
+//            GameStateCreator.createTree(tree3),
+//        ))
 
         val modeController = ModeController()
         val isLowDpi = resources.displayMetrics.density < 2
-        val tileManager = TileManager(tiles = mapGen.createTiles(this, model.getCells(), modeController, neighbourCalculator, isLowDpi))
+        val tileManager = TileManager(tiles = mapGen.createTiles(this, model.cells, modeController, neighbourCalculator, isLowDpi))
         val gw2 = GameWorld(tileManager = tileManager, context = this)
         //gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         gw2.layoutParams = ViewGroup.LayoutParams(gameBoardBorder + tileGridSize * flagDistance.toInt(), gameBoardBorder + tileGridSize * flagDistance.toInt())
@@ -151,7 +155,8 @@ class MainActivity : AppCompatActivity() {
 
         val gameRunLoop = GameRunLoop(
             tileManager = tileManager,
-            gameStateManager = gameStateManager
+            gameStateManager = gameStateManager,
+            mapSaver = mapSaver
         )
 
         val switchHandler = GameRunLoopControlHandler(gameRunLoop = gameRunLoop, handler = handler, log = logger)
@@ -177,7 +182,6 @@ class MainActivity : AppCompatActivity() {
                 tileManager.redrawAllTiles()
             }
         }
-        val serializedCells = model.serializeCells()
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -185,18 +189,6 @@ class MainActivity : AppCompatActivity() {
         return super.onTouchEvent(event)
     }
 }
-
-//class MapSaver(Map<Coordinates, Cell>) {
-//
-//
-//    fun save() {
-//
-//    }
-//
-//    fun load() {
-//
-//    }
-//}
 
 object MainActivityHelper {
     fun createInitialState(gameStateManager: GameStateManager) {
