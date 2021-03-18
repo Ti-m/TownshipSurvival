@@ -19,11 +19,10 @@ Refactor
 *** I.E. If a destruction of a building is requested, it deletes all items associated
 
 Infrasturucture
-* Save State onConfugurationChange
-** ViewModel
-* Save State on app Quit
-** SaveStateHandle?
-** Database?
+* DONE Save State onConfugurationChange
+** DONE ViewModel
+* DONE Save State after every round
+** DONE Serialized to SharedPreferences
 * Add Splashscreen
 ** NewGame
 ** ContinueGame
