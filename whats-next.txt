@@ -5,13 +5,13 @@ Bug
 ** at com.example.settlers.InspectDialogHandler.inspectCallback(BuildDialogHandler.kt:38)
 
 Refactor
-* Convert current MainActivity to GameFragment
-** COnvert StartActivity to StartFragment
-** New MainActivity should load the coreesponding fragments
-*** Launcher -> NoSave -> StartFragment
-*** Launcher -> Save -> GameFragment
-*** StartFragment -> click  NewGame -> GameFragment
-*** GameFragment -> click Menu -> Start Fragment
+* DONE Convert current MainActivity to GameFragment
+** DONE COnvert StartActivity to StartFragment
+** DONE New MainActivity should load the coreesponding fragments
+*** DONE Launcher -> NoSave -> StartFragment
+*** DONE Launcher -> Save -> GameFragment
+*** DONE StartFragment -> click  NewGame -> GameFragment
+*** DONE GameFragment -> click Menu -> Start Fragment
 * DONE Rename to Township Survival
 * DONE Save gamestate in a viewmodel to protect from configuration change
 * DONE Use onSaveInstanceState() as backup to handle system-initiated process death https://developer.android.com/topic/libraries/architecture/saving-states#onsaveinstancestate
@@ -26,6 +26,7 @@ Refactor
 *** I.E. If a destruction of a building is requested, it deletes all items associated
 
 Infrasturucture
+* Add BugerMenu for startMenu
 * DONE Save State onConfugurationChange
 ** DONE ViewModel
 * DONE Save State after every round

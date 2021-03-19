@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.settlers.*
 import com.example.settlers.databinding.ViewTopBarBinding
 import com.example.settlers.terrain.MapGenerator
@@ -40,7 +41,7 @@ class GameFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         //val baseLayout = layoutInflater.inflate(R.layout.activity_main, null)
         val constraintLayout = ConstraintLayout(requireActivity())
@@ -63,10 +64,7 @@ class GameFragment : Fragment() {
         val keyValueStorage = DefaultKeyValueStorage(requireActivity().getSharedPreferences("GameStateStorage", Context.MODE_PRIVATE))
         val mapGen = MapGenerator(TerrainInterpolator(randomGenerator), randomGenerator)
         val mapSaver = MapSaver(model.cells, mapGen, keyValueStorage)
-//        if (model.cells.containsKey(Coordinates(0,0)).not()) {
-//            mapSaver.newGame()//TODO replace with splash screen
-//        }
-        mapSaver.load()//TODO replace with splash screen
+
         val mapManager = MapManager(model.cells, logger, MainActivity.tileGridSize)
         val neighbourCalculator = HexagonNeighbourCalculator(mapManager)
         val shuffledNeighbourCalculator = ShuffledNeighbourCalculator(randomGenerator, mapManager)
@@ -145,6 +143,9 @@ class GameFragment : Fragment() {
         bindingViewTopBar.switchAutoPause.setOnCheckedChangeListener(switchHandler)
         bindingViewTopBar.stepButton.setOnClickListener(switchHandler)
         bindingViewTopBar.switchBuildMode.setOnCheckedChangeListener(modeController)
+        bindingViewTopBar.startMenuButton.setOnClickListener {
+            findNavController().navigate(GameFragmentDirections.actionGameFragmentToStartMenuFragment())
+        }
 
         val buildDialogHandler = BuildDialogHandler(gameStateManager)
 

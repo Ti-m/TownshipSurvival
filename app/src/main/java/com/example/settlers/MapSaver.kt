@@ -28,6 +28,11 @@ class MapSaver(
         cells.putAll(deserializeCells(storage.getString(CONTINUE_GAME_STATE)))
     }
 
+    fun delete() {
+        cells.clear()
+        save()
+    }
+
     fun isSaveAvailable() : Boolean {
         return cells.containsKey(Coordinates(0,0))
     }

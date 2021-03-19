@@ -2,6 +2,7 @@ package com.example.settlers
 
 import android.content.Context
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.example.settlers.terrain.MapGenerator
@@ -31,15 +32,23 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
+        val model: MainViewModel by viewModels()
+
+
         val randomGenerator = Random
         val keyValueStorage = DefaultKeyValueStorage(getSharedPreferences("GameStateStorage", Context.MODE_PRIVATE))
         val mapGen = MapGenerator(TerrainInterpolator(randomGenerator), randomGenerator)
-        val mapSaver = MapSaver(mutableMapOf(), mapGen, keyValueStorage)
-        mapSaver.load()
+        val mapSaver = MapSaver(model.cells, mapGen, keyValueStorage)
+
         if (mapSaver.isSaveAvailable()) {
             navController.navigate(LaunchScreenFragmentDirections.actionLaunchScreenFragmentToGameFragment())
         } else {
-            navController.navigate(LaunchScreenFragmentDirections.actionLaunchScreenFragmentToStartMenuFragment())
+            mapSaver.load()
+            if (mapSaver.isSaveAvailable()) {
+                navController.navigate(LaunchScreenFragmentDirections.actionLaunchScreenFragmentToGameFragment())
+            } else {
+                navController.navigate(LaunchScreenFragmentDirections.actionLaunchScreenFragmentToStartMenuFragment())
+            }
         }
     }
 }
