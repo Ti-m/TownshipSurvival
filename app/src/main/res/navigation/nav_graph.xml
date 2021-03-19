@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/launchScreenFragment">
+
+    <fragment
+        android:id="@+id/startMenuFragment"
+        android:name="com.example.settlers.ui.StartMenuFragment"
+        android:label="StartMenuFragment" >
+        <action
+            android:id="@+id/action_startMenuFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="com.example.settlers.ui.GameFragment"
+        android:label="game_fragment"
+        tools:layout="@layout/fragment_game" >
+        <action
+            android:id="@+id/action_gameFragment_to_startMenuFragment"
+            app:destination="@id/startMenuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/launchScreenFragment"
+        android:name="com.example.settlers.ui.LaunchScreenFragment"
+        android:label="fragment_launch_screen"
+        tools:layout="@layout/fragment_launch_screen" >
+        <action
+            android:id="@+id/action_launchScreenFragment_to_startMenuFragment"
+            app:destination="@id/startMenuFragment" />
+        <action
+            android:id="@+id/action_launchScreenFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </fragment>
+</navigation>

@@ -43,9 +43,9 @@ class BuildDialog : BaseDialog() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = AlertDialog.Builder(context)
-        val coordinates = (arguments!!.getSerializable(COORDINATES) as Coordinates)
+        val coordinates = (requireArguments().getSerializable(COORDINATES) as Coordinates)
         dialog.setTitle("Pick a building :: (x=${coordinates.x}, y=${coordinates.y})")
-        val items = arguments!!.getSerializable(ITEMS) as Array<String>
+        val items = requireArguments().getSerializable(ITEMS) as Array<String>
         dialog.setItems(items, object : DialogInterface.OnClickListener {
             override fun onClick(dialog: DialogInterface?, which: Int) {
                 callback.selectedCallback(availableBuildings[which], coordinates)
@@ -88,8 +88,8 @@ class InspectDialog : BaseDialog() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = AlertDialog.Builder(context)
-        val coordinates = (arguments!!.getSerializable(COORDINATES) as Coordinates)
-        val deliveryState = arguments!!.getSerializable(STOP_DELIVERY) as StopDeliveryState
+        val coordinates = (requireArguments().getSerializable(COORDINATES) as Coordinates)
+        val deliveryState = requireArguments().getSerializable(STOP_DELIVERY) as StopDeliveryState
         val deliveryText = when (deliveryState) {
             StopDeliveryState.Stopped -> "Resume Delivery"
             StopDeliveryState.Normal -> "Stop Delivery"

@@ -5,6 +5,13 @@ Bug
 ** at com.example.settlers.InspectDialogHandler.inspectCallback(BuildDialogHandler.kt:38)
 
 Refactor
+* Convert current MainActivity to GameFragment
+** COnvert StartActivity to StartFragment
+** New MainActivity should load the coreesponding fragments
+*** Launcher -> NoSave -> StartFragment
+*** Launcher -> Save -> GameFragment
+*** StartFragment -> click  NewGame -> GameFragment
+*** GameFragment -> click Menu -> Start Fragment
 * DONE Rename to Township Survival
 * DONE Save gamestate in a viewmodel to protect from configuration change
 * DONE Use onSaveInstanceState() as backup to handle system-initiated process death https://developer.android.com/topic/libraries/architecture/saving-states#onsaveinstancestate
@@ -23,9 +30,9 @@ Infrasturucture
 ** DONE ViewModel
 * DONE Save State after every round
 ** DONE Serialized to SharedPreferences
-* Add Splashscreen
-** NewGame
-** ContinueGame
+* DONE Add Splashscreen
+** DONE NewGame
+** DONE ContinueGame
 
 Graphics
 * Add graphics - for in transport items

@@ -28,6 +28,10 @@ class MapSaver(
         cells.putAll(deserializeCells(storage.getString(CONTINUE_GAME_STATE)))
     }
 
+    fun isSaveAvailable() : Boolean {
+        return cells.containsKey(Coordinates(0,0))
+    }
+
     private val json = Json {
         allowStructuredMapKeys = true
         //serializersModule = module
