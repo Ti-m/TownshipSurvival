@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/gameFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_game"
+        android:title="Game"/>
+    <item
+        android:id="@+id/statisticsFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_statistics"
+        android:title="Statistics"/>
+    <item
+        android:id="@+id/startMenuFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_menu"
+        android:title="Menu"/>
+</menu>

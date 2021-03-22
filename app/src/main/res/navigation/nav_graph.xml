@@ -21,6 +21,9 @@
         <action
             android:id="@+id/action_gameFragment_to_startMenuFragment"
             app:destination="@id/startMenuFragment" />
+        <action
+            android:id="@+id/action_gameFragment_to_statisticsFragment"
+            app:destination="@id/statisticsFragment" />
     </fragment>
     <fragment
         android:id="@+id/launchScreenFragment"
@@ -34,4 +37,9 @@
             android:id="@+id/action_launchScreenFragment_to_gameFragment"
             app:destination="@id/gameFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/statisticsFragment"
+        android:name="com.example.settlers.ui.StatisticsFragment"
+        android:label="fragment_statistics"
+        tools:layout="@layout/fragment_statistics" />
 </navigation>

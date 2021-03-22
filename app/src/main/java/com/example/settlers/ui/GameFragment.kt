@@ -143,10 +143,7 @@ class GameFragment : Fragment() {
         bindingViewTopBar.switchAutoPause.setOnCheckedChangeListener(switchHandler)
         bindingViewTopBar.stepButton.setOnClickListener(switchHandler)
         bindingViewTopBar.switchBuildMode.setOnCheckedChangeListener(modeController)
-        bindingViewTopBar.startMenuButton.setOnClickListener {
-            findNavController().navigate(GameFragmentDirections.actionGameFragmentToStartMenuFragment())
-        }
-
+        
         val buildDialogHandler = BuildDialogHandler(gameStateManager)
 
         //This Proxy keeps the TileManager out of the BuildDialogHandler
