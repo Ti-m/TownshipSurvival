@@ -1,16 +1,11 @@
 package com.example.settlers
 
-import android.content.Context
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.example.settlers.terrain.MapGenerator
-import com.example.settlers.terrain.TerrainInterpolator
 import com.example.settlers.ui.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,42 +29,5 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
         findViewById<BottomNavigationView>(R.id.bottom_navigation).setupWithNavController(navController)
-
-        val model: MainViewModel by viewModels()
-
-
-        val randomGenerator = Random
-        val keyValueStorage = DefaultKeyValueStorage(getSharedPreferences("GameStateStorage", Context.MODE_PRIVATE))
-        val mapGen = MapGenerator(TerrainInterpolator(randomGenerator), randomGenerator)
-        val mapSaver = MapSaver(model.cells, mapGen, keyValueStorage)
-
-        if (mapSaver.isSaveAvailable()) {
-            navController.navigate(LaunchScreenFragmentDirections.actionLaunchScreenFragmentToGameFragment())
-        } else {
-            mapSaver.load()
-            if (mapSaver.isSaveAvailable()) {
-                navController.navigate(LaunchScreenFragmentDirections.actionLaunchScreenFragmentToGameFragment())
-            } else {
-                navController.navigate(LaunchScreenFragmentDirections.actionLaunchScreenFragmentToStartMenuFragment())
-            }
-        }
-    }
-}
-
-object MainActivityHelper {
-    fun createInitialState(gameStateManager: GameStateManager) {
-        gameStateManager.applyStates(GameStateCreator.G1_L2_T3_unfinishedRoad())
-    }
-
-    fun setInitialSpawner(gameStateManager: GameStateManager, mapManager: MapManager) {
-        gameStateManager.applyState(GameStateCreator.createSpawner(mapManager.getSouthEastEdge()))
-    }
-
-    fun setAZombie(gameStateManager: GameStateManager) {
-        gameStateManager.applyState(GameStateCreator.createZombie(Coordinates(29,11)))
-    }
-
-    fun setExplosion(gameStateManager: GameStateManager) {
-        gameStateManager.applyState(GameStateCreator.createExplosion(Coordinates(9,9)))
     }
 }

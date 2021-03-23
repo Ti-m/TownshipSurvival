@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.settlers.*
 import com.example.settlers.databinding.FragmentStartMenuBinding
 import com.example.settlers.terrain.MapGenerator
@@ -36,12 +37,12 @@ class StartMenuFragment : Fragment() {
 
             mapSaver.newGame()
             mapSaver.save()
-            startActivity(Intent(requireActivity(), MainActivity::class.java))
+            findNavController().navigate(StartMenuFragmentDirections.actionStartMenuFragmentToGameFragment())
         }
 
         binding!!.continueGameButton.setOnClickListener {
             mapSaver.load()
-            startActivity(Intent(requireActivity(), MainActivity::class.java))
+            findNavController().navigate(StartMenuFragmentDirections.actionStartMenuFragmentToGameFragment())
         }
 
         binding!!.deleteButton.setOnClickListener {

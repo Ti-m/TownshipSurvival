@@ -3,6 +3,10 @@ Tasks - Open
 Bug
 * Click on inspect triggers: java.lang.Error: Invalid case - programming error
 ** at com.example.settlers.InspectDialogHandler.inspectCallback(BuildDialogHandler.kt:38)
+* Crash onConfigurationchane: Navigation will wieder beim Launchfragment sstarten. Ist aber nicht überall erreichbar
+** java.lang.RuntimeException: Unable to start activity ComponentInfo{com.example.settlers/com.example.settlers.MainActivity}: java.lang.IllegalArgumentException: Navigation action/destination com.example.settlers:id/action_launchScreenFragment_to_gameFragment cannot be found from the current destination Destination(com.example.settlers:id/gameFragment) label=game_fragment class=com.example.settlers.ui.GameFragment
+           at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:3270)
+** Should every screen loop to itself in navigation?
 
 Refactor
 * DONE Convert current MainActivity to GameFragment

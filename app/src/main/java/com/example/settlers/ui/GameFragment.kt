@@ -2,7 +2,6 @@ package com.example.settlers.ui
 
 import android.content.Context
 import android.graphics.Color
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,7 +12,6 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import com.example.settlers.*
 import com.example.settlers.databinding.ViewTopBarBinding
 import com.example.settlers.terrain.MapGenerator
@@ -21,16 +19,9 @@ import com.example.settlers.terrain.TerrainInterpolator
 import com.example.settlers.util.DefaultLogger
 import com.otaliastudios.zoom.ZoomApi
 import com.otaliastudios.zoom.ZoomLayout
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import kotlin.random.Random
 
 class GameFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = GameFragment()
-    }
 
     private lateinit var bindingViewTopBar: ViewTopBarBinding
 
