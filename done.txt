@@ -1,5 +1,37 @@
 Tasks - Done
 
+Bug
+* DONE Click on inspect triggers: java.lang.Error: Invalid case - programming error
+** DONE at com.example.settlers.InspectDialogHandler.inspectCallback(BuildDialogHandler.kt:38)
+* DONE Crash onConfigurationchane: Navigation will wieder beim Launchfragment sstarten. Ist aber nicht überall erreichbar
+** DONE java.lang.RuntimeException: Unable to start activity ComponentInfo{com.example.settlers/com.example.settlers.MainActivity}: java.lang.IllegalArgumentException: Navigation action/destination com.example.settlers:id/action_launchScreenFragment_to_gameFragment cannot be found from the current destination Destination(com.example.settlers:id/gameFragment) label=game_fragment class=com.example.settlers.ui.GameFragment
+           at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:3270)
+** DONE Should every screen loop to itself in navigation?
+
+Refactor
+* DONE Convert current MainActivity to GameFragment
+** DONE COnvert StartActivity to StartFragment
+** DONE New MainActivity should load the coreesponding fragments
+*** DONE Launcher -> NoSave -> StartFragment
+*** DONE Launcher -> Save -> GameFragment
+*** DONE StartFragment -> click  NewGame -> GameFragment
+*** DONE GameFragment -> click Menu -> Start Fragment
+* DONE Rename to Township Survival
+* DONE Save gamestate in a viewmodel to protect from configuration change
+* DONE Use onSaveInstanceState() as backup to handle system-initiated process death https://developer.android.com/topic/libraries/architecture/saving-states#onsaveinstancestate
+** DONE This does not work for the whole gamestate, because its to much data.
+* DONE Save GameState in Room
+
+Infrasturucture
+* DONE Add BugerMenu for startMenu
+* DONE Save State onConfugurationChange
+** DONE ViewModel
+* DONE Save State after every round
+** DONE Serialized to SharedPreferences
+* DONE Add Splashscreen
+** DONE NewGame
+** DONE ContinueGame
+
 Build
 * DONE Bug: After finishing construction, the materials in production are not removed.
 * DONE Implement Test testCreateSapwnerAtFarEdge
