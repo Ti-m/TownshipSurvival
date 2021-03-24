@@ -14,6 +14,20 @@ Refactor
 Infrasturucture
 
 Graphics
+* Building graphics
+** Lumberjack- normal
+** Lumberjack- construction
+** Fletcher - normal
+** Fletcher - construction
+** Tower - normal
+** Tower - construction
+** Pyramid - normal
+** Pyramid - construction
+** Forester - normal
+** Forester - construction
+** Spawner
+* Update Road graphics
+** All directions
 * Add graphics - for in transport items
 ** Wood
 ** Lumber
