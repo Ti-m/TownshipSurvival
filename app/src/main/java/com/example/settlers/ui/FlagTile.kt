@@ -49,7 +49,7 @@ class GraphicalFlagTile(
     private val lumber: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumber_1_16, null)
     private val stone: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.stone_1_16, null)
     private val wood: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.wood_1_16, null)
-    private val arrow: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.arrow_1_8, null)
+    private val arrow: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.arrow_1_16, null)
     private val rock: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.rock_1_32, null)
     private val grass: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.grass_1_64, null)
     private val desert: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.desert_1_64, null)
