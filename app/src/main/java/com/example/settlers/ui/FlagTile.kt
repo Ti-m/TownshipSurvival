@@ -43,6 +43,8 @@ class GraphicalFlagTile(
     private val lumbermillConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumbermill_construction_1_64, null)
     private val stonemason: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.stonemason_1_64, null)
     private val stonemasonConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.stonemason_construction_1_64, null)
+    private val pyramid: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.pyramid_1_64, null)
+    private val pyramidConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.pyramid_construction_1_64, null)
     private val spawner: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.spawner_1_32, null)
     private val zombie: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.zombie_1_32, null)
     private val tree1: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tree_1_32, null)
@@ -158,6 +160,14 @@ class GraphicalFlagTile(
             draw64(canvas, fletcher!!)
         } else {
             draw64(canvas, fletcherConstruction!!)
+        }
+    }
+
+    override fun drawPyramid(canvas: Canvas) {
+        if (cell.building!!.isConstructed()) {
+            draw64(canvas, pyramid!!)
+        } else {
+            draw64(canvas, pyramidConstruction!!)
         }
     }
 
