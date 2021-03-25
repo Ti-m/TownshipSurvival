@@ -37,6 +37,8 @@ class GraphicalFlagTile(
     private val towerConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_construction_1_32, null)
     private val lumberjack: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_1_64, null)
     private val lumberjackConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_construction_1_64, null)
+    private val forester: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.forester_1_64, null)
+    private val foresterConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.forester_construction_1_64, null)
     private val lumbermill: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumbermill_1_64, null)
     private val lumbermillConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumbermill_construction_1_64, null)
     private val stonemason: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.stonemason_1_64, null)
@@ -123,11 +125,17 @@ class GraphicalFlagTile(
 
     override fun drawLumberjack(canvas: Canvas) {
         if (cell.building!!.isConstructed()) {
-            lumberjack!!.bounds = canvas.clipBounds
-            lumberjack.draw(canvas)
+            draw64(canvas, lumberjack!!)
         } else {
-            lumberjackConstruction!!.bounds = canvas.clipBounds
-            lumberjackConstruction.draw(canvas)
+            draw64(canvas, lumberjackConstruction!!)
+        }
+    }
+
+    override fun drawForester(canvas: Canvas) {
+        if (cell.building!!.isConstructed()) {
+            draw64(canvas, forester!!)
+        } else {
+            draw64(canvas, foresterConstruction!!)
         }
     }
 
