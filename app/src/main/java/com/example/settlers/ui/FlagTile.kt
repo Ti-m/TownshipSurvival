@@ -31,10 +31,12 @@ class GraphicalFlagTile(
     private val roadSW: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_sw_32, null)
     private val roadSE: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_se_32, null)
     private val townhall: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.townhall_1_64, null)
+    private val fletcher: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.fletcher_1_64, null)
+    private val fletcherConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.fletcher_construction_1_64, null)
     private val tower: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_1_32, null)
     private val towerConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_construction_1_32, null)
-    private val lumberjack: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_1_32, null)
-    private val lumberjackConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_construction_1_32, null)
+    private val lumberjack: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_1_64, null)
+    private val lumberjackConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_construction_1_64, null)
     private val lumbermill: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumbermill_1_64, null)
     private val lumbermillConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumbermill_construction_1_64, null)
     private val stonemason: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.stonemason_1_64, null)
@@ -142,6 +144,14 @@ class GraphicalFlagTile(
             draw64(canvas, stonemason!!)
         } else {
             draw64(canvas, stonemasonConstruction!!)
+        }
+    }
+
+    override fun drawFletcher(canvas: Canvas) {
+        if (cell.building!!.isConstructed()) {
+            draw64(canvas, fletcher!!)
+        } else {
+            draw64(canvas, fletcherConstruction!!)
         }
     }
 
