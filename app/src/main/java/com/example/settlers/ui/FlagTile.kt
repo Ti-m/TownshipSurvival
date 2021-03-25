@@ -33,8 +33,8 @@ class GraphicalFlagTile(
     private val townhall: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.townhall_1_64, null)
     private val fletcher: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.fletcher_1_64, null)
     private val fletcherConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.fletcher_construction_1_64, null)
-    private val tower: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_1_32, null)
-    private val towerConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_construction_1_32, null)
+    private val tower: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_1_64, null)
+    private val towerConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_construction_1_64, null)
     private val lumberjack: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_1_64, null)
     private val lumberjackConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_construction_1_64, null)
     private val forester: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.forester_1_64, null)
@@ -115,11 +115,9 @@ class GraphicalFlagTile(
 
     override fun drawTower(canvas: Canvas) {
         if (cell.building!!.isConstructed()) {
-            tower!!.bounds = canvas.clipBounds
-            tower.draw(canvas)
+            draw64(canvas, tower!!)
         } else {
-            towerConstruction!!.bounds = canvas.clipBounds
-            towerConstruction.draw(canvas)
+            draw64(canvas, towerConstruction!!)
         }
     }
 
