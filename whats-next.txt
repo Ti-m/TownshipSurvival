@@ -1,6 +1,7 @@
 Tasks - Open
 
 Bug
+* Scrollable region needs to be expanded to south. Because the app bar blocks some space
 
 Refactor
 * MapManager/ TransportManager does to much stuff
@@ -15,25 +16,25 @@ Infrasturucture
 
 Graphics
 * Building graphics
-** Lumberjack- normal
-** Lumberjack- construction
-** Fletcher - normal
-** Fletcher - construction
-** Tower - normal
-** Tower - construction
-** Pyramid - normal
-** Pyramid - construction
-** Forester - normal
-** Forester - construction
+**DONE Lumberjack- normal
+**DONE Lumberjack- construction
+**DONE Fletcher - normal
+**DONE Fletcher - construction
+**DONE Tower - normal
+**DONE Tower - construction
+**DONE Pyramid - normal
+**DONE Pyramid - construction
+**DONE Forester - normal
+**DONE Forester - construction
 ** Spawner
-* Update Road graphics
-** All directions
-* Add graphics - for in transport items
-** Wood
-** Lumber
-** Stone
-** Arrow
-* Add ground graphics
+*DONE Update Road graphics
+**DONE All directions
+*DONE Add graphics - for in transport items
+**DONE Wood
+**DONE Lumber
+**DONE Stone
+**DONE Arrow
+*DONE Add ground graphics
 * Allow animated graphics.
 ** If automatic RunLoop is activated, there should be an inbetween step between all steps. In this step, only inbetween graphics are drawn
 1 - 0ms
