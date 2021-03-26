@@ -24,12 +24,12 @@ class GraphicalFlagTile(
 
     //TODO can these stay here? or init only once?
     //private val image: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.hexagon_outline_32, null)
-    private val roadNW: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_nw_32, null)
-    private val roadN: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_n_32, null)
-    private val roadNE: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_ne_32, null)
-    private val roadS: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_s_32, null)
-    private val roadSW: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_sw_32, null)
-    private val roadSE: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_se_32, null)
+    private val roadNW: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_nw_64, null)
+    private val roadN: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_n_64, null)
+    private val roadNE: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_ne_64, null)
+    private val roadS: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_s_64, null)
+    private val roadSW: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_sw_64, null)
+    private val roadSE: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_se_64, null)
     private val townhall: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.townhall_1_64, null)
     private val fletcher: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.fletcher_1_64, null)
     private val fletcherConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.fletcher_construction_1_64, null)
@@ -68,28 +68,22 @@ class GraphicalFlagTile(
         neighbours.forEach {
             when (it) {
                 RoadConnections.NorthWest -> {
-                    roadNW!!.bounds = canvas.clipBounds
-                    roadNW.draw(canvas)
+                    draw64(canvas, roadNW!!)
                 }
                 RoadConnections.North -> {
-                    roadN!!.bounds = canvas.clipBounds
-                    roadN.draw(canvas)
+                    draw64(canvas, roadN!!)
                 }
                 RoadConnections.NorthEast -> {
-                    roadNE!!.bounds = canvas.clipBounds
-                    roadNE.draw(canvas)
+                    draw64(canvas, roadNE!!)
                 }
                 RoadConnections.SouthEast -> {
-                    roadSE!!.bounds = canvas.clipBounds
-                    roadSE.draw(canvas)
+                    draw64(canvas, roadSE!!)
                 }
                 RoadConnections.South -> {
-                    roadS!!.bounds = canvas.clipBounds
-                    roadS.draw(canvas)
+                    draw64(canvas, roadS!!)
                 }
                 RoadConnections.SouthWest -> {
-                    roadSW!!.bounds = canvas.clipBounds
-                    roadSW.draw(canvas)
+                    draw64(canvas, roadSW!!)
                 }
             }
         }
@@ -172,8 +166,7 @@ class GraphicalFlagTile(
     }
 
     override fun drawSpawner(canvas: Canvas) {
-        spawner!!.bounds = canvas.clipBounds
-        spawner.draw(canvas)
+        draw64(canvas, spawner!!)
     }
 
     override fun drawTree(canvas: Canvas) {
