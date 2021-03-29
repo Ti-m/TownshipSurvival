@@ -46,7 +46,7 @@ class GraphicalFlagTile(
     private val pyramid: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.pyramid_1_64, null)
     private val pyramidConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.pyramid_construction_1_64, null)
     private val spawner: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.spawner_1_64, null)
-    private val zombie: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.zombie_1_32, null)
+    private val zombie: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.zombie_1_64, null)
     private val tree1: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tree_1_32, null)
     private val tree2: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tree_2_32, null)
     private val palm: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.palm_1_32, null)

@@ -26,7 +26,8 @@ Graphics
 **DONE Pyramid - construction
 **DONE Forester - normal
 **DONE Forester - construction
-** Spawner
+** DONE Spawner
+** Zombie
 *DONE Update Road graphics
 **DONE All directions
 *DONE Add graphics - for in transport items
