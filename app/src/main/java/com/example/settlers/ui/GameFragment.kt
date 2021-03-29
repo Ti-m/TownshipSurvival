@@ -113,7 +113,10 @@ class GameFragment : Fragment() {
         val tileManager = TileManager(tiles = mapGen.createTiles(requireActivity(), model.cells, modeController, neighbourCalculator, isLowDpi))
         val gw2 = GameWorld(tileManager = tileManager, context = requireActivity())
         //gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        gw2.layoutParams = ViewGroup.LayoutParams(MainActivity.gameBoardBorder + MainActivity.tileGridSize * MainActivity.flagDistance.toInt(), MainActivity.gameBoardBorder + MainActivity.tileGridSize * MainActivity.flagDistance.toInt())
+        gw2.layoutParams = ViewGroup.LayoutParams(
+            MainActivity.gameBoardBorderWidth + MainActivity.tileGridSize * MainActivity.flagDistance.toInt(),
+            MainActivity.gameBoardBorderHeight + MainActivity.tileGridSize * MainActivity.flagDistance.toInt()
+        )
 //        gw2.setBackgroundColor(Color.parseColor("#aaaaaa"))
         zoomingLayout.addView(gw2)
         constraintLayout.addView(topBar)

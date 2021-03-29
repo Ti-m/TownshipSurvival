@@ -1,7 +1,7 @@
 Tasks - Open
 
 Bug
-* Scrollable region needs to be expanded to south. Because the app bar blocks some space
+* DONE Scrollable region needs to be expanded to south. Because the app bar blocks some space
 
 Refactor
 * MapManager/ TransportManager does to much stuff
@@ -27,7 +27,7 @@ Graphics
 **DONE Forester - normal
 **DONE Forester - construction
 ** DONE Spawner
-** Zombie
+** DONE Zombie
 *DONE Update Road graphics
 **DONE All directions
 *DONE Add graphics - for in transport items

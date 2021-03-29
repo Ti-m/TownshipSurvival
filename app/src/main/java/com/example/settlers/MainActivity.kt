@@ -14,7 +14,8 @@ class MainActivity : AppCompatActivity() {
         val flagDistance = 64.0f
         val flagDiameter = flagDistance / 40
         val tileGridSize = 33
-        val gameBoardBorder = (4 * flagDistance).toInt()
+        val gameBoardBorderWidth = (4 * flagDistance).toInt()
+        val gameBoardBorderHeight = 2 * (4 * flagDistance).toInt()
     }
 
     lateinit var buildDialogClickHandler: BuildDialogCallback
