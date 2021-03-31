@@ -39,6 +39,7 @@ class GraphicalFlagTile(
     private val tower: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_1_64, null)
     private val towerConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_construction_1_64, null)
     private val lumberjack: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_1_64, null)
+    private val lumberjack_alt: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_2_64, null)
     private val lumberjackConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_construction_1_64, null)
     private val forester: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.forester_1_64, null)
     private val foresterConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.forester_construction_1_64, null)
@@ -120,69 +121,57 @@ class GraphicalFlagTile(
         draw64(canvas, mountain!!)
     }
 
+    private fun drawBuildingGraphic(canvas: Canvas, drawableNormal: Drawable, drawableConstruction: Drawable) {
+        if (cell.building!!.isConstructed()) {
+            draw64(canvas, drawableNormal)
+        } else {
+            draw64(canvas, drawableConstruction)
+        }
+    }
+
+    private fun withAlternativeGraphic(canvas: Canvas, drawableNormal: Drawable, drawableNormalAlternative: Drawable, drawableConstruction: Drawable) {
+        if (cell.building!!.isConstructed()) {
+            calcGraphic()
+            if (graphicAlt == GraphicAlt.One) {
+                draw64(canvas, drawableNormal)
+            } else { // GraphicAlt.Two
+                draw64(canvas, drawableNormalAlternative)
+            }
+        } else {
+            draw64(canvas, drawableConstruction)
+        }
+    }
+
     override fun drawTownhall(canvas: Canvas) {
         draw64(canvas, townhall!!)
     }
 
     override fun drawTower(canvas: Canvas) {
-        if (cell.building!!.isConstructed()) {
-            draw64(canvas, tower!!)
-        } else {
-            draw64(canvas, towerConstruction!!)
-        }
+        drawBuildingGraphic(canvas, tower!!, towerConstruction!!)
     }
 
     override fun drawLumberjack(canvas: Canvas) {
-        if (cell.building!!.isConstructed()) {
-            draw64(canvas, lumberjack!!)
-        } else {
-            draw64(canvas, lumberjackConstruction!!)
-        }
+        withAlternativeGraphic(canvas, lumberjack!!, lumberjack_alt!!, lumberjackConstruction!!)
     }
 
     override fun drawForester(canvas: Canvas) {
-        if (cell.building!!.isConstructed()) {
-            draw64(canvas, forester!!)
-        } else {
-            draw64(canvas, foresterConstruction!!)
-        }
+        drawBuildingGraphic(canvas, forester!!, foresterConstruction!!)
     }
 
     override fun drawLumbermill(canvas: Canvas) {
-        if (cell.building!!.isConstructed()) {
-            calcGraphic()
-            if (graphicAlt == GraphicAlt.One) {
-                draw64(canvas, lumbermill!!)
-            } else { // GraphicAlt.Two
-                draw64(canvas, lumbermill_alt!!)
-            }
-        } else {
-            draw64(canvas, lumbermillConstruction!!)
-        }
+        withAlternativeGraphic(canvas, lumbermill!!, lumbermill_alt!!, lumbermillConstruction!!)
     }
 
     override fun drawStoneMason(canvas: Canvas) {
-        if (cell.building!!.isConstructed()) {
-            draw64(canvas, stonemason!!)
-        } else {
-            draw64(canvas, stonemasonConstruction!!)
-        }
+        drawBuildingGraphic(canvas, stonemason!!, stonemasonConstruction!!)
     }
 
     override fun drawFletcher(canvas: Canvas) {
-        if (cell.building!!.isConstructed()) {
-            draw64(canvas, fletcher!!)
-        } else {
-            draw64(canvas, fletcherConstruction!!)
-        }
+        drawBuildingGraphic(canvas, fletcher!!, fletcherConstruction!!)
     }
 
     override fun drawPyramid(canvas: Canvas) {
-        if (cell.building!!.isConstructed()) {
-            draw64(canvas, pyramid!!)
-        } else {
-            draw64(canvas, pyramidConstruction!!)
-        }
+        drawBuildingGraphic(canvas, pyramid!!, pyramidConstruction!!)
     }
 
     override fun drawSpawner(canvas: Canvas) {
