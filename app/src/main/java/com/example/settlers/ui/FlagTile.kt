@@ -12,6 +12,9 @@ import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import com.example.settlers.*
 
+//Which variant of the texture will be shown
+enum class GraphicAlt { One, Two }
+
 //Only used from code
 @SuppressLint("ViewConstructor")
 class GraphicalFlagTile(
@@ -19,7 +22,7 @@ class GraphicalFlagTile(
     cell: Cell,
     modeController: ModeController,
     private val neighbourCalculator: HexagonNeighbourCalculator,
-    private val isLowDpi: Boolean
+    isLowDpi: Boolean,
 ) : FlagTile(context, cell, modeController, isLowDpi) {
 
     //TODO can these stay here? or init only once?
@@ -40,6 +43,7 @@ class GraphicalFlagTile(
     private val forester: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.forester_1_64, null)
     private val foresterConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.forester_construction_1_64, null)
     private val lumbermill: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumbermill_1_64, null)
+    private val lumbermill_alt: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumbermill_2_64, null)
     private val lumbermillConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumbermill_construction_1_64, null)
     private val stonemason: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.stonemason_1_64, null)
     private val stonemasonConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.stonemason_construction_1_64, null)
@@ -61,6 +65,17 @@ class GraphicalFlagTile(
     private val desert: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.desert_1_64, null)
     private val water: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.water_1_64, null)
     private val mountain: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.mountain_1_64, null)
+
+    private var graphicAlt = GraphicAlt.One
+
+    //TODO ddas hier in eine testbare klasse extrahieren?
+    private fun calcGraphic() {
+        graphicAlt = if (cell.building!!.isProductionInProgress() && graphicAlt == GraphicAlt.One) {
+            GraphicAlt.Two
+        } else {
+            GraphicAlt.One
+        }
+    }
 
     override fun drawRoad(canvas: Canvas) {
 
@@ -135,7 +150,12 @@ class GraphicalFlagTile(
 
     override fun drawLumbermill(canvas: Canvas) {
         if (cell.building!!.isConstructed()) {
-            draw64(canvas, lumbermill!!)
+            calcGraphic()
+            if (graphicAlt == GraphicAlt.One) {
+                draw64(canvas, lumbermill!!)
+            } else { // GraphicAlt.Two
+                draw64(canvas, lumbermill_alt!!)
+            }
         } else {
             draw64(canvas, lumbermillConstruction!!)
         }

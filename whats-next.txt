@@ -15,7 +15,9 @@ Refactor
 Infrasturucture
 
 Graphics
-* Building graphics
+* Two Step graphics: One idea to create some life in the graphics is to animate them
+** Create a slightly different second picture which alternates every half second
+* DONE Building graphics
 **DONE Lumberjack- normal
 **DONE Lumberjack- construction
 **DONE Fletcher - normal

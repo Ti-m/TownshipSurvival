@@ -1,5 +1,6 @@
 package com.example.settlers
 
+import com.example.settlers.ui.GraphicAlt
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -39,6 +39,7 @@ class MapSaver(
 
     private val json = Json {
         allowStructuredMapKeys = true
+        //ignoreUnknownKeys = true//Remove obsolete keys
         //serializersModule = module
     }
 

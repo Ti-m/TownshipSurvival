@@ -140,11 +140,14 @@ class GameFragment : Fragment() {
         
         val buildDialogHandler = BuildDialogHandler(gameStateManager)
 
+        val drawLoop = DrawLoop(gameRunLoop, handler, logger)
+        drawLoop.start()
+
         //This Proxy keeps the TileManager out of the BuildDialogHandler
         (requireActivity() as MainActivity).buildDialogClickHandler = object : BuildDialogCallback {
             override fun selectedCallback(selectedBuilding: Building, coordinates: Coordinates) {
                 buildDialogHandler.selectedCallback(selectedBuilding, coordinates)
-                tileManager.redrawAllTiles()
+                gameRunLoop.tickGraphics()
             }
         }
 
@@ -153,7 +156,7 @@ class GameFragment : Fragment() {
         (requireActivity() as MainActivity).inspectDialogClickHandler = object : InspectDialogCallback {
             override fun inspectCallback(coordinates: Coordinates, stopDelivery: StopDeliveryState) {
                 inspectDialogHandler.inspectCallback(coordinates, stopDelivery)
-                tileManager.redrawAllTiles()
+                gameRunLoop.tickGraphics()
             }
         }
 

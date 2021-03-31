@@ -4,7 +4,6 @@ import android.os.Handler
 import android.view.View
 import android.widget.CompoundButton
 import com.example.settlers.util.Logger
-import kotlin.math.log
 
 class GameRunLoop(
     private val gameStateManager: GameStateManager,
@@ -12,43 +11,44 @@ class GameRunLoop(
     private val mapSaver: MapSaver
 ) {
     companion object {
-        private val TAG = "GameRunLoop"
+        private const val TAG = "GameRunLoop"
     }
 
     private var tickCount: Long = 0L
 
-    fun tick() {
+    fun tickProgress() {
         tickCount +=1
         if (tickCount % 200 == 0L) {
             gameStateManager.setNextSpawner()
         }
         //First calculate a new gamestate
         gameStateManager.tick()
-        //Then redraw everything
-        tileManager.redrawAllTiles()
         //save after each round
         mapSaver.save()
+    }
+
+    fun tickGraphics() {
+        tileManager.redrawAllTiles()
     }
 }
 
 class GameRunLoopControlHandler(
     private val gameRunLoop: GameRunLoop,
     private val handler: Handler,
-    private val log: Logger
-) : CompoundButton.OnCheckedChangeListener,
-    View.OnClickListener {
+    private val log: Logger,
+) : CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
     companion object {
-        private val TAG = "GameRunLoop"
-        val delay = 1000L
+        private const val TAG = "GameRunLoopControlHandler"
+        private const val delay = 1000L
     }
 
-    var keepRunning = true
+    private var keepRunning = true
 
-    val loop = object : Runnable {
+    private val loop = object : Runnable {
         override fun run() {
-                log.logi(TAG, "every second")
-                gameRunLoop.tick()
+                log.logi(TAG, "progressLoop")
+                gameRunLoop.tickProgress()
             if (keepRunning) {
                 handler.postDelayed(this, delay)
             }
@@ -67,7 +67,29 @@ class GameRunLoopControlHandler(
 
     //View.OnClickListener
     override fun onClick(v: View?) {
-        gameRunLoop.tick()
+        gameRunLoop.tickProgress()
+    }
+}
+
+class DrawLoop(
+    private val gameRunLoop: GameRunLoop,
+    private val handler: Handler,
+    private val log: Logger,
+) {
+    companion object {
+        private const val TAG = "DrawLoop"
+        private const val delay = 1000L
     }
 
+    private val loop = object : Runnable {
+        override fun run() {
+            log.logi(TAG, "drawLoop")
+            gameRunLoop.tickGraphics()
+            handler.postDelayed(this, delay)
+        }
+    }
+
+    fun start() {
+        handler.postDelayed(loop, delay)
+    }
 }
