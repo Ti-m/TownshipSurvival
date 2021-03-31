@@ -42,6 +42,7 @@ class GraphicalFlagTile(
     private val lumberjack_alt: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_2_64, null)
     private val lumberjackConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumberjack_construction_1_64, null)
     private val forester: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.forester_1_64, null)
+    private val forester_alt: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.forester_2_64, null)
     private val foresterConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.forester_construction_1_64, null)
     private val lumbermill: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumbermill_1_64, null)
     private val lumbermill_alt: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumbermill_2_64, null)
@@ -155,7 +156,7 @@ class GraphicalFlagTile(
     }
 
     override fun drawForester(canvas: Canvas) {
-        drawBuildingGraphic(canvas, forester!!, foresterConstruction!!)
+        withAlternativeGraphic(canvas, forester!!, forester_alt!!, foresterConstruction!!)
     }
 
     override fun drawLumbermill(canvas: Canvas) {
