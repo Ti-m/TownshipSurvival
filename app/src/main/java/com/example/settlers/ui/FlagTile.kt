@@ -35,6 +35,7 @@ class GraphicalFlagTile(
     private val roadSE: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.road_se_64, null)
     private val townhall: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.townhall_1_64, null)
     private val fletcher: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.fletcher_1_64, null)
+    private val fletcher_alt: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.fletcher_2_64, null)
     private val fletcherConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.fletcher_construction_1_64, null)
     private val tower: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_1_64, null)
     private val towerConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.tower_construction_1_64, null)
@@ -48,6 +49,7 @@ class GraphicalFlagTile(
     private val lumbermill_alt: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumbermill_2_64, null)
     private val lumbermillConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.lumbermill_construction_1_64, null)
     private val stonemason: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.stonemason_1_64, null)
+    private val stonemason_alt: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.stonemason_2_64, null)
     private val stonemasonConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.stonemason_construction_1_64, null)
     private val pyramid: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.pyramid_1_64, null)
     private val pyramidConstruction: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.pyramid_construction_1_64, null)
@@ -164,11 +166,11 @@ class GraphicalFlagTile(
     }
 
     override fun drawStoneMason(canvas: Canvas) {
-        drawBuildingGraphic(canvas, stonemason!!, stonemasonConstruction!!)
+        withAlternativeGraphic(canvas, stonemason!!, stonemason_alt!!, stonemasonConstruction!!)
     }
 
     override fun drawFletcher(canvas: Canvas) {
-        drawBuildingGraphic(canvas, fletcher!!, fletcherConstruction!!)
+        withAlternativeGraphic(canvas, fletcher!!, fletcher_alt!!, fletcherConstruction!!)
     }
 
     override fun drawPyramid(canvas: Canvas) {

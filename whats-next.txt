@@ -17,8 +17,8 @@ Infrasturucture
 Graphics
 * Two Step graphics: One idea to create some life in the graphics is to animate them
 ** DONECreate a slightly different second picture which alternates every second
-** Fletcher
-** Stonemason
+** DONE Fletcher
+** DONE Stonemason
 * DONE Building graphics
 **DONE Lumberjack- normal
 **DONE Lumberjack- construction
