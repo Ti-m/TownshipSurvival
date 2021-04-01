@@ -15,7 +15,7 @@ Refactor
 Infrasturucture
 
 Graphics
-* Two Step graphics: One idea to create some life in the graphics is to animate them
+* DONE Two Step graphics: One idea to create some life in the graphics is to animate them
 ** DONECreate a slightly different second picture which alternates every second
 ** DONE Fletcher
 ** DONE Stonemason
@@ -40,13 +40,10 @@ Graphics
 **DONE Stone
 **DONE Arrow
 *DONE Add ground graphics
-* Allow animated graphics.
-** If automatic RunLoop is activated, there should be an inbetween step between all steps. In this step, only inbetween graphics are drawn
-1 - 0ms
-i - 500ms
-2 - 1000ms does it look weird, if the animation is changed here?
-i - 1500ms
-3 - 2000ms
+* DONE Allow animated graphics.
+** DONE If automatic RunLoop is activated, there should be an in between steps between all steps. In this steps, only in between graphics are drawn
+DONE 1 - 0ms
+DONE 2 - 1000ms
 * DONE Add Animation infrastucture
 ** DONE Add 3 tick Explosion animation
 ** Make a nice flame/explosion icon
