@@ -176,6 +176,8 @@ sealed class Building : GameObject() {
 
     //Stop delivery of items
     var stopDelivery: Boolean = false
+
+    abstract val housingLevel: Int?
 }
 @Serializable
 @SerialName("Townhall")
@@ -195,6 +197,8 @@ class Townhall : Building() {
     override val requiresProduction: MutableList<Resource> = mutableListOf()
 
     override val offers: MutableList<Resource> = mutableListOf(Lumber, Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone)
+
+    override val housingLevel: Int? = null
 }
 
 @Serializable
@@ -215,6 +219,7 @@ class Lumberjack : Building() {
 
     override val offers: List<Resource> = listOf()
 
+    override val housingLevel: Int = 1
 }
 
 @Serializable
@@ -235,6 +240,7 @@ class Stonemason : Building() {
 
     override val offers: List<Resource> = listOf()
 
+    override val housingLevel: Int = 1
 }
 
 @Serializable
@@ -255,6 +261,7 @@ class Forester : Building() {
 
     override val offers: MutableList<Resource> = mutableListOf()
 
+    override val housingLevel: Int = 1
 }
 
 @Serializable
@@ -274,6 +281,8 @@ class Road : Building() {
     override val requiresProduction: List<Resource> = listOf()
 
     override val offers: MutableList<Resource> = mutableListOf()
+
+    override val housingLevel: Int? = null
 }
 
 @Serializable
@@ -293,6 +302,8 @@ class Tower : Building() {
 
     override val offers: MutableList<Resource> = mutableListOf()
     val range = 3
+
+    override val housingLevel: Int = 2
 }
 
 @Serializable
@@ -311,6 +322,7 @@ class Spawner : Building() {
     override val requiresProduction: List<Resource> = listOf()
     override val offers: List<Resource> = listOf()
 
+    override val housingLevel: Int? = null
 }
 
 @Serializable
@@ -328,6 +340,8 @@ class Fletcher : Building() {
     override val requiresConstruction: List<Resource> = listOf(Lumber, Lumber, Stone)
     override val requiresProduction: List<Resource> = listOf(Wood)
     override val offers: List<Resource> = listOf()
+
+    override val housingLevel: Int = 2
 }
 
 @Serializable
@@ -345,6 +359,8 @@ class Lumbermill : Building() {
     override val requiresConstruction: List<Resource> = listOf(Lumber, Lumber, Stone)
     override val requiresProduction: List<Resource> = listOf(Wood)
     override val offers: List<Resource> = listOf()
+
+    override val housingLevel: Int = 2
 }
 
 @Serializable
@@ -366,6 +382,8 @@ class Pyramid : Building() {
     override val requiresProduction: List<Resource> = listOf()
 
     override val offers: List<Resource> = listOf()
+
+    override val housingLevel: Int? = null
 }
 
 /////////////////////////

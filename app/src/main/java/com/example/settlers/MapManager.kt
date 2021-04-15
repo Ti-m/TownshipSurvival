@@ -258,7 +258,29 @@ open class MapManager(
     private fun Map<Coordinates, Cell>.filterForOutsideResourcesCreatingProductionBuildings(): Map<Coordinates, Cell> {
         return filterValues { it.building!!.isWorldResourceCreatingProductionBuilding() }
     }
+
+    fun getHousingDemand(): HousingDemand {
+        val buildings = getCellsWithBuildings().filterForFinishedConstruction()
+        var lvl1 = 0
+        var lvl2 = 0
+        var lvl3 = 0
+        buildings.forEach { (_, cell) ->
+            when (cell.building!!.housingLevel) {
+                1 -> lvl1++
+                2 -> lvl2++
+                3 -> lvl3++
+                null -> {}//nothing
+                else -> if (BuildConfig.DEBUG) {
+                    error("Assertion failed")
+                }
+            }
+        }
+
+        return HousingDemand(lvl1, lvl2, lvl3)
+    }
 }
+
+data class HousingDemand(val lvl1: Int, val lvl2: Int, val lvl3: Int)
 
 class MapManagerPreparedForTest(
     cells: Map<Coordinates, Cell>,

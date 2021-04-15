@@ -1,7 +1,114 @@
 Tasks - Open
 
+The Gameloop needs some depth:
+* Add workers for buildings
+** Need luxurys like in Anno
+** With housing like in Anno and upgradeable buildings
+* A house supports 5 persons
+** Each building needs a worker
+** They live in houses
+*** Before production, it is checked if a house is available - Every time
+**** Maybe do the calculation twice: mark a building everytime it gets a worker assigned.
+***** First use all marked buildings, then fill the remaining ones.
+***** This way it does not flicker because of the order of the algorithm, if less space is available then needed.
+***** (Bonus: maybe use this for transportation too. Prefer buildings where the transports is already in progress. to prevent rerouting of items.)
+**** This way it does not need to be checked every time once a building is deleted or it's downgraded
+**** A slot is blocked inside a house
+**** If a building is suspended, no space in a house is consumed
+
+** Houses get luxury's delivered
+** A house can be upgraded if luxury resources are available
+*** Takes 10 ticks
+*** Needs to be activated actively by hand
+** A house consumes necessary luxury's every  50 Ticks
+*** If not available, it is downgraded. This is instant
+** Supports improved workers
+*** lvl 1 House supports 2 Lvl 1 workers and 1 lvl 2 workers
+*** Lvl 2 House supports 2 lvl 2 workers and 1 lvl 3 workers - Needs 1 Fish as luxury
+*** Lvl 3 House supports 2 lvl 3 workers and 1 lvl 4 workers - Needs 1 Steak and 1 Goldring as luxury
+Vielleicht hier die Zahlen noch ändern
+Irgendwie wirkt Gold auch zu früh als Luxusgut
+
+* Housing
+1 Buildable Houses
+2 Contain lists of buildings which workers are housed
+3 Need maintenance resources. i.e. Food, Beer, Cloth ..
+
+* Worker lvls
+Townhall --
+Lumberjack - 1
+Forester - 1
+Stonemason - 1
+Fletcher - 2
+Lumbermill - 2
+Tower - 2
+Road --
+Pyramid --
+
+Fisherman - 1
+Pig Farmer - 2
+Wheat farmer - 2
+Butcher - 2
+Gold miner - 3
+Coal Miner - 3
+Iron Miner - 4
+Smelter - 4
+Jewler - 3
+
+Production chains:
+Building     | produces | requirement    | Needed by
+--------------------------------------------
+Fisherman    | Fish     | water          | House
+
+Wheat farmer | Wheat    | grassland      | Pig farmer
+Pig farmer   | Pigs     | wheat          | Butcher
+Butcher      | Steaks   | pigs           | House
+
+Gold miner   | gold ore | mountain       | Jewler
+Coal miner   | coal     | mountain       | Jewler
+Jewler       | Goldring | gold ore, coal | House
+
+
+Iron for pyramid?
+
+1 pyramid
+1 fletcher
+2 forester
+2 lumberjack
+1 lumbermill
+1 smelter
+1 iron mine
+2 coal mine
+4 tower
+1 pig farmer
+1 wheat farmer
+1 butcher
+1 gold mine
+1 jeweler
+2 fisher
+
+3 lvl 1 house
+4 lvl 2 house
+2 lvl 3 house
+
+lvl 1 ||||||
+lvl 2 |||||||||
+lvl 3 ||||
+lvl 4 ||
+
+--------------------------------------
+
 Bug
 * DONE Scrollable region needs to be expanded to south. Because the app bar blocks some space
+
+Statistics
+* Create a function, which calculates the housing demand for all buildings
+* Create a function, which calculates the overall luxury demand for all houses
+** Create a function, which counts buildings of a specific type
+
+* Create a function which counts items in transport
+* Create a function which counts items in storage
+* Create a function which counts items in production
 
 Refactor
 * MapManager/ TransportManager does to much stuff
@@ -15,6 +122,7 @@ Refactor
 Infrasturucture
 
 Graphics
+Ideas: https://imgur.com/t/rts/swDzaNG
 * DONE Two Step graphics: One idea to create some life in the graphics is to animate them
 ** DONECreate a slightly different second picture which alternates every second
 ** DONE Fletcher
