@@ -104,7 +104,7 @@ Bug
 Statistics
 * Create a function, which calculates the housing demand for all buildings
 * Create a function, which calculates the overall luxury demand for all houses
-** Create a function, which counts buildings of a specific type
+** D Create a function, which counts buildings of a specific type
 
 * Create a function which counts items in transport
 * Create a function which counts items in storage

@@ -134,6 +134,15 @@ open class MapManager(
         return filterValues { it.building?.isConstructed() ?: false }
     }
 
+    private fun Map<Coordinates, Cell>.filterForLumberjacks(): Map<Coordinates, Cell> {
+        return filterValues { it.building is Lumberjack }
+    }
+
+    private fun Map<Coordinates, Cell>.filterForLumbermills(): Map<Coordinates, Cell> {
+        return filterValues { it.building is Lumbermill }
+    }
+
+
     fun getCellsWithBuildings(): Map<Coordinates, Cell> {
         return cells.filterValues { it.building != null }
     }
@@ -277,6 +286,30 @@ open class MapManager(
         }
 
         return HousingDemand(lvl1, lvl2, lvl3)
+    }
+
+    fun getFinishedLumberjacksCount(): Int {
+        return getAllLumberjacks().filterForFinishedConstruction().count()
+    }
+
+    fun getUnfinishedLumberjacksCount(): Int {
+        return getAllLumberjacks().filterForUnfinishedConstruction().count()
+    }
+
+    private fun getAllLumberjacks(): Map<Coordinates, Cell> {
+        return getCellsWithBuildings().filterForLumberjacks()
+    }
+
+    fun getFinishedLumbermillsCount(): Int {
+        return getAllLumbermills().filterForFinishedConstruction().count()
+    }
+
+    fun getUnfinishedLumbermillsCount(): Int {
+        return getAllLumbermills().filterForUnfinishedConstruction().count()
+    }
+
+    private fun getAllLumbermills(): Map<Coordinates, Cell> {
+        return getCellsWithBuildings().filterForLumbermills()
     }
 }
 

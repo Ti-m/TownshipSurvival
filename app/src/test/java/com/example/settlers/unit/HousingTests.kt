@@ -79,4 +79,48 @@ class HousingTests {
 
         Assert.assertEquals(HousingDemand(lvl1 = 3, lvl2 = 3, lvl3 = 0), result)
     }
+
+    @Test
+    fun `count lumberjacks, 2 finished and 2 unfinised`() {
+        val coord1 = Coordinates(0,0)
+        val coord2 = Coordinates(2,0)
+        val coord3 = Coordinates(4,0)
+        val coord4 = Coordinates(6,0)
+        d.gameStateManager.applyStates(listOf(
+            GameState(coord1, Operator.Set, Type.Building, Lumberjack()),
+            GameState(coord2, Operator.Set, Type.Building, Lumberjack()),
+            GameState(coord3, Operator.Set, Type.Building, Lumberjack()),
+            GameState(coord4, Operator.Set, Type.Building, Lumberjack()),
+        ))
+        d.mapManager.queryBuilding(coord1)!!.setConstructionFinished()
+        d.mapManager.queryBuilding(coord2)!!.setConstructionFinished()
+
+        val finished = d.mapManager.getFinishedLumberjacksCount()
+        val unfinished = d.mapManager.getUnfinishedLumberjacksCount()
+
+        Assert.assertEquals(2, finished)
+        Assert.assertEquals(2, unfinished)
+    }
+
+    @Test
+    fun `count lumbermills, 2 finished and 2 unfinised`() {
+        val coord1 = Coordinates(0,0)
+        val coord2 = Coordinates(2,0)
+        val coord3 = Coordinates(4,0)
+        val coord4 = Coordinates(6,0)
+        d.gameStateManager.applyStates(listOf(
+            GameState(coord1, Operator.Set, Type.Building, Lumbermill()),
+            GameState(coord2, Operator.Set, Type.Building, Lumbermill()),
+            GameState(coord3, Operator.Set, Type.Building, Lumbermill()),
+            GameState(coord4, Operator.Set, Type.Building, Lumbermill()),
+        ))
+        d.mapManager.queryBuilding(coord1)!!.setConstructionFinished()
+        d.mapManager.queryBuilding(coord2)!!.setConstructionFinished()
+
+        val finished = d.mapManager.getFinishedLumbermillsCount()
+        val unfinished = d.mapManager.getUnfinishedLumbermillsCount()
+
+        Assert.assertEquals(2, finished)
+        Assert.assertEquals(2, unfinished)
+    }
 }
