@@ -130,18 +130,33 @@ open class MapManager(
         return cells.filterValues { it.movingObject != null }
     }
 
-    private fun Map<Coordinates, Cell>.filterForFinishedConstruction(): Map<Coordinates, Cell> {
+    fun Map<Coordinates, Cell>.filterForFinishedConstruction(): Map<Coordinates, Cell> {
         return filterValues { it.building?.isConstructed() ?: false }
     }
 
-    private fun Map<Coordinates, Cell>.filterForLumberjacks(): Map<Coordinates, Cell> {
-        return filterValues { it.building is Lumberjack }
+    inline fun <reified T> getFinishedBuildingsOfType(type: T): Map<Coordinates, Cell> {
+        return getAllBuildingsOfType(type).filterForFinishedConstruction()
     }
 
-    private fun Map<Coordinates, Cell>.filterForLumbermills(): Map<Coordinates, Cell> {
-        return filterValues { it.building is Lumbermill }
+    inline fun <reified T> getFinishedBuildingsOfTypeCount(type: T): Int {
+        return getFinishedBuildingsOfType(type).count()
     }
 
+    inline fun <reified T> getUnfinishedBuildingsOfType(type: T): Map<Coordinates, Cell> {
+        return getAllBuildingsOfType(type).filterForUnfinishedConstruction()
+    }
+
+    inline fun <reified T> getUnfinishedBuildingsOfTypeCount(type: T): Int {
+        return getUnfinishedBuildingsOfType(type).count()
+    }
+
+    inline fun <reified T> Map<Coordinates, Cell>.filterForBuildingType(type: T): Map<Coordinates, Cell> {
+        return filterValues { it.building is T }
+    }
+
+    inline fun <reified T> getAllBuildingsOfType(type: T): Map<Coordinates, Cell> {
+        return getCellsWithBuildings().filterForBuildingType(type)
+    }
 
     fun getCellsWithBuildings(): Map<Coordinates, Cell> {
         return cells.filterValues { it.building != null }
@@ -154,7 +169,7 @@ open class MapManager(
         return ret
     }
 
-    private fun Map<Coordinates, Cell>.filterForUnfinishedConstruction(): Map<Coordinates, Cell> {
+    fun Map<Coordinates, Cell>.filterForUnfinishedConstruction(): Map<Coordinates, Cell> {
         return filterValues { it.building != null && !it.building!!.isConstructed() }
     }
 
@@ -286,30 +301,6 @@ open class MapManager(
         }
 
         return HousingDemand(lvl1, lvl2, lvl3)
-    }
-
-    fun getFinishedLumberjacksCount(): Int {
-        return getAllLumberjacks().filterForFinishedConstruction().count()
-    }
-
-    fun getUnfinishedLumberjacksCount(): Int {
-        return getAllLumberjacks().filterForUnfinishedConstruction().count()
-    }
-
-    private fun getAllLumberjacks(): Map<Coordinates, Cell> {
-        return getCellsWithBuildings().filterForLumberjacks()
-    }
-
-    fun getFinishedLumbermillsCount(): Int {
-        return getAllLumbermills().filterForFinishedConstruction().count()
-    }
-
-    fun getUnfinishedLumbermillsCount(): Int {
-        return getAllLumbermills().filterForUnfinishedConstruction().count()
-    }
-
-    private fun getAllLumbermills(): Map<Coordinates, Cell> {
-        return getCellsWithBuildings().filterForLumbermills()
     }
 }
 

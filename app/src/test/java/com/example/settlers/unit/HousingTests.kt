@@ -95,8 +95,8 @@ class HousingTests {
         d.mapManager.queryBuilding(coord1)!!.setConstructionFinished()
         d.mapManager.queryBuilding(coord2)!!.setConstructionFinished()
 
-        val finished = d.mapManager.getFinishedLumberjacksCount()
-        val unfinished = d.mapManager.getUnfinishedLumberjacksCount()
+        val finished = d.mapManager.getFinishedBuildingsOfTypeCount(Lumberjack())
+        val unfinished = d.mapManager.getUnfinishedBuildingsOfTypeCount(Lumberjack())
 
         Assert.assertEquals(2, finished)
         Assert.assertEquals(2, unfinished)
@@ -117,8 +117,8 @@ class HousingTests {
         d.mapManager.queryBuilding(coord1)!!.setConstructionFinished()
         d.mapManager.queryBuilding(coord2)!!.setConstructionFinished()
 
-        val finished = d.mapManager.getFinishedLumbermillsCount()
-        val unfinished = d.mapManager.getUnfinishedLumbermillsCount()
+        val finished = d.mapManager.getFinishedBuildingsOfTypeCount(Lumbermill())
+        val unfinished = d.mapManager.getUnfinishedBuildingsOfTypeCount(Lumbermill())
 
         Assert.assertEquals(2, finished)
         Assert.assertEquals(2, unfinished)
