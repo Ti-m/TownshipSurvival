@@ -66,11 +66,26 @@ open class GameStateManager(
             applyStates(transportManager.moveResources(cell))
         }
 
+        //get all buildings? Or only prod or houses?
+        mapManager.getCellsWithHousesWithoutARunningProductionAndNoMaterialsAvailable().forEach { entry ->
+            applyStates(
+                mapManager.removeHouseAssignments()
+            )
+        }
+
+        mapManager.getCellsWithHousesWithoutARunningProductionAndMaterialsAvailable().forEach { entry ->
+            applyStates(
+                mapManager.addHouseAssignments()
+            )
+        }
+
         mapManager.getCellsWhichShallContinueAProduction().forEach { (_, cell) ->
+            //TODO filter houses without worker
             applyStates(runProduction(cell))
         }
 
         mapManager.getCellsWhichShallRunAProduction().forEach { (_, cell) ->
+            //TODO filter houses without worker
             applyStates(runProduction(cell))
         }
 

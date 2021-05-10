@@ -1,22 +1,14 @@
 Tasks - Open
 
 The Gameloop needs some depth:
-* Add workers for buildings
-** Need luxurys like in Anno
+* DONE Add workers for buildings
+** DONE Need luxurys like in Anno
 ** With housing like in Anno and upgradeable buildings
-* A house supports 5 persons
-** Each building needs a worker
-** They live in houses
-*** Before production, it is checked if a house is available - Every time
-**** Maybe do the calculation twice: mark a building everytime it gets a worker assigned.
-***** First use all marked buildings, then fill the remaining ones.
-***** This way it does not flicker because of the order of the algorithm, if less space is available then needed.
-***** (Bonus: maybe use this for transportation too. Prefer buildings where the transports is already in progress. to prevent rerouting of items.)
-**** This way it does not need to be checked every time once a building is deleted or it's downgraded
-**** A slot is blocked inside a house
-**** If a building is suspended, no space in a house is consumed
-
-** Houses get luxury's delivered
+* DONE A house supports X persons
+** DONE Each building needs a worker
+** DONE They live in houses
+** If a building is suspended, no space in a house is consumed
+** DONE Houses get luxury's delivered
 ** A house can be upgraded if luxury resources are available
 *** Takes 10 ticks
 *** Needs to be activated actively by hand
@@ -29,10 +21,46 @@ The Gameloop needs some depth:
 Vielleicht hier die Zahlen noch ändern
 Irgendwie wirkt Gold auch zu früh als Luxusgut
 
+Statistics
+* DONE Create a function, which calculates the housing demand for all buildings
+** DONE Create a function, which counts buildings of a specific type
+* DONE Create a function, which calculates the overall luxury demand for all houses
+* Create a function which counts items in transport
+* Create a function which counts items in storage
+* Create a function which counts items in production
+
+Housing
+* Add Housing Buildings with demand
+** DONE Add HouseLvl1
+** Add HouseLvl2
+** Add HouseLvl3
+* If a house is idle (no luxurys) then don't Allow use of it's spaces
+**** DONE Buildings need a "Worker assigned" Boolean
+**** A house should knno where it's inhabitans work
+**** A production building should know where it's workers live
+**** Add a function which resets worker assigned
+**** D Add a function which assigns workers to houses
+***** Function to query available housing
+**** Show overlay color, if a building has no worker
+*** regular production should ignore houses.
+*** Maybe it's easier to use an own demand prototype list in building. Will this be easier to understand?
+* DONE Add a property which specifies the available space.
+** DONE Add a building derivied type "House"
+*** DONE all buildings are derived from "House"
+
+HousingAlgorithmus
+* DONE Add a new section in game loop
+* D Before production. Search for all *houses* without a running production
+** . For each one found, check if resources available
+**  if one is found without, then remove workers from production buildings
+** Before production, check if worker is assigned
+
+
 * Housing
 1 Buildable Houses
 2 Contain lists of buildings which workers are housed
-3 Need maintenance resources. i.e. Food, Beer, Cloth ..
+2.1 A data structure with references to the coordinates?
+3 Need luxury resources. i.e. Food, Beer, Cloth ..
 
 * Worker lvls
 Townhall --
@@ -100,15 +128,6 @@ lvl 4 ||
 
 Bug
 * DONE Scrollable region needs to be expanded to south. Because the app bar blocks some space
-
-Statistics
-* Create a function, which calculates the housing demand for all buildings
-* Create a function, which calculates the overall luxury demand for all houses
-** D Create a function, which counts buildings of a specific type
-
-* Create a function which counts items in transport
-* Create a function which counts items in storage
-* Create a function which counts items in production
 
 Refactor
 * MapManager/ TransportManager does to much stuff
@@ -238,6 +257,8 @@ TestSetup
 ** Maybe use of Hilt is better?
 
 Transport
+
+* Add a flag to buildings when a transport is started to a specific building. Prefer buildings where the transports is already in progress. to prevent rerouting of items.
 * WONTFIX Currently only the stuff in front of the required queue is requested. I.e. pyramid: lumber+stone are requested. stone is only requested if all lumber is already there. This is hard to do, because touched is only set, after the GameState is applied. This is after the moveResource step.
 * Transport is blocked if any field in the path is blocked. It should transport right before the next field
 ** What happens if the route of an active transport is interrrupted

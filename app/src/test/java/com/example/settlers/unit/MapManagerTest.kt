@@ -376,4 +376,89 @@ class MapManagerTest {
         assertEquals(0, d.mapManager.getCellsWhichShallRunAProductionWithProducingOutsideResources().size)
     }
 
+    //TODO TMP
+    @Test
+    fun `getCellsWithHouses() - one is found`() {
+        //Init
+//        d.gameStateManager.applyState(GameStateCreator.createLvl1House(d.coords))
+//val building = HouseLevel1()
+//        //Check
+//        assertEquals(
+//            mapOf(Pair(d.coords, Cell(coordinates = d.coords, type = GroundType.Desert, building = building))),
+//            d.mapManager.filterHouses(mapOf(Pair(d.coords, Cell(coordinates = d.coords, type = GroundType.Desert, building = building))), type =  HouseLevel1())
+//        ) Hier muss ich ein konkretes Haus reinstecken. z.b. HouseLevel1. Ich kann nicht ein abstraktes House wie "House" benutzen...
+    }
+//    Bedeutet das, dass die generische Funktion so nicht funktioniert?
+//    * Also nochmal in die Doku schauen https://kotlinlang.org/docs/generics.html#declaration-site-variance
+//    * Dann möglicherweise eine nicht generische Variante bauen.
+
+
+    @Test
+    fun `getCellsWithFinishedHouses() - one is found`() {
+        //Init
+        d.gameStateManager.applyState(GameStateCreator.createLvl1House(d.coords))
+        d.mapManager.queryBuilding(d.coords)!!.setConstructionFinished()
+
+        //Check
+        assertEquals(1, d.mapManager.getCellsWithFinishedHouses().count())
+    }
+
+    @Test
+    fun `getCellsWithHousesWithoutARunningProductionAndNoMaterialsAvailable() - one is found`() {
+        //Init
+        d.gameStateManager.applyState(GameStateCreator.createLvl1House(d.coords))
+        d.mapManager.queryBuilding(d.coords)!!.setConstructionFinished()
+
+        //Check
+        assertEquals(1, d.mapManager.getCellsWithHousesWithoutARunningProductionAndNoMaterialsAvailable().size)
+    }
+
+    @Test
+    fun `getCellsWithHousesWithoutARunningProductionAndNoMaterialsAvailable() - zero are found, because the single house has products available`() {
+        //Init
+        d.gameStateManager.applyState(GameStateCreator.createLvl1House(d.coords))
+        d.mapManager.queryBuilding(d.coords)!!.setConstructionFinished()
+        d.gameStateManager.applyState(GameStateCreator.addFishToProduction(d.coords))
+
+        //Check
+        assertEquals(0, d.mapManager.getCellsWithHousesWithoutARunningProductionAndNoMaterialsAvailable().size)
+    }
+
+    @Test
+    fun `getCellsWithHousesWithoutARunningProductionAndMaterialsAvailable() - one is found`() {
+        //Init
+        d.gameStateManager.applyState(GameStateCreator.createLvl1House(d.coords))
+        d.mapManager.queryBuilding(d.coords)!!.setConstructionFinished()
+        d.gameStateManager.applyState(GameStateCreator.addFishToProduction(d.coords))
+
+        //Check
+        assertEquals(1, d.mapManager.getCellsWithHousesWithoutARunningProductionAndMaterialsAvailable().size)
+    }
+
+    @Test
+    fun `getCellsWithHousesWithoutARunningProductionAndMaterialsAvailable() - zero are found, because the single house has no products available`() {
+        //Init
+        d.gameStateManager.applyState(GameStateCreator.createLvl1House(d.coords))
+        d.mapManager.queryBuilding(d.coords)!!.setConstructionFinished()
+
+        //Check
+        assertEquals(0, d.mapManager.getCellsWithHousesWithoutARunningProductionAndMaterialsAvailable().size)
+    }
+
+    @Test
+    fun `removeHouseAssignments() - nothing to remove, so nothing changes`() {
+        //Init
+
+        //Check
+    }
+
+    @Test
+    fun `removeHouseAssignments() - remove assignment of house in the house and in the Lumberjack`() {
+        //Init
+
+        //Do
+        //TODO Remove assignment of house in the house and in the Lumberjack
+
+        //Check
+    }
 }

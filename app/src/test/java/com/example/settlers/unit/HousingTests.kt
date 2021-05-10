@@ -1,7 +1,7 @@
 package com.example.settlers.unit
 
 import com.example.settlers.*
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
@@ -14,6 +14,7 @@ class HousingTests {
         d = BasicTestDependencies()
     }
 
+    //TODO move to MapManagerTest?
     @Test
     fun `getHousingDemand one lvl 1`() {
 
@@ -22,9 +23,10 @@ class HousingTests {
 
         val result = d.mapManager.getHousingDemand()
 
-        Assert.assertEquals(HousingDemand(lvl1 = 1, lvl2 = 0, lvl3 = 0), result)
+        assertEquals(HousingDemand(lvl1 = 1, lvl2 = 0, lvl3 = 0, lvl4 = 0), result)
     }
 
+    //TODO move to MapManagerTest?
     @Test
     fun `getHousingDemand one lvl 1 and one lvl 2`() {
 
@@ -39,9 +41,10 @@ class HousingTests {
 
         val result = d.mapManager.getHousingDemand()
 
-        Assert.assertEquals(HousingDemand(lvl1 = 1, lvl2 = 1, lvl3 = 0), result)
+        assertEquals(HousingDemand(lvl1 = 1, lvl2 = 1, lvl3 = 0, lvl4 = 0), result)
     }
 
+    //TODO move to MapManagerTest?
     @Test
     fun `getHousingDemand all`() {
 
@@ -77,9 +80,10 @@ class HousingTests {
 
         val result = d.mapManager.getHousingDemand()
 
-        Assert.assertEquals(HousingDemand(lvl1 = 3, lvl2 = 3, lvl3 = 0), result)
+        assertEquals(HousingDemand(lvl1 = 3, lvl2 = 3, lvl3 = 0, lvl4 = 0), result)
     }
 
+    //TODO move to MapManagerTest?
     @Test
     fun `count lumberjacks, 2 finished and 2 unfinised`() {
         val coord1 = Coordinates(0,0)
@@ -95,13 +99,14 @@ class HousingTests {
         d.mapManager.queryBuilding(coord1)!!.setConstructionFinished()
         d.mapManager.queryBuilding(coord2)!!.setConstructionFinished()
 
-        val finished = d.mapManager.getFinishedBuildingsOfTypeCount(Lumberjack())
-        val unfinished = d.mapManager.getUnfinishedBuildingsOfTypeCount(Lumberjack())
+        val finished = d.mapManager.getFinishedBuildingsOfTypeCount<Lumberjack>()
+        val unfinished = d.mapManager.getUnfinishedBuildingsOfTypeCount<Lumberjack>()
 
-        Assert.assertEquals(2, finished)
-        Assert.assertEquals(2, unfinished)
+        assertEquals(2, finished)
+        assertEquals(2, unfinished)
     }
 
+    //TODO move to MapManagerTest?
     @Test
     fun `count lumbermills, 2 finished and 2 unfinised`() {
         val coord1 = Coordinates(0,0)
@@ -117,10 +122,138 @@ class HousingTests {
         d.mapManager.queryBuilding(coord1)!!.setConstructionFinished()
         d.mapManager.queryBuilding(coord2)!!.setConstructionFinished()
 
-        val finished = d.mapManager.getFinishedBuildingsOfTypeCount(Lumbermill())
-        val unfinished = d.mapManager.getUnfinishedBuildingsOfTypeCount(Lumbermill())
+        val finished = d.mapManager.getFinishedBuildingsOfTypeCount<Lumbermill>()
+        val unfinished = d.mapManager.getUnfinishedBuildingsOfTypeCount<Lumbermill>()
 
-        Assert.assertEquals(2, finished)
-        Assert.assertEquals(2, unfinished)
+        assertEquals(2, finished)
+        assertEquals(2, unfinished)
+    }
+
+    @Test
+    fun `queryHouseLuxuryDemand of the specific house types - trivial`() {
+        val coord1 = Coordinates(0,0)
+        val nr1 = d.mapManager.queryHouseLuxuryDemand(coord1)
+        assertEquals(listOf<Resource>(), nr1)
+    }
+
+    @Test
+    fun `queryHouseLuxuryDemand - house is not finished`() {
+        val coord1 = Coordinates(0,0)
+        d.gameStateManager.applyStates(listOf(
+            GameState(coord1, Operator.Set, Type.Building, HouseLevel1()),
+        ))
+
+        val nr1 = d.mapManager.queryHouseLuxuryDemand(coord1)
+
+        assertEquals(listOf<Resource>(), nr1)
+    }
+
+    @Test
+    fun `queryHouseLuxuryDemand of the specific house types`() {
+        val coord1 = Coordinates(0,0)
+        val coord2 = Coordinates(2,0)
+        val coord3 = Coordinates(4,0)
+        d.gameStateManager.applyStates(listOf(
+            GameState(coord1, Operator.Set, Type.Building, HouseLevel1()),
+            GameState(coord2, Operator.Set, Type.Building, HouseLevel2()),
+            GameState(coord3, Operator.Set, Type.Building, HouseLevel3()),
+        ))
+        d.mapManager.queryBuilding(coord1)!!.setConstructionFinished()
+        d.mapManager.queryBuilding(coord2)!!.setConstructionFinished()
+        d.mapManager.queryBuilding(coord3)!!.setConstructionFinished()
+
+        val nr1 = d.mapManager.queryHouseLuxuryDemand(coord1)
+        val nr2 = d.mapManager.queryHouseLuxuryDemand(coord2)
+        val nr3 = d.mapManager.queryHouseLuxuryDemand(coord3)
+
+        assertEquals(listOf(Fish), nr1)
+        assertEquals(listOf(Fish), nr2)
+        assertEquals(listOf(Fish), nr3)
+    }
+
+    @Test
+    fun `count housing luxury demand for all buildings - trivial`() {
+        val result = d.mapManager.getCompleteLuxuryDemand()
+
+        assertEquals(listOf<Resource>(), result)
+    }
+
+    @Test
+    fun `count housing luxury demand for all buildings`() {
+        val coord1 = Coordinates(0,0)
+        val coord2 = Coordinates(2,0)
+        val coord3 = Coordinates(4,0)
+        d.gameStateManager.applyStates(listOf(
+            GameState(coord1, Operator.Set, Type.Building, HouseLevel1()),
+            GameState(coord2, Operator.Set, Type.Building, HouseLevel2()),
+            GameState(coord3, Operator.Set, Type.Building, HouseLevel3()),
+        ))
+        d.mapManager.queryBuilding(coord1)!!.setConstructionFinished()
+        d.mapManager.queryBuilding(coord2)!!.setConstructionFinished()
+        d.mapManager.queryBuilding(coord3)!!.setConstructionFinished()
+
+        val result = d.mapManager.getCompleteLuxuryDemand()
+
+        assertEquals(listOf(Fish, Fish, Fish), result)
+    }
+
+    @Test
+    fun `getBuildingsWithUnfulfilledHousing - trivial`() {
+        val result = d.mapManager.getBuildingsWithUnfulfilledHousing()
+
+        assertEquals(emptyList<Building>(), result)
+    }
+
+    @Test
+    fun `getBuildingsWithUnfulfilledHousing - 2 set and 2 unset`() {
+        val coord1 = Coordinates(0,0)
+        val coord2 = Coordinates(2,0)
+        val coord3 = Coordinates(4,0)
+        val coord4 = Coordinates(6,0)
+        d.gameStateManager.applyStates(listOf(
+            GameState(coord1, Operator.Set, Type.Building, Lumbermill()),
+            GameState(coord2, Operator.Set, Type.Building, Lumbermill()),
+            GameState(coord3, Operator.Set, Type.Building, Lumbermill()),
+            GameState(coord4, Operator.Set, Type.Building, Lumbermill()),
+        ))
+        val building1 = d.mapManager.queryBuilding(coord1)!!
+        val building2 = d.mapManager.queryBuilding(coord2)!!
+        val building3 = d.mapManager.queryBuilding(coord3)!!
+        val building4 = d.mapManager.queryBuilding(coord4)!!
+
+        building1.setConstructionFinished()
+        building2.setConstructionFinished()
+        building3.setConstructionFinished()
+        building4.setConstructionFinished()
+
+        building1.workerAssigned = true
+        building2.workerAssigned = true
+
+        val result = d.mapManager.getBuildingsWithUnfulfilledHousing()
+
+        assertEquals(listOf(building3, building4), result)
+    }
+
+    @Test
+    fun `assign worker to house - for two buldings`() {
+//        val coord1 = Coordinates(0,0)
+//        val coord2 = Coordinates(2,0)
+//        d.gameStateManager.applyStates(listOf(
+//            GameState(coord1, Operator.Set, Type.Building, Lumbermill()),
+//            GameState(coord2, Operator.Set, Type.Building, Lumbermill()),
+//        ))
+//        val building1 = d.mapManager.queryBuilding(coord1)!!
+//        val building2 = d.mapManager.queryBuilding(coord2)!!
+//
+//        building1.setConstructionFinished()
+//        building2.setConstructionFinished()
+//
+//        val buildings = d.mapManager.getBuildingsWithUnfulfilledHousing()
+//        Oder lieber direkt nach dem benötigten housing level filtern?
+//        Ich gllaube ich sollt enochmal einen Schritt zurück machen und erst einnmal in der GameLoop weiter machen:
+//         Also wie werden diese Methoden konkret aufgerufen, sodass es später in das Gesamtkonzept passt.
+//        val available = d.mapManager.getAvailableHousingSpace()
+//
+//        assertEquals(listOf(building3, building4), result)
     }
 }

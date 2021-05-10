@@ -50,6 +50,10 @@ object GameStateCreator {
         return GameState(coords, Operator.Set, Type.Building, Road())
     }
 
+    fun createLvl1House(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Set, Type.Building, HouseLevel1())
+    }
+
     fun createLumberjack(coords: Coordinates): GameState {
         return GameState(coords, Operator.Set, Type.Building, Lumberjack())
     }
@@ -128,6 +132,10 @@ object GameStateCreator {
 
     fun addArrowToProduction(coords: Coordinates): GameState {
         return GameState(coords, Operator.Set, Type.Production, Arrow)
+    }
+
+    fun addFishToProduction(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Set, Type.Production, Fish)
     }
 
     fun createTree(coords: Coordinates): GameState {

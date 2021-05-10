@@ -2,6 +2,7 @@ package com.example.settlers
 
 import com.example.settlers.util.DisabledLogger
 import com.example.settlers.util.Logger
+import kotlinx.serialization.Serializable
 
 open class MapManager(
     protected val cells: Map<Coordinates, Cell>,
@@ -134,28 +135,30 @@ open class MapManager(
         return filterValues { it.building?.isConstructed() ?: false }
     }
 
-    inline fun <reified T> getFinishedBuildingsOfType(type: T): Map<Coordinates, Cell> {
-        return getAllBuildingsOfType(type).filterForFinishedConstruction()
+    inline fun <reified T> getFinishedBuildingsOfType(): Map<Coordinates, Cell> {
+        return getAllBuildingsOfType<T>().filterForFinishedConstruction()
     }
 
-    inline fun <reified T> getFinishedBuildingsOfTypeCount(type: T): Int {
-        return getFinishedBuildingsOfType(type).count()
+    inline fun <reified T> getFinishedBuildingsOfTypeCount(): Int {
+        return getFinishedBuildingsOfType<T>().count()
     }
 
-    inline fun <reified T> getUnfinishedBuildingsOfType(type: T): Map<Coordinates, Cell> {
-        return getAllBuildingsOfType(type).filterForUnfinishedConstruction()
+    inline fun <reified T> getUnfinishedBuildingsOfType(): Map<Coordinates, Cell> {
+        return getAllBuildingsOfType<T>().filterForUnfinishedConstruction()
     }
 
-    inline fun <reified T> getUnfinishedBuildingsOfTypeCount(type: T): Int {
-        return getUnfinishedBuildingsOfType(type).count()
+    inline fun <reified T> getUnfinishedBuildingsOfTypeCount(): Int {
+        return getUnfinishedBuildingsOfType<T>().count()
     }
 
-    inline fun <reified T> Map<Coordinates, Cell>.filterForBuildingType(type: T): Map<Coordinates, Cell> {
-        return filterValues { it.building is T }
+    inline fun <reified T> Map<Coordinates, Cell>.filterForBuildingType(): Map<Coordinates, Cell> {
+        return filterValues {
+            it.building is T
+        }
     }
 
-    inline fun <reified T> getAllBuildingsOfType(type: T): Map<Coordinates, Cell> {
-        return getCellsWithBuildings().filterForBuildingType(type)
+    inline fun <reified T> getAllBuildingsOfType(): Map<Coordinates, Cell> {
+        return getCellsWithBuildings().filterForBuildingType<T>()
     }
 
     fun getCellsWithBuildings(): Map<Coordinates, Cell> {
@@ -186,6 +189,12 @@ open class MapManager(
     private fun Map<Coordinates, Cell>.filterForAllProductionMaterialsAvailable(): Map<Coordinates, Cell> {
         return filterValues {
             isRequiredListInAvailableList(it.building!!.requiresProduction, it.production)
+        }
+    }
+
+    private fun Map<Coordinates, Cell>.filterForAllProductionMaterialsNOTAvailable(): Map<Coordinates, Cell> {
+        return filterValues {
+            isRequiredListInAvailableList(it.building!!.requiresProduction, it.production).not()
         }
     }
 
@@ -283,16 +292,35 @@ open class MapManager(
         return filterValues { it.building!!.isWorldResourceCreatingProductionBuilding() }
     }
 
+    private fun Map<Coordinates, Cell>.filterForRequiresHousing(): Map<Coordinates, Cell> {
+        return filterValues { it.building!!.housingLevel != null }
+    }
+
+    fun getCellsWhichRequireAHouse(): Map<Coordinates, Cell> {
+        return getCellsWithBuildings().filterForFinishedConstruction().filterForRequiresHousing()
+    }
+
+    fun getBuildingsWhichRequireAHouse(): List<Building> {
+        return getCellsWhichRequireAHouse().map { it.value.building!! }
+    }
+
+    fun getBuildingsWithUnfulfilledHousing(): List<Building> {
+        return getBuildingsWhichRequireAHouse().filter { it.workerAssigned.not() }
+    }
+
+
+    //TODO Move this to its own class?
     fun getHousingDemand(): HousingDemand {
-        val buildings = getCellsWithBuildings().filterForFinishedConstruction()
         var lvl1 = 0
         var lvl2 = 0
         var lvl3 = 0
-        buildings.forEach { (_, cell) ->
+        var lvl4 = 0
+        getCellsWhichRequireAHouse().forEach { (_, cell) ->
             when (cell.building!!.housingLevel) {
                 1 -> lvl1++
                 2 -> lvl2++
                 3 -> lvl3++
+                4 -> lvl4++
                 null -> {}//nothing
                 else -> if (BuildConfig.DEBUG) {
                     error("Assertion failed")
@@ -300,11 +328,66 @@ open class MapManager(
             }
         }
 
-        return HousingDemand(lvl1, lvl2, lvl3)
+        return HousingDemand(lvl1, lvl2, lvl3, lvl4)
     }
+
+    fun queryHouseLuxuryDemand(coord3: Coordinates): List<Resource> {
+        val house = queryBuilding(coord3)
+        return if (house is House && house.isConstructed()) {
+            house.requiresProduction
+        } else {
+            emptyList()
+        }
+    }
+
+    fun getCompleteLuxuryDemand(): List<Resource> {
+        val demand = mutableListOf<Resource>()
+        getCellsWithBuildings().forEach { (coord, _) ->
+            demand.addAll(queryHouseLuxuryDemand(coord))
+        }
+        return demand
+    }
+
+    fun getCellsWithHouses(): Map<Coordinates, Cell> {
+        return getCellsWithBuildings().filterForBuildingType<House>()
+    }
+
+    fun getCellsWithFinishedHouses(): Map<Coordinates, Cell> {
+        return getCellsWithHouses().filterForFinishedConstruction()
+    }
+
+    fun getCellsWithHousesWithoutARunningProductionAndNoMaterialsAvailable(): Map<Coordinates, Cell> {
+        return getCellsWithFinishedHouses()
+            .filterForProductionNOTStarted()
+            .filterForAllProductionMaterialsNOTAvailable()
+    }
+
+    fun getCellsWithHousesWithoutARunningProductionAndMaterialsAvailable(): Map<Coordinates, Cell> {
+        return getCellsWithFinishedHouses()
+            .filterForProductionNOTStarted()
+            .filterForAllProductionMaterialsAvailable()
+    }
+
+    fun removeHouseAssignments(): Collection<GameState> {
+        //TODO Maybe split this into remove in the house AND remove in the destination
+        throw NotImplementedError()
+    }
+
+    fun addHouseAssignments(): Collection<GameState> {
+        //TODO Maybe split this into add in the house AND remove in the destination
+        throw NotImplementedError()
+    }
+
+
+//    fun areProductionRequirementsavailable(entry: Map.Entry<Coordinates, Cell>): List<GameState> {
+//        Hier fehlt noch die Funktion, die speziell auf Map.Entry arbeitet.
+//        Wahrscheinlich am besten direkt in "getCellsWithHousesWithoutARunningProduction" filtern?
+//        Habe ich gemacht. Siehe getCellsWithHousesWithoutARunningProductionAndNoMaterialsAvailable
+//    }
 }
 
-data class HousingDemand(val lvl1: Int, val lvl2: Int, val lvl3: Int)
+@Serializable
+data class HousingDemand(val lvl1: Int, val lvl2: Int, val lvl3: Int, val lvl4: Int)
 
 class MapManagerPreparedForTest(
     cells: Map<Coordinates, Cell>,

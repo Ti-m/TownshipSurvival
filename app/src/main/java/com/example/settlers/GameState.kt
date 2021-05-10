@@ -41,6 +41,9 @@ object Lumber : Resource()
 object Stone : Resource()
 
 @Serializable
+object Fish : Resource()
+
+@Serializable
 sealed class WorldResource : GameObject()
 
 @Serializable
@@ -177,8 +180,13 @@ sealed class Building : GameObject() {
     //Stop delivery of items
     var stopDelivery: Boolean = false
 
+    //required housing space for it's worker
     abstract val housingLevel: Int?
+
+    //Tracks the state if a worker is assigned, therefore, has a space in a house
+    var workerAssigned = false
 }
+
 @Serializable
 @SerialName("Townhall")
 class Townhall : Building() {
@@ -380,6 +388,71 @@ class Pyramid : Building() {
         this.addAll(MutableList(50) { Stone })
     }
     override val requiresProduction: List<Resource> = listOf()
+
+    override val offers: List<Resource> = listOf()
+
+    override val housingLevel: Int? = null
+}
+
+
+@Serializable
+sealed class House : Building() {
+    //Available spaces in this house
+    abstract val housingDemand: HousingDemand
+}
+
+@Serializable
+@SerialName("HouseLevel1")
+class HouseLevel1 : House() {
+    override var constructionCount: Int = 0
+    override val housingDemand: HousingDemand = HousingDemand(lvl1 = 2, lvl2 = 1, lvl3 = 0, lvl4 = 0)
+    override var productionCount: Int = 0
+    override val productionTimeMultiplier: Int = 2 //50Ticks?
+    override val produceConsumesWorldResource: WorldResource? = null
+    override val produceCreatesWorldResource: WorldResource? = null
+    override val producesItem: GameObject? = null
+    override val producesItemOutputType: Type? = null
+//TODO Does this work like this? Can I use the production step to implement the luxury consumption?
+    override val requiresConstruction: List<Resource> = listOf(Lumber, Stone)
+    override val requiresProduction: List<Resource> = listOf(Fish)
+
+    override val offers: List<Resource> = listOf()
+
+    override val housingLevel: Int? = null
+}
+
+@Serializable
+@SerialName("HouseLevel2")
+class HouseLevel2 : House() {
+    override var constructionCount: Int = 0
+    override val housingDemand: HousingDemand = HousingDemand(lvl1 = 0, lvl2 = 2, lvl3 = 1, lvl4 = 0)
+    override var productionCount: Int = 0
+    override val productionTimeMultiplier: Int = 2 //50Ticks?
+    override val produceConsumesWorldResource: WorldResource? = null
+    override val produceCreatesWorldResource: WorldResource? = null
+    override val producesItem: GameObject? = null
+    override val producesItemOutputType: Type? = null
+    override val requiresConstruction: List<Resource> = listOf(Lumber, Stone)//TODO upgrade costs?
+    override val requiresProduction: List<Resource> = listOf(Fish)//TODO add real demand
+
+    override val offers: List<Resource> = listOf()
+
+    override val housingLevel: Int? = null
+}
+
+@Serializable
+@SerialName("HouseLevel3")
+class HouseLevel3 : House() {
+    override var constructionCount: Int = 0
+    override val housingDemand: HousingDemand = HousingDemand(lvl1 = 0, lvl2 = 0, lvl3 = 2, lvl4 = 1)
+    override var productionCount: Int = 0
+    override val productionTimeMultiplier: Int = 2 //50Ticks?
+    override val produceConsumesWorldResource: WorldResource? = null
+    override val produceCreatesWorldResource: WorldResource? = null
+    override val producesItem: GameObject? = null
+    override val producesItemOutputType: Type? = null
+    override val requiresConstruction: List<Resource> = listOf(Lumber, Stone)//TODO upgrade costs?
+    override val requiresProduction: List<Resource> = listOf(Fish)//TODO add real demand
 
     override val offers: List<Resource> = listOf()
 
