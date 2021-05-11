@@ -67,15 +67,15 @@ open class GameStateManager(
         }
 
         //get all buildings? Or only prod or houses?
-        mapManager.getCellsWithHousesWithoutARunningProductionAndNoMaterialsAvailable().forEach { entry ->
+        mapManager.getCellsWithHousesWithoutARunningProductionAndNoMaterialsAvailable().forEach { (_, cell) ->
             applyStates(
-                mapManager.removeHouseAssignments()
+                mapManager.removeHouseAssignments(cell)
             )
         }
 
-        mapManager.getCellsWithHousesWithoutARunningProductionAndMaterialsAvailable().forEach { entry ->
+        mapManager.getCellsWithHousesWithoutARunningProductionAndMaterialsAvailable().forEach { (_, cell) ->
             applyStates(
-                mapManager.addHouseAssignments()
+                mapManager.addHouseAssignments(cell)
             )
         }
 
@@ -338,6 +338,15 @@ open class GameStateManager(
                         }
                     }
                     Type.WorldResource -> selected.worldResource = state.data as WorldResource
+                    Type.ProductionAssignment -> selected.building!!.workerLivesAt = (state.data as Assignment).coordinates
+                    Type.HouseAssignment -> {
+                        val currentlyAssigned = (selected.building!! as House).currentlyAssignedProductionBuildings
+                        if (currentlyAssigned.count() >= 3) {
+                            //TODO The magic number 3 is derived from the maximum housing available in a house. Remove the magic number
+                            throw IllegalStateException("To many assigned workers! $selected")
+                        }
+                        (selected.building!! as House).currentlyAssignedProductionBuildings.add((state.data as Assignment).coordinates)
+                    }
                 }
             }
             Operator.Remove -> {
@@ -368,6 +377,8 @@ open class GameStateManager(
                     }
                     Type.Damage -> throw IllegalStateException()
                     Type.WorldResource -> selected.worldResource = null
+                    Type.ProductionAssignment -> selected.building!!.workerLivesAt = null
+                    Type.HouseAssignment -> (selected.building!! as House).currentlyAssignedProductionBuildings.remove((state.data as Assignment).coordinates)
                 }
             }
         }

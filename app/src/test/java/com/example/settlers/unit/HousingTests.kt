@@ -5,6 +5,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
+//TODO Revisit this tests. Are they still relevant? Or are they obsolete now?
 class HousingTests {
 
     private lateinit var d: BasicTestDependencies
@@ -226,8 +227,8 @@ class HousingTests {
         building3.setConstructionFinished()
         building4.setConstructionFinished()
 
-        building1.workerAssigned = true
-        building2.workerAssigned = true
+        building1.workerLivesAt = coord1
+        building2.workerLivesAt = coord2
 
         val result = d.mapManager.getBuildingsWithUnfulfilledHousing()
 

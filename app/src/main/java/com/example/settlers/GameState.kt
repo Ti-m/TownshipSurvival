@@ -1,6 +1,5 @@
 package com.example.settlers
 
-import com.example.settlers.ui.GraphicAlt
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -18,7 +17,9 @@ enum class Type {
     MovingObject, //Enemeys i.e.
     Animation,
     Damage, //To Moving Objects, Buildings
-    WorldResource //Tree, Stone, Ore...
+    WorldResource, //Tree, Stone, Ore...
+    ProductionAssignment, //Assign a worker to a production building
+    HouseAssignment //Assign a house to a worker
 }
 
 @Serializable
@@ -77,6 +78,13 @@ object Zombie : MovingObject() {
 @Serializable
 @SerialName("Damage")
 class Damage(val value: Int): GameObject()
+
+//A worker gets assigned to a production building
+//A worker gets assigned to a house
+//The use of a data class here autogenerates a comparable class
+@Serializable
+@SerialName("Assignment")
+data class Assignment(val coordinates: Coordinates): GameObject()
 
 ///////////////////////////////////
 
@@ -183,8 +191,8 @@ sealed class Building : GameObject() {
     //required housing space for it's worker
     abstract val housingLevel: Int?
 
-    //Tracks the state if a worker is assigned, therefore, has a space in a house
-    var workerAssigned = false
+    //The Coordinates of the house, where the worker is living.
+    var workerLivesAt: Coordinates? = null
 }
 
 @Serializable
@@ -397,15 +405,20 @@ class Pyramid : Building() {
 
 @Serializable
 sealed class House : Building() {
-    //Available spaces in this house
-    abstract val housingDemand: HousingDemand
+    //Maximum available spaces in this house
+    abstract val maximumHousingAvailable: HousingDemand
+    //Current available spaces in this house
+    abstract val currentHousingAvailable: HousingDemand
+    //Coordinates of all assigned production buildings
+    val currentlyAssignedProductionBuildings = mutableListOf<Coordinates>()
 }
 
 @Serializable
 @SerialName("HouseLevel1")
 class HouseLevel1 : House() {
     override var constructionCount: Int = 0
-    override val housingDemand: HousingDemand = HousingDemand(lvl1 = 2, lvl2 = 1, lvl3 = 0, lvl4 = 0)
+    override val maximumHousingAvailable: HousingDemand = HousingDemand(lvl1 = 2, lvl2 = 1, lvl3 = 0, lvl4 = 0)
+    override val currentHousingAvailable: HousingDemand = maximumHousingAvailable.copy()
     override var productionCount: Int = 0
     override val productionTimeMultiplier: Int = 2 //50Ticks?
     override val produceConsumesWorldResource: WorldResource? = null
@@ -425,7 +438,8 @@ class HouseLevel1 : House() {
 @SerialName("HouseLevel2")
 class HouseLevel2 : House() {
     override var constructionCount: Int = 0
-    override val housingDemand: HousingDemand = HousingDemand(lvl1 = 0, lvl2 = 2, lvl3 = 1, lvl4 = 0)
+    override val maximumHousingAvailable: HousingDemand = HousingDemand(lvl1 = 0, lvl2 = 2, lvl3 = 1, lvl4 = 0)
+    override val currentHousingAvailable: HousingDemand = maximumHousingAvailable.copy()
     override var productionCount: Int = 0
     override val productionTimeMultiplier: Int = 2 //50Ticks?
     override val produceConsumesWorldResource: WorldResource? = null
@@ -444,7 +458,8 @@ class HouseLevel2 : House() {
 @SerialName("HouseLevel3")
 class HouseLevel3 : House() {
     override var constructionCount: Int = 0
-    override val housingDemand: HousingDemand = HousingDemand(lvl1 = 0, lvl2 = 0, lvl3 = 2, lvl4 = 1)
+    override val maximumHousingAvailable: HousingDemand = HousingDemand(lvl1 = 0, lvl2 = 0, lvl3 = 2, lvl4 = 1)
+    override val currentHousingAvailable: HousingDemand = maximumHousingAvailable.copy()
     override var productionCount: Int = 0
     override val productionTimeMultiplier: Int = 2 //50Ticks?
     override val produceConsumesWorldResource: WorldResource? = null
