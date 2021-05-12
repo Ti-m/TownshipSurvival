@@ -33,7 +33,21 @@ class BuildDialog : BaseDialog() {
         }
 
         private val ITEMS = "items"
-        private val availableBuildings = arrayOf(Townhall(), Lumberjack(), Forester(), Lumbermill(), Stonemason(), Tower(), Fletcher(), Road(), Pyramid())
+        private val availableBuildings = arrayOf(
+            Townhall(),
+            Lumberjack(),
+            Forester(),
+            Lumbermill(),
+            Stonemason(),
+            Tower(),
+            Fletcher(),
+            Road(),
+            Fisherman(),
+            HouseLevel1(),
+            HouseLevel2(),//TODO replace with upgrade of lvl1
+            HouseLevel3(),//TODO replace with upgrade of lvl2
+            Pyramid()
+        )
     }
 
     override fun onAttach(context: Context) {

@@ -19,6 +19,10 @@ class BuildDialogHandler (
             is Lumbermill -> Lumbermill()
             is Tower -> Tower()
             is Road -> Road()
+            is Fisherman -> Fisherman()
+            is HouseLevel1 -> HouseLevel1()
+            is HouseLevel2 -> HouseLevel2()//TODO replace with upgrade of lvl1
+            is HouseLevel3 -> HouseLevel3()//TODO replace with upgrade of lvl2
             is Pyramid -> Pyramid()
             else -> throw NotImplementedError()
         }

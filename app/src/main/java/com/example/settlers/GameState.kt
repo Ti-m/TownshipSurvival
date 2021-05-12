@@ -281,6 +281,27 @@ class Forester : Building() {
 }
 
 @Serializable
+@SerialName("Fisherman")
+class Fisherman : Building() {
+
+    override var constructionCount: Int = 0
+
+    override var productionCount: Int = 0
+    override val productionTimeMultiplier: Int = 5
+    override val produceConsumesWorldResource: WorldResource? = null//Should it consume something?
+    override val produceCreatesWorldResource: WorldResource? = null
+    override val producesItem: GameObject = Fish
+    override val producesItemOutputType: Type = Type.Storage
+
+    override val requiresConstruction: List<Resource> = listOf(Lumber, Lumber)
+    override val requiresProduction: List<Resource> = listOf()
+
+    override val offers: MutableList<Resource> = mutableListOf()
+
+    override val housingLevel: Int? = null //Int = 1 TODO readd level 1?
+}
+
+@Serializable
 @SerialName("Road")
 class Road : Building() {
     //no build time

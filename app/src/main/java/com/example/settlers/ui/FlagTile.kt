@@ -423,6 +423,26 @@ open class FlagTile(
         canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
     }
 
+    open fun drawFisherman(canvas: Canvas) {
+        val letter = "A"
+        canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
+    }
+
+    open fun drawHouseLevel1(canvas: Canvas) {
+        val letter = "1"
+        canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
+    }
+
+    open fun drawHouseLevel2(canvas: Canvas) {
+        val letter = "2"
+        canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
+    }
+
+    open fun drawHouseLevel3(canvas: Canvas) {
+        val letter = "3"
+        canvas.drawText(letter, coords.center.first, coords.center.second + textPaint.textSize * 0.3f, textPaint)
+    }
+
     open fun drawSpawner(canvas: Canvas) {
         //overwrite
     }
@@ -462,8 +482,11 @@ open class FlagTile(
                 is Pyramid -> drawPyramid(canvas)
                 is Tower -> drawTower(canvas)
                 is Fletcher -> drawFletcher(canvas)
+                is Fisherman -> drawFisherman(canvas)
+                is HouseLevel1 -> drawHouseLevel1(canvas)
+                is HouseLevel2 -> drawHouseLevel2(canvas)
+                is HouseLevel3 -> drawHouseLevel3(canvas)
                 is Spawner -> drawSpawner(canvas)
-                else -> throw NotImplementedError()
             }
 
             //Show progress
@@ -495,7 +518,7 @@ open class FlagTile(
                 is Lumber -> drawLumber(canvas, index)
                 is Stone -> drawStone(canvas, index)
                 is Arrow -> drawArrow(canvas, index)
-                else -> throw NotImplementedError()
+                is Fish -> drawFish(canvas, index)
             }
         }
 
@@ -528,6 +551,11 @@ open class FlagTile(
 
     open fun drawArrow(canvas: Canvas, index: Int) {
         val letter = "a"
+        drawText(canvas, index, letter)
+    }
+
+    open fun drawFish(canvas: Canvas, index: Int) {
+        val letter = "f"
         drawText(canvas, index, letter)
     }
 

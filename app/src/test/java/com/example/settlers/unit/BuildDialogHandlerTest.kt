@@ -96,5 +96,13 @@ class BuildDialogHandlerTest {
         assertEquals(emptyList<Resource>(), cell.building!!.offers)
         sut.selectedCallback(Tower(), d.coords)
         assertEquals(emptyList<Resource>(), cell.building!!.offers)
+        sut.selectedCallback(Fisherman(), d.coords)
+        assertEquals(emptyList<Resource>(), cell.building!!.offers)
+        sut.selectedCallback(HouseLevel1(), d.coords)
+        assertEquals(emptyList<Resource>(), cell.building!!.offers)
+        sut.selectedCallback(HouseLevel2(), d.coords)
+        assertEquals(emptyList<Resource>(), cell.building!!.offers)
+        sut.selectedCallback(HouseLevel3(), d.coords)
+        assertEquals(emptyList<Resource>(), cell.building!!.offers)
     }
 }

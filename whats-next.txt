@@ -15,6 +15,7 @@ The Gameloop needs some depth:
 ** A house consumes necessary luxury's every  50 Ticks
 *** If not available, it is downgraded. This is instant
 ** Supports improved workers
+*** Should the townhall support some level 1 workers?
 *** lvl 1 House supports 2 Lvl 1 workers and 1 lvl 2 workers
 *** Lvl 2 House supports 2 lvl 2 workers and 1 lvl 3 workers - Needs 1 Fish as luxury
 *** Lvl 3 House supports 2 lvl 3 workers and 1 lvl 4 workers - Needs 1 Steak and 1 Goldring as luxury
@@ -50,11 +51,17 @@ Housing
 
 HousingAlgorithmus
 * DONE Add a new section in game loop
-* D Before production. Search for all *houses* without a running production
-** . For each one found, check if resources available
-**  if one is found without, then remove workers from production buildings
-** Before production, check if worker is assigned
-
+* DONE Before production. Search for all *houses* without a running production
+** DONE For each one found, check if resources available
+** DONE if one is found without, then remove workers from production buildings
+** DONE Before production, check if worker is assigned
+* DONE Add Houses to Build Dialogs
+* DONE Add Fisher
+** Add "Fish outside ressources" in water
+*** Fish is unlimited but can only be used by one fisher every round
+*** (This concept can be adopted for ore in mountains)
+* Implement upgrading of houses
+* Show in info dialog, where a worker of a house lives
 
 * Housing
 1 Buildable Houses

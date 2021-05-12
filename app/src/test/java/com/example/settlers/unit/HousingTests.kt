@@ -58,6 +58,10 @@ class HousingTests {
         val coord7 = Coordinates(5,1)
         val coord8 = Coordinates(7,1)
         val coord9 = Coordinates(0,2)
+        val coord10 = Coordinates(2,2)
+        val coord11 = Coordinates(4,2)
+        val coord12 = Coordinates(6,2)
+        val coord13 = Coordinates(1,3)
         d.gameStateManager.applyStates(listOf(
             GameState(coord1, Operator.Set, Type.Building, Lumberjack()),
             GameState(coord2, Operator.Set, Type.Building, Lumbermill()),
@@ -68,6 +72,10 @@ class HousingTests {
             GameState(coord7, Operator.Set, Type.Building, Pyramid()),
             GameState(coord8, Operator.Set, Type.Building, Road()),
             GameState(coord9, Operator.Set, Type.Building, Townhall()),
+            GameState(coord10, Operator.Set, Type.Building, HouseLevel1()),
+            GameState(coord11, Operator.Set, Type.Building, HouseLevel2()),
+            GameState(coord12, Operator.Set, Type.Building, HouseLevel3()),
+            GameState(coord13, Operator.Set, Type.Building, Fisherman()),
         ))
         d.mapManager.queryBuilding(coord1)!!.setConstructionFinished()
         d.mapManager.queryBuilding(coord2)!!.setConstructionFinished()
@@ -78,10 +86,15 @@ class HousingTests {
         d.mapManager.queryBuilding(coord7)!!.setConstructionFinished()
         d.mapManager.queryBuilding(coord8)!!.setConstructionFinished()
         d.mapManager.queryBuilding(coord9)!!.setConstructionFinished()
+        d.mapManager.queryBuilding(coord10)!!.setConstructionFinished()
+        d.mapManager.queryBuilding(coord11)!!.setConstructionFinished()
+        d.mapManager.queryBuilding(coord12)!!.setConstructionFinished()
+        d.mapManager.queryBuilding(coord13)!!.setConstructionFinished()
 
         val result = d.mapManager.getHousingDemand()
 
-        assertEquals(HousingDemand(lvl1 = 3, lvl2 = 3, lvl3 = 0, lvl4 = 0), result)
+        //assertEquals(HousingDemand(lvl1 = 4, lvl2 = 3, lvl3 = 0, lvl4 = 0), result)
+        assertEquals(HousingDemand(lvl1 = 3, lvl2 = 3, lvl3 = 0, lvl4 = 0), result)//TODO  revert to 4 of lvl1 when the fisher needs housing again
     }
 
     //TODO move to MapManagerTest?
