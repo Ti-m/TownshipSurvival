@@ -95,7 +95,7 @@ class MapManagerTest {
     }
 
     @Test
-    fun getCellsWhichShallRunAProduction() {
+    fun `getCellsWhichShallRunAProduction - one of two is found, because only one has material`() {
         val c1 = Coordinates(1,1)
         val c2 = Coordinates(0,2)
         d.gameStateManager.applyStates(listOf(
@@ -104,13 +104,31 @@ class MapManagerTest {
             GameStateCreator.addWoodToProduction(c1),
         ))
         val cell1 = d.mapManager.findSpecificCell(c1)!!
+        val cell2 = d.mapManager.findSpecificCell(c2)!!
         cell1.building!!.setConstructionFinished()
+        cell2.building!!.setConstructionFinished()
+        cell1.building!!.workerLivesAt = Coordinates(0,0) //Anything except null
+        cell2.building!!.workerLivesAt = Coordinates(0,0) //Anything except null
 
         val result = d.mapManager.getCellsWhichShallRunAProduction()
 
         assertEquals(mapOf(
             Pair(c1, cell1)
         ), result)
+    }
+
+    @Test
+    fun `getCellsWhichShallRunAProduction - none, because no worker`() {
+        d.gameStateManager.applyStates(listOf(
+            GameStateCreator.createFletcher(d.coords),
+            GameStateCreator.addWoodToProduction(d.coords),
+        ))
+        val fletcher = d.mapManager.findSpecificCell(d.coords)!!
+        fletcher.building!!.setConstructionFinished()
+
+        val result = d.mapManager.getCellsWhichShallRunAProduction()
+
+        assertEquals(emptyMap<Coordinates, Cell>(), result)
     }
 
     @Test
@@ -300,20 +318,22 @@ class MapManagerTest {
     }
 
     @Test
-    fun `getCellsWhichShallRunAProduction() - production, because all materials are available`() {
+    fun `getCellsWhichShallContinueAProduction() - production, because production is already running`() {
         //Init
         d.gameStateManager.applyStates(listOf(
-            GameStateCreator.createFletcher(d.coords),
-            GameStateCreator.addWoodToProduction(d.coords)
+            GameStateCreator.createFletcher(d.coords)
         ))
-        d.mapManager.queryBuilding(d.coords)!!.setConstructionFinished()
+        val fletcher = d.mapManager.queryBuilding(d.coords)!!
+        fletcher.setConstructionFinished()
+        fletcher.workerLivesAt = Coordinates(1,1)//Anything, just not null
+        fletcher.productionCount = 50 //set by hand
 
         //Check
-        assertEquals(1, d.mapManager.getCellsWhichShallRunAProduction().size)
+        assertEquals(1, d.mapManager.getCellsWhichShallContinueAProduction().size)
     }
 
     @Test
-    fun `getCellsWhichShallContinueAProduction() - production, because production is already running`() {
+    fun `getCellsWhichShallContinueAProduction() - none, because no worker`() {
         //Init
         d.gameStateManager.applyStates(listOf(
             GameStateCreator.createFletcher(d.coords)
@@ -322,7 +342,7 @@ class MapManagerTest {
         d.mapManager.queryBuilding(d.coords)!!.productionCount = 50 //set by hand
 
         //Check
-        assertEquals(1, d.mapManager.getCellsWhichShallContinueAProduction().size)
+        assertEquals(0, d.mapManager.getCellsWhichShallContinueAProduction().size)
     }
 
     @Test

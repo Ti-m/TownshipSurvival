@@ -99,6 +99,7 @@ open class MapManager(
         return getCellsWithBuildings()
             .filterForFinishedConstruction()
             .filterForProductionBuildings()
+            .filterForBuildingHasWorker()
             .filterForProductionStarted()
     }
 
@@ -106,6 +107,7 @@ open class MapManager(
         return getCellsWithBuildings()
             .filterForFinishedConstruction()
             .filterForProductionBuildings()
+            .filterForBuildingHasWorker()
             .filterForProductionNOTStarted()
             .filterForProductionNOTBlocked()
             .filterForAllProductionMaterialsAvailable()
@@ -227,6 +229,10 @@ open class MapManager(
 
     private fun Map<Coordinates, Cell>.filterForProductionNOTBlocked(): Map<Coordinates, Cell> {
         return filterValues { it.building != null && it.building!!.isProductionBlocked.not() }
+    }
+
+    private fun Map<Coordinates, Cell>.filterForBuildingHasWorker(): Map<Coordinates, Cell> {
+        return filterValues { it.building!!.workerLivesAt != null }
     }
 
     //https://www.redblobgames.com/grids/hexagons/#coordinates-doubled

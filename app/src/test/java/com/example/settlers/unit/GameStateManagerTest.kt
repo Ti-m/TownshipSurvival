@@ -314,8 +314,9 @@ class GameStateManagerTest {
             GameStateCreator.removeStoneFromRequired(d.coords),
             GameStateCreator.addWoodToProduction(d.coords),
         ))
-        val cell = d.mapManager.findSpecificCell(d.coords)!!
-        cell.building!!.setConstructionFinished()
+        val fletcher = d.mapManager.queryBuilding(d.coords)!!
+        fletcher.setConstructionFinished()
+        fletcher.workerLivesAt = Coordinates(0,0)//Anything except null
         for (x in 0 .. 8) {
             //d.gameStateManager.runProduction(cell)
             d.gameStateManager.tick()

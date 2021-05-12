@@ -235,6 +235,7 @@ class TransportationTest {
             d.gameStateManager.tick()
         }
         assertTrue(fletcher2.isConstructed())
+        fletcher2.workerLivesAt = Coordinates(0,0)//Anything except null
 
         for (x in 1 .. 4) {
             //sut.runProduction(cell)

@@ -80,7 +80,6 @@ open class GameStateManager(
         }
 
         mapManager.getCellsWhichShallContinueAProduction().forEach { (_, cell) ->
-            //TODO filter houses without worker
             applyStates(runProduction(cell))
         }
 

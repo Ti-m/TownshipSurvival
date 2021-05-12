@@ -58,6 +58,9 @@ class ProductionTest {
         //Now it's finished
         Assert.assertTrue(d.mapManager.queryBuilding(cFletcher1)!!.isConstructed())
 
+        //TODO use a real house here?
+        d.mapManager.queryBuilding(cFletcher1)!!.workerLivesAt = Coordinates(0,0)//Anything except null
+
         for (x in 1 .. 7) {
             //d.gameStateManager.runProduction(cell)
             d.gameStateManager.tick()
