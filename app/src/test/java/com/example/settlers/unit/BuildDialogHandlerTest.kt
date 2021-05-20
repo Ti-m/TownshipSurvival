@@ -79,7 +79,7 @@ class BuildDialogHandlerTest {
     @Test
     fun onClick_offers() {
         sut.selectedCallback(Townhall(), d.coords)
-        assertEquals(listOf(Lumber, Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone), cell.building!!.offers)
+        assertEquals(listOf(Lumber, Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone, Fish, Fish), cell.building!!.offers)
         sut.selectedCallback(Forester(), d.coords)
         assertEquals(emptyList<Resource>(), cell.building!!.offers)
         sut.selectedCallback(Lumberjack(), d.coords)

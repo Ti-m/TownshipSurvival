@@ -66,18 +66,18 @@ open class GameStateManager(
             applyStates(transportManager.moveResources(cell))
         }
 
-        //get all buildings? Or only prod or houses?
         mapManager.getCellsWithHousesWithoutARunningProductionAndNoMaterialsAvailable().forEach { (_, cell) ->
-            applyStates(
-                mapManager.removeHouseAssignments(cell)
-            )
+            applyStates(mapManager.removeHouseAssignmentsWithHouseAsBase(cell))
         }
 
         mapManager.getCellsWithHousesWithoutARunningProductionAndMaterialsAvailable().forEach { (_, cell) ->
-            applyStates(
-                mapManager.addHouseAssignments(cell)
-            )
+            applyStates(mapManager.addLevel1HouseAssignmentsWithHouseAsBase(cell))
+            applyStates(mapManager.addLevel2HouseAssignmentsWithHouseAsBase(cell))
+            applyStates(mapManager.addLevel3HouseAssignmentsWithHouseAsBase(cell))
         }
+
+//        TODO Do I need this? To give new buildings a slot until the next luxury is consumed.
+//        mapManager.getCellsWithHousesAndARunningProductionAndEmptySpacesAvailable().forEach { (_, cell) -> }
 
         mapManager.getCellsWhichShallContinueAProduction().forEach { (_, cell) ->
             applyStates(runProduction(cell))

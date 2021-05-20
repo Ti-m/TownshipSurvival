@@ -26,16 +26,16 @@ class TransportationTest {
             GameStateCreator.createTownhall(provider),
             GameStateCreator.createLumberjack(destination),
         ))
-        assertEquals(listOf(Lumber, Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone), d.mapManager.queryInStorage(at = provider))
+        assertEquals(listOf(Lumber, Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone, Fish, Fish), d.mapManager.queryInStorage(at = provider))
 
         d.gameStateManager.tick()
         assertEquals(listOf(Lumber), d.mapManager.queryInTransport(at = provider))
-        assertEquals(listOf(Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone), d.mapManager.queryInStorage(at = provider))
+        assertEquals(listOf(Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone, Fish, Fish), d.mapManager.queryInStorage(at = provider))
         assertEquals(emptyList<Resource>(), d.mapManager.queryInProduction(at = provider))
 
         d.gameStateManager.tick()
         assertEquals(listOf(Lumber), d.mapManager.queryInTransport(at = destination))
-        assertEquals(listOf(Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone), d.mapManager.queryInStorage(at = provider))
+        assertEquals(listOf(Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone, Fish, Fish), d.mapManager.queryInStorage(at = provider))
         assertEquals(emptyList<Resource>(), d.mapManager.queryInProduction(at = provider))
 
         d.gameStateManager.tick()
@@ -45,7 +45,7 @@ class TransportationTest {
 
         d.gameStateManager.tick()
         assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = provider))
-        assertEquals(listOf(Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone), d.mapManager.queryInStorage(at = provider))
+        assertEquals(listOf(Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone, Fish, Fish), d.mapManager.queryInStorage(at = provider))
         assertEquals(listOf(Lumber), d.mapManager.queryInProduction(at = destination))
         assertEquals(listOf(Lumber), d.mapManager.queryInTransport(at = destination))
     }
@@ -56,9 +56,9 @@ class TransportationTest {
         d.gameStateManager.applyState(GameStateCreator.createRoad(Coordinates(3,1)))//Finish road
 
 
-        assertEquals(listOf(Lumber, Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone), d.mapManager.queryInStorage(at = Coordinates(2,0)))
-        assertEquals(listOf(Lumber, Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone), d.mapManager.queryInStorage(at = Coordinates(1,1)))
-        assertEquals(listOf(Lumber, Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone), d.mapManager.queryInStorage(at = Coordinates(2,2)))
+        assertEquals(listOf(Lumber, Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone, Fish, Fish), d.mapManager.queryInStorage(at = Coordinates(2,0)))
+        assertEquals(listOf(Lumber, Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone, Fish, Fish), d.mapManager.queryInStorage(at = Coordinates(1,1)))
+        assertEquals(listOf(Lumber, Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone, Fish, Fish), d.mapManager.queryInStorage(at = Coordinates(2,2)))
 
         d.gameStateManager.tick()
         assertEquals(emptyList<Resource>(), d.mapManager.queryInTransport(at = Coordinates(3,1)))

@@ -608,18 +608,29 @@ open class FlagTile(
                 Production: ${cell.production.joinToString { it.javaClass.simpleName }}
                 Requires: ${cell.requires.joinToString { it.javaClass.simpleName }}                
             """.trimIndent()
-            val buildingContent = if (cell.building != null) {
-                val progress = if (cell.building!!.isConstructed()) {
-                    cell.building!!.productionCount
+            val buildingContent = cell.building?.let {
+                //decide here between house and regular building. show a list of tenants for a house. color these on the map?
+                val progress = if (it.isConstructed()) {
+                    it.productionCount
                 } else {
-                    cell.building!!.constructionCount
+                    it.constructionCount
                 }
-                """
+                var a = """
                     Building:
-                    Progress : $progress
+                    Progress: $progress                    
                 """.trimIndent()
-            } else {
-                null
+                a += if (it is House) {
+                    """
+                                    
+                        Houses workers for: ${it.currentlyAssignedProductionBuildings}
+                    """.trimIndent()
+                } else {
+                    """
+                                    
+                        Lives at: ${it.workerLivesAt}
+                    """.trimIndent()
+                }
+                a
             }
 
             val deliveryState = when (cell.building?.stopDelivery) {

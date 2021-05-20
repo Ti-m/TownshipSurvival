@@ -113,7 +113,7 @@ class InspectDialog : BaseDialog() {
         dialog.setTitle( "Inspect :: (x=${coordinates.x}, y=${coordinates.y})")
         //dialog.setMessage(arguments!!.getString(MESSAGE))
         dialog.setItems(arrayOf(
-            arguments!!.getString(MESSAGE), //The data, click is ignored
+            requireArguments().getString(MESSAGE), //The data, click is ignored
             deliveryText
         ).filterNotNull().toTypedArray(), object : DialogInterface.OnClickListener {
             override fun onClick(dialog: DialogInterface?, which: Int) {

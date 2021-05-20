@@ -50,7 +50,7 @@ class GameStateManagerTest {
         assertTrue(d.mapManager.queryBuilding(d.coords) is Townhall)
 
         assertEquals(
-            listOf(Lumber, Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone),
+            listOf(Lumber, Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone, Fish, Fish),
             d.mapManager.queryInStorage(d.coords)
         )
     }
@@ -114,17 +114,17 @@ class GameStateManagerTest {
         assertEquals(0, d.mapManager.findSpecificCell(Coordinates(0, 0))!!.storage.count())
         d.gameStateManager.applyState(GameState(Coordinates(0,0), Operator.Set, Type.Building, Townhall()))
         assertEquals(0, d.mapManager.findSpecificCell(Coordinates(0, 0))!!.requires.count())
-        assertEquals(9, d.mapManager.findSpecificCell(Coordinates(0, 0))!!.storage.count())
+        assertEquals(11, d.mapManager.findSpecificCell(Coordinates(0, 0))!!.storage.count())
     }
 
     @Test
     fun `Replacing a building does not delete the storage`() {
         d.gameStateManager.applyState(GameState(Coordinates(0,0), Operator.Set, Type.Building, Townhall()))
         assertEquals(0, d.mapManager.findSpecificCell(Coordinates(0, 0))!!.requires.count())
-        assertEquals(9, d.mapManager.findSpecificCell(Coordinates(0, 0))!!.storage.count())
+        assertEquals(11, d.mapManager.findSpecificCell(Coordinates(0, 0))!!.storage.count())
         d.gameStateManager.applyState(GameState(Coordinates(0,0), Operator.Set, Type.Building, Lumberjack()))
         assertEquals(2, d.mapManager.findSpecificCell(Coordinates(0, 0))!!.requires.count())
-        assertEquals(9, d.mapManager.findSpecificCell(Coordinates(0, 0))!!.storage.count())
+        assertEquals(11, d.mapManager.findSpecificCell(Coordinates(0, 0))!!.storage.count())
     }
 
     @Test

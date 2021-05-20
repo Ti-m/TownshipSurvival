@@ -465,17 +465,16 @@ class MapManagerTest {
         assertEquals(0, d.mapManager.getCellsWithHousesWithoutARunningProductionAndMaterialsAvailable().size)
     }
 
-    //TODO
     @Test
-    fun `addHouseAssignments() - trivial test - no house`() {
+    fun `addHouseAssignments() - trivial test - no production`() {
         //Init
-        val coordsLumberjack = Coordinates(0,2)
-        d.gameStateManager.applyState(GameStateCreator.createLumberjack(coordsLumberjack))
-        val lumberjack = d.mapManager.findSpecificCell(coordsLumberjack)!!
-        lumberjack.building!!.setConstructionFinished()
+        val coordsHouse = Coordinates(0,2)
+        d.gameStateManager.applyState(GameStateCreator.createLvl1House(coordsHouse))
+        val house = d.mapManager.findSpecificCell(coordsHouse)!!
+        house.building!!.setConstructionFinished()
 
         //Do
-        val states = d.mapManager.addHouseAssignments(lumberjack)
+        val states = d.mapManager.addLevel1HouseAssignmentsWithHouseAsBase(house)
 
         //Check
         assertEquals(listOf<GameState>(), states)
@@ -494,7 +493,7 @@ class MapManagerTest {
         lumberjack.building!!.setConstructionFinished()
 
         //Do
-        val states = d.mapManager.addHouseAssignments(lumberjack)
+        val states = d.mapManager.addLevel1HouseAssignmentsWithHouseAsBase(house)
 
         //Check
         assertEquals(
@@ -506,6 +505,14 @@ class MapManagerTest {
             ),
             states
         )
+        //Apply the states
+        d.gameStateManager.applyStates(states)
+
+        //Do it again, to check if the states are applied in the right way
+        val states2 = d.mapManager.addLevel1HouseAssignmentsWithHouseAsBase(house)
+
+        //Check
+        assertEquals(listOf<GameState>(), states2)
     }
 
     @Test
@@ -521,22 +528,22 @@ class MapManagerTest {
         lumberjack.building!!.setConstructionFinished()
 
         //Do - remove them again
-        val newStates = d.mapManager.removeHouseAssignments(lumberjack)
+        val newStates = d.mapManager.removeHouseAssignmentsWithHouseAsBase(house)
 
         //Check
         assertEquals(listOf<GameState>(), newStates)
     }
 
     @Test
-    fun `removeHouseAssignments() - nothing to remove, not even a house set`() {
+    fun `removeHouseAssignments() - nothing to remove, only a house, no production building`() {
         //Init
-        val coordsLumberjack = Coordinates(0,2)
-        d.gameStateManager.applyState(GameStateCreator.createLumberjack(coordsLumberjack))
-        val lumberjack = d.mapManager.findSpecificCell(coordsLumberjack)!!
-        lumberjack.building!!.setConstructionFinished()
+        val coordsHouse = Coordinates(0,2)
+        d.gameStateManager.applyState(GameStateCreator.createLvl1House(coordsHouse))
+        val house = d.mapManager.findSpecificCell(coordsHouse)!!
+        house.building!!.setConstructionFinished()
 
         //Do - remove them again
-        val newStates = d.mapManager.removeHouseAssignments(lumberjack)
+        val newStates = d.mapManager.removeHouseAssignmentsWithHouseAsBase(house)
 
         //Check
         assertEquals(listOf<GameState>(), newStates)
@@ -554,11 +561,11 @@ class MapManagerTest {
         house.building!!.setConstructionFinished()
         lumberjack.building!!.setConstructionFinished()
         //setup housing
-        val states = d.mapManager.addHouseAssignments(lumberjack)
+        val states = d.mapManager.addLevel1HouseAssignmentsWithHouseAsBase(house)
         d.gameStateManager.applyStates(states)
 
         //Do - remove them again
-        val newStates = d.mapManager.removeHouseAssignments(lumberjack)
+        val newStates = d.mapManager.removeHouseAssignmentsWithHouseAsBase(house)
 
         //Check
         assertEquals(

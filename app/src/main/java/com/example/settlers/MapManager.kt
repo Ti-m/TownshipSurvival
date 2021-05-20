@@ -235,6 +235,10 @@ open class MapManager(
         return filterValues { it.building!!.workerLivesAt != null }
     }
 
+    private fun Map<Coordinates, Cell>.filterForBuildingHasNOWorker(): Map<Coordinates, Cell> {
+        return filterValues { it.building!!.workerLivesAt == null }
+    }
+
     //https://www.redblobgames.com/grids/hexagons/#coordinates-doubled
     //Columns are simply incremented with double coordinates
     fun getMaxColumn() = mapsize - 1
@@ -302,18 +306,26 @@ open class MapManager(
         return filterValues { it.building!!.housingLevel != null }
     }
 
-    fun getCellsWhichRequireAHouse(): Map<Coordinates, Cell> {
+    private fun Map<Coordinates, Cell>.filterForRequiresHousingWithLevel(level: Int): Map<Coordinates, Cell> {
+        return filterValues { it.building!!.housingLevel == level }
+    }
+
+    private fun getCellsWhichRequireAHouse(): Map<Coordinates, Cell> {
         return getCellsWithBuildings().filterForFinishedConstruction().filterForRequiresHousing()
     }
 
-    fun getBuildingsWhichRequireAHouse(): List<Building> {
+    private fun getBuildingsWhichRequireAHouse(): List<Building> {
         return getCellsWhichRequireAHouse().map { it.value.building!! }
     }
 
+    //TODO this is only used in tests at the moment. Obsolete?
     fun getBuildingsWithUnfulfilledHousing(): List<Building> {
         return getBuildingsWhichRequireAHouse().filter { it.workerLivesAt == null }
     }
 
+    private fun getCellsWithUnfulfilledHousingWithLevel(level: Int): List<Cell> {
+        return getCellsWhichRequireAHouse().filterForRequiresHousingWithLevel(level).filterForBuildingHasNOWorker().map { it.value }
+    }
 
     //TODO Move this to its own class?
     fun getHousingDemand(): HousingDemand {
@@ -374,35 +386,87 @@ open class MapManager(
             .filterForAllProductionMaterialsAvailable()
     }
 
-    fun removeHouseAssignments(cell: Cell): Collection<GameState> {
+    fun removeHouseAssignmentsWithHouseAsBase(houseCell: Cell): Collection<GameState> {
+        val states: MutableCollection<GameState> = mutableListOf()
+        (houseCell.building as House).currentlyAssignedProductionBuildings.forEach {
+            states.addAll(removeHouseAssignmentsWithProductionBuildingAsBase(findSpecificCell(it)!!))
+        }
+        return states
+    }
+
+    //This function has the production building as base cell
+    private fun removeHouseAssignmentsWithProductionBuildingAsBase(productionCell: Cell): Collection<GameState> {
         //TODO Maybe split this into remove in the house AND remove in the destination
-        val productionBuilding = queryBuilding(cell.coordinates)!!
+        val productionBuilding = queryBuilding(productionCell.coordinates)!!
         //remove worker from production building
         val coordinatesOfAssignedHouse: Coordinates = productionBuilding.workerLivesAt ?: return emptyList()
 
         return  mutableListOf(
             //rmeove worker from production building
-            GameState(cell.coordinates, Operator.Remove, Type.ProductionAssignment, Assignment(coordinatesOfAssignedHouse)),
+            GameState(productionCell.coordinates, Operator.Remove, Type.ProductionAssignment, Assignment(coordinatesOfAssignedHouse)),
             //remove worker from house
-            GameState(coordinatesOfAssignedHouse, Operator.Remove, Type.HouseAssignment, Assignment(cell.coordinates)),
+            GameState(coordinatesOfAssignedHouse, Operator.Remove, Type.HouseAssignment, Assignment(productionCell.coordinates)),
         )
     }
 
-    fun addHouseAssignments(cell: Cell): Collection<GameState> {
-        //Find the required space of the production building
-        val building = queryBuilding(cell.coordinates)!!
-        val requiredHousingLevel = building.housingLevel!!
-        //Find a house with space (valid road can be omitted, because the house needs luxurys anyway)
-        //If null is returned there are no houses available
-        val coordinatesWithSpace: Coordinates = getHouseWithLevelAvailable(requiredHousingLevel) ?: return emptyList()
-
-        return  mutableListOf(
+    private fun setWorkerToUnfulfilled(production: Cell, house: Cell): Collection<GameState> {
+        return  listOf(
             //assign to the production building
-            GameState(cell.coordinates, Operator.Set, Type.ProductionAssignment, Assignment(coordinatesWithSpace)),
+            GameState(production.coordinates, Operator.Set, Type.ProductionAssignment, Assignment(house.coordinates)),
             //assign to the house
-            GameState(coordinatesWithSpace, Operator.Set, Type.HouseAssignment, Assignment(cell.coordinates)),
+            GameState(house.coordinates, Operator.Set, Type.HouseAssignment, Assignment(production.coordinates)),
         )
     }
+
+    fun addLevel1HouseAssignmentsWithHouseAsBase(houseCell: Cell): Collection<GameState> {
+        val house = queryBuilding(houseCell.coordinates) as House
+        val availableHousing = house.currentHousingAvailable.lvl1
+        val unfulfilled = getCellsWithUnfulfilledHousingWithLevel(1).toMutableList()
+        return addHouseAssignmentsWithHouseAsBase(houseCell, unfulfilled, availableHousing)
+    }
+
+    fun addLevel2HouseAssignmentsWithHouseAsBase(houseCell: Cell): Collection<GameState> {
+        val house = queryBuilding(houseCell.coordinates) as House
+        val availableHousing = house.currentHousingAvailable.lvl2
+        val unfulfilled = getCellsWithUnfulfilledHousingWithLevel(2).toMutableList()
+        return addHouseAssignmentsWithHouseAsBase(houseCell, unfulfilled, availableHousing)
+    }
+
+    fun addLevel3HouseAssignmentsWithHouseAsBase(houseCell: Cell): Collection<GameState> {
+        val house = queryBuilding(houseCell.coordinates) as House
+        val availableHousing = house.currentHousingAvailable.lvl3
+        val unfulfilled = getCellsWithUnfulfilledHousingWithLevel(3).toMutableList()
+        return addHouseAssignmentsWithHouseAsBase(houseCell, unfulfilled, availableHousing)
+    }
+
+    private fun addHouseAssignmentsWithHouseAsBase(houseCell: Cell, unfulfilledProduction: MutableList<Cell>, availableHousing: Int): Collection<GameState> {
+        val states: MutableCollection<GameState> = mutableListOf()
+        var mutableAvailableHousing = availableHousing
+        var availableProduction = unfulfilledProduction.count()
+        while (mutableAvailableHousing > 0 && availableProduction > 0) {
+            mutableAvailableHousing--
+            availableProduction--
+            states.addAll(setWorkerToUnfulfilled(unfulfilledProduction.first(), houseCell))
+        }
+        return states
+    }
+
+//    //TODO This is useless?
+//    fun addHouseAssignmentsWithProductionBuildingAsBase(cell: Cell): Collection<GameState> {
+//        //Find the required space of the production building
+//        val building = queryBuilding(cell.coordinates)!!
+//        val requiredHousingLevel = building.housingLevel!!
+//        //Find a house with space (valid road can be omitted, because the house needs luxurys anyway)
+//        //If null is returned there are no houses available
+//        val coordinatesWithSpace: Coordinates = getHouseWithLevelAvailable(requiredHousingLevel) ?: return emptyList()
+//
+//        return  mutableListOf(
+//            //assign to the production building
+//            GameState(cell.coordinates, Operator.Set, Type.ProductionAssignment, Assignment(coordinatesWithSpace)),
+//            //assign to the house
+//            GameState(coordinatesWithSpace, Operator.Set, Type.HouseAssignment, Assignment(cell.coordinates)),
+//        )
+//    }
 
     private fun getHouseWithLevelAvailable(level: Int): Coordinates? {
         return getCellsWithFinishedHouses().filter {
@@ -416,7 +480,6 @@ open class MapManager(
 
         }.keys.firstOrNull()
     }
-
 
 
 //    fun areProductionRequirementsavailable(entry: Map.Entry<Coordinates, Cell>): List<GameState> {

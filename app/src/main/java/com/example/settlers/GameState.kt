@@ -212,7 +212,7 @@ class Townhall : Building() {
     override val requiresConstruction: MutableList<Resource> = mutableListOf()//mutableListOf(Ressource.Wood, Ressource.Wood, Ressource.Stone, Ressource.Stone, Ressource.Stone)//TODO set the real cost, atm its for free
     override val requiresProduction: MutableList<Resource> = mutableListOf()
 
-    override val offers: MutableList<Resource> = mutableListOf(Lumber, Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone)
+    override val offers: MutableList<Resource> = mutableListOf(Lumber, Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone, Fish, Fish)
 
     override val housingLevel: Int? = null
 }

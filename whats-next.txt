@@ -61,7 +61,10 @@ HousingAlgorithmus
 *** Fish is unlimited but can only be used by one fisher every round
 *** (This concept can be adopted for ore in mountains)
 * Implement upgrading of houses
-* Show in info dialog, where a worker of a house lives
+* DONE Show in inspect dialog, where a worker of a house lives
+* In GameStateManager, add a concept like getCellsWithHousesAndARunningProductionAndEmptySpacesAvailable
+** To give new buildings a slot in a house until the next luxury is consumed. Otherwise, only in this case a new house would be assigned.
+* Buildings consuming world resources, are producing without worker. I.e. lumberjack
 
 * Housing
 1 Buildable Houses
