@@ -23,7 +23,8 @@ class GraphicalFlagTile(
     modeController: ModeController,
     private val neighbourCalculator: HexagonNeighbourCalculator,
     isLowDpi: Boolean,
-) : FlagTile(context, cell, modeController, isLowDpi) {
+    overlayController: OverlayController
+) : FlagTile(context, cell, modeController, isLowDpi, overlayController) {
 
     //TODO can these stay here? or init only once?
     //private val image: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.hexagon_outline_32, null)
@@ -278,7 +279,8 @@ open class FlagTile(
     context: Context,
     val cell: Cell,
     private val modeController: ModeController,
-    isLowDpi: Boolean
+    isLowDpi: Boolean,
+    private val overlayController: OverlayController,
 ) : View(context) {
 
     companion object {
@@ -292,6 +294,7 @@ open class FlagTile(
     private val textPaint = ColorHelper.getTextPaint()
     private val buildingPaint = ColorHelper.getBuildingPaint()
     private val stoppedPaint = ColorHelper.getStoppedPaint()
+    private val overlayColor = ColorHelper.getOverLayPaint()
     private val path = Path()
 
     override fun onDraw(canvas: Canvas?) {
@@ -327,7 +330,9 @@ open class FlagTile(
 //        } else {
 //            canvas.drawPath(path, groundPaint)
 //        }
-        if (cell.building != null) {
+        if (overlayController.shallDrawOverlayForCoordinates(cell.coordinates)) {
+            canvas.drawPath(path, overlayColor)
+        } else if (cell.building != null) {
             if (cell.building!!.stopDelivery) {
                 canvas.drawPath(path, stoppedPaint)
             } else {
@@ -602,6 +607,8 @@ open class FlagTile(
             val dialog = BuildDialog.newInstance(cell.coordinates)
             dialog.show((context as MainActivity).supportFragmentManager, TAG)
         } else {
+            //Clear here, in case nothing is selected
+            overlayController.clearOverlay()
             //TODO use mapManger API here when extracting the method
             val content = """
                 Storage: ${cell.storage.joinToString { it.javaClass.simpleName }}
@@ -620,11 +627,15 @@ open class FlagTile(
                     Progress: $progress                    
                 """.trimIndent()
                 a += if (it is House) {
+                    overlayController.updateOverlay(it.currentlyAssignedProductionBuildings)
                     """
                                     
                         Houses workers for: ${it.currentlyAssignedProductionBuildings}
                     """.trimIndent()
                 } else {
+                    it.workerLivesAt?.let { worker ->
+                        overlayController.updateOverlay(worker)
+                    }
                     """
                                     
                         Lives at: ${it.workerLivesAt}

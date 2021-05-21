@@ -69,4 +69,13 @@ object ColorHelper {
             this.strokeWidth = 1.0f
         }
     }
+
+    fun getOverLayPaint() : Paint {
+        return Paint().apply {
+            this.color = Color.BLUE
+            this.alpha = 200 //Make this less bright
+            this.style = Paint.Style.FILL_AND_STROKE
+            this.strokeWidth = 1.0f
+        }
+    }
 }

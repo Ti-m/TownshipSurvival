@@ -110,7 +110,8 @@ class GameFragment : Fragment() {
 
         val modeController = ModeController()
         val isLowDpi = resources.displayMetrics.density < 2
-        val tileManager = TileManager(tiles = mapGen.createTiles(requireActivity(), model.cells, modeController, neighbourCalculator, isLowDpi))
+        val overlayController = OverlayController()
+        val tileManager = TileManager(tiles = mapGen.createTiles(requireActivity(), model.cells, modeController, neighbourCalculator, isLowDpi, overlayController))
         val gw2 = GameWorld(tileManager = tileManager, context = requireActivity())
         //gw2.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         gw2.layoutParams = ViewGroup.LayoutParams(
