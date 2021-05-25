@@ -62,12 +62,14 @@ HousingAlgorithmus
 *** (This concept can be adopted for ore in mountains)
 * Implement upgrading of houses
 * DONE Show in inspect dialog, where a worker of a house lives
-** Show an overlay on the world map after looking into a house.
-*** This should color the building and the corresponding house where the worker lives
+** DONE Show an overlay on the world map after looking into a house.
+*** DONE This should color the building and the corresponding house where the worker lives
+**** DONE Different colors?
 *** In the topleft/right should be a dismiss button overlay
 * In GameStateManager, add a concept like getCellsWithHousesAndARunningProductionAndEmptySpacesAvailable
 ** To give new buildings a slot in a house until the next luxury is consumed. Otherwise, only in this case a new house would be assigned.
 * Buildings consuming world resources, are producing without worker. I.e. lumberjack
+* Production is not increased in houses
 
 * Housing
 1 Buildable Houses

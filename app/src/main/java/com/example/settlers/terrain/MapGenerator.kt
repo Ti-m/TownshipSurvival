@@ -76,8 +76,17 @@ class MapGenerator(private val interpolator: TerrainInterpolator, private val ra
         modeController: ModeController,
         neighbourCalculator: HexagonNeighbourCalculator,
         isLowDpi: Boolean,
-        overlayController: OverlayController,
+        assignedOverlayController: OverlayController,
+        clickedOverlayController: OverlayController,
     ): Map<Coordinates, FlagTile> {
-        return input.mapValues { GraphicalFlagTile(context, it.value, modeController, neighbourCalculator, isLowDpi, overlayController) }
+        return input.mapValues { GraphicalFlagTile(
+            context,
+            it.value,
+            modeController,
+            neighbourCalculator,
+            isLowDpi,
+            assignedOverlayController,
+            clickedOverlayController,
+        )}
     }
 }
