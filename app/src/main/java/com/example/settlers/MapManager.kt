@@ -327,6 +327,15 @@ open class MapManager(
         return getCellsWhichRequireAHouse().filterForRequiresHousingWithLevel(level).filterForBuildingHasNOWorker().map { it.value }
     }
 
+    fun getRequiredHousing(targetProduction: Coordinates): Int {
+        val productionBuilding = queryBuilding(targetProduction)!!
+        return getRequiredHousing(productionBuilding)
+    }
+
+    fun getRequiredHousing(targetProduction: Building): Int {
+        return targetProduction.housingLevel!!
+    }
+
     //TODO Move this to its own class?
     fun getHousingDemand(): HousingDemand {
         var lvl1 = 0
@@ -446,7 +455,7 @@ open class MapManager(
         while (mutableAvailableHousing > 0 && availableProduction > 0) {
             mutableAvailableHousing--
             availableProduction--
-            states.addAll(setWorkerToUnfulfilled(unfulfilledProduction.first(), houseCell))
+            states.addAll(setWorkerToUnfulfilled(unfulfilledProduction.removeFirst(), houseCell))
         }
         return states
     }
@@ -468,6 +477,7 @@ open class MapManager(
 //        )
 //    }
 
+    //TODO obsolete? not used atm
     private fun getHouseWithLevelAvailable(level: Int): Coordinates? {
         return getCellsWithFinishedHouses().filter {
             when (level) {
@@ -490,7 +500,7 @@ open class MapManager(
 }
 
 @Serializable
-data class HousingDemand(val lvl1: Int, val lvl2: Int, val lvl3: Int, val lvl4: Int)
+data class HousingDemand(var lvl1: Int, var lvl2: Int, var lvl3: Int, var lvl4: Int)
 
 class MapManagerPreparedForTest(
     cells: Map<Coordinates, Cell>,

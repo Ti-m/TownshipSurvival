@@ -339,12 +339,14 @@ open class GameStateManager(
                     Type.WorldResource -> selected.worldResource = state.data as WorldResource
                     Type.ProductionAssignment -> selected.building!!.workerLivesAt = (state.data as Assignment).coordinates
                     Type.HouseAssignment -> {
-                        val currentlyAssigned = (selected.building!! as House).currentlyAssignedProductionBuildings
-                        if (currentlyAssigned.count() >= 3) {
-                            //TODO The magic number 3 is derived from the maximum housing available in a house. Remove the magic number
+                        val targetHouse = selected.building!! as House
+                        val neededHousing = mapManager.getRequiredHousing((state.data as Assignment).coordinates)
+                        val slotIsAvailable = checkIfHouseSlotIsAvailable(neededHousing = neededHousing, targetHouse = targetHouse)
+                        if (slotIsAvailable.not()) {
                             throw IllegalStateException("To many assigned workers! $selected")
                         }
-                        (selected.building!! as House).currentlyAssignedProductionBuildings.add((state.data as Assignment).coordinates)
+                        targetHouse.currentlyAssignedProductionBuildings.add(state.data.coordinates)
+                        reduceAvailableHousing(neededHousing, targetHouse)
                     }
                 }
             }
@@ -381,6 +383,31 @@ open class GameStateManager(
                 }
             }
         }
+    }
+
+    private fun reduceAvailableHousing(neededHousing: Int,targetHouse: House) {
+        when(neededHousing) {
+            1 -> targetHouse.currentHousingAvailable.lvl1--
+            2 -> targetHouse.currentHousingAvailable.lvl2--
+            3 -> targetHouse.currentHousingAvailable.lvl3--
+            4 -> targetHouse.currentHousingAvailable.lvl4--
+        }
+    }
+
+    private fun checkIfHouseSlotIsAvailable(neededHousing: Int, targetHouse: House): Boolean {
+        val housingAvailable = targetHouse.currentHousingAvailable
+        return when (neededHousing) {
+            1 -> housingAvailable.lvl1 > 0
+            2 -> housingAvailable.lvl2 > 0
+            3 -> housingAvailable.lvl3 > 0
+            4 -> housingAvailable.lvl4 > 0
+            else -> false
+        }
+    }
+
+    private fun checkIfHouseSlotIsAvailable(assignment: Assignment, targetHouse: House): Boolean {
+        val neededHousing = mapManager.getRequiredHousing(assignment.coordinates)
+        return checkIfHouseSlotIsAvailable(neededHousing, targetHouse)
     }
 
     fun setNextSpawner() {

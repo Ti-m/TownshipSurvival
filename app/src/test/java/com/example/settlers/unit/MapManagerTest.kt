@@ -516,6 +516,57 @@ class MapManagerTest {
     }
 
     @Test
+    fun `addHouseAssignments() - Add more production buildings, then slots are available`() {
+        //Init
+        val coordsHouse = Coordinates(0,0)
+        val prod1 = Coordinates(2,0)
+        val prod2 = Coordinates(4,0)
+        val prod3 = Coordinates(6,0)
+        val prod4 = Coordinates(1,1)
+        d.gameStateManager.applyState(GameStateCreator.createLvl1House(coordsHouse))
+        d.gameStateManager.applyState(GameStateCreator.createLumberjack(prod1))
+        d.gameStateManager.applyState(GameStateCreator.createLumberjack(prod2))
+        d.gameStateManager.applyState(GameStateCreator.createLumberjack(prod3))
+        d.gameStateManager.applyState(GameStateCreator.createLumberjack(prod4))
+        val house = d.mapManager.findSpecificCell(coordsHouse)!!
+        val houseBuilding = d.mapManager.queryBuilding(coordsHouse)!! as House
+        val lumber1 = d.mapManager.findSpecificCell(prod1)!!
+        val lumber2 = d.mapManager.findSpecificCell(prod2)!!
+        val lumber3 = d.mapManager.findSpecificCell(prod3)!!
+        val lumber4 = d.mapManager.findSpecificCell(prod4)!!
+        houseBuilding.setConstructionFinished()
+        lumber1.building!!.setConstructionFinished()
+        lumber2.building!!.setConstructionFinished()
+        lumber3.building!!.setConstructionFinished()
+        lumber4.building!!.setConstructionFinished()
+
+        //Do
+        val states = d.mapManager.addLevel1HouseAssignmentsWithHouseAsBase(house)
+        //Check
+        assertEquals(
+            listOf(
+                GameState(coordinates=Coordinates(x=2, y=0), operator=Operator.Set, type=Type.ProductionAssignment, data=Assignment(coordinates=Coordinates(x=0, y=0))),
+                GameState(coordinates=Coordinates(x=0, y=0), operator=Operator.Set, type=Type.HouseAssignment, data=Assignment(coordinates=Coordinates(x=2, y=0))),
+                GameState(coordinates=Coordinates(x=4, y=0), operator=Operator.Set, type=Type.ProductionAssignment, data=Assignment(coordinates=Coordinates(x=0, y=0))),
+                GameState(coordinates=Coordinates(x=0, y=0), operator=Operator.Set, type=Type.HouseAssignment, data=Assignment(coordinates=Coordinates(x=4, y=0)))
+            ),
+            states)
+
+        assertEquals(HousingDemand(lvl1 = 2, lvl2 = 1, lvl3 = 0, lvl4 = 0), houseBuilding.currentHousingAvailable)
+        //Apply the states
+        d.gameStateManager.applyStates(states)
+        //The available housing should be reduced, when applying the states
+        assertEquals(HousingDemand(lvl1 = 0, lvl2 = 1, lvl3 = 0, lvl4 = 0), houseBuilding.currentHousingAvailable)
+
+        //Do it again - to check that the house is full
+        //All production buildings should be assigned now
+        val states2 = d.mapManager.addLevel1HouseAssignmentsWithHouseAsBase(house)
+
+        //Check
+        assertEquals(listOf<GameState>(), states2)
+    }
+
+    @Test
     fun `removeHouseAssignments() - nothing to remove, no workers set`() {
         //Init
         val coordsHouse = Coordinates(1,1)
