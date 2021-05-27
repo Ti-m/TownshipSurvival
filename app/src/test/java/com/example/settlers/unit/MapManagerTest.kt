@@ -377,10 +377,23 @@ class MapManagerTest {
     }
 
     @Test
-    fun `getCellsWhichShallRunAProductionWithProducingOutsideResources() - find a forester`() {
+    fun `getCellsWhichShallRunAProductionWithProducingOutsideResources() - 0, because no worker`() {
         //Init
         d.gameStateManager.applyState(GameStateCreator.createForester(d.coords))
         d.mapManager.queryBuilding(d.coords)!!.setConstructionFinished()
+
+        //Check
+        assertEquals(0, d.mapManager.getCellsWhichShallRunAProductionWithProducingOutsideResources().size)
+    }
+
+    @Test
+    fun `getCellsWhichShallRunAProductionWithProducingOutsideResources() - find a forester`() {
+        //Init
+        d.gameStateManager.applyState(GameStateCreator.createForester(d.coords))
+        val forester = d.mapManager.queryBuilding(d.coords)!!
+        forester.setConstructionFinished()
+        //some random coordinates to satisfy worker housing requirement
+        forester.workerLivesAt = Coordinates(1,1)
 
         //Check
         assertEquals(1, d.mapManager.getCellsWhichShallRunAProductionWithProducingOutsideResources().size)

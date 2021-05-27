@@ -47,7 +47,10 @@ class ProductionTest {
         Assert.assertEquals(90, d.mapManager.queryBuilding(cLumber)!!.constructionCount)
         d.gameStateManager.tick()
         //Now it's finished
-        Assert.assertTrue(d.mapManager.queryBuilding(cLumber)!!.isConstructed())
+        val lumberjack = d.mapManager.queryBuilding(cLumber)!!
+        Assert.assertTrue(lumberjack.isConstructed())
+        lumberjack.workerLivesAt = Coordinates(0,0)//Set a dummy worker, anything except null
+
         for (x in 1 .. 13) {
             //d.gameStateManager.runProduction(cell)
             d.gameStateManager.tick()
@@ -58,8 +61,7 @@ class ProductionTest {
         //Now it's finished
         Assert.assertTrue(d.mapManager.queryBuilding(cFletcher1)!!.isConstructed())
 
-        //TODO use a real house here?
-        d.mapManager.queryBuilding(cFletcher1)!!.workerLivesAt = Coordinates(0,0)//Anything except null
+        d.mapManager.queryBuilding(cFletcher1)!!.workerLivesAt = Coordinates(0,0)//Set a dummy worker, anything except null
 
         for (x in 1 .. 7) {
             //d.gameStateManager.runProduction(cell)

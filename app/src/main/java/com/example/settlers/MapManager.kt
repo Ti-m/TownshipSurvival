@@ -117,6 +117,7 @@ open class MapManager(
     fun getCellsWhichShallRunAProductionWithConsumingOutsideResources(): Map<Coordinates, Cell> {
         return getCellsWithBuildings()
             .filterForFinishedConstruction()
+            .filterForBuildingHasWorker()
             .filterForStorageNotFull()
             .filterForOutsideResourcesConsumingProductionBuildings()
         //isWorldResourceInRange is not checked here, because the routing algirithm is not available to the MapManager
@@ -125,6 +126,7 @@ open class MapManager(
     fun getCellsWhichShallRunAProductionWithProducingOutsideResources(): Map<Coordinates, Cell> {
         return getCellsWithBuildings()
             .filterForFinishedConstruction()
+            .filterForBuildingHasWorker()
             .filterForOutsideResourcesCreatingProductionBuildings()
             //isSpaceAvailableForWorldResource is not checked here, because the routing algirithm is not available to the MapManager
     }

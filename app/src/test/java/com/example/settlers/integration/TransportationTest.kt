@@ -229,13 +229,14 @@ class TransportationTest {
             d.gameStateManager.tick()
         }
         assertTrue(lumber.isConstructed())
+        lumber.workerLivesAt = Coordinates(0,0)//Set a dummy worker, anything except null
 
         for (x in 1 .. 11) {
             //sut.runProduction(cell)
             d.gameStateManager.tick()
         }
         assertTrue(fletcher2.isConstructed())
-        fletcher2.workerLivesAt = Coordinates(0,0)//Anything except null
+        fletcher2.workerLivesAt = Coordinates(0,0)//Set a dummy worker, anything except null
 
         for (x in 1 .. 4) {
             //sut.runProduction(cell)

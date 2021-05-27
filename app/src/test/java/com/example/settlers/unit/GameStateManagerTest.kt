@@ -378,9 +378,12 @@ class GameStateManagerTest {
             GameStateCreator.removeLumberFromRequired(d.coords),
             GameStateCreator.createTree(Coordinates(2,0))
         ))
-        val cell = d.mapManager.findSpecificCell(d.coords)!!
+        val lumberjack = d.mapManager.queryBuilding(d.coords)!!
 
-        cell.building!!.setConstructionFinished()
+        lumberjack.setConstructionFinished()
+        //some random coordinates to satisfy worker housing requirement
+        lumberjack.workerLivesAt = Coordinates(1,1)
+
         for (x in 0 .. 8) {
             //d.gameStateManager.runProduction(cell)
             d.gameStateManager.tick()
@@ -402,9 +405,12 @@ class GameStateManagerTest {
             GameStateCreator.removeWoodFromRequired(d.coords),
             GameStateCreator.createRock(Coordinates(2,0))
         ))
-        val cell = d.mapManager.findSpecificCell(d.coords)!!
+        val stonemason = d.mapManager.queryBuilding(d.coords)!!
 
-        cell.building!!.setConstructionFinished()
+        stonemason.setConstructionFinished()
+        //some random coordinates to satisfy worker housing requirement
+        stonemason.workerLivesAt = Coordinates(1,1)
+
         for (x in 0 .. 8) {
             //d.gameStateManager.runProduction(cell)
             d.gameStateManager.tick()
@@ -419,15 +425,17 @@ class GameStateManagerTest {
     }
 
     @Test
-    fun `runProductionWithProducingOutsideResource - Forester`() {
+    fun `runProductionWithProducingOutsideResource - Forester - check planting`() {
         d.gameStateManager.applyStates(listOf(
             GameStateCreator.createForester(d.coords),
             GameStateCreator.removeWoodFromRequired(d.coords),
             GameStateCreator.removeWoodFromRequired(d.coords)
         ))
-        val cell = d.mapManager.findSpecificCell(d.coords)!!
+        val forester = d.mapManager.queryBuilding(d.coords)!!
 
-        cell.building!!.setConstructionFinished()
+        forester.setConstructionFinished()
+        //some random coordinates to satisfy worker housing requirement
+        forester.workerLivesAt = Coordinates(1,1)
 
         d.gameStateManager.tick()
 
@@ -440,17 +448,6 @@ class GameStateManagerTest {
 
         assertEquals(Tree, d.mapManager.queryWorldResource(Coordinates(1,1)))
         assertEquals(Tree, d.mapManager.queryWorldResource(Coordinates(2,0)))
-//        for (x in 0 .. 8) {
-//            //sut.runProduction(cell)
-//            sut.tick()
-//        }
-//        //Still empty
-//        assertEquals(listOf<Resource>(), mapManager.queryInStorage(coords))
-//
-//        sut.tick()
-//
-//        //Now there should be an produced item
-//        assertEquals(listOf(Stone), mapManager.queryInStorage(coords))
     }
 
     @Test
