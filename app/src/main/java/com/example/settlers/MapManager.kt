@@ -234,7 +234,10 @@ open class MapManager(
     }
 
     private fun Map<Coordinates, Cell>.filterForBuildingHasWorker(): Map<Coordinates, Cell> {
-        return filterValues { it.building!!.workerLivesAt != null }
+        return filterValues {
+            //Spawner shall produce without a worker
+            it.building!!.workerLivesAt != null || it.building is Spawner
+        }
     }
 
     private fun Map<Coordinates, Cell>.filterForBuildingHasNOWorker(): Map<Coordinates, Cell> {

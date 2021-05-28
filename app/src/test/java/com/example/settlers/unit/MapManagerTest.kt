@@ -132,6 +132,18 @@ class MapManagerTest {
     }
 
     @Test
+    fun `getCellsWhichShallRunAProduction - spawner shall produce even without a worker`() {
+        d.gameStateManager.applyStates(listOf(
+            GameStateCreator.createSpawner(d.coords),
+        ))
+        val spawner = d.mapManager.queryBuilding(d.coords)
+
+        val result = d.mapManager.getCellsWhichShallRunAProduction()
+
+        assertEquals(mapOf(Pair(Coordinates(0,0), Cell(Coordinates(0,0), GroundType.Desert, building = spawner))), result)
+    }
+
+    @Test
     fun `getCellsWhichShallRunAProduction - production is blocked`() {
         val c1 = Coordinates(1,1)
         d.gameStateManager.applyStates(listOf(
@@ -145,6 +157,22 @@ class MapManagerTest {
         val result = d.mapManager.getCellsWhichShallRunAProduction()
 
         assertEquals(emptyMap<Coordinates, Cell>(), result)
+    }
+
+    @Test
+    fun `getCellsWhichShallRunAProduction() - don't run production if already 3 items are in storage`() {
+        //Init
+        d.gameStateManager.applyStates(listOf(
+            GameStateCreator.createFletcher(d.coords),
+            GameStateCreator.addWoodToProduction(d.coords),//Material is available
+            GameStateCreator.addArrowToStorage(d.coords),//Already 3 are produced
+            GameStateCreator.addArrowToStorage(d.coords),//Already 3 are produced
+            GameStateCreator.addArrowToStorage(d.coords),//Already 3 are produced
+        ))
+        d.mapManager.queryBuilding(d.coords)!!.setConstructionFinished()
+
+        //Check
+        assertEquals(0, d.mapManager.getCellsWhichShallRunAProduction().size)
     }
 
     @Test
@@ -343,22 +371,6 @@ class MapManagerTest {
 
         //Check
         assertEquals(0, d.mapManager.getCellsWhichShallContinueAProduction().size)
-    }
-
-    @Test
-    fun `getCellsWhichShallRunAProduction() - don't run production if already 3 items are in storage`() {
-        //Init
-        d.gameStateManager.applyStates(listOf(
-            GameStateCreator.createFletcher(d.coords),
-            GameStateCreator.addWoodToProduction(d.coords),//Material is available
-            GameStateCreator.addArrowToStorage(d.coords),//Already 3 are produced
-            GameStateCreator.addArrowToStorage(d.coords),//Already 3 are produced
-            GameStateCreator.addArrowToStorage(d.coords),//Already 3 are produced
-        ))
-        d.mapManager.queryBuilding(d.coords)!!.setConstructionFinished()
-
-        //Check
-        assertEquals(0, d.mapManager.getCellsWhichShallRunAProduction().size)
     }
 
     @Test

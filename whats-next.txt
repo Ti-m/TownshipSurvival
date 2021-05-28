@@ -66,11 +66,16 @@ HousingAlgorithmus
 *** DONE This should color the building and the corresponding house where the worker lives
 **** DONE Different colors?
 *** In the topleft/right should be a dismiss button overlay
+* A house should show the different available Slot levels
+* A production building should show which kind of housing slot it needs
 * In GameStateManager, add a concept like getCellsWithHousesAndARunningProductionAndEmptySpacesAvailable
 ** To give new buildings a slot in a house until the next luxury is consumed. Otherwise, only in this case a new house would be assigned.
-* .. Buildings consuming world resources, are producing without worker. I.e. lumberjack
+* DONE Buildings consuming world resources, are producing without worker. I.e. lumberjack
+** . Spawner should produce without a worker. Currently it does not work???
+** Does arrow shooting already require a worker?
 * Production is not increased in houses
 * DONE A house gets more workers assigned then slots available
+* When a building is destroyed/ overbuild, there worker assignment is not cleared
 
 * Housing
 1 Buildable Houses
