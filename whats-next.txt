@@ -71,9 +71,9 @@ HousingAlgorithmus
 * In GameStateManager, add a concept like getCellsWithHousesAndARunningProductionAndEmptySpacesAvailable
 ** To give new buildings a slot in a house until the next luxury is consumed. Otherwise, only in this case a new house would be assigned.
 * DONE Buildings consuming world resources, are producing without worker. I.e. lumberjack
-** . Spawner should produce without a worker. Currently it does not work???
-** Does arrow shooting already require a worker?
-* Production is not increased in houses
+** DONE Spawner should produce without a worker. Currently it does not work???
+** DONE Does arrow shooting already require a worker? No
+* . Production is not increased in houses
 * DONE A house gets more workers assigned then slots available
 * When a building is destroyed/ overbuild, there worker assignment is not cleared
 

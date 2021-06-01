@@ -98,16 +98,16 @@ open class MapManager(
     fun getCellsWhichShallContinueAProduction(): Map<Coordinates, Cell> {
         return getCellsWithBuildings()
             .filterForFinishedConstruction()
-            .filterForProductionBuildings()
-            .filterForBuildingHasWorker()
+            .filterForProductionBuildingsANDHouses()
+            .filterForBuildingHasWorkerOrIsSpawnerOrHouse()
             .filterForProductionStarted()
     }
 
     fun getCellsWhichShallRunAProduction(): Map<Coordinates, Cell> {
         return getCellsWithBuildings()
             .filterForFinishedConstruction()
-            .filterForProductionBuildings()
-            .filterForBuildingHasWorker()
+            .filterForProductionBuildingsANDHouses()
+            .filterForBuildingHasWorkerOrIsSpawnerOrHouse()
             .filterForProductionNOTStarted()
             .filterForProductionNOTBlocked()
             .filterForAllProductionMaterialsAvailable()
@@ -117,7 +117,7 @@ open class MapManager(
     fun getCellsWhichShallRunAProductionWithConsumingOutsideResources(): Map<Coordinates, Cell> {
         return getCellsWithBuildings()
             .filterForFinishedConstruction()
-            .filterForBuildingHasWorker()
+            .filterForBuildingHasWorkerOrIsSpawnerOrHouse()
             .filterForStorageNotFull()
             .filterForOutsideResourcesConsumingProductionBuildings()
         //isWorldResourceInRange is not checked here, because the routing algirithm is not available to the MapManager
@@ -126,7 +126,7 @@ open class MapManager(
     fun getCellsWhichShallRunAProductionWithProducingOutsideResources(): Map<Coordinates, Cell> {
         return getCellsWithBuildings()
             .filterForFinishedConstruction()
-            .filterForBuildingHasWorker()
+            .filterForBuildingHasWorkerOrIsSpawnerOrHouse()
             .filterForOutsideResourcesCreatingProductionBuildings()
             //isSpaceAvailableForWorldResource is not checked here, because the routing algirithm is not available to the MapManager
     }
@@ -233,10 +233,12 @@ open class MapManager(
         return filterValues { it.building != null && it.building!!.isProductionBlocked.not() }
     }
 
-    private fun Map<Coordinates, Cell>.filterForBuildingHasWorker(): Map<Coordinates, Cell> {
+    private fun Map<Coordinates, Cell>.filterForBuildingHasWorkerOrIsSpawnerOrHouse(): Map<Coordinates, Cell> {
         return filterValues {
             //Spawner shall produce without a worker
-            it.building!!.workerLivesAt != null || it.building is Spawner
+            it.building!!.workerLivesAt != null ||
+                    it.building is Spawner ||
+                    it.building is House
         }
     }
 
@@ -280,8 +282,8 @@ open class MapManager(
             //.filterForProductionStorageIsEmpty()
     }
 
-    private fun Map<Coordinates, Cell>.filterForProductionBuildings(): Map<Coordinates, Cell> {
-        return filterValues { it.building != null && it.building!!.isProductionBuilding() }
+    private fun Map<Coordinates, Cell>.filterForProductionBuildingsANDHouses(): Map<Coordinates, Cell> {
+        return filterValues { it.building != null && (it.building!!.isProductionBuilding() || it.building!! is House) }
     }
 
     private fun Map<Coordinates, Cell>.filterForNotEverythingRequiredIsInProductionTransportOrStorage(): Map<Coordinates, Cell> {

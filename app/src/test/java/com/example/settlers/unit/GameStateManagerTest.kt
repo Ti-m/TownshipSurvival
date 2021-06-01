@@ -460,4 +460,32 @@ class GameStateManagerTest {
         d.gameStateManager.setNextSpawner()
         assertTrue(d.mapManager.queryBuilding(Coordinates(5,3)) is Spawner)
     }
+
+    @Test
+    fun `getCellsWhichShallRunAProduction - houses shall run a production, if at least one worker is assigned`() {
+        val coordsHouse = Coordinates(0,0)
+        val coordsLumberjack = Coordinates(2,0)
+
+        d.gameStateManager.applyStates(listOf(
+            GameStateCreator.createLvl1House(coordsHouse),
+            GameStateCreator.addFishToProduction(coordsHouse),
+            GameStateCreator.createLumberjack(coordsLumberjack),
+
+            ))
+        val house = d.mapManager.queryBuilding(coordsHouse)!! as House
+        val lumberjack = d.mapManager.queryBuilding(coordsLumberjack)!!
+        house.setConstructionFinished()
+        lumberjack.setConstructionFinished()
+
+        assertFalse(house.isProductionInProgress())
+
+        d.gameStateManager.tick()
+
+        assertTrue(house.isProductionInProgress())
+        assertEquals(2, house.productionCount)
+
+        d.gameStateManager.tick()
+
+        assertEquals(4, house.productionCount)
+    }
 }

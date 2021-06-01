@@ -89,7 +89,7 @@ data class Assignment(val coordinates: Coordinates): GameObject()
 ///////////////////////////////////
 
 @Serializable
-sealed class Building : GameObject() {
+abstract class Building : GameObject() {
 
     //TODO shall these counters also be part of the GameStateObjects? Or is it ok, that the
     // buildings handle stuff on their own?
@@ -155,22 +155,28 @@ sealed class Building : GameObject() {
         isProductionBlocked = false
     }
 
-    fun produce(coordinates: Coordinates): Collection<GameState> {
-        if (producesItem == null && produceCreatesWorldResource == null) return emptyList()
+    open fun produce(coordinates: Coordinates): Collection<GameState> {
         if (!isConstructed()) return emptyList()
         val result = mutableListOf<GameState>()
         for (x in 0 until productionTimeMultiplier) {
             productionCount += 1
             if (productionCount == 100) {
                 if (producesItem != null) {
-                    //if producesItem == null, produce is only a timer to know when the next WorldResource is created
-                    result.add(GameState(coordinates, Operator.Set, producesItemOutputType!!, producesItem))
-                    isProductionBlocked = true
+                    innerProduce(coordinates)?.let {
+                        result.add(it)
+                    }
                 }
+
                 productionCount = 0
             }
         }
         return result
+    }
+
+    //What should be done in the production step
+    //Override if used
+    open fun innerProduce(coordinates: Coordinates): GameState? {
+        return null
     }
 
     fun removeProductionRequirementsFromProduction(coordinates: Coordinates) : Collection<GameState> {
@@ -197,7 +203,7 @@ sealed class Building : GameObject() {
 
 @Serializable
 @SerialName("Townhall")
-class Townhall : Building() {
+class Townhall : ProductionBuilding() {
 
     //no build time
     override var constructionCount: Int = 100
@@ -219,7 +225,7 @@ class Townhall : Building() {
 
 @Serializable
 @SerialName("Lumberjack")
-class Lumberjack : Building() {
+class Lumberjack : ProductionBuilding() {
 
     override var constructionCount: Int = 0
 
@@ -240,7 +246,7 @@ class Lumberjack : Building() {
 
 @Serializable
 @SerialName("Stonemason")
-class Stonemason : Building() {
+class Stonemason : ProductionBuilding() {
 
     override var constructionCount: Int = 0
 
@@ -261,7 +267,7 @@ class Stonemason : Building() {
 
 @Serializable
 @SerialName("Forester")
-class Forester : Building() {
+class Forester : ProductionBuilding() {
 
     override var constructionCount: Int = 0
 
@@ -282,7 +288,7 @@ class Forester : Building() {
 
 @Serializable
 @SerialName("Fisherman")
-class Fisherman : Building() {
+class Fisherman : ProductionBuilding() {
 
     override var constructionCount: Int = 0
 
@@ -303,7 +309,7 @@ class Fisherman : Building() {
 
 @Serializable
 @SerialName("Road")
-class Road : Building() {
+class Road : ProductionBuilding() {
     //no build time
     override var constructionCount: Int = 100
     //no production
@@ -324,7 +330,7 @@ class Road : Building() {
 
 @Serializable
 @SerialName("Tower")
-class Tower : Building() {
+class Tower : ProductionBuilding() {
     override var constructionCount: Int = 0
     //no production
     override var productionCount: Int = 0
@@ -345,7 +351,7 @@ class Tower : Building() {
 
 @Serializable
 @SerialName("Spawner")
-class Spawner : Building() {
+class Spawner : ProductionBuilding() {
     override var constructionCount: Int = 100//no build time yet
 
     override var productionCount: Int = 0
@@ -364,7 +370,7 @@ class Spawner : Building() {
 
 @Serializable
 @SerialName("Fletcher")
-class Fletcher : Building() {
+class Fletcher : ProductionBuilding() {
     override var constructionCount: Int = 0
 
     override var productionCount: Int = 0
@@ -383,7 +389,7 @@ class Fletcher : Building() {
 
 @Serializable
 @SerialName("Lumbermill")
-class Lumbermill : Building() {
+class Lumbermill : ProductionBuilding() {
     override var constructionCount: Int = 0
 
     override var productionCount: Int = 0
@@ -402,7 +408,7 @@ class Lumbermill : Building() {
 
 @Serializable
 @SerialName("Pyramid")
-class Pyramid : Building() {
+class Pyramid : ProductionBuilding() {
     override var constructionCount: Int = 0
     //no production
     override var productionCount: Int = 0
@@ -423,9 +429,23 @@ class Pyramid : Building() {
     override val housingLevel: Int? = null
 }
 
+@Serializable
+abstract class ProductionBuilding : Building() {
+
+    override fun produce(coordinates: Coordinates): Collection<GameState> {
+        if (producesItem == null && produceCreatesWorldResource == null) return emptyList()
+        return super.produce(coordinates)
+    }
+
+    override fun innerProduce(coordinates: Coordinates): GameState {
+        //if producesItem == null, produce is only a timer to know when the next WorldResource is created
+        isProductionBlocked = true
+        return GameState(coordinates, Operator.Set, producesItemOutputType!!, producesItem)
+    }
+}
 
 @Serializable
-sealed class House : Building() {
+abstract class House : Building() {
     //Maximum available spaces in this house
     abstract val maximumHousingAvailable: HousingDemand
     //Current available spaces in this house

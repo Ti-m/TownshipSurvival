@@ -132,18 +132,6 @@ class MapManagerTest {
     }
 
     @Test
-    fun `getCellsWhichShallRunAProduction - spawner shall produce even without a worker`() {
-        d.gameStateManager.applyStates(listOf(
-            GameStateCreator.createSpawner(d.coords),
-        ))
-        val spawner = d.mapManager.queryBuilding(d.coords)
-
-        val result = d.mapManager.getCellsWhichShallRunAProduction()
-
-        assertEquals(mapOf(Pair(Coordinates(0,0), Cell(Coordinates(0,0), GroundType.Desert, building = spawner))), result)
-    }
-
-    @Test
     fun `getCellsWhichShallRunAProduction - production is blocked`() {
         val c1 = Coordinates(1,1)
         d.gameStateManager.applyStates(listOf(
@@ -173,6 +161,31 @@ class MapManagerTest {
 
         //Check
         assertEquals(0, d.mapManager.getCellsWhichShallRunAProduction().size)
+    }
+
+    @Test
+    fun `getCellsWhichShallRunAProduction - spawner shall produce even without a worker`() {
+        d.gameStateManager.applyStates(listOf(
+            GameStateCreator.createSpawner(d.coords),
+        ))
+        val spawner = d.mapManager.queryBuilding(d.coords)
+
+        val result = d.mapManager.getCellsWhichShallRunAProduction()
+
+        assertEquals(mapOf(Pair(Coordinates(0,0), Cell(Coordinates(0,0), GroundType.Desert, building = spawner))), result)
+    }
+
+    @Test
+    fun `getCellsWhichShallRunAProduction - no worker assigned here, so no production`() {
+        d.gameStateManager.applyStates(listOf(
+            GameStateCreator.createLvl1House(d.coords),
+        ))
+        val house = d.mapManager.queryBuilding(d.coords)!!
+        house.setConstructionFinished()
+
+        val result = d.mapManager.getCellsWhichShallRunAProduction()
+
+        assertEquals(emptyMap<Coordinates, Cell>(), result)
     }
 
     @Test
