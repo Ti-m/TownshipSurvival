@@ -82,6 +82,10 @@ object GameStateCreator {
         return GameState(coords, Operator.Set, Type.MovingObject, Zombie)
     }
 
+    fun removeZombie(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Remove, Type.MovingObject, Zombie)
+    }
+
     fun createExplosion(coords: Coordinates): GameState {
         return GameState(coords, Operator.Set, Type.Animation, ExplosionAnimation())
     }

@@ -70,8 +70,8 @@ open class TransportManager(
         val target = zombieTargetFinder.find(start) ?: return emptyList()
         val step = calcRouteFirstStep(from = start, to = target, ignoreObstacles = true) ?: return emptyList()
         return listOf(
-            GameState(start, Operator.Remove, Type.MovingObject, Zombie),
-            GameState(step, Operator.Set, Type.MovingObject, Zombie)
+            GameStateCreator.removeZombie(start),
+            GameStateCreator.createZombie(step)
         )
     }
 

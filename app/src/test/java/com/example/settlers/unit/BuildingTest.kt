@@ -65,6 +65,6 @@ class BuildingTest {
         assertEquals(99, sut.productionCount)
         val states = sut.produce(dummyCoordinates)
         assertEquals(0, sut.productionCount)
-        assertEquals(listOf(GameState(dummyCoordinates, Operator.Set, Type.MovingObject, Zombie)), states)
+        assertEquals(listOf(GameStateCreator.createZombie(dummyCoordinates)), states)
     }
 }

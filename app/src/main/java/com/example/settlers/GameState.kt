@@ -161,10 +161,8 @@ abstract class Building : GameObject() {
         for (x in 0 until productionTimeMultiplier) {
             productionCount += 1
             if (productionCount == 100) {
-                if (producesItem != null) {
-                    innerProduce(coordinates)?.let {
-                        result.add(it)
-                    }
+                outputItemToStorage(coordinates)?.let {
+                    result.add(it)
                 }
 
                 productionCount = 0
@@ -173,9 +171,8 @@ abstract class Building : GameObject() {
         return result
     }
 
-    //What should be done in the production step
-    //Override if used
-    open fun innerProduce(coordinates: Coordinates): GameState? {
+    //Override to add code which outputs into the outqueue
+    open fun outputItemToStorage(coordinates: Coordinates): GameState? {
         return null
     }
 
@@ -202,8 +199,52 @@ abstract class Building : GameObject() {
 }
 
 @Serializable
+abstract class MobileObjectProductionBuilding : ProductionBuilding() {
+
+}
+
+//Maybe this one shouldn't be considered as a production building, because it does not output items to the queue?
+//Can I remove several "is Spawner" and "is House checks" this way?
+@Serializable
+abstract class OutsideConsumingProductionBuilding : ProductionBuilding() {
+//    override fun innerProduce(coordinates: Coordinates): GameState? {
+//        //if producesItem == null, produce is only a timer to know when the next WorldResource is created
+//        isProductionBlocked = true
+//        return producesItemOutputType?.let {
+//            GameState(coordinates, Operator.Set, it, producesItem)
+//        }
+//    }
+}
+
+@Serializable
+abstract class OutsideProducingProductionBuilding : ProductionBuilding()
+
+@Serializable
+abstract class InsideProductionBuilding : ProductionBuilding() {
+//    override fun innerProduce(coordinates: Coordinates): GameState? {
+//        //if producesItem == null, produce is only a timer to know when the next WorldResource is created
+//        isProductionBlocked = true
+//        return producesItemOutputType?.let {
+//            GameState(coordinates, Operator.Set, it, producesItem)
+//        }
+//    }
+
+}
+
+@Serializable
+abstract class ProductionBuilding : Building() {
+    override fun outputItemToStorage(coordinates: Coordinates): GameState? {
+        //if producesItem == null, produce is only a timer to know when the next WorldResource is created
+        isProductionBlocked = true
+        return producesItemOutputType?.let {
+            GameState(coordinates, Operator.Set, it, producesItem)
+        }
+    }
+}
+
+@Serializable
 @SerialName("Townhall")
-class Townhall : ProductionBuilding() {
+class Townhall : Building() {
 
     //no build time
     override var constructionCount: Int = 100
@@ -225,7 +266,7 @@ class Townhall : ProductionBuilding() {
 
 @Serializable
 @SerialName("Lumberjack")
-class Lumberjack : ProductionBuilding() {
+class Lumberjack : OutsideConsumingProductionBuilding() {
 
     override var constructionCount: Int = 0
 
@@ -246,7 +287,7 @@ class Lumberjack : ProductionBuilding() {
 
 @Serializable
 @SerialName("Stonemason")
-class Stonemason : ProductionBuilding() {
+class Stonemason : OutsideConsumingProductionBuilding() {
 
     override var constructionCount: Int = 0
 
@@ -267,7 +308,7 @@ class Stonemason : ProductionBuilding() {
 
 @Serializable
 @SerialName("Forester")
-class Forester : ProductionBuilding() {
+class Forester : OutsideProducingProductionBuilding() {
 
     override var constructionCount: Int = 0
 
@@ -288,7 +329,7 @@ class Forester : ProductionBuilding() {
 
 @Serializable
 @SerialName("Fisherman")
-class Fisherman : ProductionBuilding() {
+class Fisherman : OutsideConsumingProductionBuilding() {
 
     override var constructionCount: Int = 0
 
@@ -309,7 +350,7 @@ class Fisherman : ProductionBuilding() {
 
 @Serializable
 @SerialName("Road")
-class Road : ProductionBuilding() {
+class Road : Building() {
     //no build time
     override var constructionCount: Int = 100
     //no production
@@ -330,7 +371,7 @@ class Road : ProductionBuilding() {
 
 @Serializable
 @SerialName("Tower")
-class Tower : ProductionBuilding() {
+class Tower : Building() {
     override var constructionCount: Int = 0
     //no production
     override var productionCount: Int = 0
@@ -351,7 +392,7 @@ class Tower : ProductionBuilding() {
 
 @Serializable
 @SerialName("Spawner")
-class Spawner : ProductionBuilding() {
+class Spawner : MobileObjectProductionBuilding() {
     override var constructionCount: Int = 100//no build time yet
 
     override var productionCount: Int = 0
@@ -370,7 +411,7 @@ class Spawner : ProductionBuilding() {
 
 @Serializable
 @SerialName("Fletcher")
-class Fletcher : ProductionBuilding() {
+class Fletcher : InsideProductionBuilding() {
     override var constructionCount: Int = 0
 
     override var productionCount: Int = 0
@@ -389,7 +430,7 @@ class Fletcher : ProductionBuilding() {
 
 @Serializable
 @SerialName("Lumbermill")
-class Lumbermill : ProductionBuilding() {
+class Lumbermill : InsideProductionBuilding() {
     override var constructionCount: Int = 0
 
     override var productionCount: Int = 0
@@ -408,7 +449,7 @@ class Lumbermill : ProductionBuilding() {
 
 @Serializable
 @SerialName("Pyramid")
-class Pyramid : ProductionBuilding() {
+class Pyramid : Building() {
     override var constructionCount: Int = 0
     //no production
     override var productionCount: Int = 0
@@ -427,21 +468,6 @@ class Pyramid : ProductionBuilding() {
     override val offers: List<Resource> = listOf()
 
     override val housingLevel: Int? = null
-}
-
-@Serializable
-abstract class ProductionBuilding : Building() {
-
-    override fun produce(coordinates: Coordinates): Collection<GameState> {
-        if (producesItem == null && produceCreatesWorldResource == null) return emptyList()
-        return super.produce(coordinates)
-    }
-
-    override fun innerProduce(coordinates: Coordinates): GameState {
-        //if producesItem == null, produce is only a timer to know when the next WorldResource is created
-        isProductionBlocked = true
-        return GameState(coordinates, Operator.Set, producesItemOutputType!!, producesItem)
-    }
 }
 
 @Serializable
