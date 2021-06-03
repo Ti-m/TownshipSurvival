@@ -73,7 +73,11 @@ HousingAlgorithmus
 * DONE Buildings consuming world resources, are producing without worker. I.e. lumberjack
 ** DONE Spawner should produce without a worker. Currently it does not work???
 ** DONE Does arrow shooting already require a worker? No
-* . Production is not increased in houses
+* DONE Production is not increased in houses
+** Refactor the "is Spawner" and "is House" checks and use polymorphism. This check can be replaced with the new ProductionBuilding/Spawner Types
+** Lumbermill is not adding a worker anymore, but a slot is available and the test for level 2 housing works too.
+ -> I guess the building is not added, because no new production buildings are added, when the production is already running
+** Add new building type for road, townhall? "OtherBuilding"?
 * DONE A house gets more workers assigned then slots available
 * When a building is destroyed/ overbuild, there worker assignment is not cleared
 

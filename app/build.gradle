@@ -54,7 +54,7 @@ dependencies {
     // Saved state module for ViewModel
     //implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.0"
     implementation 'com.otaliastudios:zoomlayout:1.7.1'
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'de.bechte.junit:junit-hierarchicalcontextrunner:4.12.2'

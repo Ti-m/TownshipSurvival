@@ -86,10 +86,10 @@ class Damage(val value: Int): GameObject()
 @SerialName("Assignment")
 data class Assignment(val coordinates: Coordinates): GameObject()
 
-///////////////////////////////////
-
+//needs to be sealed instead of abstract, otherwise:  kotlinx.serialization.SerializationException: Class 'aaa' is not registered for polymorphic serialization in the scope of 'Building'.
+//    Mark the base class as 'sealed' or register the serializer explicitly.
 @Serializable
-abstract class Building : GameObject() {
+sealed class Building : GameObject() {
 
     //TODO shall these counters also be part of the GameStateObjects? Or is it ok, that the
     // buildings handle stuff on their own?
@@ -198,41 +198,10 @@ abstract class Building : GameObject() {
     var workerLivesAt: Coordinates? = null
 }
 
+//needs to be sealed instead of abstract, otherwise:  kotlinx.serialization.SerializationException: Class 'aaa' is not registered for polymorphic serialization in the scope of 'Building'.
+//    Mark the base class as 'sealed' or register the serializer explicitly.
 @Serializable
-abstract class MobileObjectProductionBuilding : ProductionBuilding() {
-
-}
-
-//Maybe this one shouldn't be considered as a production building, because it does not output items to the queue?
-//Can I remove several "is Spawner" and "is House checks" this way?
-@Serializable
-abstract class OutsideConsumingProductionBuilding : ProductionBuilding() {
-//    override fun innerProduce(coordinates: Coordinates): GameState? {
-//        //if producesItem == null, produce is only a timer to know when the next WorldResource is created
-//        isProductionBlocked = true
-//        return producesItemOutputType?.let {
-//            GameState(coordinates, Operator.Set, it, producesItem)
-//        }
-//    }
-}
-
-@Serializable
-abstract class OutsideProducingProductionBuilding : ProductionBuilding()
-
-@Serializable
-abstract class InsideProductionBuilding : ProductionBuilding() {
-//    override fun innerProduce(coordinates: Coordinates): GameState? {
-//        //if producesItem == null, produce is only a timer to know when the next WorldResource is created
-//        isProductionBlocked = true
-//        return producesItemOutputType?.let {
-//            GameState(coordinates, Operator.Set, it, producesItem)
-//        }
-//    }
-
-}
-
-@Serializable
-abstract class ProductionBuilding : Building() {
+sealed class ProductionBuilding : Building() {
     override fun outputItemToStorage(coordinates: Coordinates): GameState? {
         //if producesItem == null, produce is only a timer to know when the next WorldResource is created
         isProductionBlocked = true
@@ -266,7 +235,7 @@ class Townhall : Building() {
 
 @Serializable
 @SerialName("Lumberjack")
-class Lumberjack : OutsideConsumingProductionBuilding() {
+class Lumberjack : ProductionBuilding() {
 
     override var constructionCount: Int = 0
 
@@ -287,7 +256,7 @@ class Lumberjack : OutsideConsumingProductionBuilding() {
 
 @Serializable
 @SerialName("Stonemason")
-class Stonemason : OutsideConsumingProductionBuilding() {
+class Stonemason : ProductionBuilding() {
 
     override var constructionCount: Int = 0
 
@@ -308,7 +277,7 @@ class Stonemason : OutsideConsumingProductionBuilding() {
 
 @Serializable
 @SerialName("Forester")
-class Forester : OutsideProducingProductionBuilding() {
+class Forester : ProductionBuilding() {
 
     override var constructionCount: Int = 0
 
@@ -329,7 +298,7 @@ class Forester : OutsideProducingProductionBuilding() {
 
 @Serializable
 @SerialName("Fisherman")
-class Fisherman : OutsideConsumingProductionBuilding() {
+class Fisherman : ProductionBuilding() {
 
     override var constructionCount: Int = 0
 
@@ -392,7 +361,7 @@ class Tower : Building() {
 
 @Serializable
 @SerialName("Spawner")
-class Spawner : MobileObjectProductionBuilding() {
+class Spawner : ProductionBuilding() {
     override var constructionCount: Int = 100//no build time yet
 
     override var productionCount: Int = 0
@@ -411,7 +380,7 @@ class Spawner : MobileObjectProductionBuilding() {
 
 @Serializable
 @SerialName("Fletcher")
-class Fletcher : InsideProductionBuilding() {
+class Fletcher : ProductionBuilding() {
     override var constructionCount: Int = 0
 
     override var productionCount: Int = 0
@@ -430,7 +399,7 @@ class Fletcher : InsideProductionBuilding() {
 
 @Serializable
 @SerialName("Lumbermill")
-class Lumbermill : InsideProductionBuilding() {
+class Lumbermill : ProductionBuilding() {
     override var constructionCount: Int = 0
 
     override var productionCount: Int = 0
@@ -470,8 +439,10 @@ class Pyramid : Building() {
     override val housingLevel: Int? = null
 }
 
+//needs to be sealed instead of abstract, otherwise:  kotlinx.serialization.SerializationException: Class 'aaa' is not registered for polymorphic serialization in the scope of 'Building'.
+//    Mark the base class as 'sealed' or register the serializer explicitly.
 @Serializable
-abstract class House : Building() {
+sealed class House : Building() {
     //Maximum available spaces in this house
     abstract val maximumHousingAvailable: HousingDemand
     //Current available spaces in this house

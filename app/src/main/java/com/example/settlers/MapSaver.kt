@@ -25,7 +25,9 @@ class MapSaver(
 
     fun load() {
         cells.clear()
-        cells.putAll(deserializeCells(storage.getString(CONTINUE_GAME_STATE)))
+        storage.getString(CONTINUE_GAME_STATE)?.let {
+            cells.putAll(deserializeCells(it))
+        }
     }
 
     fun delete() {

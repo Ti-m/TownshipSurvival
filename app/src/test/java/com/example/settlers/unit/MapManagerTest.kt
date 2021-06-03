@@ -554,6 +554,41 @@ class MapManagerTest {
     }
 
     @Test
+    fun `addHouseAssignments() - add assignment of lvl 2 house - lumbermill in the house and in the lumbermill`() {
+        //Init
+        val coordsHouse = Coordinates(1,1)
+        val coordsLumbermill = Coordinates(0,2)
+        d.gameStateManager.applyState(GameStateCreator.createLvl1House(coordsHouse))
+        d.gameStateManager.applyState(GameStateCreator.createLumbermill(coordsLumbermill))
+        val house = d.mapManager.findSpecificCell(coordsHouse)!!
+        val lumbermill = d.mapManager.findSpecificCell(coordsLumbermill)!!
+        house.building!!.setConstructionFinished()
+        lumbermill.building!!.setConstructionFinished()
+
+        //Do
+        val states = d.mapManager.addLevel2HouseAssignmentsWithHouseAsBase(house)
+
+        //Check
+        assertEquals(
+            listOf(
+                //assign to the production building
+                GameState(coordsLumbermill, Operator.Set, Type.ProductionAssignment, Assignment(coordsHouse)),
+                //assign to the house
+                GameState(coordsHouse, Operator.Set, Type.HouseAssignment, Assignment(coordsLumbermill)),
+            ),
+            states
+        )
+        //Apply the states
+        d.gameStateManager.applyStates(states)
+
+        //Do it again, to check if the states are applied in the right way
+        val states2 = d.mapManager.addLevel2HouseAssignmentsWithHouseAsBase(house)
+
+        //Check
+        assertEquals(listOf<GameState>(), states2)
+    }
+
+    @Test
     fun `addHouseAssignments() - Add more production buildings, then slots are available`() {
         //Init
         val coordsHouse = Coordinates(0,0)

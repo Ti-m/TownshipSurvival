@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 
 interface KeyValueStorage {
     fun setString(key: String, value: String)
-    fun getString(key: String): String
+    fun getString(key: String): String?
 }
 
 class DefaultKeyValueStorage(private val sharedPreferences: SharedPreferences) : KeyValueStorage {
@@ -14,7 +14,7 @@ class DefaultKeyValueStorage(private val sharedPreferences: SharedPreferences) :
         editor.apply()
     }
 
-    override fun getString(key: String): String = sharedPreferences.getString(key, "")!!
+    override fun getString(key: String): String? = sharedPreferences.getString(key, null)
 }
 
 class TestDoubleKeyValueStorage : KeyValueStorage {
@@ -25,6 +25,6 @@ class TestDoubleKeyValueStorage : KeyValueStorage {
         map[key] = value
     }
 
-    override fun getString(key: String): String = map[key] as String
+    override fun getString(key: String): String? = map[key] as? String
 
 }
