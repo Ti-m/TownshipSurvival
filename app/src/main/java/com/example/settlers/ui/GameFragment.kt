@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +29,9 @@ class GameFragment : Fragment() {
     private val handler = Handler(Looper.getMainLooper())
 
     private val model: MainViewModel by activityViewModels()
+
+    private lateinit var gameRunLoop: GameRunLoop
+    private lateinit var drawLoop: DrawLoop
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -137,27 +141,26 @@ class GameFragment : Fragment() {
         constraintSet.connect(zoomingLayout.id, ConstraintSet.TOP, topBar.id, ConstraintSet.BOTTOM)
         constraintSet.applyTo(constraintLayout)
 
-        val gameRunLoop = GameRunLoop(
+        val tickController = TickController(
             tileManager = tileManager,
             gameStateManager = gameStateManager,
             mapSaver = mapSaver
         )
 
-        val switchHandler = GameRunLoopControlHandler(gameRunLoop = gameRunLoop, handler = handler, log = logger)
-        bindingViewTopBar.switchAutoPause.setOnCheckedChangeListener(switchHandler)
-        bindingViewTopBar.stepButton.setOnClickListener(switchHandler)
+        gameRunLoop = GameRunLoop(tickController = tickController, handler = handler, log = logger)
+        bindingViewTopBar.switchAutoPause.setOnCheckedChangeListener(gameRunLoop)
+        bindingViewTopBar.stepButton.setOnClickListener(gameRunLoop)
         bindingViewTopBar.switchBuildMode.setOnCheckedChangeListener(modeController)
         
         val buildDialogHandler = BuildDialogHandler(gameStateManager)
 
-        val drawLoop = DrawLoop(gameRunLoop, handler, logger)
-        drawLoop.start()
+        drawLoop = DrawLoop(tickController, handler, logger)
 
         //This Proxy keeps the TileManager out of the BuildDialogHandler
         (requireActivity() as MainActivity).buildDialogClickHandler = object : BuildDialogCallback {
             override fun selectedCallback(selectedBuilding: Building, coordinates: Coordinates) {
                 buildDialogHandler.selectedCallback(selectedBuilding, coordinates)
-                gameRunLoop.tickGraphics()
+                tickController.tickGraphics()
             }
         }
 
@@ -166,11 +169,24 @@ class GameFragment : Fragment() {
         (requireActivity() as MainActivity).inspectDialogClickHandler = object : InspectDialogCallback {
             override fun inspectCallback(coordinates: Coordinates, stopDelivery: StopDeliveryState) {
                 inspectDialogHandler.inspectCallback(coordinates, stopDelivery)
-                gameRunLoop.tickGraphics()
+                tickController.tickGraphics()
             }
         }
 
 
         return constraintLayout
+    }
+
+    override fun onResume() {
+        Log.e("GameFragment", "onResume")
+        drawLoop.start()
+        super.onResume()
+    }
+
+    override fun onPause() {
+        Log.e("GameFragment", "onPause")
+        gameRunLoop.forceStop()
+        drawLoop.forceStop()
+        super.onPause()
     }
 }
