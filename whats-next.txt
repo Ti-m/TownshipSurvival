@@ -12,7 +12,7 @@ The Gameloop needs some depth:
 ** A house can be upgraded if luxury resources are available
 *** Takes 10 ticks
 *** Needs to be activated actively by hand
-** A house consumes necessary luxury's every  50 Ticks
+** DONE A house consumes necessary luxury's every  50 Ticks
 *** If not available, it is downgraded. This is instant
 ** Supports improved workers
 *** Should the townhall support some level 1 workers?
@@ -31,56 +31,19 @@ Statistics
 * Create a function which counts items in production
 
 Housing
-* Add Housing Buildings with demand
-** DONE Add HouseLvl1
-** Add HouseLvl2
-** Add HouseLvl3
-* If a house is idle (no luxurys) then don't Allow use of it's spaces
-**** DONE Buildings need a "Worker assigned" Boolean
-**** A house should knno where it's inhabitans work
-**** A production building should know where it's workers live
-**** Add a function which resets worker assigned
-**** D Add a function which assigns workers to houses
-***** Function to query available housing
-**** Show overlay color, if a building has no worker
-*** regular production should ignore houses.
-*** Maybe it's easier to use an own demand prototype list in building. Will this be easier to understand?
-* DONE Add a property which specifies the available space.
-** DONE Add a building derivied type "House"
-*** DONE all buildings are derived from "House"
 
-HousingAlgorithmus
-* DONE Add a new section in game loop
-* DONE Before production. Search for all *houses* without a running production
-** DONE For each one found, check if resources available
-** DONE if one is found without, then remove workers from production buildings
-** DONE Before production, check if worker is assigned
-* DONE Add Houses to Build Dialogs
-* DONE Add Fisher
 ** Add "Fish outside ressources" in water
 *** Fish is unlimited but can only be used by one fisher every round
 *** (This concept can be adopted for ore in mountains)
 * Implement upgrading of houses
-* DONE Show in inspect dialog, where a worker of a house lives
-** DONE Show an overlay on the world map after looking into a house.
-*** DONE This should color the building and the corresponding house where the worker lives
-**** DONE Different colors?
-*** In the topleft/right should be a dismiss button overlay
+* HousingOverlays: In the topleft/right should be a dismiss button overlay
 * A house should show the different available Slot levels
 * A production building should show which kind of housing slot it needs
-* In GameStateManager, add a concept like getCellsWithHousesAndARunningProductionAndEmptySpacesAvailable
-** To give new buildings a slot in a house until the next luxury is consumed. Otherwise, only in this case a new house would be assigned.
-* DONE Buildings consuming world resources, are producing without worker. I.e. lumberjack
-** DONE Spawner should produce without a worker. Currently it does not work???
-** DONE Does arrow shooting already require a worker? No
-* DONE Production is not increased in houses
-** Refactor the "is Spawner" and "is House" checks and use polymorphism. This check can be replaced with the new ProductionBuilding/Spawner Types
-**.   Lumbermill is not adding a worker anymore, but a slot is available and the test for adding level 2 housing works too.
 * Remove animation for production progress in buildings when a worker is no longer available
- -> I guess the building is not added, because no new production buildings are added, when the production is already running
-** Add new building type for road, townhall? "OtherBuilding"?
-* DONE A house gets more workers assigned then slots available
+* Add new building type for road, townhall? "OtherBuilding"?
 * When a building is destroyed/ overbuild, there worker assignment is not cleared
+* Pause a house should remove the worker
+* House shall consume luxury's only if somebody is living there
 
 * Housing
 1 Buildable Houses
@@ -168,35 +131,6 @@ Infrasturucture
 
 Graphics
 Ideas: https://imgur.com/t/rts/swDzaNG
-* DONE Two Step graphics: One idea to create some life in the graphics is to animate them
-** DONECreate a slightly different second picture which alternates every second
-** DONE Fletcher
-** DONE Stonemason
-* DONE Building graphics
-**DONE Lumberjack- normal
-**DONE Lumberjack- construction
-**DONE Fletcher - normal
-**DONE Fletcher - construction
-**DONE Tower - normal
-**DONE Tower - construction
-**DONE Pyramid - normal
-**DONE Pyramid - construction
-**DONE Forester - normal
-**DONE Forester - construction
-** DONE Spawner
-** DONE Zombie
-*DONE Update Road graphics
-**DONE All directions
-*DONE Add graphics - for in transport items
-**DONE Wood
-**DONE Lumber
-**DONE Stone
-**DONE Arrow
-*DONE Add ground graphics
-* DONE Allow animated graphics.
-** DONE If automatic RunLoop is activated, there should be an in between steps between all steps. In this steps, only in between graphics are drawn
-DONE 1 - 0ms
-DONE 2 - 1000ms
 * DONE Add Animation infrastucture
 ** DONE Add 3 tick Explosion animation
 ** Make a nice flame/explosion icon
@@ -204,30 +138,12 @@ DONE 2 - 1000ms
 * Bug: View.generateViewId() creates error message "Invalid ID" in logcat, but seems to work anyway?
 
 Combat
-* DONE Tower only requests arrows, if its empty. The requesting can be updated after each shot
-* DONE Set a spawner every 200 ticks
-** DONE Remove initial spawner
-** DONE Tower shoots arrows <--
-***DONE Tower should have up to 3 Arrows
-*** DONE Request arrows for 'production'
-**** DONE Bug: Arrow disappears, after dilivery into tower
-*** DONE Add range property
-**** DONE Find a Target within range.
-**** DONE Every tower searches its surrounding each tick for a valid target
-*** DONE The tower will shoot an arrow in a straight line at a zombie within range
-**** DONE This is a one tick action, but show an animation at the full shooting path
-***** Shooting animation tower
-***** red line in the path
-***** Get hit animation at zombie
+* Shooting animation tower
+** red line in the path
+** Get hit animation at zombie
 ** DONE Add ammunition for towers as new ressource which needs to be in production
 *** 1 Dmg, later a dmg property?
 *** Progressbar for reload (production)
-** DONE Zombies spawner in SE map border. Created with Townhall
-** DONE Spawn a Zombie every 100 Ticks (Production)
-*** DONE Add Zombie graphics
-*** DONE Zombies move 1 tile per tick
-**** DONE Zombies ignore Roads and spawners
-*** DONE At the moment the old zombies are not deleted in a proper way. so the zombies are blurred over the map
 ** Buildings have Health
 *** DONE 1 At the beginning
 *** DONE Zombies explode when they reach a building dealing 1 dmg. So the Building is destroyed
@@ -237,46 +153,13 @@ Combat
 Map
 
 Building
-* DONE Add Lumbermill building
-** DONE Takes Wood and Produces Lumber
-** DONE Jumps production? sometimes when wood is delivered it produces for two ticks
-* DONE Disable a building
-** DONE This will stop any resources being delivered.
-** DONE Works for construction and production
-** DONE Color cell Magenta if delivery is stopped
-* DONE requiresProduction/requiresConstruction: MutableList<Resource> - Use an immutable list?
-* DONE Construction shall consume the items for construction, at the beginning of construction
-** DONE Add a fletcher which produces 1 arrow from 1 wood
-** DONE Bug: Buildings are not constructing, if the are additional ressources in production.
-*** Example is the tower if an arrow is in front of the list
 ** Add an option to delete a building
-* DONE Add Building StoneMason, needs 2 Wood
-** DONE Produces stone every 10 Ticks
-** DONE Consumes WorldResource Rock
-* DONE Monument
-** DONE Add Build Pyramids for 100 Wood
-* DONE Add Forester
-** DONE Production, plants a tree every 10 ticks
-*** DONE Add some random where is planted?
-*** DONE Trees are planted in the water currently
-* DONE Add ShuffledRandomNeighbour to FindWorldResource
 
 Dialog
 
 Production
-* Lumberjack
-** DONE Only Produces if tree (resource) is in range
-** DONE Production will consume a tree
-** DONE The production limit is not used, lumberjack produces until full
-*** guy moves to the tree and then the production starts? (later)
-
-* DONE Stop production, if 3 produced items are in storage
-* DONE Produce does not check if items are requirements are fulfilled
-** DONE Requests items for production
-*** DONE Add a new step in tick which scans production buildings and sets a request if production storage is empty and no request is pending
-*** DONE if building is finished
-*** DONE only request stuff for the next production, not two more
-** DONE Remove items at the start of production
+* DONE Lumberjack
+** guy moves to the tree and then the production starts? (later)
 * Reduce townhall start resources to 2 Wood
 
 TestSetup
@@ -300,24 +183,24 @@ UI
 --------------------------------------------------------------------------------------------------
 M1 MVP
 
-* Name - Idea "Township Survival"
+* DONE Name - Idea "Township Survival"
 * Design MVP which is playable
-** Gameloop
-*** What are must have buildings
-**** (Townhall) Storage
-**** (Lumberjack) Material
-**** (Defensetower) Shoot zombies
-**** (Fletcher) Produces ammo
-***
+** DONE Gameloop
+*** DONE  What are must have buildings
+**** DONE (Townhall) Storage
+**** DONE (Lumberjack) Material
+**** DONE (Defensetower) Shoot zombies
+**** DONE (Fletcher) Produces ammo
+*** Housing
 ** Goal
-*** Build Monument
-** Obstacles
-*** Enemy spawners
-**** Send waves
+*** DONE Build Monument
+** DONE Obstacles
+*** DONE Enemy spawners
+**** DONE Send waves
 ** Pixelart Graphics
-** Scrollable map
-*** Run on small phones to see if the scrollable map works
-*** ALternative is some grid system, which expands to a single cell on a bigger grid
+** DONE Scrollable map
+*** DONE Run on small phones to see if the scrollable map works
+*** DONE ALternative is some grid system, which expands to a single cell on a bigger grid
 
 M2 Playstore
 * Make App Icon

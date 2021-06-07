@@ -32,7 +32,7 @@ Infrasturucture
 ** DONE NewGame
 ** DONE ContinueGame
 
-Build
+Building
 * DONE Bug: After finishing construction, the materials in production are not removed.
 * DONE Implement Test testCreateSapwnerAtFarEdge
 ** DONE Implement Spawner Building
@@ -50,6 +50,28 @@ Build
 ** DONE Add resource list
 ** DONE How to handle the search for an item:
 *** DONE When it is searched for transport and storage, it has to be seperated between the GameState command to remove the object
+* DONE Add Lumbermill building
+** DONE Takes Wood and Produces Lumber
+** DONE Jumps production? sometimes when wood is delivered it produces for two ticks
+* DONE Disable a building
+** DONE This will stop any resources being delivered.
+** DONE Works for construction and production
+** DONE Color cell Magenta if delivery is stopped
+* DONE requiresProduction/requiresConstruction: MutableList<Resource> - Use an immutable list?
+* DONE Construction shall consume the items for construction, at the beginning of construction
+** DONE Add a fletcher which produces 1 arrow from 1 wood
+** DONE Bug: Buildings are not constructing, if the are additional ressources in production.
+*** DONE Example is the tower if an arrow is in front of the list
+* DONE Add Building StoneMason, needs 2 Wood
+** DONE Produces stone every 10 Ticks
+** DONE Consumes WorldResource Rock
+* DONE Monument
+** DONE Add Build Pyramids for 100 Wood
+* DONE Add Forester
+** DONE Production, plants a tree every 10 ticks
+*** DONE Add some random where is planted?
+*** DONE Trees are planted in the water currently
+* DONE Add ShuffledRandomNeighbour to FindWorldResource
 
 Production
 * DONE Lumberjack Produce wood every 10 ticks
@@ -70,6 +92,66 @@ Graphics
 *** DONE Townhalls are missing atm
 ** DONE The graphics of the diagonal roads are not fitting together
 *** DONE Redraw neighbour roads on building new roads
+* DONE Two Step graphics: One idea to create some life in the graphics is to animate them
+** DONECreate a slightly different second picture which alternates every second
+** DONE Fletcher
+** DONE Stonemason
+* DONE Building graphics
+**DONE Lumberjack- normal
+**DONE Lumberjack- construction
+**DONE Fletcher - normal
+**DONE Fletcher - construction
+**DONE Tower - normal
+**DONE Tower - construction
+**DONE Pyramid - normal
+**DONE Pyramid - construction
+**DONE Forester - normal
+**DONE Forester - construction
+** DONE Spawner
+** DONE Zombie
+*DONE Update Road graphics
+**DONE All directions
+*DONE Add graphics - for in transport items
+**DONE Wood
+**DONE Lumber
+**DONE Stone
+**DONE Arrow
+*DONE Add ground graphics
+* DONE Allow animated graphics.
+** DONE If automatic RunLoop is activated, there should be an in between steps between all steps. In this steps, only in between graphics are drawn
+DONE 1 - 0ms
+DONE 2 - 1000ms
+* DONE Lumberjack
+** DONE Only Produces if tree (resource) is in range
+** DONE Production will consume a tree
+** DONE The production limit is not used, lumberjack produces until full
+* DONE Stop production, if 3 produced items are in storage
+* DONE Produce does not check if items are requirements are fulfilled
+** DONE Requests items for production
+*** DONE Add a new step in tick which scans production buildings and sets a request if production storage is empty and no request is pending
+*** DONE if building is finished
+*** DONE only request stuff for the next production, not two more
+** DONE Remove items at the start of production
+
+Combat
+* DONE Tower only requests arrows, if its empty. The requesting can be updated after each shot
+* DONE Set a spawner every 200 ticks
+** DONE Remove initial spawner
+** DONE Tower shoots arrows <--
+***DONE Tower should have up to 3 Arrows
+*** DONE Request arrows for 'production'
+**** DONE Bug: Arrow disappears, after dilivery into tower
+*** DONE Add range property
+**** DONE Find a Target within range.
+**** DONE Every tower searches its surrounding each tick for a valid target
+*** DONE The tower will shoot an arrow in a straight line at a zombie within range
+**** DONE This is a one tick action, but show an animation at the full shooting path
+* DONE Zombies spawner in SE map border. Created with Townhall
+* DONE Spawn a Zombie every 100 Ticks (Production)
+** DONE Add Zombie graphics
+** DONE Zombies move 1 tile per tick
+*** DONE Zombies ignore Roads and spawners
+** DONE At the moment the old zombies are not deleted in a proper way. so the zombies are blurred over the map
 
 Map
 ** DONE Show construction progress
@@ -163,3 +245,41 @@ UI
 * DONE Add PAuse button
 * DONE Disable automatic gameloop if pause pressed
 ** DONE Add singlestep button
+
+Statistics
+
+Housing
+* DONE Add Housing Buildings with demand
+** DONE Add HouseLvl1
+** DONE Add HouseLvl2
+** DONE Add HouseLvl3
+* DONE If a house is idle (no luxurys) then don't Allow use of it's spaces
+** DONE Buildings need a "Worker assigned" Boolean
+** DONE A house should know where it's inhabitans work
+** DONE A production building should know where it's workers live
+** DONE Add a function which resets worker assigned
+** DONE Add a function which assigns workers to houses
+** DONE Function to query available housing
+** DONE Show overlay color, if a building has no worker
+* DONE Add a property which specifies the available space.
+** DONE Add a building derivied type "House"
+*** DONE all buildings are derived from "House"
+* DONE Add a new section in game loop
+* DONE Before production. Search for all *houses* without a running production
+** DONE For each one found, check if resources available
+** DONE if one is found without, then remove workers from production buildings
+** DONE Before production, check if worker is assigned
+* DONE Add Houses to Build Dialogs
+* DONE Add Fisher
+* DONE Show in inspect dialog, where a worker of a house lives
+** DONE Show an overlay on the world map after looking into a house.
+** DONE This should color the building and the corresponding house where the worker lives
+** DONE Different colors?
+* DONE In GameStateManager, add a concept like getCellsWithHousesAndARunningProductionAndEmptySpacesAvailable
+** DONE To give new buildings a slot in a house until the next luxury is consumed. Otherwise, only in this case a new house would be assigned.
+* DONE Buildings consuming world resources, are producing without worker. I.e. lumberjack
+** DONE Spawner should produce without a worker. Currently it does not work???
+** DONE Does arrow shooting already require a worker? No
+* DONE Production is not increased in houses
+** WONTFIX/HARDTODO Refactor the "is Spawner" and "is House" checks and use polymorphism. This check can be replaced with the new ProductionBuilding/Spawner Types
+* DONE A house gets more workers assigned then slots available
