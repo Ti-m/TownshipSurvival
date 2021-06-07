@@ -434,23 +434,6 @@ class MapManagerTest {
         assertEquals(0, d.mapManager.getCellsWhichShallRunAProductionWithProducingOutsideResources().size)
     }
 
-    //TODO TMP
-    @Test
-    fun `getCellsWithHouses() - one is found`() {
-        //Init
-//        d.gameStateManager.applyState(GameStateCreator.createLvl1House(d.coords))
-//val building = HouseLevel1()
-//        //Check
-//        assertEquals(
-//            mapOf(Pair(d.coords, Cell(coordinates = d.coords, type = GroundType.Desert, building = building))),
-//            d.mapManager.filterHouses(mapOf(Pair(d.coords, Cell(coordinates = d.coords, type = GroundType.Desert, building = building))), type =  HouseLevel1())
-//        ) Hier muss ich ein konkretes Haus reinstecken. z.b. HouseLevel1. Ich kann nicht ein abstraktes House wie "House" benutzen...
-    }
-//    Bedeutet das, dass die generische Funktion so nicht funktioniert?
-//    * Also nochmal in die Doku schauen https://kotlinlang.org/docs/generics.html#declaration-site-variance
-//    * Dann möglicherweise eine nicht generische Variante bauen.
-
-
     @Test
     fun `getCellsWithFinishedHouses() - one is found`() {
         //Init
@@ -702,4 +685,27 @@ class MapManagerTest {
             newStates
         )
     }
+
+    @Test
+    fun `getCellsWithHousesAndARunningProductionAndEmptySpacesAvailable() - zero are found - trivial`() {
+        //Init
+        d.gameStateManager.applyState(GameStateCreator.createLvl1House(d.coords))
+        d.mapManager.queryBuilding(d.coords)!!.setConstructionFinished()
+
+        //Check
+        assertEquals(0, d.mapManager.getCellsWithHousesAndARunningProductionAndEmptySpacesAvailable().size)
+    }
+
+    @Test
+    fun `getCellsWithHousesAndARunningProductionAndEmptySpacesAvailable() - one is found`() {
+        //Init
+        d.gameStateManager.applyState(GameStateCreator.createLvl1House(d.coords))
+        val house = d.mapManager.queryBuilding(d.coords)!!
+        house.setConstructionFinished()
+        house.productionCount = 66 //Set in the middle of production
+
+        //Check
+        assertEquals(1, d.mapManager.getCellsWithHousesAndARunningProductionAndEmptySpacesAvailable().size)
+    }
+
 }

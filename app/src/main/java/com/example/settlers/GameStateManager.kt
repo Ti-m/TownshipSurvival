@@ -76,8 +76,11 @@ open class GameStateManager(
             applyStates(mapManager.addLevel3HouseAssignmentsWithHouseAsBase(cell))
         }
 
-//        TODO Do I need this? To give new buildings a slot until the next luxury is consumed.
-//        mapManager.getCellsWithHousesAndARunningProductionAndEmptySpacesAvailable().forEach { (_, cell) -> }
+        mapManager.getCellsWithHousesAndARunningProductionAndEmptySpacesAvailable().forEach { (_, cell) ->
+            applyStates(mapManager.addLevel1HouseAssignmentsWithHouseAsBase(cell))
+            applyStates(mapManager.addLevel2HouseAssignmentsWithHouseAsBase(cell))
+            applyStates(mapManager.addLevel3HouseAssignmentsWithHouseAsBase(cell))
+        }
 
         mapManager.getCellsWhichShallContinueAProduction().forEach { (_, cell) ->
             applyStates(runProduction(cell))

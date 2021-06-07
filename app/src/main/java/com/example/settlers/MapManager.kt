@@ -402,6 +402,11 @@ open class MapManager(
             .filterForAllProductionMaterialsAvailable()
     }
 
+    fun getCellsWithHousesAndARunningProductionAndEmptySpacesAvailable(): Map<Coordinates, Cell> {
+        return getCellsWithFinishedHouses()
+            .filterForProductionStarted()
+    }
+
     fun removeHouseAssignmentsWithHouseAsBase(houseCell: Cell): Collection<GameState> {
         val states: MutableCollection<GameState> = mutableListOf()
         (houseCell.building as House).currentlyAssignedProductionBuildings.forEach {
