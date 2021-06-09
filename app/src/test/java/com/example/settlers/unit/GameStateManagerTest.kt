@@ -472,7 +472,7 @@ class GameStateManagerTest {
             GameStateCreator.createLumberjack(coordsLumberjack),
 
             ))
-        val house = d.mapManager.queryBuilding(coordsHouse)!! as House
+        val house = d.mapManager.queryHouse(coordsHouse)!!
         val lumberjack = d.mapManager.queryBuilding(coordsLumberjack)!!
         house.setConstructionFinished()
         lumberjack.setConstructionFinished()

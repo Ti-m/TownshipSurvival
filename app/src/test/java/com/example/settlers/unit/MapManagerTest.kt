@@ -176,16 +176,33 @@ class MapManagerTest {
     }
 
     @Test
-    fun `getCellsWhichShallRunAProduction - no worker assigned here, so no production`() {
+    fun `getCellsWhichShallRunAProduction - houses produce only if a worker is assigned - no worker`() {
         d.gameStateManager.applyStates(listOf(
             GameStateCreator.createLvl1House(d.coords),
+            GameStateCreator.addFishToProduction(d.coords),
         ))
-        val house = d.mapManager.queryBuilding(d.coords)!!
+        val house = d.mapManager.queryHouse(d.coords)!!
         house.setConstructionFinished()
 
         val result = d.mapManager.getCellsWhichShallRunAProduction()
 
         assertEquals(emptyMap<Coordinates, Cell>(), result)
+    }
+
+    @Test
+    fun `getCellsWhichShallRunAProduction - houses produce only if a worker is assigned - worker is assigned`() {
+        val coordsHouse = Coordinates(1,1)
+        d.gameStateManager.applyStates(listOf(
+            GameStateCreator.createLvl1House(coordsHouse),
+            GameStateCreator.addFishToProduction(coordsHouse),
+        ))
+        val house = d.mapManager.queryHouse(coordsHouse)!!
+        house.setConstructionFinished()
+        house.currentlyAssignedProductionBuildings.add(Coordinates(0,0))//Add pseudo worker
+
+        val result = d.mapManager.getCellsWhichShallRunAProduction()
+
+        assertEquals(1, result.count())
     }
 
     @Test
@@ -387,6 +404,34 @@ class MapManagerTest {
     }
 
     @Test
+    fun `getCellsWhichShallContinueAProduction() - house does not continue production without housing a worker`() {
+        d.gameStateManager.applyStates(listOf(
+            GameStateCreator.createLvl1House(d.coords),
+        ))
+        val house = d.mapManager.queryHouse(d.coords)!!
+        house.setConstructionFinished()
+
+        val result = d.mapManager.getCellsWhichShallContinueAProduction()
+
+        assertEquals(0, result.count())
+    }
+
+    @Test
+    fun `getCellsWhichShallContinueAProduction() - house continues production because it houses a worker`() {
+        d.gameStateManager.applyStates(listOf(
+            GameStateCreator.createLvl1House(d.coords),
+        ))
+        val house = d.mapManager.queryHouse(d.coords)!!
+        house.setConstructionFinished()
+        house.productionCount = 50
+        house.currentlyAssignedProductionBuildings.add(Coordinates(0,0))//Add pseudo worker
+
+        val result = d.mapManager.getCellsWhichShallContinueAProduction()
+
+        assertEquals(1, result.count())
+    }
+
+    @Test
     fun `getCellsWhichShallRunAProductionWithConsumingOutsideResources() - don't run production if already 3 items are in storage`() {
         //Init
         d.gameStateManager.applyStates(listOf(
@@ -585,7 +630,7 @@ class MapManagerTest {
         d.gameStateManager.applyState(GameStateCreator.createLumberjack(prod3))
         d.gameStateManager.applyState(GameStateCreator.createLumberjack(prod4))
         val house = d.mapManager.findSpecificCell(coordsHouse)!!
-        val houseBuilding = d.mapManager.queryBuilding(coordsHouse)!! as House
+        val houseBuilding = d.mapManager.queryHouse(coordsHouse)!!
         val lumber1 = d.mapManager.findSpecificCell(prod1)!!
         val lumber2 = d.mapManager.findSpecificCell(prod2)!!
         val lumber3 = d.mapManager.findSpecificCell(prod3)!!

@@ -44,7 +44,7 @@ Housing
 * When a building is destroyed/ overbuild, there worker assignment is not cleared
 * DONE Pause a house should remove the worker
 ** DONE The now empty slots are not reassigned, why?
-* House shall consume luxury's only if somebody is living there
+* . House shall consume luxury's only if somebody is living there
 
 * Housing
 1 Buildable Houses

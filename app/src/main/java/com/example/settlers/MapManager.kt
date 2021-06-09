@@ -34,6 +34,10 @@ open class MapManager(
         return findSpecificCell(at)?.building
     }
 
+    fun queryHouse(at: Coordinates): House? {
+        return queryBuilding(at) as? House
+    }
+
     fun queryAnimation(at: Coordinates): Animation? {
         return findSpecificCell(at)?.animation
     }
@@ -98,7 +102,7 @@ open class MapManager(
     fun getCellsWhichShallContinueAProduction(): Map<Coordinates, Cell> {
         return getCellsWithBuildings()
             .filterForFinishedConstruction()
-            .filterForProductionBuildingsANDHouses()
+            .filterForProductionBuildingsANDHousesWithWorker()
             .filterForBuildingHasWorkerOrIsSpawnerOrHouse()
             .filterForProductionStarted()
     }
@@ -106,7 +110,7 @@ open class MapManager(
     fun getCellsWhichShallRunAProduction(): Map<Coordinates, Cell> {
         return getCellsWithBuildings()
             .filterForFinishedConstruction()
-            .filterForProductionBuildingsANDHouses()
+            .filterForProductionBuildingsANDHousesWithWorker()
             .filterForBuildingHasWorkerOrIsSpawnerOrHouse()
             .filterForProductionNOTStarted()
             .filterForProductionNOTBlocked()
@@ -286,8 +290,13 @@ open class MapManager(
             //.filterForProductionStorageIsEmpty()
     }
 
-    private fun Map<Coordinates, Cell>.filterForProductionBuildingsANDHouses(): Map<Coordinates, Cell> {
-        return filterValues { it.building != null && (it.building!!.isProductionBuilding() || it.building!! is House) }
+    private fun Map<Coordinates, Cell>.filterForProductionBuildingsANDHousesWithWorker(): Map<Coordinates, Cell> {
+        return filterValues { it.building != null && (it.building!!.isProductionBuilding() || isHouseWithWorker(it.building!!)) }
+    }
+
+    private fun isHouseWithWorker(building: Building): Boolean {
+        if ((building is House).not()) return false
+        return (building as House).currentlyAssignedProductionBuildings.count() > 0
     }
 
     private fun Map<Coordinates, Cell>.filterForNotEverythingRequiredIsInProductionTransportOrStorage(): Map<Coordinates, Cell> {
@@ -445,21 +454,21 @@ open class MapManager(
     }
 
     fun addLevel1HouseAssignmentsWithHouseAsBase(houseCell: Cell): Collection<GameState> {
-        val house = queryBuilding(houseCell.coordinates) as House
+        val house = queryHouse(houseCell.coordinates)!!
         val availableHousing = house.currentHousingAvailable.lvl1
         val unfulfilled = getCellsWithUnfulfilledHousingWithLevel(1).toMutableList()
         return addHouseAssignmentsWithHouseAsBase(houseCell, unfulfilled, availableHousing)
     }
 
     fun addLevel2HouseAssignmentsWithHouseAsBase(houseCell: Cell): Collection<GameState> {
-        val house = queryBuilding(houseCell.coordinates) as House
+        val house = queryHouse(houseCell.coordinates)!!
         val availableHousing = house.currentHousingAvailable.lvl2
         val unfulfilled = getCellsWithUnfulfilledHousingWithLevel(2).toMutableList()
         return addHouseAssignmentsWithHouseAsBase(houseCell, unfulfilled, availableHousing)
     }
 
     fun addLevel3HouseAssignmentsWithHouseAsBase(houseCell: Cell): Collection<GameState> {
-        val house = queryBuilding(houseCell.coordinates) as House
+        val house = queryHouse(houseCell.coordinates)!!
         val availableHousing = house.currentHousingAvailable.lvl3
         val unfulfilled = getCellsWithUnfulfilledHousingWithLevel(3).toMutableList()
         return addHouseAssignmentsWithHouseAsBase(houseCell, unfulfilled, availableHousing)
