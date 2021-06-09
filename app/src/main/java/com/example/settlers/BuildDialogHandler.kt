@@ -31,14 +31,21 @@ class BuildDialogHandler (
 }
 
 class InspectDialogHandler (
-    private val mapManager: MapManager
+    private val mapManager: MapManager,
+    private val gameStateManager: GameStateManager,
 ) : InspectDialogCallback {
 
     override fun inspectCallback(coordinates: Coordinates, stopDelivery: StopDeliveryState) {
-        val building = mapManager.queryBuilding(coordinates)
+        val selectedCell = mapManager.findSpecificCell(coordinates)!!
+        val selectedBuilding = mapManager.queryBuilding(coordinates)!!
         when (stopDelivery) {
-            StopDeliveryState.Normal -> building!!.stopDelivery = true
-            StopDeliveryState.Stopped -> building!!.stopDelivery = false
+            StopDeliveryState.Normal -> { //TODO Is Stopped and Normal kind of reversed??
+                selectedBuilding.stopDelivery = true
+                gameStateManager.applyStates(mapManager.removeHouseAssignmentsWithProductionBuildingAsBase(selectedCell))
+            }
+            StopDeliveryState.Stopped -> {
+                selectedBuilding.stopDelivery = false
+            }
             StopDeliveryState.NoBuilding -> throw Error("Invalid case - programming error")
         }
     }

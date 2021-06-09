@@ -83,7 +83,7 @@ open class MapManager(
 
     fun getCellsWhichRequireStuffWhichIsNotInStorage(): Map<Coordinates, Cell> {
         return getCellsWhichRequireStuff()
-            .filterValues { it.building?.stopDelivery == false }
+            .filterForNOTPaused()
             .filterValues { cell ->
                 isRequiredListInAvailableList(cell.requires, cell.storage).not()
         }
@@ -217,6 +217,10 @@ open class MapManager(
         }
     }
 
+    private fun Map<Coordinates, Cell>.filterForNOTPaused(): Map<Coordinates, Cell> {
+        return filterValues { it.building?.stopDelivery == false }
+    }
+
     private fun Map<Coordinates, Cell>.filterForStorageNotFull(): Map<Coordinates, Cell> {
         return filterValues { it.storage.count() < 3 }
     }
@@ -318,7 +322,10 @@ open class MapManager(
     }
 
     private fun getCellsWhichRequireAHouse(): Map<Coordinates, Cell> {
-        return getCellsWithBuildings().filterForFinishedConstruction().filterForRequiresHousing()
+        return getCellsWithBuildings()
+            .filterForFinishedConstruction()
+            .filterForRequiresHousing()
+            .filterForNOTPaused()
     }
 
     private fun getBuildingsWhichRequireAHouse(): List<Building> {
@@ -415,9 +422,7 @@ open class MapManager(
         return states
     }
 
-    //This function has the production building as base cell
-    private fun removeHouseAssignmentsWithProductionBuildingAsBase(productionCell: Cell): Collection<GameState> {
-        //TODO Maybe split this into remove in the house AND remove in the destination
+    fun removeHouseAssignmentsWithProductionBuildingAsBase(productionCell: Cell): Collection<GameState> {
         val productionBuilding = queryBuilding(productionCell.coordinates)!!
         //remove worker from production building
         val coordinatesOfAssignedHouse: Coordinates = productionBuilding.workerLivesAt ?: return emptyList()

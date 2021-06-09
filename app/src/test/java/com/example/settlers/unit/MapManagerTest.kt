@@ -663,16 +663,24 @@ class MapManagerTest {
         val coordsLumberjack = Coordinates(0,2)
         d.gameStateManager.applyState(GameStateCreator.createLvl1House(coordsHouse))
         d.gameStateManager.applyState(GameStateCreator.createLumberjack(coordsLumberjack))
-        val house = d.mapManager.findSpecificCell(coordsHouse)!!
-        val lumberjack = d.mapManager.findSpecificCell(coordsLumberjack)!!
-        house.building!!.setConstructionFinished()
-        lumberjack.building!!.setConstructionFinished()
+        val houseCell = d.mapManager.findSpecificCell(coordsHouse)!!
+        val lumberjack = d.mapManager.queryBuilding(coordsLumberjack)!!
+        val house = houseCell.building as House
+        house.setConstructionFinished()
+        lumberjack.setConstructionFinished()
+
+        //Check available housing - before assigning a worker
+        assertEquals(HousingDemand(2,1,0,0), house.currentHousingAvailable)
+
         //setup housing
-        val states = d.mapManager.addLevel1HouseAssignmentsWithHouseAsBase(house)
+        val states = d.mapManager.addLevel1HouseAssignmentsWithHouseAsBase(houseCell)
         d.gameStateManager.applyStates(states)
 
+        //Check available housing - after assigning a worker
+        assertEquals(HousingDemand(1,1,0,0), house.currentHousingAvailable)
+
         //Do - remove them again
-        val newStates = d.mapManager.removeHouseAssignmentsWithHouseAsBase(house)
+        val newStates = d.mapManager.removeHouseAssignmentsWithHouseAsBase(houseCell)
 
         //Check
         assertEquals(
@@ -684,6 +692,10 @@ class MapManagerTest {
             ),
             newStates
         )
+        d.gameStateManager.applyStates(newStates)
+
+        //Check available housing - after removing a worker
+        assertEquals(HousingDemand(2,1,0,0), house.currentHousingAvailable)
     }
 
     @Test

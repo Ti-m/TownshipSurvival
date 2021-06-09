@@ -105,8 +105,8 @@ class InspectDialog : BaseDialog() {
         val coordinates = (requireArguments().getSerializable(COORDINATES) as Coordinates)
         val deliveryState = requireArguments().getSerializable(STOP_DELIVERY) as StopDeliveryState
         val deliveryText = when (deliveryState) {
-            StopDeliveryState.Stopped -> "Resume Delivery"
-            StopDeliveryState.Normal -> "Stop Delivery"
+            StopDeliveryState.Stopped -> "Resume Building"
+            StopDeliveryState.Normal -> "Stop Building"
             StopDeliveryState.NoBuilding -> null
         }
 

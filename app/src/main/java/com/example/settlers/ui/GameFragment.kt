@@ -164,7 +164,7 @@ class GameFragment : Fragment() {
             }
         }
 
-        val inspectDialogHandler = InspectDialogHandler(mapManager)
+        val inspectDialogHandler = InspectDialogHandler(mapManager, gameStateManager)
 
         (requireActivity() as MainActivity).inspectDialogClickHandler = object : InspectDialogCallback {
             override fun inspectCallback(coordinates: Coordinates, stopDelivery: StopDeliveryState) {

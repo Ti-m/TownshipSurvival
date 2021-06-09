@@ -188,7 +188,7 @@ sealed class Building : GameObject() {
         }
     }
 
-    //Stop delivery of items
+    //Stop delivery of items, true is stopped/paused
     var stopDelivery: Boolean = false
 
     //required housing space for it's worker

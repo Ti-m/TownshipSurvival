@@ -381,7 +381,13 @@ open class GameStateManager(
                     Type.Damage -> throw IllegalStateException()
                     Type.WorldResource -> selected.worldResource = null
                     Type.ProductionAssignment -> selected.building!!.workerLivesAt = null
-                    Type.HouseAssignment -> (selected.building!! as House).currentlyAssignedProductionBuildings.remove((state.data as Assignment).coordinates)
+                    Type.HouseAssignment -> {
+                        val targetHouse = selected.building!! as House
+                        val productionBuildingCoordinates = (state.data as Assignment).coordinates
+                        val neededHousing = mapManager.getRequiredHousing(productionBuildingCoordinates)
+                        targetHouse.currentlyAssignedProductionBuildings.remove(productionBuildingCoordinates)
+                        increaseAvailableHousing(neededHousing, targetHouse)
+                    }
                 }
             }
         }
@@ -396,6 +402,15 @@ open class GameStateManager(
         }
     }
 
+    private fun increaseAvailableHousing(neededHousing: Int, targetHouse: House) {
+        when(neededHousing) {
+            1 -> targetHouse.currentHousingAvailable.lvl1++
+            2 -> targetHouse.currentHousingAvailable.lvl2++
+            3 -> targetHouse.currentHousingAvailable.lvl3++
+            4 -> targetHouse.currentHousingAvailable.lvl4++
+        }
+    }
+
     private fun checkIfHouseSlotIsAvailable(neededHousing: Int, targetHouse: House): Boolean {
         val housingAvailable = targetHouse.currentHousingAvailable
         return when (neededHousing) {
@@ -407,6 +422,7 @@ open class GameStateManager(
         }
     }
 
+    //TODO obsolete?
     private fun checkIfHouseSlotIsAvailable(assignment: Assignment, targetHouse: House): Boolean {
         val neededHousing = mapManager.getRequiredHousing(assignment.coordinates)
         return checkIfHouseSlotIsAvailable(neededHousing, targetHouse)

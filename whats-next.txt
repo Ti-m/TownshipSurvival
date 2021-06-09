@@ -42,7 +42,8 @@ Housing
 * Remove animation for production progress in buildings when a worker is no longer available
 * Add new building type for road, townhall? "OtherBuilding"?
 * When a building is destroyed/ overbuild, there worker assignment is not cleared
-* Pause a house should remove the worker
+* DONE Pause a house should remove the worker
+** DONE The now empty slots are not reassigned, why?
 * House shall consume luxury's only if somebody is living there
 
 * Housing
