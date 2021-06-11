@@ -62,6 +62,10 @@ object GameStateCreator {
         return GameState(coords, Operator.Set, Type.Building, Forester())
     }
 
+    fun createFisherman(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Set, Type.Building, Fisherman())
+    }
+
     fun createLumbermill(coords: Coordinates): GameState {
         return GameState(coords, Operator.Set, Type.Building, Lumbermill())
     }
@@ -148,6 +152,10 @@ object GameStateCreator {
 
     fun createRock(coords: Coordinates): GameState {
         return GameState(coords, Operator.Set, Type.WorldResource, Rock)
+    }
+
+    fun createFishShoal(coords: Coordinates): GameState {
+        return GameState(coords, Operator.Set, Type.WorldResource, FishShoal)
     }
 
 }

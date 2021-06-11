@@ -488,4 +488,27 @@ class GameStateManagerTest {
 
         assertEquals(4, house.productionCount)
     }
+
+    @Test
+    fun `runProductionWithConsumingOutsideResource - a fisherman produces fish from outside resources`() {
+        val fisherCoords = Coordinates(5,3)
+        val fishShoalCoords = Coordinates(7,3)
+        d.gameStateManager.applyStates(listOf(
+            GameStateCreator.createFisherman(fisherCoords),
+            GameStateCreator.createFishShoal(fishShoalCoords),
+        ))
+        val fisherman = d.mapManager.queryBuilding(fisherCoords)!!
+        fisherman.setConstructionFinished()
+        fisherman.workerLivesAt = d.coords
+
+        assertEquals(emptyList<Resource>(), d.mapManager.queryInStorage(fisherCoords))
+
+        for (x in 0 .. 9) {
+            d.gameStateManager.tick()
+        }
+
+        assertEquals(listOf(Fish), d.mapManager.queryInStorage(fisherCoords))
+        //Producing Fish, does not remove a FishShoal
+        assertEquals(FishShoal, d.mapManager.findSpecificCell(fishShoalCoords)!!.worldResource)
+    }
 }
