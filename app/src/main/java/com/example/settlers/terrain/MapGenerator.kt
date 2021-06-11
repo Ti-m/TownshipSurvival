@@ -55,7 +55,9 @@ class MapGenerator(private val interpolator: TerrainInterpolator, private val ra
             val hasResource = randomGenerator.nextInt(0, 100)
             val supportsTrees = type == GroundType.Grass || type == GroundType.Desert
             val supportsRocks = type == GroundType.Grass || type == GroundType.Desert || type == GroundType.Mountain
-            val tree = if (hasResource < 25 && supportsTrees) {
+            val worldResource = if (type == GroundType.Water) {
+                FishShoal //TODO atm every piece of water is a FishShoal. Reduce to something resonable
+            } else if (hasResource < 25 && supportsTrees) {
                 Tree
             } else if (hasResource > 85 && supportsRocks) {
                 Rock
@@ -63,7 +65,7 @@ class MapGenerator(private val interpolator: TerrainInterpolator, private val ra
                 null
             }
 
-            Cell(coordinates = it.value.coordinates, type = type, worldResource = tree).apply {
+            Cell(coordinates = it.value.coordinates, type = type, worldResource = worldResource).apply {
                 this.textureVariant = randomGenerator.nextInt(0,2)
             }
         }

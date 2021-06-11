@@ -2,6 +2,7 @@ package com.example.settlers.unit.terrain
 
 import com.example.settlers.Cell
 import com.example.settlers.Coordinates
+import com.example.settlers.FishShoal
 import com.example.settlers.GroundType
 import com.example.settlers.terrain.MapGenerator
 import com.example.settlers.terrain.TerrainInterpolator
@@ -39,10 +40,10 @@ class MapGeneratorTest {
     fun createMap() {
         val map = sut.createMap(2)
         assertEquals(mapOf(
-            Pair(Coordinates(0,0), Cell(Coordinates(0,0), GroundType.Water)),
+            Pair(Coordinates(0,0), Cell(Coordinates(0,0), GroundType.Water, worldResource = FishShoal)),
             Pair(Coordinates(1,1), Cell(Coordinates(1,1), GroundType.Desert)),//TODO Why is here desert and not water?
             Pair(Coordinates(2,0), Cell(Coordinates(2,0), GroundType.Grass)),//TODO Why is here desert and not water?
-            Pair(Coordinates(3,1), Cell(Coordinates(3,1), GroundType.Water))
+            Pair(Coordinates(3,1), Cell(Coordinates(3,1), GroundType.Water, worldResource = FishShoal))
         ),
             map
         )

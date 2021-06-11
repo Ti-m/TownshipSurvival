@@ -32,9 +32,11 @@ Statistics
 
 Housing
 
-** Add "Fish outside ressources" in water
-*** Fish is unlimited but can only be used by one fisher every round
+** DONE Add "FishShoal outside ressources" in water
+*** DONE FishShoal is unlimited but can only be used by one fisher every round
+***** DONE Add fishShoal graphics/letter to see
 *** (This concept can be adopted for ore in mountains)
+* I am not sure, if there are still some issues assigning workers, if  multiples houses are present
 * Implement upgrading of houses
 * HousingOverlays: In the topleft/right should be a dismiss button overlay
 * A house should show the different available Slot levels
@@ -44,7 +46,7 @@ Housing
 * When a building is destroyed/ overbuild, there worker assignment is not cleared
 * DONE Pause a house should remove the worker
 ** DONE The now empty slots are not reassigned, why?
-* . House shall consume luxury's only if somebody is living there
+* DONE House shall consume luxury's only if somebody is living there
 
 * Housing
 1 Buildable Houses

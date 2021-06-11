@@ -47,6 +47,10 @@ object Fish : Resource()
 @Serializable
 sealed class WorldResource : GameObject()
 
+//Ein Fischschwarm, gute Übersetzung?
+@Serializable
+object FishShoal : WorldResource()
+
 @Serializable
 object Tree : WorldResource()
 
@@ -303,8 +307,8 @@ class Fisherman : ProductionBuilding() {
     override var constructionCount: Int = 0
 
     override var productionCount: Int = 0
-    override val productionTimeMultiplier: Int = 5
-    override val produceConsumesWorldResource: WorldResource? = null//Should it consume something?
+    override val productionTimeMultiplier: Int = 10
+    override val produceConsumesWorldResource: WorldResource = FishShoal
     override val produceCreatesWorldResource: WorldResource? = null
     override val producesItem: GameObject = Fish
     override val producesItemOutputType: Type = Type.Storage
@@ -314,7 +318,7 @@ class Fisherman : ProductionBuilding() {
 
     override val offers: MutableList<Resource> = mutableListOf()
 
-    override val housingLevel: Int? = null //Int = 1 TODO readd level 1?
+    override val housingLevel: Int = 1
 }
 
 @Serializable
@@ -356,7 +360,7 @@ class Tower : Building() {
     override val offers: MutableList<Resource> = mutableListOf()
     val range = 3
 
-    override val housingLevel: Int = 2
+    override val housingLevel: Int = 2 //TODO this is currently ignored, is this what i want?
 }
 
 @Serializable

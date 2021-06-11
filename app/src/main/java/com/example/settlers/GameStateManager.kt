@@ -379,7 +379,10 @@ open class GameStateManager(
                         selected.animation = null
                     }
                     Type.Damage -> throw IllegalStateException()
-                    Type.WorldResource -> selected.worldResource = null
+                    Type.WorldResource -> {
+                        if (state.data is FishShoal) return //Ignore fishshoal
+                        selected.worldResource = null
+                    }
                     Type.ProductionAssignment -> selected.building!!.workerLivesAt = null
                     Type.HouseAssignment -> {
                         val targetHouse = selected.building!! as House

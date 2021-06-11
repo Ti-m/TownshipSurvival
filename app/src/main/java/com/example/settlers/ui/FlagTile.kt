@@ -367,6 +367,8 @@ open class FlagTile(
             }
         } else if (cell.worldResource is Rock) {
             drawRock(canvas)
+        } else if (cell.worldResource is FishShoal) {
+            drawFishShoal(canvas)
         }
     }
 
@@ -474,6 +476,12 @@ open class FlagTile(
 
     open fun drawRock(canvas: Canvas) {
         val letter = "r"
+        //+5 to move the letter out of the pole
+        canvas.drawText(letter, coords.center.first + 5, coords.center.second + textPaint.textSize * 0.3f, textPaint)
+    }
+
+    open fun drawFishShoal(canvas: Canvas) {
+        val letter = "F"
         //+5 to move the letter out of the pole
         canvas.drawText(letter, coords.center.first + 5, coords.center.second + textPaint.textSize * 0.3f, textPaint)
     }

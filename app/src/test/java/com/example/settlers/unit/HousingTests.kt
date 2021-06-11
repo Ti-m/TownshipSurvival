@@ -93,8 +93,7 @@ class HousingTests {
 
         val result = d.mapManager.getHousingDemand()
 
-        //assertEquals(HousingDemand(lvl1 = 4, lvl2 = 3, lvl3 = 0, lvl4 = 0), result)
-        assertEquals(HousingDemand(lvl1 = 3, lvl2 = 3, lvl3 = 0, lvl4 = 0), result)//TODO  revert to 4 of lvl1 when the fisher needs housing again
+        assertEquals(HousingDemand(lvl1 = 4, lvl2 = 3, lvl3 = 0, lvl4 = 0), result)
     }
 
     //TODO move to MapManagerTest?
