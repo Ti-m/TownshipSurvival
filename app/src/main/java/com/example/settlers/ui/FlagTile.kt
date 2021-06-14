@@ -651,17 +651,31 @@ open class FlagTile(
                 a += if (it is House) {
                     assignedOverlayController.updateOverlay(it.currentlyAssignedProductionBuildings)
                     """
-                                    
+                        
+                        Empty house slots:
+                        lvl1 = ${it.currentHousingAvailable.lvl1}
+                        lvl2 = ${it.currentHousingAvailable.lvl2}
+                        lvl3 = ${it.currentHousingAvailable.lvl3}
+                        lvl4 = ${it.currentHousingAvailable.lvl4}
                         Houses workers for: ${it.currentlyAssignedProductionBuildings}
                     """.trimIndent()
                 } else {
+                    var b = ""
+                    it.housingLevel?.let {
+                       b += """
+                           
+                           Requires worker with level: $it
+                       """.trimIndent()
+                    }
+
                     it.workerLivesAt?.let { worker ->
                         assignedOverlayController.updateOverlay(worker)
+                        b += """
+                                        
+                            Lives at: ${worker}
+                        """.trimIndent()
                     }
-                    """
-                                    
-                        Lives at: ${it.workerLivesAt}
-                    """.trimIndent()
+                    b
                 }
                 a
             }

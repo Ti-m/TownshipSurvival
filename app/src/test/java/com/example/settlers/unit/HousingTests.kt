@@ -248,25 +248,13 @@ class HousingTests {
     }
 
     @Test
-    fun `assign worker to house - for two buldings`() {
-//        val coord1 = Coordinates(0,0)
-//        val coord2 = Coordinates(2,0)
-//        d.gameStateManager.applyStates(listOf(
-//            GameState(coord1, Operator.Set, Type.Building, Lumbermill()),
-//            GameState(coord2, Operator.Set, Type.Building, Lumbermill()),
-//        ))
-//        val building1 = d.mapManager.queryBuilding(coord1)!!
-//        val building2 = d.mapManager.queryBuilding(coord2)!!
-//
-//        building1.setConstructionFinished()
-//        building2.setConstructionFinished()
-//
-//        val buildings = d.mapManager.getBuildingsWithUnfulfilledHousing()
-//        Oder lieber direkt nach dem benötigten housing level filtern?
-//        Ich gllaube ich sollt enochmal einen Schritt zurück machen und erst einnmal in der GameLoop weiter machen:
-//         Also wie werden diese Methoden konkret aufgerufen, sodass es später in das Gesamtkonzept passt.
-//        val available = d.mapManager.getAvailableHousingSpace()
-//
-//        assertEquals(listOf(building3, building4), result)
+    fun `HousingDemand - getStringForInspectDialog`() {
+        val housingDemand = HousingDemand(1,2,3,4)
+        assertEquals("""
+            lvl1 = 1
+            lvl2 = 2
+            lvl3 = 3
+            lvl4 = 4
+        """.trimIndent(), housingDemand.getStringForInspectDialog())
     }
 }

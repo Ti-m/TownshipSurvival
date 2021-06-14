@@ -526,7 +526,16 @@ open class MapManager(
 }
 
 @Serializable
-data class HousingDemand(var lvl1: Int, var lvl2: Int, var lvl3: Int, var lvl4: Int)
+data class HousingDemand(var lvl1: Int, var lvl2: Int, var lvl3: Int, var lvl4: Int) {
+    fun getStringForInspectDialog(): String {
+        return """
+            lvl1 = $lvl1
+            lvl2 = $lvl2
+            lvl3 = $lvl3
+            lvl4 = $lvl4
+        """.trimIndent()
+    }
+}
 
 class MapManagerPreparedForTest(
     cells: Map<Coordinates, Cell>,
