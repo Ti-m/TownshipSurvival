@@ -39,7 +39,7 @@ Housing
 * I am not sure, if there are still some issues assigning workers, if  multiples houses are present
 * Implement upgrading of houses
 * HousingOverlays: In the topleft/right should be a dismiss button overlay
-* . A house should show the different available Slot levels
+* DONE A house should show the different available Slot levels
 * A production building should show which kind of housing slot it needs
 * Remove animation for production progress in buildings when a worker is no longer available
 * Add new building type for road, townhall? "OtherBuilding"?
@@ -47,6 +47,12 @@ Housing
 * DONE Pause a house should remove the worker
 ** DONE The now empty slots are not reassigned, why?
 * DONE House shall consume luxury's only if somebody is living there
+
+Dialogs
+* Show a Fragment when inspecting with a graphical display, no longer a pop up
+* Show a Fragment when opening a Builddialog
+** The fragment should be popped if something is build
+** only works if I click straight on the icon. The whole area shall be clickable
 
 * Housing
 1 Buildable Houses

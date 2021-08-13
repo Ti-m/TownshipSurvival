@@ -200,6 +200,9 @@ sealed class Building : GameObject() {
 
     //The Coordinates of the house, where the worker is living.
     var workerLivesAt: Coordinates? = null
+
+    //TODO maybe add an class above from which this class will inherit to encapuslate this meta item. At least if more are added
+    abstract val drawableRessoucreId: Int
 }
 
 //needs to be sealed instead of abstract, otherwise:  kotlinx.serialization.SerializationException: Class 'aaa' is not registered for polymorphic serialization in the scope of 'Building'.
@@ -235,6 +238,7 @@ class Townhall : Building() {
     override val offers: MutableList<Resource> = mutableListOf(Lumber, Lumber, Lumber, Lumber, Lumber, Lumber, Stone, Stone, Stone, Fish, Fish)
 
     override val housingLevel: Int? = null
+    override val drawableRessoucreId: Int = R.drawable.townhall_1_64
 }
 
 @Serializable
@@ -256,6 +260,7 @@ class Lumberjack : ProductionBuilding() {
     override val offers: List<Resource> = listOf()
 
     override val housingLevel: Int = 1
+    override val drawableRessoucreId: Int = R.drawable.lumberjack_1_64
 }
 
 @Serializable
@@ -277,6 +282,7 @@ class Stonemason : ProductionBuilding() {
     override val offers: List<Resource> = listOf()
 
     override val housingLevel: Int = 1
+    override val drawableRessoucreId: Int = R.drawable.stonemason_1_64
 }
 
 @Serializable
@@ -298,6 +304,7 @@ class Forester : ProductionBuilding() {
     override val offers: MutableList<Resource> = mutableListOf()
 
     override val housingLevel: Int = 1
+    override val drawableRessoucreId: Int = R.drawable.forester_1_64
 }
 
 @Serializable
@@ -319,6 +326,7 @@ class Fisherman : ProductionBuilding() {
     override val offers: MutableList<Resource> = mutableListOf()
 
     override val housingLevel: Int = 1
+    override val drawableRessoucreId: Int = R.drawable.forester_1_64//TODO create icon
 }
 
 @Serializable
@@ -340,6 +348,7 @@ class Road : Building() {
     override val offers: MutableList<Resource> = mutableListOf()
 
     override val housingLevel: Int? = null
+    override val drawableRessoucreId: Int = R.drawable.road_n_64
 }
 
 @Serializable
@@ -361,6 +370,7 @@ class Tower : Building() {
     val range = 3
 
     override val housingLevel: Int = 2 //TODO this is currently ignored, is this what i want?
+    override val drawableRessoucreId: Int = R.drawable.tower_1_64
 }
 
 @Serializable
@@ -380,6 +390,7 @@ class Spawner : ProductionBuilding() {
     override val offers: List<Resource> = listOf()
 
     override val housingLevel: Int? = null
+    override val drawableRessoucreId: Int = R.drawable.spawner_1_64
 }
 
 @Serializable
@@ -399,6 +410,7 @@ class Fletcher : ProductionBuilding() {
     override val offers: List<Resource> = listOf()
 
     override val housingLevel: Int = 2
+    override val drawableRessoucreId: Int = R.drawable.fletcher_1_64
 }
 
 @Serializable
@@ -418,6 +430,7 @@ class Lumbermill : ProductionBuilding() {
     override val offers: List<Resource> = listOf()
 
     override val housingLevel: Int = 2
+    override val drawableRessoucreId: Int = R.drawable.lumbermill_1_64
 }
 
 @Serializable
@@ -441,6 +454,7 @@ class Pyramid : Building() {
     override val offers: List<Resource> = listOf()
 
     override val housingLevel: Int? = null
+    override val drawableRessoucreId: Int = R.drawable.pyramid_1_64
 }
 
 //needs to be sealed instead of abstract, otherwise:  kotlinx.serialization.SerializationException: Class 'aaa' is not registered for polymorphic serialization in the scope of 'Building'.
@@ -474,6 +488,7 @@ class HouseLevel1 : House() {
     override val offers: List<Resource> = listOf()
 
     override val housingLevel: Int? = null
+    override val drawableRessoucreId: Int = R.drawable.townhall_1_64//TODO add icon
 }
 
 @Serializable
@@ -494,6 +509,7 @@ class HouseLevel2 : House() {
     override val offers: List<Resource> = listOf()
 
     override val housingLevel: Int? = null
+    override val drawableRessoucreId: Int = R.drawable.townhall_1_64//TODO add icon
 }
 
 @Serializable
@@ -514,6 +530,7 @@ class HouseLevel3 : House() {
     override val offers: List<Resource> = listOf()
 
     override val housingLevel: Int? = null
+    override val drawableRessoucreId: Int = R.drawable.townhall_1_64//TODO add icon
 }
 
 /////////////////////////

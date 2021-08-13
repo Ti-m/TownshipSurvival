@@ -6,10 +6,13 @@ import android.graphics.Canvas
 import android.graphics.Path
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
+import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import com.example.settlers.*
 
 //Which variant of the texture will be shown
@@ -624,8 +627,20 @@ open class FlagTile(
 
     override fun performClick(): Boolean {
         if (modeController.mode == DialogMode.Build) {
-            val dialog = BuildDialog.newInstance(cell.coordinates)
-            dialog.show((context as MainActivity).supportFragmentManager, TAG)
+            //https://developer.android.com/guide/fragments/fragmentmanager#perform
+                val fragment = BuildFragment.newInstance(cell.coordinates)
+//            val bundle = Bundle()
+//            bundle.putSerializable(BaseDialog.COORDINATES, cell.coordinates)
+            //fragment.arguments = bundle
+            (context as MainActivity).supportFragmentManager.commit {
+                replace(R.id.nav_host_fragment, fragment)
+                setReorderingAllowed(true) //Improves animation
+                addToBackStack(null) // name is only needed to pop a specific fragment
+            }
+            //TODO bulding works, but only if I click straight on the icon. The whole area shall be clickable
+            //TODO The fragment should be poped if something is build
+//            val dialog = BuildDialog.newInstance(cell.coordinates)
+//            dialog.show((context as MainActivity).supportFragmentManager, TAG)
         } else {
             //Clear here, in case nothing is selected
             assignedOverlayController.clearOverlay()
