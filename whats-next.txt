@@ -50,9 +50,13 @@ Housing
 
 Dialogs
 * Show a Fragment when inspecting with a graphical display, no longer a pop up
-* Show a Fragment when opening a Builddialog
-** The fragment should be popped if something is build
+* DONE Show a Fragment when opening a Builddialog
+** DONE The fragment should be popped if something is build
 ** only works if I click straight on the icon. The whole area shall be clickable
+** Missing icon for HouseLvl 1
+** Missing icon for HouseLvl 2
+** Missing icon for HouseLvl 3
+** Missing icon for Fisherman
 
 * Housing
 1 Buildable Houses

@@ -160,7 +160,7 @@ class GameFragment : Fragment() {
         (requireActivity() as MainActivity).buildDialogClickHandler = object : BuildDialogCallback {
             override fun selectedCallback(selectedBuilding: Building, coordinates: Coordinates) {
                 buildDialogHandler.selectedCallback(selectedBuilding, coordinates)
-
+                requireActivity().supportFragmentManager.popBackStack()
                 tickController.tickGraphics()
             }
         }

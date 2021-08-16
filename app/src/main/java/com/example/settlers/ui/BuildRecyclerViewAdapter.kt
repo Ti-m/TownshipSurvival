@@ -42,11 +42,7 @@ class BuildRecyclerViewAdapter(
         holder.contentView.text = item.content
         holder.imageButton.setImageResource(item.type.drawableRessoucreId)
         holder.imageButton.setOnClickListener {
-            //TODO the coordiantes are needed here
-            //clickHandler.selectedCallback()
             clickHandler.selectedCallback(coordinates = coordinates, selectedBuilding = item.type)
-            Log.e("---", "postion: $position")
-//TODO add the onclick handler
         }
     }
     override fun getItemCount() = values.size

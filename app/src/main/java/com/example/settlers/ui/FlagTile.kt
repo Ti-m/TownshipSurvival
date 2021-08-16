@@ -638,7 +638,6 @@ open class FlagTile(
                 addToBackStack(null) // name is only needed to pop a specific fragment
             }
             //TODO bulding works, but only if I click straight on the icon. The whole area shall be clickable
-            //TODO The fragment should be poped if something is build
 //            val dialog = BuildDialog.newInstance(cell.coordinates)
 //            dialog.show((context as MainActivity).supportFragmentManager, TAG)
         } else {
