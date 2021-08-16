@@ -18,57 +18,57 @@ abstract class BaseDialog : DialogFragment() {
     }
 }
 
-class BuildDialog : BaseDialog() {
-
-    private lateinit var callback: BuildDialogCallback
-
-    companion object {
-        fun newInstance(coordinates: Coordinates): BuildDialog {
-            val dialog = BuildDialog()
-            val bundle = Bundle()
-            bundle.putSerializable(COORDINATES, coordinates)
-            bundle.putSerializable("items", availableBuildings.map { it.javaClass.simpleName }.toTypedArray())
-            dialog.arguments = bundle
-            return dialog
-        }
-
-        private val ITEMS = "items"
-        private val availableBuildings = arrayOf(
-            Townhall(),
-            Lumberjack(),
-            Forester(),
-            Lumbermill(),
-            Stonemason(),
-            Tower(),
-            Fletcher(),
-            Road(),
-            Fisherman(),
-            HouseLevel1(),
-            HouseLevel2(),//TODO replace with upgrade of lvl1
-            HouseLevel3(),//TODO replace with upgrade of lvl2
-            Pyramid()
-        )
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        callback = (context as MainActivity).buildDialogClickHandler
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = AlertDialog.Builder(context)
-        val coordinates = (requireArguments().getSerializable(COORDINATES) as Coordinates)
-        dialog.setTitle("Pick a building :: (x=${coordinates.x}, y=${coordinates.y})")
-        val items = requireArguments().getSerializable(ITEMS) as Array<String>
-        dialog.setItems(items, object : DialogInterface.OnClickListener {
-            override fun onClick(dialog: DialogInterface?, which: Int) {
-                callback.selectedCallback(availableBuildings[which], coordinates)
-            }
-        })
-
-        return dialog.create()
-    }
-}
+//class BuildDialog : BaseDialog() {
+//
+//    private lateinit var callback: BuildDialogCallback
+//
+//    companion object {
+//        fun newInstance(coordinates: Coordinates): BuildDialog {
+//            val dialog = BuildDialog()
+//            val bundle = Bundle()
+//            bundle.putSerializable(COORDINATES, coordinates)
+//            bundle.putSerializable("items", availableBuildings.map { it.javaClass.simpleName }.toTypedArray())
+//            dialog.arguments = bundle
+//            return dialog
+//        }
+//
+//        private val ITEMS = "items"
+//        private val availableBuildings = arrayOf(
+//            Townhall(),
+//            Lumberjack(),
+//            Forester(),
+//            Lumbermill(),
+//            Stonemason(),
+//            Tower(),
+//            Fletcher(),
+//            Road(),
+//            Fisherman(),
+//            HouseLevel1(),
+//            HouseLevel2(),//TODO replace with upgrade of lvl1
+//            HouseLevel3(),//TODO replace with upgrade of lvl2
+//            Pyramid()
+//        )
+//    }
+//
+//    override fun onAttach(context: Context) {
+//        super.onAttach(context)
+//        callback = (context as MainActivity).buildDialogClickHandler
+//    }
+//
+//    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+//        val dialog = AlertDialog.Builder(context)
+//        val coordinates = (requireArguments().getSerializable(COORDINATES) as Coordinates)
+//        dialog.setTitle("Pick a building :: (x=${coordinates.x}, y=${coordinates.y})")
+//        val items = requireArguments().getSerializable(ITEMS) as Array<String>
+//        dialog.setItems(items, object : DialogInterface.OnClickListener {
+//            override fun onClick(dialog: DialogInterface?, which: Int) {
+//                callback.selectedCallback(availableBuildings[which], coordinates)
+//            }
+//        })
+//
+//        return dialog.create()
+//    }
+//}
 
 interface InspectDialogCallback {
     fun inspectCallback(coordinates: Coordinates, stopDelivery: StopDeliveryState)
