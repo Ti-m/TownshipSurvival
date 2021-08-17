@@ -53,6 +53,8 @@ Dialogs
 * DONE Show a Fragment when opening a Builddialog
 ** DONE The fragment should be popped if something is build
 ** DONE only works if I click straight on the icon. The whole area shall be clickable
+** On the 10" tablet, the screen always jumps to the bottom right after closing the fragment
+*** How is the coordinate determined, where the game fragment is opened
 ** Missing icon for HouseLvl 1
 ** Missing icon for HouseLvl 2
 ** Missing icon for HouseLvl 3

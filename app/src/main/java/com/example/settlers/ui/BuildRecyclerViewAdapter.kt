@@ -2,7 +2,7 @@ package com.example.settlers.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -18,12 +18,8 @@ class BuildRecyclerViewAdapter(
     inner class ViewHolder(binding: FragmentBuildItemBinding) : RecyclerView.ViewHolder(binding.root) {
         //val idView: TextView = binding.itemNumber
         val contentView: TextView = binding.content
-        val imageButton: ImageButton = binding.imageButton
+        val imageView: ImageView = binding.imageButton
         val layout: LinearLayout = binding.layout
-
-        override fun toString(): String {
-            return super.toString() + " '" + contentView.text + "'"
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -40,11 +36,8 @@ class BuildRecyclerViewAdapter(
 
         val item = values[position]
         holder.contentView.text = item.content
-        holder.imageButton.setImageResource(item.type.drawableRessoucreId)
+        holder.imageView.setImageResource(item.type.drawableRessoucreId)
         holder.layout.setOnClickListener {
-            clickHandler.selectedCallback(coordinates = coordinates, selectedBuilding = item.type)
-        }
-        holder.imageButton.setOnClickListener {
             clickHandler.selectedCallback(coordinates = coordinates, selectedBuilding = item.type)
         }
     }

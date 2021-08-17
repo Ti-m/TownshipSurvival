@@ -2,4 +2,5 @@
     <string name="app_name">Township Survival</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Welcome to Township Survival!</string>
+    <string name="build_dialog_image_view_desctiption_text">Descriptive icon to the text</string>
 </resources>
